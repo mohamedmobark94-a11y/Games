@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ألعاب ترتيل القرآن | Tarteel Al-Quran Games</title>
+<meta name="description" content="ألعاب تفاعلية مجانية لتعليم القرآن والتجويد والعربي لغير الناطقين بالعربية — للأطفال والمراهقين والكبار.">
+<meta property="og:title" content="ألعاب ترتيل القرآن | Tarteel Al-Quran Games">
+<meta property="og:description" content="ألعاب تفاعلية مجانية لتعليم القرآن والتجويد والعربي — تعمل على الموبايل وفي الحصص الأونلاين.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+/* Layout: one centered column — brand header, filter chips, a wrapping grid of game cards, footer. Navy + gold = Tarteel brand. */
+:root{
+  color-scheme:dark;
+  --bg:#0B1E2D; --card:#163A57; --card2:#12304A; --ink:#F4EBD6; --muted:#A9BCCB; --line:#2A5675;
+  --gold:#E2B85C; --kids:#F0A35E; --teens:#5DADE2; --adults:#AF7AC5; --tajweed:#2ECC71;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif; --f-ar:"Amiri","Traditional Arabic",serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1000px 500px at 80% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:16px;padding-block:28px 40px;display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
+.logo{font-family:var(--f-ar);font-size:clamp(2.2rem,7vw,3.6rem);font-weight:700;color:var(--gold);line-height:1.2;margin:0}
+.logo small{display:block;font-family:var(--f-ui);font-size:1rem;color:var(--muted);font-weight:700;letter-spacing:.06em}
+.lead{max-width:60ch;margin:0;color:var(--ink);font-size:1.08rem;text-wrap:balance}
+.lead .en{display:block;direction:ltr;color:var(--muted);font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:4px 16px;cursor:pointer;min-height:40px}
+.chip[aria-pressed="true"]{background:var(--gold);color:#10263A;border-color:var(--gold)}
+.chip:focus-visible,.card a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.live{border-color:var(--gold)}
+.card .ico{font-size:2.2rem;line-height:1}
+.card h2{margin:0;font-family:var(--f-ar);font-size:1.6rem;line-height:1.3}
+.card h2 .en{display:block;font-family:var(--f-ui);font-size:.85rem;color:var(--muted);direction:ltr;text-align:right}
+.card p{margin:0;font-size:.95rem;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.78rem;font-weight:800;border-radius:999px;padding:0 10px;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c);border:1px solid var(--c)}
+.card a,.card .soon{margin-top:auto;text-align:center;font-weight:800;border-radius:14px;padding:8px 14px;text-decoration:none}
+.card a{background:var(--gold);color:#10263A;box-shadow:0 4px 0 #8C6A25}
+.card a:active{transform:translateY(2px);box-shadow:0 2px 0 #8C6A25}
+.card .soon{border:2px dashed var(--line);color:var(--muted)}
+.book{font-size:.8rem;color:var(--gold)}
+footer{text-align:center;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--gold)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="logo">تَرْتِيلُ القُرْآن<small>TARTEEL AL-QURAN · GAMES</small></h1>
+    <p class="lead">أَلْعَابٌ تَفَاعُلِيَّةٌ مَجَّانِيَّةٌ لِتَعْلِيمِ القُرْآنِ وَالتَّجْوِيدِ وَالعَرَبِيَّة — لِلْحِصَصِ الأُونْلَايْن وَلِلْبَيْت.<span class="en">Free interactive games for teaching Qur'an, Tajweed and Arabic to non-Arabic speakers — kids, teens and adults.</span></p>
+  </header>
+
+  <div class="chips" role="group" aria-label="تصفية">
+    <button class="chip" data-f="all" aria-pressed="true">الكل</button>
+    <button class="chip" data-f="kids" aria-pressed="false">👧 أطفال</button>
+    <button class="chip" data-f="teens" aria-pressed="false">🧑 مراهقين وكبار</button>
+    <button class="chip" data-f="tajweed" aria-pressed="false">📖 تجويد</button>
+    <button class="chip" data-f="hifz" aria-pressed="false">🧠 حفظ</button>
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <footer>
+    <b>Tarteel Al-Quran · ترتيل القرآن</b> — حصص أونلاين في القرآن والتجويد والعربي لغير الناطقين بالعربية.<br>
+    كل لعبة تذكر مصدرها من كتب أهل العلم بالصفحة.
+  </footer>
+</div>
+<script>
+/* ✏️ أضف كل لعبة جديدة هنا: file = اسم الملف داخل فولدر games (اتركه فارغًا = «قريبًا») */
+const GAMES = [
+  {file:'hifz-chain.html', ico:'🔗', ar:'سِلْسِلَةُ الحُفَّاظ', en:'The Golden Chain of Huffāẓ', tags:['teens','hifz'], desc:'رتّب السند من جبريل إليك، خمّن الحافظ من الأدلة، وسمّع بالتبادل مع معلمك.', book:'كيف تحفظ القرآن الكريم'},
+  {file:'', ico:'🌟', ar:'نُجُومُ القُرْآن', en:'Quran Stars', tags:['kids','hifz'], desc:'رتّب كلمات الآية نجومًا، ثم احفظها والنجوم تختفي واحدة واحدة.', book:'كيف تحفظ القرآن الكريم'},
+  {file:'', ico:'🚦', ar:'إِشَارَاتُ الوَقْف', en:'Waqf Traffic Lights', tags:['teens','tajweed'], desc:'أين أقف؟ ومن أين أبدأ؟ الوقف والابتداء وهمزة الوصل.', book:'الوجيز في علم التجويد'},
+  {file:'', ico:'🐡', ar:'السَّمِينُ وَالنَّحِيف', en:'Puffy & Skinny Letters', tags:['kids','tajweed'], desc:'التفخيم والترقيق بشخصيتين وحركات، ولعبة ذاكرة للحروف المتشابهة.', book:'الوجيز في علم التجويد'},
+  {file:'', ico:'🪜', ar:'سُلَّمُ المُدُود', en:'The Madd Ladder', tags:['teens','tajweed'], desc:'شخّص المد بالأسئلة، وقِس طوله بالحركات.', book:'الوجيز في علم التجويد'},
+  {file:'', ico:'☀️', ar:'عَجَلَةُ الشَّمْسِ وَالقَمَر', en:'Sun & Moon Wheel', tags:['kids','tajweed'], desc:'لِفّ العجلة: اللام قمرية أم شمسية؟', book:'الوجيز في علم التجويد'},
+  {file:'', ico:'⚖️', ar:'مِيزَانُ النُّونِ وَالمِيم', en:'The Nūn & Mīm Scale', tags:['teens','tajweed'], desc:'الحكم ولماذا؟ أحكام النون والميم الساكنتين على آيات حقيقية.', book:'الوجيز في علم التجويد'},
+  {file:'', ico:'🏠', ar:'بُيُوتُ الصِّفَات', en:'Sifat Houses', tags:['kids','tajweed'], desc:'صفات الحروف شخصيات بحركات، اسحب كل حرف إلى بيته.', book:'الوجيز في علم التجويد'},
+  {file:'', ico:'🌬️', ar:'رِحْلَةُ الحَرْف', en:"The Letter's Journey", tags:['teens','tajweed'], desc:'مخارج الحروف على خريطة رحلة الهواء.', book:'الوجيز في علم التجويد'},
+];
+const TAG={kids:['👧 أطفال','var(--kids)'],teens:['🧑 مراهقين وكبار','var(--teens)'],tajweed:['📖 تجويد','var(--tajweed)'],hifz:['🧠 حفظ','var(--adults)']};
+const grid=document.getElementById('grid');
+function render(f){grid.innerHTML=GAMES.filter(g=>f==='all'||g.tags.includes(f)).map(g=>`<article class="card ${g.file?'live':''}">
+  <div class="ico" aria-hidden="true">${g.ico}</div><h2>${g.ar}<span class="en">${g.en}</span></h2>
+  <div class="tags">${g.tags.map(t=>`<span class="tag" style="--c:${TAG[t][1]}">${TAG[t][0]}</span>`).join('')}</div>
+  <p>${g.desc}</p><div class="book">📚 ${g.book}</div>
+  ${g.file?`<a href="games/${g.file}">▶ اِلْعَبِ الآن</a>`:'<span class="soon">قريبًا</span>'}</article>`).join('')}
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===c));render(c.dataset.f)});
+render('all');
+</script>
+</body>
+</html>
