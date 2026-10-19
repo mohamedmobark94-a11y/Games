@@ -3,183 +3,291 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ألعاب ترتيل القرآن | Tarteel Al-Quran Games</title>
-<meta name="description" content="ألعاب تفاعلية مجانية لتعليم القرآن والتجويد والعربي لغير الناطقين بالعربية — للأطفال والمراهقين والكبار.">
-<meta property="og:title" content="ألعاب ترتيل القرآن | Tarteel Al-Quran Games">
-<meta property="og:description" content="ألعاب تفاعلية مجانية لتعليم القرآن والتجويد والعربي — تعمل على الموبايل وفي الحصص الأونلاين.">
+<title>ترتيل القرآن | Tarteel Al-Quran — Qur'an, Tajweed & Arabic</title>
+<meta name="description" content="Free interactive games and online classes for Qur'an, Tajweed and Arabic for non-Arabic speakers — kids, teens and adults. ألعاب تفاعلية مجانية وحصص أونلاين في القرآن والتجويد والعربية.">
+<meta property="og:title" content="ترتيل القرآن | Tarteel Al-Quran">
+<meta property="og:description" content="Free interactive games and online classes for Qur'an, Tajweed and Arabic — for kids, teens and adults.">
 <meta name="theme-color" content="#0B1E2D">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
 <style>
-/* Layout: one centered column — brand header, "newest" spotlight + book of the week, search + two filter rows, a wrapping grid of game cards, footer. Navy + gold = Tarteel brand. */
+/* Layout: sticky bar (brand · language · free-trial) → hero with two actions → "who is learning?" age paths that retheme the whole page → newest game + book of the week → search/filters → game grid → closing booking band. Navy + gold = Tarteel brand; each age path swaps accent, corner radius and icon size. */
 :root{
   color-scheme:dark;
-  --bg:#0B1E2D; --card:#163A57; --card2:#12304A; --ink:#F4EBD6; --muted:#A9BCCB; --line:#2A5675;
-  --gold:#E2B85C; --kids:#F0A35E; --teens:#5DADE2; --adults:#AF7AC5; --tajweed:#2ECC71; --hifz:#E2B85C; --arabic:#F1948A; --islamic:#76D7C4;
-  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif; --f-ar:"Amiri","Traditional Arabic",serif;
+  --bg:#0B1E2D; --card:#163A57; --card2:#12304A; --ink:#F4EBD6; --muted:#B4C5D3; --line:#2A5675;
+  --gold:#E2B85C; --wa:#25D366; --wa-ink:#06331A; --btn-ink:#10263A;
+  --kids:#F0A35E; --teens:#5DADE2; --adults:#B48AD0; --tajweed:#2ECC71; --hifz:#E2B85C; --arabic:#F1948A; --islamic:#76D7C4;
+  --accent:var(--gold); --r:20px; --ico:2.2rem; --base:16.5px;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif; --f-ar:"Amiri","Traditional Arabic",serif; --f-en:"Inter","Segoe UI",system-ui,sans-serif;
 }
+/* age themes — set on <body data-age> by the path cards */
+body[data-age=kids]{--accent:var(--kids);--r:28px;--ico:3rem;--base:18px}
+body[data-age=teens]{--accent:var(--teens);--r:16px;--ico:2.2rem;--base:16.5px}
+body[data-age=adults]{--accent:var(--adults);--r:10px;--ico:1.7rem;--base:16.5px}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:radial-gradient(1000px 500px at 80% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);line-height:1.6}
-.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(28px + env(safe-area-inset-top,0px)) 40px;display:flex;flex-direction:column;gap:22px}
-header{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
-.logo{font-family:var(--f-ar);font-size:clamp(2.2rem,7vw,3.6rem);font-weight:700;color:var(--gold);line-height:1.2;margin:0}
-.logo small{display:block;font-family:var(--f-ui);font-size:1rem;color:var(--muted);font-weight:700;letter-spacing:.06em}
-.lead{max-width:60ch;margin:0;color:var(--ink);font-size:1.08rem;text-wrap:balance}
-.lead .en{display:block;direction:ltr;color:var(--muted);font-size:.9rem}
-.aboutlink{display:inline-flex;gap:8px;align-items:center;background:#25D366;color:#06331A;font-weight:800;text-decoration:none;border-radius:14px;padding:6px 18px;box-shadow:0 4px 0 #138A40}
-.aboutlink .en{display:inline;color:#06331A;font-size:.8em}
-.aboutlink:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.stat{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:2px 14px;font-weight:700;font-size:.9rem;font-variant-numeric:tabular-nums}
-.stat b{color:var(--gold)}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1000px 520px at 80% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:var(--base);line-height:1.7;transition:font-size .2s}
+html[lang=en] body{font-family:var(--f-en);line-height:1.6}
+html[lang=en] .logo,html[lang=en] h1,html[lang=en] h2,html[lang=en] h3{font-family:var(--f-en)}
+html[lang=ar] .en,html[lang=en] .ar{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:34px;padding-bottom:110px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
 
+/* top bar */
+.bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:8px max(16px,env(safe-area-inset-left,0px));padding-top:calc(8px + env(safe-area-inset-top,0px))}
+.brand{white-space:nowrap;font-family:var(--f-ar);font-weight:700;font-size:1.5rem;color:var(--gold);text-decoration:none;margin-inline-end:auto;line-height:1.2}
+html[lang=en] .brand{font-family:var(--f-en);font-size:1.2rem;font-weight:800}
+.lang{font:inherit;font-weight:700;font-size:.9rem;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:2px 14px;min-height:40px;cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:800;text-decoration:none;border:0;cursor:pointer;border-radius:14px;padding:8px 20px;min-height:46px;background:var(--accent);color:var(--btn-ink);box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 55%,#000);transition:transform .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 55%,#000)}
+.btn.wa{background:var(--wa);color:var(--wa-ink);box-shadow:0 4px 0 #138A40}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.btn.sm{min-height:40px;padding:4px 16px;font-size:.95rem}
+
+/* hero */
+.hero{display:grid;gap:14px;justify-items:center;text-align:center;padding-top:34px}
+.eyebrow{display:inline-block;background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);border:1px solid var(--accent);font-weight:800;font-size:.85rem;border-radius:999px;padding:0 14px}
+.hero h1{margin:0;font-size:clamp(1.9rem,5.6vw,3.2rem);line-height:1.3;max-width:20ch;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.lead{max-width:56ch;margin:0;color:var(--muted);font-size:1.08em;text-wrap:balance}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.trust{display:flex;gap:8px 18px;flex-wrap:wrap;justify-content:center;color:var(--muted);font-size:.92rem;margin:6px 0 0;padding:0;list-style:none}
+.trust li::before{content:"✓";color:var(--accent);font-weight:800;margin-inline-end:6px}
+
+h2.sec{margin:0 0 4px;font-size:clamp(1.4rem,3.6vw,1.9rem);line-height:1.3}
+p.sub{margin:0 0 14px;color:var(--muted)}
+
+/* age paths */
+.paths{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.path{font:inherit;color:inherit;text-align:start;cursor:pointer;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:6px;transition:transform .15s,border-color .15s}
+.path:hover{transform:translateY(-3px);border-color:var(--c)}
+.path[aria-pressed=true]{border-color:var(--c);background:linear-gradient(160deg,color-mix(in srgb,var(--c) 22%,var(--card)),var(--card))}
+.path .ico{font-size:2.4rem;line-height:1}
+.path b{font-size:1.25rem}
+.path .age{color:var(--c);font-weight:800;font-size:.9rem}
+.path p{margin:0;color:var(--muted);font-size:.95rem}
+.path .n{margin-top:auto;font-size:.85rem;color:var(--c);font-weight:700}
+
+/* spotlight */
 .top2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px}
-.spot{background:linear-gradient(135deg,#1D4B6E,var(--card));border:2px solid var(--gold);border-radius:22px;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;min-width:0}
+.spot{background:linear-gradient(135deg,#1D4B6E,var(--card));border:2px solid var(--accent);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:center;min-width:0}
 .spot .ico{font-size:3.4rem;line-height:1;grid-row:span 3}
-.spot .eyebrow{font-size:.8rem;font-weight:800;color:var(--gold);letter-spacing:.04em}
-.spot h2{margin:0;font-family:var(--f-ar);font-size:1.8rem;line-height:1.25}
+.spot .lbl,.bow .lbl{font-size:.82rem;font-weight:800;color:var(--accent)}
+.spot h3{margin:0;font-family:var(--f-ar);font-size:1.8rem;line-height:1.25}
 .spot p{margin:0;color:var(--muted);font-size:.95rem}
-.spot a{grid-column:1/-1;justify-self:start}
-.bow{background:var(--card2);border:2px dashed var(--line);border-radius:22px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.bow .eyebrow{font-size:.8rem;font-weight:800;color:var(--gold)}
-.bow b{font-family:var(--f-ar);font-size:1.35rem;line-height:1.35}
+.spot .btn{grid-column:1/-1;justify-self:start}
+.bow{background:var(--card2);border:2px dashed var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.bow b{font-family:var(--f-ar);font-size:1.3rem;line-height:1.4}
 .bow small{color:var(--muted)}
 
-.tools{display:flex;flex-direction:column;gap:10px;align-items:center}
-.search{width:100%;max-width:520px;font:inherit;font-size:1rem;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:6px 18px;min-height:46px}
+/* filters */
+.tools{display:flex;flex-direction:column;gap:12px;align-items:center}
+.search{width:100%;max-width:520px;font:inherit;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:6px 20px;min-height:48px}
 .search::placeholder{color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.chip{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:4px 16px;cursor:pointer;min-height:40px}
-.chip[aria-pressed="true"]{background:var(--gold);color:#10263A;border-color:var(--gold)}
-.chip:focus-visible,.card a:focus-visible,.search:focus-visible,.copy:focus-visible,.spot a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.chip{font:inherit;font-weight:700;font-size:.95rem;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:2px 16px;cursor:pointer;min-height:42px}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--btn-ink);border-color:var(--accent)}
 .tabs{display:flex;gap:6px;background:var(--card2);border:2px solid var(--line);border-radius:999px;padding:4px}
-.tab{font:inherit;font-weight:800;font-size:1.05rem;border:0;background:transparent;color:var(--muted);border-radius:999px;padding:4px 22px;min-height:42px;cursor:pointer}
-.tab[aria-selected="true"]{background:var(--ink);color:#10263A}
-.tab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.count{color:var(--muted);font-size:.9rem;text-align:center;margin:0}
+.tab{font:inherit;font-weight:800;border:0;background:transparent;color:var(--muted);border-radius:999px;padding:4px 22px;min-height:42px;cursor:pointer}
+.tab[aria-selected=true]{background:var(--ink);color:var(--btn-ink)}
+.count{color:var(--muted);font-size:.9rem;text-align:center;margin:0;min-height:1.4em}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.card{position:relative;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.card.live{border-color:#3C6A8A}
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.card{position:relative;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 24px rgb(0 0 0/.25)}
 .card.new{border-color:var(--gold)}
-.badge{position:absolute;top:12px;left:12px;background:var(--gold);color:#10263A;font-weight:800;font-size:.75rem;border-radius:999px;padding:0 10px}
-.card .ico{font-size:2.2rem;line-height:1}
-.card h2{margin:0;font-family:var(--f-ar);font-size:1.6rem;line-height:1.3}
-.card h2 .en{display:block;font-family:var(--f-ui);font-size:.85rem;color:var(--muted);direction:ltr;text-align:right}
-.card p{margin:0;font-size:.95rem;color:var(--muted)}
+.badge{position:absolute;top:12px;inset-inline-end:12px;background:var(--gold);color:var(--btn-ink);font-weight:800;font-size:.75rem;border-radius:999px;padding:0 10px}
+.card .ico{font-size:var(--ico);line-height:1}
+.card h3{margin:0;font-family:var(--f-ar);font-size:1.5rem;line-height:1.3}
+.card h3 small{display:block;font-family:var(--f-en);font-size:.78rem;font-weight:600;color:var(--muted);direction:ltr;text-align:start}
+html[lang=en] .card h3{font-family:var(--f-en);font-size:1.2rem;font-weight:800}
+html[lang=en] .card h3 small{font-family:var(--f-ar);direction:rtl;font-size:1rem}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:.78rem;font-weight:800;border-radius:999px;padding:0 10px;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c);border:1px solid var(--c)}
+.tag{font-size:.78rem;font-weight:800;border-radius:999px;padding:0 10px;background:color-mix(in srgb,var(--c) 20%,transparent);color:var(--c);border:1px solid var(--c)}
+.card p{margin:0;font-size:.95rem;color:var(--muted)}
 .meta{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--gold);flex-wrap:wrap}
 .meta time{color:var(--muted);font-variant-numeric:tabular-nums}
-.acts{margin-top:auto;display:flex;gap:8px}
-.play,.spot a{flex:1;text-align:center;font-weight:800;border-radius:14px;padding:8px 14px;text-decoration:none;background:var(--gold);color:#10263A;box-shadow:0 4px 0 #8C6A25}
-.play:active,.spot a:active{transform:translateY(2px);box-shadow:0 2px 0 #8C6A25}
-.copy{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:14px;padding:4px 12px;cursor:pointer}
+.acts{margin-top:auto;display:flex;gap:8px;padding-top:4px}
+.acts .btn{flex:1}
+.copy{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:14px;padding:4px 14px;cursor:pointer;min-height:46px}
 .soon{margin-top:auto;text-align:center;font-weight:800;border-radius:14px;padding:8px 14px;border:2px dashed var(--line);color:var(--muted)}
 .empty{text-align:center;color:var(--muted);grid-column:1/-1}
+
+/* closing band + footer */
+.band{background:linear-gradient(135deg,#1D4B6E,var(--card));border:2px solid var(--accent);border-radius:calc(var(--r) + 6px);padding:28px 20px;text-align:center;display:grid;gap:10px;justify-items:center}
+.band h2{margin:0;font-size:clamp(1.4rem,4vw,2rem);line-height:1.35;max-width:26ch;text-wrap:balance}
+.band p{margin:0;color:var(--muted);max-width:52ch}
 footer{text-align:center;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);padding-top:16px}
 footer b{color:var(--gold)}
-.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:#10263A;font-weight:800;border-radius:999px;padding:6px 18px;z-index:9}
-@media (max-width:760px){.top2{grid-template-columns:1fr}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+footer a{color:var(--gold)}
+.fab{position:fixed;inset-inline-start:max(16px,env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;width:58px;height:58px;border-radius:50%;background:var(--wa);color:var(--wa-ink);display:grid;place-items:center;box-shadow:0 6px 18px rgb(0 0 0/.4);text-decoration:none}
+.fab svg{width:30px;height:30px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:var(--btn-ink);font-weight:800;border-radius:999px;padding:6px 18px;z-index:40}
+@media (max-width:760px){.top2{grid-template-columns:1fr}.hero{padding-top:22px}.bar .btn .long{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.card:hover,.path:hover,.btn:hover{transform:none}}
 </style>
 </head>
 <body>
+<div class="bar"><div class="in">
+  <a class="brand" href="./"><span class="ar">تَرْتِيلُ القُرْآن</span><span class="en">Tarteel Al-Quran</span></a>
+  <button class="lang" id="lang" type="button" aria-label="Language / اللغة"></button>
+  <a class="btn sm" href="about.html#book">🎁 <span class="ar">حصة مجانية</span><span class="en">Free trial</span></a>
+</div></div>
+
 <div class="wrap">
-  <header>
-    <h1 class="logo">تَرْتِيلُ القُرْآن<small>TARTEEL AL-QURAN · GAMES</small></h1>
-    <p class="lead">أَلْعَابٌ تَفَاعُلِيَّةٌ مَجَّانِيَّةٌ لِتَعْلِيمِ القُرْآنِ وَالتَّجْوِيدِ وَالعَرَبِيَّة — لِلْحِصَصِ الأُونْلَايْن وَلِلْبَيْت.<span class="en">Free interactive games for teaching Qur'an, Tajweed and Arabic to non-Arabic speakers — kids, teens and adults.</span></p>
-    <div class="stats" id="stats"></div>
-    <a class="aboutlink" href="about.html">🎁 احجز حصة تجريبية مجانية · عن المعلم <span class="en">Book a free trial</span></a>
+  <header class="hero">
+    <span class="eyebrow"><span class="ar">للناطقين بغير العربية · أطفال ومراهقون وكبار</span><span class="en">For non-Arabic speakers · kids, teens & adults</span></span>
+    <h1><span class="ar">تعلّم <em>القرآن</em> والعربية بالطريقة التي تناسب عمرك</span><span class="en">Learn <em>Qur'an</em> and Arabic in the way that suits your age</span></h1>
+    <p class="lead"><span class="ar">ألعاب تفاعلية مجانية، وحصص أونلاين فردية مع معلّم يتابع تقدّمك خطوة بخطوة.</span><span class="en">Free interactive games, plus one-to-one online classes with a teacher who follows your progress step by step.</span></p>
+    <div class="cta-row">
+      <a class="btn wa" href="about.html#book">🎁 <span class="ar">احجز حصتك التجريبية المجانية</span><span class="en">Book your free trial class</span></a>
+      <a class="btn ghost" href="#paths"><span class="ar">جرّب الألعاب مجانًا ↓</span><span class="en">Try the games free ↓</span></a>
+    </div>
+    <ul class="trust">
+      <li><span class="ar">الحصة الأولى مجانية</span><span class="en">First class is free</span></li>
+      <li><span class="ar">منهج مختلف لكل عمر</span><span class="en">A different approach for every age</span></li>
+      <li><span class="ar">شرح بالعربية أو الإنجليزية</span><span class="en">Taught in Arabic or English</span></li>
+      <li><span class="ar">كل لعبة تذكر مصدرها</span><span class="en">Every game cites its source</span></li>
+    </ul>
   </header>
 
-  <section class="top2" aria-label="الجديد">
+  <section id="paths" aria-labelledby="h-paths">
+    <h2 class="sec" id="h-paths"><span class="ar">من سيتعلّم؟</span><span class="en">Who is learning?</span></h2>
+    <p class="sub"><span class="ar">اختر العمر لنعرض لك الألعاب والأسلوب الأنسب.</span><span class="en">Pick an age and we'll show the games and style that fit best.</span></p>
+    <div class="paths" id="paths-grid"></div>
+  </section>
+
+  <section class="top2" aria-label="Highlights">
     <div class="spot" id="spot"></div>
     <div class="bow" id="bow"></div>
   </section>
 
-  <section class="tools" aria-label="بحث وتصفية">
-    <div class="tabs" role="tablist" aria-label="النوع">
-      <button class="tab" role="tab" data-t="games" aria-selected="true">🎮 الألعاب</button>
-      <button class="tab" role="tab" data-t="lessons" aria-selected="false">📘 الدروس</button>
+  <section class="tools" id="library" aria-labelledby="h-lib">
+    <h2 class="sec" id="h-lib"><span class="ar">مكتبة الألعاب والدروس</span><span class="en">Games & lessons library</span></h2>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-t="games" aria-selected="true">🎮 <span class="ar">الألعاب</span><span class="en">Games</span></button>
+      <button class="tab" role="tab" data-t="lessons" aria-selected="false">📘 <span class="ar">الدروس</span><span class="en">Lessons</span></button>
     </div>
-    <input class="search" id="q" type="search" placeholder="🔎 ابحث: مد، نون، حفظ، جملة، Madd…" aria-label="بحث">
-    <div class="chips" role="group" aria-label="العمر">
-      <button class="chip" data-g="age" data-f="all" aria-pressed="true">كل الأعمار</button>
-      <button class="chip" data-g="age" data-f="kids" aria-pressed="false">👧 أطفال</button>
-      <button class="chip" data-g="age" data-f="teens" aria-pressed="false">🧑 مراهقين</button>
-      <button class="chip" data-g="age" data-f="adults" aria-pressed="false">🧔 كبار</button>
-    </div>
-    <div class="chips" role="group" aria-label="المادة">
-      <button class="chip" data-g="subj" data-f="all" aria-pressed="true">كل المواد</button>
-      <button class="chip" data-g="subj" data-f="tajweed" aria-pressed="false">📖 تجويد</button>
-      <button class="chip" data-g="subj" data-f="hifz" aria-pressed="false">🧠 حفظ</button>
-      <button class="chip" data-g="subj" data-f="arabic" aria-pressed="false">✍️ عربي</button>
-      <button class="chip" data-g="subj" data-f="islamic" aria-pressed="false">🕌 إسلاميات</button>
-    </div>
+    <input class="search" id="q" type="search" aria-label="Search">
+    <div class="chips" role="group" id="subj-chips"></div>
     <p class="count" id="count" aria-live="polite"></p>
+    <main class="grid" id="grid" style="width:100%"></main>
   </section>
 
-  <main class="grid" id="grid"></main>
+  <section class="band">
+    <h2><span class="ar">جرّب حصة واحدة مجانًا، وقرّر بعدها</span><span class="en">Try one class free, then decide</span></h2>
+    <p><span class="ar">نتعرّف على مستواك وهدفك، ونضع لك خطة واضحة. لا التزام ولا بيانات دفع.</span><span class="en">We learn your level and goal, then build a clear plan. No commitment and no payment details.</span></p>
+    <a class="btn wa" href="about.html#book">🎁 <span class="ar">احجز الآن</span><span class="en">Book now</span></a>
+  </section>
 
   <footer>
-    <b>Tarteel Al-Quran · ترتيل القرآن</b> — حصص أونلاين في القرآن والتجويد والعربي لغير الناطقين بالعربية.<br>
-    <a href="about.html" style="color:var(--gold)">عن المعلم والحجز</a> · كل لعبة تذكر مصدرها من كتب أهل العلم بالصفحة. لعبة جديدة تقريبًا كل يوم ✨
+    <b>Tarteel Al-Quran · ترتيل القرآن</b><br>
+    <span class="ar">حصص أونلاين في القرآن والتجويد والعربية لغير الناطقين بها. لعبة جديدة تقريبًا كل يوم.</span><span class="en">Online classes in Qur'an, Tajweed and Arabic for non-Arabic speakers. A new game almost every day.</span><br>
+    <a href="about.html"><span class="ar">عن المعلم والحجز</span><span class="en">About the teacher & booking</span></a>
   </footer>
 </div>
+<a class="fab" id="fab" href="about.html#book" aria-label="WhatsApp" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.5 4c1.7.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.2-.3-.3-.6-.4z"/></svg></a>
+
 <script src="games.js"></script>
 <script>
-const AGE={kids:['👧 أطفال','var(--kids)'],teens:['🧑 مراهقين','var(--teens)'],adults:['🧔 كبار','var(--adults)']};
-const SUBJ={tajweed:['📖 تجويد','var(--tajweed)'],hifz:['🧠 حفظ','var(--hifz)'],arabic:['✍️ عربي','var(--arabic)'],islamic:['🕌 إسلاميات','var(--islamic)']};
-const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const L={lang:store.get('tq-lang')||((navigator.language||'').toLowerCase().startsWith('ar')?'ar':'en')};
+const t=(a,e)=>L.lang==='ar'?a:e;
+const num=n=>L.lang==='ar'?String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]):String(n);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-const fmt=d=>{const [y,m,dd]=d.split('-').map(Number);return `${ar(dd)} ${MONTHS[m-1]} ${ar(y)}`};
+const AGE={kids:{ar:'أطفال',en:'Kids',ico:'👧',c:'var(--kids)',range:['٤–١٢ سنة','Ages 4–12'],
+    d:['ألعاب وحركة وتشجيع، وحصص قصيرة تُبقي الطفل متحمسًا.','Games, movement and encouragement, in short classes that keep children excited.']},
+  teens:{ar:'مراهقون',en:'Teens',ico:'🧑',c:'var(--teens)',range:['١٣–١٧ سنة','Ages 13–17'],
+    d:['مواقف من حياتهم، ونقاش وتحديات، وربط العلم بالواقع.','Real-life situations, discussion and challenges that link knowledge to daily life.']},
+  adults:{ar:'كبار',en:'Adults',ico:'🧔',c:'var(--adults)',range:['١٨ سنة فأكثر','Ages 18+'],
+    d:['خطة مرنة تناسب وقتك، وفهم للمعنى مع الإتقان.','A flexible plan around your schedule, with meaning alongside accuracy.']}};
+const SUBJ={tajweed:{ar:'تجويد',en:'Tajweed',ico:'📖',c:'var(--tajweed)'},hifz:{ar:'حفظ',en:'Memorisation',ico:'🧠',c:'var(--hifz)'},
+  arabic:{ar:'عربية',en:'Arabic',ico:'✍️',c:'var(--arabic)'},islamic:{ar:'إسلاميات',en:'Islamic studies',ico:'🕌',c:'var(--islamic)'}};
+const MONTHS={ar:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+  en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
+const fmt=d=>{const [y,m,dd]=d.split('-').map(Number);return `${num(dd)} ${MONTHS[L.lang][m-1]} ${num(y)}`};
 const isNew=d=>d&&(Date.now()-new Date(d+'T00:00:00').getTime())<7*864e5;
 const byDate=a=>(a||[]).slice().sort((x,y)=>(y.date||'').localeCompare(x.date||''));
-const games=byDate(window.GAMES),lessons=byDate(window.LESSONS);
-const live=games.filter(g=>g.file);
+const games=byDate(window.GAMES),lessons=byDate(window.LESSONS),live=games.filter(g=>g.file);
+const EN=window.DESC_EN||{};
+const desc=g=>L.lang==='en'&&EN[g.file]?EN[g.file]:g.desc;
+const strip=s=>String(s).toLowerCase().replace(/[ً-ٰٟ]/g,'');
 const state={age:'all',subj:'all',q:'',tab:'games'};
-try{const s=JSON.parse(localStorage.getItem('tq-filter')||'{}');Object.assign(state,s,{q:''});if(location.hash==='#lessons')state.tab='lessons'}catch(e){}
+try{const s=JSON.parse(store.get('tq-filter')||'{}');if(AGE[s.age])state.age=s.age;if(SUBJ[s.subj])state.subj=s.subj;if(location.hash==='#lessons')state.tab='lessons'}catch(e){}
+const $=id=>document.getElementById(id);
+const saveFilter=()=>store.set('tq-filter',JSON.stringify({age:state.age,subj:state.subj}));
+const waNum=String((window.SITE&&SITE.contact&&SITE.contact.whatsapp)||'').replace(/\D/g,'');
 
-document.getElementById('stats').innerHTML=`<span class="stat">🎮 <b>${ar(live.length)}</b> لعبة</span><span class="stat">📘 <b>${ar(lessons.length)}</b> درس</span>`+
-  Object.entries(SUBJ).map(([k,v])=>{const n=live.filter(g=>g.subj===k).length;return n?`<span class="stat">${v[0]} <b>${ar(n)}</b></span>`:''}).join('');
+function drawStatic(){
+  document.documentElement.lang=L.lang;document.documentElement.dir=L.lang==='ar'?'rtl':'ltr';
+  $('lang').textContent=L.lang==='ar'?'English':'العربية';
+  $('q').placeholder=t('🔎 ابحث: مد، نون، حفظ، جملة…','🔎 Search: madd, noon, memorise, sentence…');
+  document.body.dataset.age=state.age==='all'?'':state.age;
 
-const newest=live[0];
-if(newest){document.getElementById('spot').innerHTML=`<div class="ico" aria-hidden="true">${newest.ico}</div>
-  <span class="eyebrow">✨ أَحْدَثُ لُعْبَة · ${fmt(newest.date)}</span>
-  <h2>${newest.ar}</h2><p>${esc(newest.desc)}</p><a href="games/${newest.file}">▶ اِلْعَبِ الآن</a>`}
-const B=window.SITE&&SITE.bookOfWeek;
-if(B){document.getElementById('bow').innerHTML=`<span class="eyebrow">📚 كِتَابُ الأُسْبُوع (من ${fmt(B.since)})</span><b>«${B.ar}»</b><small>${B.by}</small><small>${B.note||''}</small>`}
-else document.getElementById('bow').hidden=true;
+  $('paths-grid').innerHTML=Object.entries(AGE).map(([k,a])=>{
+    const n=live.filter(g=>(g.age||[]).includes(k)).length;
+    return `<button class="path" data-a="${k}" style="--c:${a.c}" aria-pressed="${state.age===k}">
+      <span class="ico" aria-hidden="true">${a.ico}</span><b>${t(a.ar,a.en)}</b><span class="age">${t(a.range[0],a.range[1])}</span>
+      <p>${t(a.d[0],a.d[1])}</p><span class="n">${t(`${num(n)} لعبة مناسبة ←`,`${num(n)} games for this age →`)}</span></button>`}).join('');
 
-const grid=document.getElementById('grid');
-function render(){
-  const q=state.q.trim().toLowerCase(),src=state.tab==='lessons'?lessons:games,dir=state.tab==='lessons'?'lessons/':'games/';
-  const list=src.filter(g=>(state.age==='all'||(g.age||[]).includes(state.age))&&(state.subj==='all'||g.subj===state.subj)&&
-    (!q||[g.ar,g.en,g.desc,g.book].join(' ').toLowerCase().replace(/[ً-ْ]/g,'').includes(q.replace(/[ً-ْ]/g,''))));
-  document.getElementById('count').textContent=list.length===src.length?'':`${ar(list.length)} من ${ar(src.length)}`;
-  grid.innerHTML=list.length?list.map(g=>`<article class="card ${g.file?'live':''} ${g.file&&isNew(g.date)?'new':''}">
-    ${g.file&&isNew(g.date)?'<span class="badge">جديد</span>':''}
-    <div class="ico" aria-hidden="true">${g.ico}</div><h2>${g.ar}<span class="en">${esc(g.en)}</span></h2>
-    <div class="tags">${(g.age||[]).map(t=>AGE[t]?`<span class="tag" style="--c:${AGE[t][1]}">${AGE[t][0]}</span>`:'').join('')}${SUBJ[g.subj]?`<span class="tag" style="--c:${SUBJ[g.subj][1]}">${SUBJ[g.subj][0]}</span>`:''}</div>
-    <p>${esc(g.desc)}</p>
-    <div class="meta"><span>📚 ${esc(g.book)}${g.min?` · ⏱️ ${ar(g.min)} د`:''}</span>${g.date?`<time datetime="${g.date}">${fmt(g.date)}</time>`:''}</div>
-    ${g.file?`<div class="acts"><a class="play" href="${dir}${g.file}">${state.tab==='lessons'?'📘 اِفْتَحِ الدَّرْس':'▶ اِلْعَبِ الآن'}</a><button class="copy" data-f="${dir}${g.file}" title="انسخ الرابط لترسله للطالب">🔗</button></div>`:'<span class="soon">قريبًا</span>'}</article>`).join('')
-    :'<p class="empty">لا توجد نتائج بهذا البحث — جرّب كلمة أخرى.</p>';
+  const subj=[['all','🎯',t('كل المواد','All subjects')]].concat(Object.entries(SUBJ).map(([k,s])=>[k,s.ico,t(s.ar,s.en)]));
+  $('subj-chips').innerHTML=(state.age!=='all'?`<button class="chip" data-reset="1">✕ ${t('كل الأعمار','All ages')}</button>`:'')+
+    subj.map(([k,i,l])=>`<button class="chip" data-s="${k}" aria-pressed="${state.subj===k}">${i} ${l}</button>`).join('');
+
+  const nw=live[0];
+  $('spot').innerHTML=nw?`<div class="ico" aria-hidden="true">${nw.ico}</div>
+    <span class="lbl">✨ ${t('أحدث لعبة','Newest game')} · ${fmt(nw.date)}</span>
+    <h3>${L.lang==='ar'?nw.ar:esc(nw.en)}</h3><p>${esc(desc(nw))}</p>
+    <a class="btn" href="games/${nw.file}">▶ ${t('العب الآن','Play now')}</a>`:'';
+  const B=window.SITE&&SITE.bookOfWeek;
+  $('bow').hidden=!B;
+  if(B)$('bow').innerHTML=`<span class="lbl">📚 ${t('كتاب الأسبوع','Book of the week')} · ${fmt(B.since)}</span><b>«${B.ar}»</b><small>${B.by}</small><small>${B.note||''}</small>`;
+
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x.dataset.t===state.tab));
+  if(waNum){const u='https://wa.me/'+waNum+'?text='+encodeURIComponent("Assalamu alaikum, I'd like to book a free trial class (Tarteel Al-Quran).");
+    $('fab').href=u;$('fab').target='_blank';$('fab').rel='noopener';$('fab').hidden=false}
 }
-document.querySelectorAll('.chip').forEach(c=>{
-  if(state[c.dataset.g]!==undefined)c.setAttribute('aria-pressed',c.dataset.f===state[c.dataset.g]);
-  c.onclick=()=>{state[c.dataset.g]=c.dataset.f;document.querySelectorAll(`.chip[data-g="${c.dataset.g}"]`).forEach(x=>x.setAttribute('aria-pressed',x===c));
-    try{localStorage.setItem('tq-filter',JSON.stringify({age:state.age,subj:state.subj}))}catch(e){}render()}});
-document.querySelectorAll('.tab').forEach(t=>{t.setAttribute('aria-selected',t.dataset.t===state.tab);t.onclick=()=>{state.tab=t.dataset.t;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));history.replaceState(null,'',t.dataset.t==='lessons'?'#lessons':location.pathname);render()}});
-document.getElementById('q').oninput=e=>{state.q=e.target.value;render()};
-grid.addEventListener('click',e=>{const b=e.target.closest('.copy');if(!b)return;const url=new URL(b.dataset.f,location.href).href;
-  const done=()=>{const t=document.createElement('div');t.className='toast';t.textContent='✓ اتنسخ الرابط';document.body.appendChild(t);setTimeout(()=>t.remove(),1500)};
-  (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(done,()=>{prompt('انسخ الرابط:',url)})});
-render();
+
+function render(){
+  const q=strip(state.q.trim()),src=state.tab==='lessons'?lessons:games,dir=state.tab==='lessons'?'lessons/':'games/';
+  const list=src.filter(g=>(state.age==='all'||(g.age||[]).includes(state.age))&&(state.subj==='all'||g.subj===state.subj)&&
+    (!q||strip([g.ar,g.en,g.desc,EN[g.file]||'',g.book].join(' ')).includes(q)));
+  $('count').textContent=list.length===src.length?'':t(`${num(list.length)} من ${num(src.length)}`,`${list.length} of ${src.length}`);
+  $('grid').innerHTML=list.length?list.map(g=>{
+    const nw=g.file&&isNew(g.date),s=SUBJ[g.subj];
+    return `<article class="card ${nw?'new':''}">${nw?`<span class="badge">${t('جديد','New')}</span>`:''}
+    <div class="ico" aria-hidden="true">${g.ico}</div>
+    <h3>${L.lang==='ar'?g.ar:esc(g.en)}<small>${L.lang==='ar'?esc(g.en):g.ar}</small></h3>
+    <div class="tags">${(g.age||[]).map(k=>AGE[k]?`<span class="tag" style="--c:${AGE[k].c}">${AGE[k].ico} ${t(AGE[k].ar,AGE[k].en)}</span>`:'').join('')}${s?`<span class="tag" style="--c:${s.c}">${s.ico} ${t(s.ar,s.en)}</span>`:''}</div>
+    <p>${esc(desc(g))}</p>
+    <div class="meta"><span>📚 ${esc(g.book)}${g.min?` · ⏱️ ${num(g.min)} ${t('د','min')}`:''}</span>${g.date?`<time datetime="${g.date}">${fmt(g.date)}</time>`:''}</div>
+    ${g.file?`<div class="acts"><a class="btn" href="${dir}${g.file}">${state.tab==='lessons'?'📘 '+t('افتح الدرس','Open lesson'):'▶ '+t('العب الآن','Play now')}</a><button class="copy" data-f="${dir}${g.file}" title="${t('انسخ الرابط لإرساله للطالب','Copy link to send to the student')}" aria-label="${t('نسخ الرابط','Copy link')}">🔗</button></div>`:`<span class="soon">${t('قريبًا','Coming soon')}</span>`}</article>`}).join('')
+    :`<p class="empty">${t('لا توجد نتائج لهذا البحث، جرّب كلمة أخرى.','No results for this search. Try another word.')}</p>`;
+}
+function all(){drawStatic();render()}
+
+document.addEventListener('click',e=>{
+  const p=e.target.closest('.path');
+  if(p){state.age=state.age===p.dataset.a?'all':p.dataset.a;saveFilter();all();if(state.age!=='all')$('library').scrollIntoView({behavior:'smooth'});return}
+  const c=e.target.closest('.chip');
+  if(c){if(c.dataset.reset)state.age='all';else state.subj=c.dataset.s;saveFilter();all();return}
+  const tb=e.target.closest('.tab');
+  if(tb){state.tab=tb.dataset.t;history.replaceState(null,'',tb.dataset.t==='lessons'?'#lessons':location.pathname);all();return}
+  const b=e.target.closest('.copy');
+  if(b){const url=new URL(b.dataset.f,location.href).href;
+    const done=()=>{const x=document.createElement('div');x.className='toast';x.textContent=t('✓ تم نسخ الرابط','✓ Link copied');document.body.appendChild(x);setTimeout(()=>x.remove(),1500)};
+    (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(done,()=>{prompt(t('انسخ الرابط:','Copy the link:'),url)})}
+});
+$('lang').onclick=()=>{L.lang=L.lang==='ar'?'en':'ar';store.set('tq-lang',L.lang);all()};
+$('q').oninput=e=>{state.q=e.target.value;render()};
+all();
 </script>
 </body>
 </html>

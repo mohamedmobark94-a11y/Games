@@ -77,3 +77,34 @@ window.LESSONS = [
   {file:'reciters-road.html', date:'2026-09-14', ico:'🛣️', ar:'طَرِيقُ القَارِئ', en:"The Reciter's Road", age:['teens','adults'], subj:'tajweed',
    desc:'علامات الوقف الست في المصحف وعلامات أخرى ستراها، بأمثلة.', book:'علامات المصحف'},
 ];
+
+/* =====================================================================
+   🌐 English descriptions (optional) — key = file name. If a file is missing here the Arabic desc is shown.
+   ===================================================================== */
+window.DESC_EN = {
+  'sentence-train.html':'The sentence is a train and each word is a carriage: label nouns, verbs and particles, tell complete sentences from incomplete ones, and build your own.',
+  'page-map.html':'Photograph the page with your eyes, then answer: where does the verse start? Line cues fade away step by step, and a weakness map shows each line.',
+  'dabt-keys.html':'Every verse is a chest with five locks: listen, understand, memorise from the end, consolidate, recite.',
+  'hifz-chain.html':'Order the chain of transmission from Jibreel to you, guess the memoriser from clues, and recite in turns with a classmate.',
+  'quran-stars.html':'Arrange the words of a verse as stars, repeat it three times, then memorise it as the stars disappear one by one.',
+  'waqf-lights.html':'Where do I stop? Where do I restart? Stopping, starting, the brief pause and connecting hamzas, shown as traffic lights.',
+  'fat-thin-letters.html':'Heavy and light letters through two characters with movements, a memory game for look-alike letters, and balloons for the levels of heaviness.',
+  'madd-ladder.html':'Diagnose each madd with detective questions, order the strength ladder, and measure madd length in counts.',
+  'sun-moon-wheel.html':'Spin the wheel and read the word: is the lam solar or lunar? Each has its own movement.',
+  'nun-mim-scale.html':'What is the rule, and why? Rules of silent nūn and mīm on real Qur’anic phrases.',
+  'sifat-houses.html':'Letter characteristics as characters with movements and sounds; drag each letter to its house, with a strength battle for older learners.',
+  'letter-journey.html':'Points of articulation on a map that follows the breath from the chest to the lips.',
+  'confidence-bet.html':'Real-life situations for young people, answered with evidence: choose, then bet on how sure you are.',
+  'open-the-box.html':'Surprise boxes for vocabulary about home, food, family and animals, with manners cards.',
+  'letter-freeze.html':'Move to the sound; at “Freeze!” strike the pose of the letter’s vowel by its dots and clap its count.',
+  'letter-balloons.html':'Letter balloons float up from the hills: catch the requested letter before it flies away.',
+  'hats-sounds.html':'A letter has a name and a sound: three “hats” (fatha, kasra, damma) and three sounds, with listening and movement games.',
+  'appearance.html':'Etiquette of appearance, cleanliness and adornment for teens, with evidence, situations and questions.',
+  'fiqh-quiz.html':'An interactive quiz on youth fiqh and the levels of the religion.',
+  'three-levels-deen.html':'Islam, Īmān and Iḥsān from the Hadith of Jibreel, with activities and questions.',
+  'allah-watching.html':'A lesson on mindfulness for children: Allah sees me and hears me everywhere, through stories and situations.',
+  'aynuk-amana.html':'Lowering the gaze and guarding chastity for teens, in an interactive presentation with pen and whiteboard.',
+  'ghadd-albasar.html':'A 30-minute lesson in stations: the ruling, the evidence, situations and a quiz.',
+  'ahkam-almadd.html':'A 40-minute beginner lesson: natural and secondary madd with examples and games.',
+  'reciters-road.html':'The six stop signs in the muṣḥaf and other marks you will meet, with examples.'
+};
