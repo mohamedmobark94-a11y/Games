@@ -1,0 +1,698 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>إشارات الوقف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+/* «إِشَارَاتُ الوَقْف» — navy/gold "night road" style for teens & adults (one look on purpose: screen-share). */
+:root{
+  color-scheme:dark;
+  --bg:#0B1E2D; --bg2:#12304A; --card:#163A57; --ink:#F4EBD6; --muted:#A9BCCB; --line:#2A5675;
+  --gold:#E2B85C; --gold2:#C9A35A;
+  --green:#2ECC71; --yellow:#F5C33B; --red:#E74C3C; --blue:#5DADE2; --purple:#AF7AC5;
+  --teamA:#5DADE2; --teamB:#F1948A; --ok:#2ECC71; --bad:#E74C3C;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;
+  --f-ar:"Amiri","Traditional Arabic","Noto Naskh Arabic",serif;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:radial-gradient(1200px 600px at 70% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);direction:rtl;font-size:18px;line-height:1.5;overflow-x:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:10px 28px;display:flex;flex-direction:column;gap:12px}
+.top-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.brand{flex:1 1 260px;margin:0;font-size:1.55rem;font-weight:800;line-height:1.2;text-wrap:balance}
+.brand b{color:var(--gold)}
+.brand small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+.tbtn{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;min-height:40px}
+.tbtn[aria-pressed="true"],.tbtn.on{background:var(--gold);border-color:var(--gold);color:#10263A}
+.en{display:none;direction:ltr;unicode-bidi:isolate;font-family:system-ui,sans-serif;font-size:.8em;color:var(--muted);font-weight:500}
+body.show-en .en{display:inline}
+body.show-en .en.blk{display:block}
+button:focus-visible,select:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border-radius:18px;padding:8px 12px;border:2px solid var(--line)}
+.bar label{font-weight:700;font-size:.95rem}
+.bar select{font:inherit;font-size:.95rem;border:2px solid var(--line);border-radius:12px;padding:2px 8px;background:var(--bg2);color:var(--ink);min-height:40px;max-width:100%}
+.bar .grow{flex:1}
+.teams{display:flex;gap:10px;flex-wrap:wrap}
+.team{flex:1 1 200px;display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--line);border-radius:20px;padding:6px 14px;transition:transform .2s,border-color .2s}
+.team .nm{font-weight:800;font-size:1.1rem;color:var(--tc)}
+.team .pts{margin-inline-start:auto;font-weight:800;font-size:1.7rem;color:var(--gold);font-variant-numeric:tabular-nums}
+.team .turn{font-size:.8rem;font-weight:700;background:var(--tc);color:#10263A;border-radius:999px;padding:0 10px;visibility:hidden}
+.team.now{border-color:var(--tc);transform:scale(1.02)}
+.team.now .turn{visibility:visible}
+
+#s0{position:relative;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:14px;align-items:start}
+.panel{background:var(--card);border:3px solid var(--line);border-radius:24px;padding:14px;min-width:0}
+.card{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.prog{font-weight:700;color:var(--muted);font-size:.95rem;align-self:stretch;display:flex;justify-content:space-between;gap:8px}
+.q{font-weight:800;font-size:1.12rem}
+.tip{font-size:.95rem;color:var(--muted);max-width:60ch}
+.ref{font-size:.9rem;color:var(--gold);font-weight:700}
+
+/* the road: verse words */
+.road{align-self:stretch;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px;direction:rtl;background:linear-gradient(#0E2638,#0E2638) padding-box;border:2px dashed #3C6A8A;border-radius:20px;padding:12px 10px}
+.w{font-family:var(--f-ar);font-weight:700;font-size:clamp(1.7rem,4.6vw,2.6rem);line-height:1.5;color:var(--ink);background:none;border:2px solid transparent;border-radius:12px;padding:0 6px;transition:all .25s}
+button.w{cursor:pointer;border-color:#2F5D7E;background:#143650}
+button.w:hover:not(:disabled){border-color:var(--gold);transform:translateY(-2px)}
+.w.dim{opacity:.45}
+.w.hit{border-color:var(--green);background:color-mix(in srgb,var(--green) 22%,transparent)}
+.w.ok2{border-color:var(--green);border-style:dashed}
+.w.no{border-color:var(--red);animation:shake .35s}
+.stop{display:inline-grid;place-items:center;width:52px;height:52px;clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%);background:var(--sc,#7F8C8D);color:#fff;font-weight:800;font-size:.8rem;line-height:1.05;text-align:center;transition:background .3s;flex:none}
+.gap{font:inherit;min-width:30px;height:46px;border-radius:10px;border:2px dashed #3C6A8A;background:transparent;color:var(--muted);cursor:pointer;font-weight:800}
+.gap:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.gap.hit{border-style:solid;border-color:var(--purple);background:color-mix(in srgb,var(--purple) 30%,transparent);color:#fff;font-family:var(--f-ar);font-size:1.4rem}
+.gap.no{border-color:var(--red);animation:shake .35s}
+.gap:disabled{cursor:default}
+
+.step{align-self:stretch;display:flex;flex-direction:column;gap:6px;background:var(--bg2);border:2px solid var(--line);border-radius:16px;padding:8px 10px;animation:pop .3s}
+.step .q{font-size:1.05rem;text-align:start}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.ob{font:inherit;font-weight:800;min-height:56px;border-radius:14px;border:2px solid var(--line);border-inline-start:9px solid var(--ac,var(--gold));background:var(--card);color:var(--ink);cursor:pointer;font-size:1rem;padding:4px 10px;line-height:1.25;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:start}
+.ob small{font-weight:600;font-size:.78rem;color:var(--muted)}
+.ob .en{display:none}
+body.show-en .ob .en{display:block}
+.ob:hover:not(:disabled){transform:translateY(-2px);border-color:var(--ac,var(--gold))}
+.ob.right{background:color-mix(in srgb,var(--ok) 22%,var(--card));border-color:var(--ok)}
+.ob.bad{opacity:.4;animation:shake .35s}
+.ob:disabled{cursor:default}
+/* light buttons */
+.lights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.lb{font:inherit;cursor:pointer;border-radius:18px;border:2px solid var(--line);background:#0E2638;color:var(--ink);padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:800;font-size:.95rem;line-height:1.25;min-height:120px}
+.lb i{width:54px;height:54px;border-radius:50%;background:var(--lc);box-shadow:0 0 22px var(--lc);display:block}
+.lb small{font-weight:600;color:var(--muted);font-size:.75rem}
+.lb:hover:not(:disabled){border-color:var(--lc);transform:translateY(-2px)}
+.lb.right{border-color:var(--lc);background:color-mix(in srgb,var(--lc) 20%,#0E2638)}
+.lb.bad{opacity:.35;animation:shake .35s}
+.lb:disabled{cursor:default}
+/* the 2x2 map */
+.grid2{display:grid;grid-template-columns:6.5em 1fr 1fr;gap:6px;align-items:stretch}
+.grid2 .hd{font-size:.8rem;font-weight:800;color:var(--muted);display:grid;place-items:center;text-align:center;padding:2px}
+.grid2 .ob{min-height:84px}
+@keyframes shake{25%{transform:translateX(6px)}75%{transform:translateX(-6px)}}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+.info{align-self:stretch;text-align:start;background:var(--bg2);border-inline-start:7px solid var(--ac,var(--gold));border-radius:14px;padding:8px 14px;animation:pop .35s}
+.info .t{font-weight:800;font-size:1.15rem;color:var(--ac)}
+.info .bq{font-family:var(--f-ar);font-size:1.22rem;line-height:1.85;margin-top:2px}
+.info .why{margin-top:4px;font-weight:700}
+.info small{display:block;color:var(--gold2);font-weight:700}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.big-btn{font:inherit;font-weight:800;font-size:1.1rem;border:0;border-radius:16px;padding:6px 22px;min-height:52px;cursor:pointer;color:#10263A;background:var(--gold);box-shadow:0 5px 0 #8C6A25}
+.big-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #8C6A25}
+.big-btn.green{background:var(--green);box-shadow:0 5px 0 #1E8449}
+.big-btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 5px 0 var(--line)}
+
+/* hamzat al-wasl */
+.door{font-family:var(--f-ar);font-weight:700;font-size:clamp(3rem,10vw,5.2rem);line-height:1.5;background:#0E2638;border:3px solid #3C6A8A;border-radius:24px;padding:0 28px;position:relative;min-width:60%}
+.door .mk{color:var(--yellow);text-decoration:underline 4px var(--gold);text-underline-offset:16px}
+.door.open{border-color:var(--green);box-shadow:0 0 30px color-mix(in srgb,var(--green) 40%,transparent)}
+.ctx{font-family:var(--f-ar);font-size:1.5rem;color:var(--muted)}
+.keys{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.key{font:inherit;cursor:pointer;min-width:110px;min-height:96px;border-radius:20px;border:3px solid var(--line);background:#0E2638;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 10px}
+.key b{font-family:var(--f-ar);font-size:2.6rem;line-height:1.2;color:var(--gold)}
+.key small{font-weight:700;font-size:.8rem;color:var(--muted)}
+.key:hover:not(:disabled){border-color:var(--gold);transform:translateY(-3px) rotate(-2deg)}
+.key.right{border-color:var(--green);background:color-mix(in srgb,var(--green) 20%,#0E2638)}
+.key.bad{opacity:.35;animation:shake .35s}
+.key:disabled{cursor:default}
+.say{font-family:var(--f-ar);font-size:2.2rem;font-weight:700;color:var(--green)}
+.speed{align-self:stretch;height:10px;background:#0E2638;border-radius:99px;overflow:hidden}
+.speed i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));transform-origin:right;transition:transform linear}
+
+/* side: traffic light */
+.side{overflow:hidden}
+.side h2{margin:0 0 6px;font-size:1.05rem;color:var(--muted)}
+.tl{display:flex;gap:14px;align-items:center;justify-content:center}
+.pole{background:#0A1722;border:3px solid #334F66;border-radius:26px;padding:10px 12px;display:flex;flex-direction:column;gap:10px}
+.lamp{width:62px;height:62px;border-radius:50%;background:#1D2B36;border:3px solid #22384A;transition:all .3s}
+.lamp.on{background:var(--lc);box-shadow:0 0 30px var(--lc),inset 0 -6px 10px rgba(0,0,0,.25)}
+.legend{display:flex;flex-direction:column;gap:8px;font-size:.9rem;font-weight:700}
+.legend div{display:flex;gap:8px;align-items:flex-start}
+.legend i{flex:none;width:16px;height:16px;border-radius:50%;background:var(--lc);margin-top:4px}
+.legend small{display:block;color:var(--muted);font-weight:600}
+.car{font-size:2.2rem;text-align:center;transition:transform .8s ease;line-height:1}
+.car.go{transform:translateX(-110px)}
+.car.back{transform:translateX(70px) scaleX(-1)}
+.hadith{margin-top:10px;background:var(--bg2);border-radius:16px;padding:8px 12px;font-size:.9rem}
+.hadith .bq{font-family:var(--f-ar);font-size:1.15rem;line-height:1.8}
+.hadith small{display:block;color:var(--muted)}
+.breath{margin-top:10px;background:var(--bg2);border-radius:16px;padding:8px 12px;display:flex;flex-direction:column;gap:6px}
+.breath .row{justify-content:flex-start}
+.book{margin-top:8px;font-size:.82rem;color:var(--muted)}
+
+.endmsg{text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;align-self:stretch}
+.endmsg .trophy{font-size:4.5rem;line-height:1}
+.endmsg h2{margin:0;font-size:1.9rem;color:var(--gold)}
+.report{align-self:stretch;display:flex;flex-direction:column;gap:5px;text-align:start}
+.report .r{display:grid;grid-template-columns:10em 1fr 3.2em;gap:8px;align-items:center;font-weight:700;font-size:.92rem}
+.report .bar2{height:14px;background:#0E2638;border-radius:99px;overflow:hidden}
+.report .bar2 i{display:block;height:100%;background:var(--ac)}
+.miss{font-family:var(--f-ar);font-size:1.4rem;line-height:1.9}
+
+.cf{position:fixed;top:-20px;width:11px;height:15px;border-radius:3px;pointer-events:none;z-index:80;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.starpop{position:fixed;top:22%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:1.8rem;background:var(--card);color:var(--ink);border:4px solid var(--gold);border-radius:999px;padding:4px 24px;z-index:81;pointer-events:none;white-space:nowrap;animation:sp 1.2s ease forwards}
+@keyframes sp{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}25%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-90%)}}
+
+/* pen tools (from lesson-engine/engine.css) */
+.ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45;pointer-events:none;touch-action:none}
+body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
+body.ink-erase .ink-cv{cursor:cell!important}
+body.ink-laser .ink-cv{cursor:none!important}
+#wbLaser{position:fixed;inset:0;width:100%;height:100%;z-index:66;pointer-events:none}
+#wbBoard{position:fixed;inset:0;z-index:60;background-color:#FDFCF8;background-image:linear-gradient(#E6ECEF 1px,transparent 1px),linear-gradient(90deg,#E6ECEF 1px,transparent 1px);background-size:40px 40px}
+#wbBoard[hidden]{display:none!important}
+#wbBoard .bt{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font:700 18px/1 var(--f-ui);color:#86662A;background:#FBF3E1;border:1px solid #EBDDBB;border-radius:20px;padding:8px 16px;z-index:2;pointer-events:none;white-space:nowrap}
+#tools{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:5px;background:rgba(7,23,33,.95);border:1px solid #C9A35A;border-radius:16px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#tools button{width:42px;height:42px;border-radius:10px;border:1px solid #24485A;background:#12303F;color:#E8F1F5;display:grid;place-items:center;padding:0;cursor:pointer}
+#tools button svg{width:22px;height:22px}
+#tools button.on{background:#C9A35A;color:#0B2431;border-color:#C9A35A}
+#tools .sw i{width:22px;height:22px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.6)}
+#tools .sw.on{background:#24485A;border-color:#C9A35A}
+#tools .sz i{display:block;border-radius:50%;background:#E8F1F5}
+#tools .sep{height:1px;background:#2A5266;margin:2px 0}
+#tools[hidden]{display:none!important}
+@media (max-height:980px){#tools{gap:4px;padding:6px}#tools button{width:34px;height:34px}#tools button svg{width:18px;height:18px}#tools .sw i{width:18px;height:18px}}
+@media (max-height:800px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+#drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:860px){#s0{grid-template-columns:1fr}.report .r{grid-template-columns:7.5em 1fr 3em}.lamp{width:46px;height:46px}.lb{min-height:100px}.lb i{width:40px;height:40px}.grid2{grid-template-columns:1fr 1fr}.grid2 .hd{display:none}.stop{width:44px;height:44px;font-size:.7rem}.key{min-width:80px}}
+</style>
+
+<div class="wrap">
+  <header class="top-row">
+    <h1 class="brand">إِشَارَاتُ <b>الوَقْف</b> 🚦 <span class="en">Waqf Traffic Lights</span><small>ترتيل القرآن · Tarteel Al-Quran — باب الوقف والابتداء وهمزة الوصل من «الوجيز في علم التجويد»</small></h1>
+    <button class="tbtn" id="enB" aria-pressed="false">English</button>
+    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+  </header>
+  <div class="bar">
+    <label for="modeSel">اللعبة:</label>
+    <select id="modeSel">
+      <option value="waqf">🚦 إِشَارَةُ الوَقْف (أَيْنَ أَقِف؟ مِنْ أَيْنَ أَبْدَأ؟)</option>
+      <option value="wasl">🔑 مِفْتَاحُ البِدَايَة (همزة الوصل)</option>
+      <option value="sakt">⏸ وَقْفٌ أَمْ سَكْتٌ أَمْ قَطْع؟ (+ سكتات حفص)</option>
+    </select>
+    <label for="setSel">الأمثلة:</label>
+    <select id="setSel"></select>
+    <label for="teamSel">اللاعبون:</label>
+    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <button class="tbtn" id="spdB" aria-pressed="false" title="في «مفتاح البداية»: نقاط أكثر للأسرع (مثل Kahoot)">⚡ سُرْعَة</button>
+    <span class="grow"></span>
+    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+  </div>
+  <div class="teams" id="teams"></div>
+  <section id="s0">
+    <div class="panel card" id="qa" aria-live="polite"></div>
+    <div class="panel side">
+      <h2>🚦 إِشَارَةُ المُرُورِ فِي التِّلَاوَة <span class="en blk">The recitation traffic light</span></h2>
+      <div class="tl">
+        <div class="pole" aria-hidden="true"><div class="lamp" id="lp-red" style="--lc:var(--red)"></div><div class="lamp" id="lp-yellow" style="--lc:var(--yellow)"></div><div class="lamp" id="lp-green" style="--lc:var(--green)"></div></div>
+        <div class="legend">
+          <div style="--lc:var(--green)"><i></i><span>قِفْ ← وَابْدَأْ بِمَا بَعْدَهَا<small>تَامّ · كَافٍ · رَأْسُ آيَة</small></span></div>
+          <div style="--lc:var(--yellow)"><i></i><span>قِفْ ← ثُمَّ ارْجِعْ وَصِلْ<small>حَسَن (لَيْسَ رَأْسَ آيَة)</small></span></div>
+          <div style="--lc:var(--red)"><i></i><span>لَا تَقِفْ! (إِلَّا لِضَرُورَة) ← ارْجِعْ<small>قَبِيح · أَشَدُّ قُبْحًا</small></span></div>
+        </div>
+      </div>
+      <div class="car" id="car" aria-hidden="true">🚗</div>
+      <div class="hadith"><div class="bq">«كان رسول الله ﷺ إذا قرأ قطع قراءته آية آية. يقول: بسم الله الرحمن الرحيم، ثم يقف، ثم يقول: الحمد لله رب العالمين، ثم يقف…»</div>
+        <small>حديث أم سلمة ﵂ كما أورده المؤلف (ص ٤٣)، وقال: «وهذا الحديث أصل في هذا الباب». التخريج في حاشية الكتاب (من المحقق): أبو داود (٤٠٠١)، والترمذي (٢٩٢٨)، وأحمد ٦/٣٠٢، ونقل عن ابن الجزري في «النشر»: «حديث حسن وسنده صحيح».</small></div>
+      <div class="breath">
+        <b>🫁 اِسْمَعِ الفَرْق <span class="en">Hear the difference</span></b>
+        <div class="row">
+          <button class="tbtn" id="bWaqf">🫁 وَقْف (بِنَفَس)</button>
+          <button class="tbtn" id="bSakt">⏸ سَكْت (بِلَا نَفَس)</button>
+          <button class="tbtn" id="bQat">📕 قَطْع (اِنْتِهَاء)</button>
+        </div>
+      </div>
+      <div class="book" id="bookRef"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================================================
+   ✏️ المحتوى — عدّل هنا فقط  (EDIT CONTENT HERE)
+   WAQF_SETS = «صيغة الآية على الطريق»: { key:{ ar, en, items:[ {t, ref, k, note?} ] } }
+       t  = كلمات الآية بمسافات؛ ضع ⏸ مكان الوقف، وضع ^ قبل كل كلمة يصح الابتداء منها بعد هذا الوقف.
+       k  = نوع الوقف (مفتاح من TYPES): tam / kafi / hasan / hasanHead / head / qabih / aqbah / rasm
+   WASL = همزة الوصل: {t (الكلمة بـ ٱ والحرف الثالث بين [ ]), ctx, ref, ans:['u'|'i'|'a'|'l'], kind (مفتاح من WASL_KINDS), say}
+   SAKT = سكتات حفص: {w:[الكلمات], gap:رقم الكلمة التي بعدها السكت (من ٠), ref, why}
+   SCENES = مواقف «وقف أم سكت أم قطع؟»: {ar, en, a:'waqf'|'sakt'|'qat'}
+   ============================================================ */
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب الوقف والابتداء ص ٤١–٤٥، وباب همزة الوصل ص ٥٧–٥٩ (بترقيم الشاملة آليًّا)'};
+const LIGHTS = {
+  green:{ar:'قِفْ ← وَابْدَأْ بِمَا بَعْدَهَا',sub:'المَعْنَى تَمَّ',en:'Stop, then start after it',c:'var(--green)',snd:'go'},
+  yellow:{ar:'قِفْ ← ثُمَّ ارْجِعْ وَصِلْ',sub:'مَعْنًى حَسَن، لَكِنَّ مَا بَعْدَهُ مُتَعَلِّقٌ بِه',en:'Stop, then go back and join',c:'var(--yellow)',snd:'wait'},
+  red:{ar:'لَا تَقِفْ هُنَا!',sub:'إِلَّا لِضَرُورَة (نَفَس) ← ثُمَّ ارْجِعْ',en:"Don't stop here!",c:'var(--red)',snd:'stop'},
+};
+const NAMES = {
+  tam:{ar:'تَامّ',en:'Complete',c:'var(--green)',lafz:0,mana:0,
+    bq:'«هو الوقف على كلمة لم يتعلق ما بعدها بها، ولا بما قبلها لا لفظا ولا معنى… وأكثر ما يوجد هذا النوع في رءوس الآي، وعند انقضاء القصص… وحكمه: أنه يحسن الوقف عليه، والابتداء بما بعده» (ص ٤١).'},
+  kafi:{ar:'كَافٍ',en:'Sufficient',c:'var(--blue)',lafz:0,mana:1,
+    bq:'«هو الوقف على كلمة لم يتعلق ما بعدها بها، ولا بما قبلها لفظا، بل معنى فقط… وحكمه: كالتام» (ص ٤٢).'},
+  hasan:{ar:'حَسَن',en:'Good',c:'var(--yellow)',lafz:1,mana:1,
+    bq:'«هو الوقف على كلمة تعلق ما بعدها بها، أو بما قبلها لفظا ومعنى، بشرط إفادته معنى يحسن السكوت عليه… فمن وقف عليه وأراد الابتداء وصله بما بعده؛ لأن الابتداء بما يتعلق بما قبله لفظا قبيح. وإن كان رأس آية… حسن الوقف عليه، والابتداء بما بعده» (ص ٤٢).'},
+  qabih:{ar:'قَبِيح',en:'Bad',c:'var(--red)',lafz:1,mana:1,
+    bq:'«هو الوقف على لفظ غير مفيد، وقد تعلق ما بعده بما قبله لفظا ومعنى، كالوقف على المبتدأ دون خبره، أو على المضاف دون المضاف إليه» (ص ٤٣)، «ولا يجوز إلا لضرورة، كانقطاع نفس ونحوه… ولا بد من الابتداء بالكلمة الموقوف عليها، أو بما قبلها» (ص ٤٤).'},
+};
+const TYPES = {
+  tam:{light:'green',name:'tam'}, kafi:{light:'green',name:'kafi'}, hasan:{light:'yellow',name:'hasan'},
+  hasanHead:{light:'green',name:'hasan',head:1}, head:{light:'green',name:null,head:1},
+  qabih:{light:'red',name:'qabih'}, aqbah:{light:'red',name:'qabih',worst:1},
+  rasm:{light:'red',name:null,rasm:1},
+};
+const WAQF_SETS = {
+  book:{ar:'📖 أمثلة الكتاب (الوجيز)',en:'Book examples',items:[
+    {t:'أُولَئِكَ عَلَى هُدًى مِنْ رَبِّهِمْ وَأُولَئِكَ هُمُ الْمُفْلِحُونَ ⏸ ^إِنَّ الَّذِينَ كَفَرُوا',ref:'البقرة: ٥–٦',k:'tam',note:'«فإن الأولى من تمام أحوال المؤمنين، والثانية متعلقة بأحوال الكافرين» (ص ٤١).'},
+    {t:'أَمْ لَمْ تُنْذِرْهُمْ لَا يُؤْمِنُونَ ⏸ ^خَتَمَ اللَّهُ عَلَى قُلُوبِهِمْ',ref:'البقرة: ٦–٧',k:'kafi',note:'«فإن قوله: \"لا يؤمنون\" مع ما بعده متعلق بالكافرين من جهة المعنى» (ص ٤٢).'},
+    {t:'^الْحَمْدُ لِلَّهِ ⏸ رَبِّ الْعَالَمِينَ',ref:'الفاتحة: ٢',k:'hasan',note:'«فهذه الجملة أفادت معنى، لكن ما بعد لفظ الجلالة متعلق به؛ لكونه صفة له» (ص ٤٢) ← ارجع وابدأ من «الْحَمْدُ».'},
+    {t:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ⏸ ^الرَّحْمَنِ الرَّحِيمِ',ref:'الفاتحة: ٢–٣',k:'hasanHead',note:'حَسَن (ما بعده صفة متعلقة به) لكنه رأس آية، و«الوقف على رءوس الآي سنة مطلقا» (ص ٤٣) ← ابدأ بما بعده.'},
+    {t:'^لَعَلَّكُمْ ^تَتَفَكَّرُونَ ⏸ ^فِي الدُّنْيَا وَالْآخِرَةِ',ref:'البقرة: ٢١٩–٢٢٠',k:'head',note:'💬 للنقاش: رأس آية، والمشهور «عند غالب أهل هذا الفن» الابتداء بما بعده، وقال بعضهم: لا يحسن الابتداء بـ«في الدنيا والآخرة» لأنه لا يفيد معنى إلا بما قبله «بل يستحب العود لما قبله» (ص ٤٣). كلا الوجهين صحيح هنا.'},
+    {t:'^الْحَمْدُ ⏸ لِلَّهِ رَبِّ الْعَالَمِينَ',ref:'الفاتحة: ٢',k:'qabih',note:'«فالوقف على: \"الحمد\" من قوله تعالى: الْحَمْدُ لِلَّهِ قبيح» (ص ٤٤) — مبتدأ بلا خبر.'},
+    {t:'^بِسْمِ ⏸ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',ref:'الفاتحة: ١',k:'qabih',note:'«وكذلك الوقف على: \"بسم\" من: بِسْمِ اللَّهِ» (ص ٤٤) — مضاف بلا مضاف إليه.'},
+    {t:'^إِنَّ اللَّهَ لَا يَسْتَحْيِي ⏸ أَنْ يَضْرِبَ مَثَلًا',ref:'البقرة: ٢٦',k:'aqbah',note:'«وأشد قبحا الوقف والابتداء الموهمان خلاف المراد… فمن وقف على مثل هذا لضرورة وجب عليه أن يرجع إلى ما قبله، ويصل الكلام بعضه ببعض» (ص ٤٤).'},
+    {t:'^لَقَدْ سَمِعَ اللَّهُ ^قَوْلَ الَّذِينَ قَالُوا ⏸ إِنَّ اللَّهَ فَقِيرٌ',ref:'آل عمران: ١٨١',k:'aqbah',note:'الوقف على «قالوا» ثم الابتداء بـ«إن الله فقير» من أشد القبح: يوهم «وصفا لا يليق به تعالى» (ص ٤٤) ← ارجع وصِل.'},
+    {t:'^لِكَيْ ⏸ لَا يَعْلَمَ مِنْ بَعْدِ عِلْمٍ شَيْئًا',ref:'الحج: ٥',k:'rasm',note:'«ولا يأتي [الوقف] في وسط الكلمة، ولا فيما اتصل رسما، فلا يوقف على: \"لكي\"… لاتصاله رسما» (ص ٤١) — في المصحف: لِكَيْلَا (كلمة واحدة).'},
+  ]},
+  juz:{ar:'🌙 تدريب من قصار السور',en:'Short surahs practice',items:[
+    {t:'قُلْ هُوَ اللَّهُ أَحَدٌ ⏸ ^اللَّهُ الصَّمَدُ',ref:'الإخلاص: ١–٢',k:'head'},
+    {t:'وَالْعَصْرِ ⏸ ^إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ',ref:'العصر: ١–٢',k:'head'},
+    {t:'^إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ ⏸ ^إِلَّا الَّذِينَ آمَنُوا',ref:'العصر: ٢–٣',k:'head',note:'💬 مثل «تتفكرون * في الدنيا»: رأس آية فالمشهور الابتداء بما بعده، ومن رأى أن «إلا الذين آمنوا» لا يفيد إلا بما قبله عاد ووصل (ص ٤٣). الوجهان صحيحان.'},
+    {t:'^قُلْ ⏸ هُوَ اللَّهُ أَحَدٌ',ref:'الإخلاص: ١',k:'qabih',note:'«قُلْ» وحدها لا تفيد شيئًا، وما بعدها (المقول) متعلق بها لفظًا ومعنى ← قبيح، فابدأ بها نفسها (ص ٤٣–٤٤).'},
+    {t:'^مَالِكِ ⏸ يَوْمِ الدِّينِ',ref:'الفاتحة: ٤',k:'qabih',note:'«مَالِكِ» مضاف و«يَوْمِ» مضاف إليه ← «كالوقف… على المضاف دون المضاف إليه» (ص ٤٣).'},
+    {t:'^قُلْ أَعُوذُ ^بِرَبِّ ⏸ الْفَلَقِ',ref:'الفلق: ١',k:'qabih',note:'«بِرَبِّ» مضاف و«الْفَلَقِ» مضاف إليه ← قبيح؛ ابدأ بالكلمة الموقوف عليها أو بما قبلها (ص ٤٤).'},
+    {t:'^تَبَّتْ يَدَا ⏸ أَبِي لَهَبٍ وَتَبَّ',ref:'المسد: ١',k:'qabih',note:'«يَدَا» مضاف و«أَبِي لَهَبٍ» مضاف إليه ← قبيح؛ و«يَدَا أَبِي لَهَبٍ» لا تصلح بداية وحدها، فارجع إلى «تَبَّتْ».'},
+    {t:'إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ ⏸ ^وَرَأَيْتَ النَّاسَ',ref:'النصر: ١–٢',k:'head'},
+  ]},
+};
+WAQF_SETS.mix={ar:'🔀 الكل مخلوط',en:'All mixed',items:[...WAQF_SETS.book.items,...WAQF_SETS.juz.items]};
+
+const KEYS = {u:{ar:'أُ',sub:'ضَمّ',en:'u'},i:{ar:'إِ',sub:'كَسْر',en:'i'},a:{ar:'أَ',sub:'فَتْح',en:'a'},l:{ar:'لِـ',sub:'بِاللَّامِ مُبَاشَرَة',en:'with Lām'}};
+const WASL_KINDS = {
+  vu:{ar:'فِعْلٌ ثَالِثُهُ مَضْمُومٌ ضَمًّا أَصْلِيًّا ← أُ',c:'var(--blue)',bq:'«تضم همزة الوصل في الفعل ابتداء إذا كان ثالثه مضموما ضما أصليا مثل: انْظُرْ، اخْرُجْ، اضْطُرَّ، اسْتُهْزِئَ» (ص ٥٧).'},
+  va:{ar:'🪤 ضَمٌّ عَارِض ← إِ',c:'var(--purple)',bq:'«فإذا كان ثالث الفعل مضموما ضما عارضا كسرت همزة الوصل… فإن أصل هذه الكلمات: اقضيوا، وابنيوا، وامشيوا، وائتيوا بكسر عين الفعل، فلما أعل بحذف لامه ضمت العين لمناسبة الواو، فالضم عارض» (ص ٥٨).'},
+  vi:{ar:'فِعْلٌ ثَالِثُهُ مَكْسُورٌ أَوْ مَفْتُوح ← إِ',c:'var(--green)',bq:'«وتكسر همزة الوصل في الفعل ابتداء إذا كان ثالثه مكسورا مثل: اضْرِبْ، ارْجِعْ، أو مفتوحا مثل: اذْهَبْ، افْتَحْ» (ص ٥٨).'},
+  al:{ar:'«أَل» ← أَ',c:'var(--yellow)',bq:'«تفتح همزة أل في الابتداء مثل الأَرْضِ، الإِنْسَانُ، الْعِلْمِ» (ص ٥٨)، «ولم تحفظ في حرف إلا في \"أل\"» (ص ٥٧).'},
+  ms:{ar:'مَصْدَرُ الخُمَاسِيِّ أَوِ السُّدَاسِيّ ← إِ',c:'var(--gold)',bq:'«تكسر همزة الوصل ابتداء في مصدر الخماسي مثل: ابْتِغَاءَ وفي مصدر السداسي مثل: اسْتِغْفَارُ» (ص ٥٨).'},
+  n7:{ar:'الأَسْمَاءُ السَّبْعَة ← إِ',c:'var(--red)',bq:'«ولم يرد منها في القرآن الكريم إلا سبعة وهي: ابن… وابنة… وامرؤ… واثنان… واثنتان… وامرأة… واسم… وتكسر همزة الوصل في الابتداء بهذه الأسماء» (ص ٥٨–٥٩).'},
+  ism:{ar:'⭐ «الِاسْمُ» فِي الحُجُرَات: وَجْهَان',c:'var(--purple)',bq:'«ويجوز الابتداء باللام، أو بهمزة الوصل في لفظ \"الاسم\" في قوله تعالى: بِئْسَ الاسْمُ الْفُسُوقُ» (ص ٥٨)، وبيت «لآلئ البيان» كما في الحاشية: «وابدأ بهمز أو بلام في ابتدا… لاسم الفسوق».'},
+};
+const WASL = [
+  {t:'ٱنْ[ظُ]رْ',ctx:'ٱنْظُرْ كَيْفَ يَفْتَرُونَ',ref:'النساء: ٥٠',ans:['u'],kind:'vu',say:'أُنْظُرْ'},
+  {t:'ٱخْ[رُ]جْ',ctx:'قَالَ ٱخْرُجْ مِنْهَا',ref:'الأعراف: ١٨',ans:['u'],kind:'vu',say:'أُخْرُجْ'},
+  {t:'ٱضْ[طُ]رَّ',ctx:'فَمَنِ ٱضْطُرَّ',ref:'البقرة: ١٧٣',ans:['u'],kind:'vu',say:'أُضْطُرَّ'},
+  {t:'ٱسْ[تُ]هْزِئَ',ctx:'وَلَقَدِ ٱسْتُهْزِئَ بِرُسُلٍ',ref:'الأنعام: ١٠',ans:['u'],kind:'vu',say:'أُسْتُهْزِئَ'},
+  {t:'ٱقْ[ضُ]وا',ctx:'ثُمَّ ٱقْضُوا إِلَيَّ',ref:'يونس: ٧١',ans:['i'],kind:'va',say:'إِقْضُوا'},
+  {t:'ٱبْ[نُ]وا',ctx:'فَقَالُوا ٱبْنُوا عَلَيْهِمْ بُنْيَانًا',ref:'الكهف: ٢١',ans:['i'],kind:'va',say:'إِبْنُوا'},
+  {t:'ٱمْ[شُ]وا',ctx:'أَنِ ٱمْشُوا وَٱصْبِرُوا',ref:'ص: ٦',ans:['i'],kind:'va',say:'إِمْشُوا'},
+  {t:'ٱئْ[تُ]ونِي',ctx:'ٱئْتُونِي بِكِتَابٍ',ref:'الأحقاف: ٤',ans:['i'],kind:'va',say:'إِيتُونِي'},
+  {t:'ٱضْ[رِ]بْ',ctx:'ٱضْرِبْ بِعَصَاكَ',ref:'البقرة: ٦٠',ans:['i'],kind:'vi',say:'إِضْرِبْ'},
+  {t:'ٱرْ[جِ]عْ',ctx:'ٱرْجِعْ إِلَى رَبِّكَ',ref:'يوسف: ٥٠',ans:['i'],kind:'vi',say:'إِرْجِعْ'},
+  {t:'ٱذْ[هَ]بْ',ctx:'قَالَ ٱذْهَبْ',ref:'الإسراء: ٦٣',ans:['i'],kind:'vi',say:'إِذْهَبْ'},
+  {t:'ٱفْ[تَ]حْ',ctx:'رَبَّنَا ٱفْتَحْ بَيْنَنَا',ref:'الأعراف: ٨٩',ans:['i'],kind:'vi',say:'إِفْتَحْ'},
+  {t:'ٱ[لْ]أَرْضِ',ctx:'فِي ٱلْأَرْضِ',ref:'البقرة: ١١',ans:['a'],kind:'al',say:'أَلْأَرْضِ'},
+  {t:'ٱ[لْ]إِنْسَانُ',ctx:'وَخُلِقَ ٱلْإِنْسَانُ ضَعِيفًا',ref:'النساء: ٢٨',ans:['a'],kind:'al',say:'أَلْإِنْسَانُ'},
+  {t:'ٱ[لْ]عِلْمِ',ctx:'مِنَ ٱلْعِلْمِ',ref:'البقرة: ١٢٠',ans:['a'],kind:'al',say:'أَلْعِلْمِ'},
+  {t:'ٱبْتِغَاءَ',ctx:'ٱبْتِغَاءَ مَرْضَاتِ ٱللَّهِ',ref:'البقرة: ٢٠٧',ans:['i'],kind:'ms',say:'إِبْتِغَاءَ'},
+  {t:'ٱسْتِغْفَارُ',ctx:'وَمَا كَانَ ٱسْتِغْفَارُ إِبْرَاهِيمَ',ref:'التوبة: ١١٤',ans:['i'],kind:'ms',say:'إِسْتِغْفَارُ'},
+  {t:'ٱبْنَ',ctx:'عِيسَى ٱبْنَ مَرْيَمَ',ref:'البقرة: ٨٧',ans:['i'],kind:'n7',say:'إِبْنَ مَرْيَمَ'},
+  {t:'ٱمْرَأَتُ',ctx:'وَقَالَتِ ٱمْرَأَتُ فِرْعَوْنَ',ref:'القصص: ٩',ans:['i'],kind:'n7',say:'إِمْرَأَتُ فِرْعَوْنَ'},
+  {t:'ٱثْنَيْنِ',ctx:'إِلَهَيْنِ ٱثْنَيْنِ',ref:'النحل: ٥١',ans:['i'],kind:'n7',say:'إِثْنَيْنِ'},
+  {t:'ٱسْمُ',ctx:'تَبَارَكَ ٱسْمُ رَبِّكَ',ref:'الرحمن: ٧٨',ans:['i'],kind:'n7',say:'إِسْمُ رَبِّكَ'},
+  {t:'ٱلِٱسْمُ',ctx:'بِئْسَ ٱلِٱسْمُ ٱلْفُسُوقُ',ref:'الحجرات: ١١',ans:['a','l'],kind:'ism',say:'أَلِسْمُ — أَوْ — لِسْمُ'},
+];
+const SCENES = [
+  {ar:'قَرَأْتُ «الْمُفْلِحُونَ»، ثُمَّ أَخَذْتُ نَفَسًا، ثُمَّ أَكْمَلْتُ القِرَاءَة.',en:'I stopped, took a breath, and continued.',a:'waqf'},
+  {ar:'قَطَعْتُ صَوْتِي لَحْظَةً قَصِيرَةً جِدًّا بِلَا نَفَس، ثُمَّ أَكْمَلْت.',en:'I paused very briefly without breathing, then continued.',a:'sakt'},
+  {ar:'وَصَلْتُ إِلَى آخِرِ الآيَة، وَأَنْهَيْتُ الحِصَّةَ وَأَغْلَقْتُ المُصْحَف.',en:'I reached the end of the āyah and finished reading.',a:'qat'},
+  {ar:'وَقَفْتُ فِي وَسَطِ كَلِمَةٍ وَاحِدَةٍ لِآخُذَ نَفَسًا.',en:'I stopped in the middle of a word to breathe.',a:'none'},
+];
+const SCENE_OPTS = [
+  {k:'waqf',ar:'🫁 وَقْف',sub:'قَطْعُ الصَّوْتِ + نَفَس + نِيَّةُ الإِكْمَال',c:'var(--green)',bq:'«عبارة عن قطع الصوت على الكلمة زمنا يتنفس فيه عادة بنية استئناف القراءة، فلا بد من التنفس معه» (ص ٤١).'},
+  {k:'sakt',ar:'⏸ سَكْت',sub:'زَمَنٌ يَسِيرٌ بِلَا نَفَس',c:'var(--purple)',bq:'«هو قطع الصوت زمنا يسيرا من غير تنفس، ويأتي في وسط الكلمة، وفي آخرها» (ص ٤١).'},
+  {k:'qat',ar:'📕 قَطْع',sub:'إِنْهَاءُ القِرَاءَة',c:'var(--blue)',bq:'«عبارة عن قطع القراءة رأسا، ولا يكون إلا على رءوس الآي؛ لأن رءوس الآي في نفسها مقاطع» (ص ٤١).'},
+  {k:'none',ar:'⛔ لَا يَجُوز',sub:'الوَقْفُ لَا يَكُونُ فِي وَسَطِ الكَلِمَة',c:'var(--red)',bq:'«ولا يأتي [الوقف] في وسط الكلمة، ولا فيما اتصل رسما» (ص ٤١).'},
+];
+const SAKT = [
+  {w:['وَلَمْ','يَجْعَلْ','لَهُ','عِوَجًا','قَيِّمًا'],gap:3,ref:'الكهف: ١–٢',why:'السكت «على الألف المبدلة من التنوين في لفظ \"عوجا\"؛ وذلك لبيان أن ما بعده وهو قوله: قَيِّمًا ليس متصلا بما قبله» (ص ٤٤).'},
+  {w:['قَالُوا','يَا','وَيْلَنَا','مَنْ','بَعَثَنَا','مِنْ','مَرْقَدِنَا','هَذَا','مَا','وَعَدَ','الرَّحْمَنُ'],gap:6,ref:'يس: ٥٢',why:'السكت «على ألف \"مرقدنا\"؛ وذلك لبيان أن كلام الكفار قد انقضى، وما بعده… ليس من كلامهم، بل هو من كلام الملائكة، أو المؤمنين» (ص ٤٤).'},
+  {w:['وَقِيلَ','مَنْ','رَاقٍ'],gap:1,ref:'القيامة: ٢٧',why:'السكت «على نون \"من\"؛ لئلا يتوهم أنها مع ما بعدها كلمة واحدة على وزن \"فعال\"» (ص ٤٥).'},
+  {w:['كَلَّا','بَلْ','رَانَ','عَلَى','قُلُوبِهِمْ'],gap:1,ref:'المطففين: ١٤',why:'السكت «على لام \"بل\" لما تقدم في مَنْ رَاقٍ» (ص ٤٥) — والسكت يمنع الإدغام.'},
+  {w:['مَا','أَغْنَى','عَنِّي','مَالِيَهْ','هَلَكَ','عَنِّي','سُلْطَانِيَهْ'],gap:3,ref:'الحاقة: ٢٨–٢٩',why:'«موضع خامس مختلف فيه… ففيه السكت والإدغام كما تقدم في باب \"المتماثلين\"» (ص ٤٥).',alt:1},
+];
+const ROUND = 10;     // عدد الأسئلة في الجولة
+const RETRY_GAP = 3;  // السؤال الخطأ يرجع بعد ٣ أسئلة
+const SPEED_SECONDS = 12; // وضع ⚡ السرعة في «مفتاح البداية»
+const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَكَ اللهُ فِيك!','مُمْتَاز!'], PRAISE_EN=['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'];
+/* ============================================================ */
+
+const $=s=>document.querySelector(s);
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* ---------- word HTML: [marked] part, ZWJ keeps letters joined across the coloured span ---------- */
+const LET=/[ء-يٱ]/, NOJOIN='اأإآٱدذرزوؤةء';
+function lastBase(s){for(let i=s.length-1;i>=0;i--)if(LET.test(s[i]))return {ch:s[i],end:true};return null}
+function wordHTML(t){const m=t.match(/^(.*)\[([^\]]*)\](.*)$/);if(!m)return t;let [,a,b,c]=m;
+  const la=lastBase(a);if(a&&la&&!NOJOIN.includes(la.ch)&&b)a=a+'‍',b='‍'+b;
+  const lb=lastBase(b);if(c&&lb&&!NOJOIN.includes(lb.ch)&&LET.test(c[0]||''))b=b+'‍',c='‍'+c;
+  return `${a}<span class="mk">${b}</span>${c}`}
+const plain=t=>t.replace(/[\[\]]/g,'');
+
+/* ---------- sound ---------- */
+let AC=null,soundOn=true;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
+function noise(d=.6,when=0,v=.12){const a=ac();if(!a||!soundOn)return;const n=a.createBuffer(1,a.sampleRate*d,a.sampleRate),x=n.getChannelData(0);for(let i=0;i<x.length;i++)x[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/x.length);
+  const s=a.createBufferSource();s.buffer=n;const f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=900;f.Q.value=.7;const g=a.createGain();g.gain.value=v;s.connect(f).connect(g).connect(a.destination);s.start(a.currentTime+when)}
+function voice(d,when=0,f=330){tone(f,d,'triangle',.12,when,f*0.97)}
+const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
+  go:()=>{tone(440,.12,'sine',.15);tone(660,.2,'sine',.15,.12)},wait:()=>{tone(520,.12,'square',.07);tone(520,.12,'square',.07,.25)},stop:()=>tone(260,.4,'sawtooth',.08,0,180),
+  unlock:()=>{tone(1200,.04,'square',.08);tone(900,.05,'square',.08,.06);[523,784].forEach((f,i)=>tone(f,.2,'triangle',.16,.15+i*.1))},
+  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
+// breath demos: waqf = voice · breath · voice ; sakt = voice · short silence · voice ; qat = voice + closing chime
+$('#bWaqf').onclick=()=>{ac();voice(.7);noise(.7,.85);voice(.7,1.7)};
+$('#bSakt').onclick=()=>{ac();voice(.7);voice(.7,.95)};
+$('#bQat').onclick=()=>{ac();voice(.9);[784,659,523].forEach((f,i)=>tone(f,.3,'sine',.12,1.1+i*.2))};
+function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#E2B85C','#2ECC71','#F5C33B','#E74C3C','#5DADE2','#AF7AC5'];
+  for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+
+/* ---------- traffic light ---------- */
+function light(c){['red','yellow','green'].forEach(k=>$('#lp-'+k).classList.toggle('on',k===c));const car=$('#car');car.className='car';if(c&&c!=='yellow'){void car.offsetWidth;car.classList.add(c==='green'?'go':'back')}}
+
+/* ---------- state ---------- */
+let teams=[],turn=0,queue=[],idx=0,mode='waqf',missed=[],stats={},speedOn=false,spTimer=0;
+function teamDefs(){const v=$('#teamSel').value;
+  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold)'}];
+  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
+  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+const qa=$('#qa');
+function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
+function stat(k,ok){const s=stats[k]||(stats[k]={ok:0,n:0});s.n++;if(ok)s.ok++}
+function miss(it){missed.push(it);const q=queue[idx];if(!q.retry)queue.splice(Math.min(idx+1+RETRY_GAP,queue.length),0,{it,retry:true})}
+function setOptions(){mode=$('#modeSel').value;const sel=$('#setSel');sel.disabled=mode!=='waqf';
+  sel.innerHTML=mode==='waqf'?Object.entries(WAQF_SETS).map(([k,s])=>`<option value="${k}">${s.ar}</option>`).join(''):'<option>—</option>';
+  $('#spdB').style.display=mode==='wasl'?'':'none'}
+function roundOf(items,keyFn){const by={};items.forEach(it=>{const k=keyFn(it);(by[k]=by[k]||[]).push(it)});
+  const pick=Object.values(by).map(a=>shuffle(a)[0]);const rest=shuffle(items.filter(it=>!pick.includes(it)));
+  return shuffle(pick.concat(rest).slice(0,Math.max(ROUND,pick.length))).map(it=>({it,retry:false}))}
+function newGame(){clearInterval(spTimer);
+  mode=$('#modeSel').value;teams=teamDefs().map(t=>({...t,pts:0}));turn=0;idx=0;missed=[];stats={};
+  if(mode==='waqf'){const items=WAQF_SETS[$('#setSel').value].items;queue=roundOf(items,it=>it.k)}
+  else if(mode==='wasl')queue=roundOf(WASL,it=>it.kind);
+  else queue=[...shuffle(SCENES).map(s=>({it:{scene:s},retry:false})),...SAKT.map(s=>({it:s,retry:false}))];
+  light(null);renderTeams();
+  $('#bookRef').textContent='📚 المصدر: '+BOOK.ar+'، '+BOOK.ref+'. أمثلة «قصار السور» أضفناها للتدريب وطبّقنا عليها تعريفات الكتاب نفسها.';
+  show();
+}
+function header(){return `<div class="prog"><span>${ar(idx+1)} مِنْ ${ar(queue.length)}${queue[idx].retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>`}
+function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en" style="color:#10263A">Next</span></button></div>`}
+function bindNext(){$('#nextB').onclick=()=>{idx++;turn=(turn+1)%teams.length;renderTeams();show()};$('#nextB').focus({preventScroll:true})}
+function show(){clearInterval(spTimer);if(idx>=queue.length){end();return}
+  light(null);const {it}=queue[idx];
+  if(mode==='waqf')showWaqf(it);else if(mode==='wasl')showWasl(it);else (it.scene?showScene(it.scene):showSakt(it));
+  document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+}
+function opts(list,id,cls='ob'){return list.map((o,i)=>`<button class="${cls}" data-i="${i}" style="--ac:${o.c||'var(--gold)'};--lc:${o.c||'var(--gold)'}">${cls==='lb'?'<i></i>':''}${o.ar}${o.sub?`<small>${o.sub}</small>`:''}<span class="en">${o.en||''}</span></button>`).join('')}
+// one multiple-choice step; cb(firstTry)
+function ask(host,qHtml,list,correct,cb,{cls='ob',wrap='opts',tries=1,html}={}){
+  const ok=Array.isArray(correct)?correct:[correct];
+  const id='o'+Math.random().toString(36).slice(2,7);
+  host.insertAdjacentHTML('beforeend',`<div class="step"><div class="q">${qHtml}</div><div class="${wrap}" id="${id}">${html||opts(list,id,cls)}</div></div>`);
+  let left=tries+1,done=false;const btns=[...document.querySelectorAll(`#${id} [data-i]`)];
+  btns.forEach(b=>b.onclick=()=>{if(done||b.classList.contains('bad'))return;ac();
+    if(ok.includes(+b.dataset.i)){done=true;b.classList.add('right');lock();cb(left===tries+1,+b.dataset.i)}
+    else{left--;b.classList.add('bad');sfx.bad();if(left<=0){done=true;ok.forEach(i=>btns.find(x=>+x.dataset.i===i).classList.add('right'));lock();cb(false,-1)}}});
+  function lock(){btns.forEach(x=>x.disabled=true)}
+}
+
+/* ---------- mode 1: waqf traffic light ---------- */
+function parseVerse(t){const words=[];let stopAfter=-1;
+  t.trim().split(/\s+/).forEach(tok=>{if(tok==='⏸'){stopAfter=words.length-1;return}const st=tok.startsWith('^');words.push({w:st?tok.slice(1):tok,start:st})});
+  return {words,stopAfter}}
+function roadHTML(P,lit){return P.words.map((x,i)=>`<span class="w" data-wi="${i}">${x.w}</span>${i===P.stopAfter?`<span class="stop" id="stopSign" style="--sc:${lit||'#7F8C8D'}">قِفْ<br>؟</span>`:''}`).join('')}
+function showWaqf(it){const T=TYPES[it.k],P=parseVerse(it.t),L=LIGHTS[T.light];
+  qa.innerHTML=`${header()}<div class="road" id="road">${roadHTML(P)}</div><div class="ref">﴿${it.ref}﴾</div>
+    <div class="q">🎙️ اِقْرَأْ حَتَّى إِشَارَةِ «قِفْ»، ثُمَّ قَرِّر: <span class="en blk">Read up to the stop sign, then decide:</span></div><div id="steps" style="display:contents"></div>`;
+  const steps=$('#steps');let clean=true;const lk=Object.keys(LIGHTS);
+  ask(steps,`① مَا لَوْنُ الإِشَارَة هُنَا؟ <span class="en blk">Which light is it here?</span>`,lk.map(k=>LIGHTS[k]),lk.indexOf(T.light),ok=>{
+    if(!ok)clean=false;light(T.light);sfx[L.snd]();const s=$('#stopSign');s.style.setProperty('--sc',L.c);s.innerHTML=T.light==='green'?'قِفْ<br>✓':T.light==='yellow'?'قِفْ<br>↩':'لَا<br>✋';
+    stat('light-'+T.light,ok);
+    if(T.name)nameStep();else restartStep();
+  },{cls:'lb',wrap:'lights'});
+  function nameStep(){const nk=['tam','kafi','hasan','qabih'];
+    const cell=k=>{const N=NAMES[k];return `<button class="ob" data-i="${nk.indexOf(k)}" style="--ac:${N.c}">${N.ar}<small>${k==='tam'?'لَا تَعَلُّق: لَا لَفْظًا وَلَا مَعْنًى':k==='kafi'?'تَعَلُّقٌ فِي المَعْنَى فَقَط':k==='hasan'?'لَفْظًا وَمَعْنًى… لَكِنْ أَفَادَ مَعْنًى':'لَفْظًا وَمَعْنًى… وَلَمْ يُفِدْ مَعْنًى'}</small><span class="en">${N.en}</span></button>`};
+    const html=`<span class="hd"></span><span class="hd">مَا بَعْدَهَا <b>لَا</b> يَتَعَلَّقُ بِهَا لَفْظًا (إِعْرَابًا)</span><span class="hd">مَا بَعْدَهَا يَتَعَلَّقُ بِهَا لَفْظًا وَمَعْنًى</span>
+      <span class="hd">وَلَا مَعْنًى ↓<br>/ أَفَادَ ↓</span>${cell('tam')}${cell('hasan')}<span class="hd">مَعْنًى فَقَط ↓<br>/ لَمْ يُفِدْ ↓</span>${cell('kafi')}${cell('qabih')}`;
+    ask(steps,`② مَا اسْمُ هَذَا الوَقْف؟ اُنْظُرْ إِلَى «التَّعَلُّق» <span class="en blk">Name it: how is what follows connected?</span>`,null,nk.indexOf(T.name),ok=>{if(!ok)clean=false;stat('name-'+T.name,ok);restartStep()},{wrap:'grid2',html});
+  }
+  function restartStep(){
+    steps.insertAdjacentHTML('beforeend',`<div class="step"><div class="q">③ ${T.light==='green'?'تَوَقَّفْتَ وَتَنَفَّسْتَ… مِنْ أَيْنَ تَبْدَأ؟':'اِنْقَطَعَ نَفَسُكَ هُنَا… مِنْ أَيْنَ تَبْدَأُ بَعْدَ النَّفَس؟'} اِضْغَطْ عَلَى الكَلِمَة <span class="en blk">Where do you start again? Tap the word.</span></div></div>`);
+    const ws=[...document.querySelectorAll('#road .w')];let tries=2,done=false;
+    ws.forEach(sp=>{const b=document.createElement('button');b.className='w';b.dataset.wi=sp.dataset.wi;b.innerHTML=sp.innerHTML;sp.replaceWith(b);
+      b.onclick=()=>{if(done)return;ac();const i=+b.dataset.wi;
+        if(P.words[i].start){done=true;b.classList.add('hit');P.words.forEach((x,j)=>{if(x.start&&j!==i)document.querySelector(`#road [data-wi="${j}"]`).classList.add('ok2')});lockW();finish(clean&&tries===2)}
+        else{tries--;b.classList.add('no');sfx.bad();setTimeout(()=>b.classList.remove('no'),400);if(tries<=0){done=true;P.words.forEach((x,j)=>{if(x.start)document.querySelector(`#road [data-wi="${j}"]`).classList.add('hit')});lockW();finish(false)}}}});
+    function lockW(){document.querySelectorAll('#road button.w').forEach(b=>b.disabled=true)}
+  }
+  function finish(good){stat('restart',good);if(good)setTimeout(()=>award(2),150);else{sfx.pop();miss(it)}
+    const N=T.name?NAMES[T.name]:null;
+    const title=T.rasm?'⛔ لَا وَقْفَ دَاخِلَ كَلِمَةٍ مُتَّصِلَةٍ رَسْمًا':T.head&&!N?'📍 رَأْسُ آيَة — الوَقْفُ عَلَيْهَا سُنَّة':`وَقْفٌ ${N.ar}${T.head?' + رَأْسُ آيَة':''}${T.worst?' — ⛔ أَشَدُّ قُبْحًا':''}`;
+    const ex=document.createElement('div');ex.style.display='contents';
+    ex.innerHTML=`<div class="info" style="--ac:${L.c}"><div class="t">${title}</div>
+      ${it.note?`<div class="why">🔸 ${it.note}</div>`:''}
+      ${N?`<div class="bq">${N.bq}</div>`:T.head?'<div class="bq">«لأن الوقف على رءوس الآي سنة مطلقا؛ لحديث أم سلمة» (ص ٤٣).</div>':''}
+      <div class="why" style="color:${L.c}">🚦 ${L.ar} <span class="en">${L.en}</span></div>
+      <small>${BOOK.ar}، ${BOOK.ref}</small></div>
+      <div class="tip">🎙️ الآنَ اقْرَأْهَا مِنْ جَدِيد: قِفْ ← خُذْ نَفَسًا 🫁 ← اِبْدَأْ مِنَ الكَلِمَةِ الخَضْرَاء. <span class="en blk">Now read it again: stop, breathe, restart from the green word.</span></div>${nextBtn()}`;
+    qa.appendChild(ex);bindNext()}
+}
+
+/* ---------- mode 2: hamzat al-wasl key ---------- */
+function showWasl(it){const K=WASL_KINDS[it.kind];const keys=it.kind==='ism'?['u','i','a','l']:['u','i','a'];
+  qa.innerHTML=`${header()}<div class="ctx">﴿${it.ctx}﴾ <span class="ref">${it.ref}</span></div>
+    <div class="door" id="door">${wordHTML(it.t)}</div>
+    ${speedOn?'<div class="speed" id="spd"><i id="spdI"></i></div>':''}
+    <div class="q">🔑 لَوْ بَدَأْتَ القِرَاءَةَ بِهَذِهِ الكَلِمَة، بِأَيِّ مِفْتَاحٍ تَفْتَحُهَا؟ <span class="en blk">If you START with this word, which key opens it?</span></div>
+    <div id="steps" style="display:contents"></div>`;
+  const t0=performance.now();let timeUp=false;
+  if(speedOn){const bar=$('#spdI');requestAnimationFrame(()=>{bar.style.transitionDuration=SPEED_SECONDS+'s';bar.style.transform='scaleX(0)'});
+    spTimer=setTimeout(()=>{timeUp=true},SPEED_SECONDS*1000)}
+  const list=keys.map(k=>({ar:`<b>${KEYS[k].ar}</b>`,sub:KEYS[k].sub,en:KEYS[k].en}));
+  const correct=it.ans.map(a=>keys.indexOf(a));
+  ask($('#steps'),'',list,correct,ok=>{clearTimeout(spTimer);const sec=(performance.now()-t0)/1000;
+    if(speedOn){const b=$('#spdI');b.style.transitionDuration='0s';b.style.transform=getComputedStyle(b).transform}
+    let pts=0;if(ok){pts=speedOn?(timeUp?1:sec<SPEED_SECONDS/3?3:sec<SPEED_SECONDS*2/3?2:1):1}
+    stat(it.kind,ok);$('#door').classList.add('open');sfx.unlock();
+    if(ok)setTimeout(()=>award(pts),250);else{sfx.pop();miss(it)}
+    const ex=document.createElement('div');ex.style.display='contents';
+    ex.innerHTML=`<div class="say">🗝️ ${it.say}</div>
+      <div class="info" style="--ac:${K.c}"><div class="t">${K.ar}</div><div class="bq">${K.bq}</div>
+      <div class="why">🔸 «همزة الوصل هي التي تسقط وصلا وتثبت ابتداء بخلاف همزة القطع، فإنها تثبت وصلا وابتداء» (ص ٥٧) — لِذَلِكَ: ﴿${it.ctx}﴾ تُقْرَأُ وَصْلًا بِلَا هَمْزَة.</div>
+      ${it.kind.startsWith('v')?'<div class="why">👀 السِّرّ: اُنْظُرْ إِلَى الحَرْفِ <b>الثَّالِث</b> (المُلَوَّن) — ضَمٌّ أَصْلِيّ ← أُ ، غَيْرُ ذَلِكَ ← إِ</div>':''}
+      ${speedOn&&ok?`<div class="why">⚡ ${ar(sec.toFixed(1))} ث ← +${ar(pts)}</div>`:''}
+      <small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+    qa.appendChild(ex);bindNext()},{cls:'key',wrap:'keys'});
+}
+
+/* ---------- mode 3: waqf / sakt / qat + Ḥafṣ's sakt spots ---------- */
+function showScene(s){
+  qa.innerHTML=`${header()}<div class="q">🎬 مَاذَا فَعَلَ القَارِئ؟ <span class="en blk">What did the reciter do?</span></div>
+    <div class="info" style="--ac:var(--gold);text-align:center"><div class="bq" style="font-size:1.5rem">${s.ar}</div><span class="en blk">${s.en}</span></div><div id="steps" style="display:contents"></div>`;
+  ask($('#steps'),'',SCENE_OPTS,SCENE_OPTS.findIndex(o=>o.k===s.a),ok=>{stat('scene',ok);const O=SCENE_OPTS.find(o=>o.k===s.a);
+    light(s.a==='none'?'red':s.a==='sakt'?'yellow':'green');
+    ({waqf:$('#bWaqf'),sakt:$('#bSakt'),qat:$('#bQat')})[s.a]?.click();
+    if(ok)setTimeout(()=>award(1),150);else{sfx.pop();miss({scene:s})}
+    const ex=document.createElement('div');ex.style.display='contents';
+    ex.innerHTML=`<div class="info" style="--ac:${O.c}"><div class="t">${O.ar}</div><div class="bq">${O.bq}</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+    qa.appendChild(ex);bindNext()});
+}
+function showSakt(it){
+  const road=it.w.map((w,i)=>`<span class="w">${w}</span>${i<it.w.length-1?`<button class="gap" data-g="${i}" aria-label="هنا">·</button>`:''}`).join('');
+  qa.innerHTML=`${header()}<div class="q">⏸ سَكْتَةُ حَفْص: أَيْنَ يَسْكُتُ القَارِئُ هُنَا؟ اِضْغَطْ عَلَى الفَرَاغ <span class="en blk">Where does Ḥafṣ make a sakt? Tap the gap.</span></div>
+    <div class="road" id="road">${road}</div><div class="ref">﴿${it.ref}﴾</div><div id="steps" style="display:contents"></div>`;
+  let tries=2,done=false;
+  document.querySelectorAll('.gap').forEach(g=>g.onclick=()=>{if(done)return;ac();
+    if(+g.dataset.g===it.gap){done=true;g.classList.add('hit');g.textContent='ۜ';fin(tries===2)}
+    else{tries--;g.classList.add('no');sfx.bad();setTimeout(()=>g.classList.remove('no'),400);if(tries<=0){done=true;const r=document.querySelector(`.gap[data-g="${it.gap}"]`);r.classList.add('hit');r.textContent='ۜ';fin(false)}}});
+  function fin(ok){document.querySelectorAll('.gap').forEach(g=>g.disabled=true);stat('sakt',ok);light('yellow');$('#bSakt').click();
+    if(ok)setTimeout(()=>award(1),150);else{sfx.pop();miss(it)}
+    const ex=document.createElement('div');ex.style.display='contents';
+    ex.innerHTML=`<div class="info" style="--ac:var(--purple)"><div class="t">⏸ سَكْتَة: «قطع الصوت زمنا يسيرا من غير تنفس» (ص ٤١)${it.alt?' — وَفِيهَا وَجْهٌ ثَانٍ: الإِدْغَام':''}</div><div class="bq">${it.why}</div>
+      <div class="why">🎙️ اِقْرَأْهَا: سَكْتَةٌ قَصِيرَةٌ ⏸ بِلَا نَفَس، ثُمَّ أَكْمِلْ. (اِسْمَعِ الفَرْقَ بِزِرِّ «سَكْت» عَلَى اليَمِين)</div>
+      <small>${BOOK.ar}، ${BOOK.ref} — السكت عن حفص في أربعة مواضع (ص ٤٤–٤٥)</small></div>${nextBtn()}`;
+    qa.appendChild(ex);bindNext()}
+}
+
+/* ---------- end ---------- */
+const STAT_NAMES={'light-green':{ar:'🟢 الإِشَارَةُ الخَضْرَاء',c:'var(--green)'},'light-yellow':{ar:'🟡 الإِشَارَةُ الصَّفْرَاء',c:'var(--yellow)'},'light-red':{ar:'🔴 الإِشَارَةُ الحَمْرَاء',c:'var(--red)'},
+  'name-tam':{ar:'اسْم: تَامّ',c:'var(--green)'},'name-kafi':{ar:'اسْم: كَافٍ',c:'var(--blue)'},'name-hasan':{ar:'اسْم: حَسَن',c:'var(--yellow)'},'name-qabih':{ar:'اسْم: قَبِيح',c:'var(--red)'},
+  restart:{ar:'↩ مِنْ أَيْنَ أَبْدَأ؟',c:'var(--gold)'},scene:{ar:'وَقْف/سَكْت/قَطْع',c:'var(--blue)'},sakt:{ar:'⏸ سَكَتَاتُ حَفْص',c:'var(--purple)'},
+  ...Object.fromEntries(Object.entries(WASL_KINDS).map(([k,K])=>[k,{ar:K.ar.replace(/ ←.*/,''),c:K.c}]))};
+function end(){light(null);
+  const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
+  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${STAT_NAMES[k]?.c||'var(--gold)'}"><span>${STAT_NAMES[k]?.ar||k}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${ar(s.ok)}/${ar(s.n)}</span></div>`).join('');
+  const uniq=[...new Set(missed)];
+  const label=it=>it.scene?'🎬 '+it.scene.ar:it.w?it.w.join(' ')+` (${it.ref})`:it.ctx?it.ctx+` (${it.ref})`:it.t.replace(/\^/g,'')+` (${it.ref})`;
+  qa.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
+    <div class="q">📊 تَقْرِيرُ الإِشَارَات (صَحّ مِنْ أَوَّلِ مَرَّة) <span class="en">Report</span></div><div class="report">${rows}</div>
+    ${uniq.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${uniq.map(label).join(' ۞ ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
+    <div class="tip">💡 تَحَدِّي الخِتَام: اِفْتَحْ سُورَتَكَ وَاقْرَأْ آيَةً طَوِيلَة. ضَعْ بِالقَلَمِ ✏️ إِشَارَةً 🟢 حَيْثُ تَقِفُ لِلنَّفَس، وَ🔴 حَيْثُ لَا يَجُوزُ الوَقْف — ثُمَّ اقْرَأْهَا كَمَا خَطَّطْت. <span class="en blk">Closing challenge: mark 🟢 breathing stops and 🔴 no-stop places on a long āyah from your surah, then recite it as planned.</span></div>
+    <button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div>`;
+  $('#againB').onclick=newGame;sfx.win();confetti(90);
+  document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+}
+
+setOptions();
+$('#modeSel').onchange=()=>{setOptions();newGame()};['#setSel','#teamSel'].forEach(s=>$(s).onchange=newGame);
+$('#newB').onclick=newGame;
+$('#spdB').onclick=()=>{speedOn=!speedOn;$('#spdB').setAttribute('aria-pressed',speedOn);newGame()};
+$('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'&&$('#nextB')){e.preventDefault();$('#nextB').click()}});
+newGame();
+</script>
+<script>
+(function(){
+// Pen tools + whiteboard, ported from the "عينك أمانة" deck to the scrolling lesson pages.
+// Ink lives inside each station (scrolls with the text); the whiteboard is a full-screen grid board.
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ hand:SV('<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V12M16 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L7 15"/>'),
+ pen:SV('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ hl:SV('<path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ erase:SV('<path d="M20 20H8l-5-5a2 2 0 0 1 0-2.8L12.2 3a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L13 20"/><path d="M6 11l7 7"/>'),
+ laser:SV('<circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'),
+ undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+ clear:SV('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'),
+ board:SV('<rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21l4-4 4 4"/>'),
+ close:SV('<path d="M6 6l12 12M18 6L6 18"/>')
+};
+const COLORS=['#C2453A','#14374A','#2E8B5A','#2F6FB3','#C9A35A','#FFFFFF'];
+const SIZES=[2.5,5,9];
+
+// toolbar
+const tb=document.createElement('div');tb.id='tools';tb.hidden=true;tb.setAttribute('role','toolbar');tb.setAttribute('aria-label','أدوات الكتابة');
+tb.innerHTML=`
+ <button data-t="none" title="تحكم في الدرس (V / Esc)" aria-label="تحكم في الدرس">${IC.hand}</button>
+ <button data-t="pen" title="قلم (P)" aria-label="قلم">${IC.pen}</button>
+ <button data-t="hl" title="هايلايتر لتظليل الكلمات (H)" aria-label="هايلايتر">${IC.hl}</button>
+ <button data-t="erase" title="ممحاة (E)" aria-label="ممحاة">${IC.erase}</button>
+ <button data-t="laser" title="مؤشر ليزر (L)" aria-label="مؤشر ليزر">${IC.laser}</button>
+ <div class="sep"></div>
+ ${COLORS.map(c=>`<button class="sw" data-c="${c}" title="لون" aria-label="لون ${c}"><i style="background:${c}"></i></button>`).join('')}
+ <div class="sep"></div>
+ ${SIZES.map((s,i)=>`<button class="sz" data-s="${i}" title="سُمك" aria-label="سمك ${i+1}"><i style="width:${6+i*6}px;height:${6+i*6}px"></i></button>`).join('')}
+ <div class="sep"></div>
+ <button data-a="undo" title="تراجع (Ctrl+Z)" aria-label="تراجع">${IC.undo}</button>
+ <button data-a="clear" title="امسح كتابة هذه المحطة" aria-label="مسح">${IC.clear}</button>
+ <button data-a="board" title="سبورة بيضاء (W)" aria-label="سبورة بيضاء">${IC.board}</button>
+ <button data-a="close" title="إغلاق أدوات الكتابة (D)" aria-label="إغلاق">${IC.close}</button>`;
+document.body.appendChild(tb);
+
+// whiteboard overlay + laser layer
+const board=document.createElement('div');board.id='wbBoard';board.hidden=true;board.innerHTML='<span class="bt">سبورة بيضاء · Whiteboard</span>';document.body.appendChild(board);
+const lz=document.createElement('canvas');lz.id='wbLaser';document.body.appendChild(lz);const lctx=lz.getContext('2d');
+
+let tool='none',color=COLORS[0],sizeI=1,stage=0;
+const store={},backup={};
+const key=()=>stage+(board.hidden?'':'-wb');
+const list=()=>store[key()]||(store[key()]=[]);
+
+function lw(s,pr){return s.t==='hl'?s.w*5:s.w*(0.45+1.1*(pr==null?.5:pr))}
+function seg(c,s,i){const p=s.pts,a=p[i-1],b=p[i];const m0=i===1?a:[(p[i-2][0]+a[0])/2,(p[i-2][1]+a[1])/2];const m1=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ c.lineWidth=lw(s,(a[2]+b[2])/2);c.beginPath();c.moveTo(m0[0],m0[1]);c.quadraticCurveTo(a[0],a[1],m1[0],m1[1]);c.stroke()}
+function drawStroke(c,s){const p=s.pts;if(!p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.c;c.fillStyle=s.c;
+ if(s.t==='hl'){c.globalAlpha=.35;c.lineWidth=lw(s);c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++){const m=[(p[i-1][0]+p[i][0])/2,(p[i-1][1]+p[i][1])/2];c.quadraticCurveTo(p[i-1][0],p[i-1][1],m[0],m[1])}c.lineTo(p[p.length-1][0],p[p.length-1][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]);c.stroke()}
+ else{if(p.length===1){c.beginPath();c.arc(p[0][0],p[0][1],lw(s,p[0][2])/2,0,7);c.fill()}else for(let i=1;i<p.length;i++)seg(c,s,i)}
+ c.restore()}
+
+// canvases: one per station + one on the board
+const cvs={};
+function makeCanvas(host,k){
+ const cv=document.createElement('canvas');cv.className='ink-cv';host.appendChild(cv);
+ const o={cv,ctx:cv.getContext('2d'),w:0,h:0,k};
+ o.fit=()=>{const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;o.w=r.width;o.h=r.height;cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));o.ctx.setTransform(d,0,0,d,0,0);o.redraw()};
+ o.redraw=extra=>{o.ctx.clearRect(0,0,o.w,o.h);(store[o.k()]||[]).forEach(s=>drawStroke(o.ctx,s));if(extra)drawStroke(o.ctx,extra)};
+ bind(o);return o;
+}
+function stageCanvas(i){
+ if(cvs[i])return cvs[i];const sec=document.getElementById('s'+i);if(!sec)return null;
+ const o=makeCanvas(sec,()=>String(i));new ResizeObserver(()=>o.fit()).observe(sec);return cvs[i]=o;
+}
+const bcv=makeCanvas(board,()=>stage+'-wb');
+const active=()=>board.hidden?stageCanvas(stage):bcv;
+function redraw(){const a=active();if(a)a.redraw()}
+
+let cur=null,erasing=false,trail=[];
+function bind(o){
+ const cv=o.cv;
+ const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?(e.pressure||.5):.5]};
+ const eraseAt=(x,y)=>{const L=store[o.k()]||[],r=14;let ch=false;for(let i=L.length-1;i>=0;i--){if(L[i].pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<r+lw(L[i],p[2])/2)){L.splice(i,1);ch=true}}if(ch)o.redraw()};
+ cv.addEventListener('pointerdown',e=>{if(tool==='none')return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=pos(e);
+  erasing=tool==='erase'||e.button===5||!!(e.buttons&32);
+  if(tool==='laser'){trail=[[e.clientX,e.clientY,performance.now()]];return}
+  if(erasing){eraseAt(p[0],p[1]);return}
+  cur={t:tool,c:color,w:SIZES[sizeI],pts:[p]};if(tool==='pen')drawStroke(o.ctx,cur)});
+ cv.addEventListener('pointermove',e=>{if(tool==='none')return;const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce.length?ce:[e];
+  if(tool==='laser'){trail.push([e.clientX,e.clientY,performance.now()]);return}
+  if(!e.buttons)return;
+  for(const ev of evs){const p=pos(ev);if(erasing){eraseAt(p[0],p[1]);continue}if(!cur)continue;const l=cur.pts[cur.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])<1.2)continue;cur.pts.push(p);
+   if(cur.t==='pen'){o.ctx.save();o.ctx.lineCap='round';o.ctx.strokeStyle=cur.c;seg(o.ctx,cur,cur.pts.length-1);o.ctx.restore()}}
+  if(cur&&cur.t==='hl')o.redraw(cur)});
+ const up=()=>{if(cur){(store[o.k()]||(store[o.k()]=[])).push(cur);cur=null;o.redraw()}erasing=false};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(tool==='laser')trail.push(null)});
+ cv.addEventListener('contextmenu',e=>{if(tool!=='none')e.preventDefault()});
+}
+
+function fitLaser(){const d=window.devicePixelRatio||1;lz.width=innerWidth*d;lz.height=innerHeight*d;lctx.setTransform(d,0,0,d,0,0)}
+fitLaser();
+(function loop(){const now=performance.now();lctx.clearRect(0,0,innerWidth,innerHeight);
+ if(tool==='laser'){trail=trail.filter(p=>p&&now-p[2]<450);for(let i=1;i<trail.length;i++){const a=trail[i-1],b=trail[i],k=1-(now-b[2])/450;lctx.strokeStyle=`rgba(255,40,40,${.7*k})`;lctx.lineWidth=8*k+2;lctx.lineCap='round';lctx.beginPath();lctx.moveTo(a[0],a[1]);lctx.lineTo(b[0],b[1]);lctx.stroke()}
+  const t=trail[trail.length-1];if(t){lctx.fillStyle='rgba(255,40,40,.25)';lctx.beginPath();lctx.arc(t[0],t[1],16,0,7);lctx.fill();lctx.fillStyle='#FF2A2A';lctx.beginPath();lctx.arc(t[0],t[1],7,0,7);lctx.fill()}}
+ requestAnimationFrame(loop)})();
+
+function markCurrent(){Object.entries(cvs).forEach(([i,o])=>o.cv.classList.toggle('cur',+i===stage))}
+function setTool(t){tool=t;if(t!=='laser')trail=[];
+ document.body.classList.toggle('ink-on',t!=='none');document.body.classList.toggle('ink-erase',t==='erase');document.body.classList.toggle('ink-laser',t==='laser');
+ if(t!=='none'){const a=stageCanvas(stage);if(a&&!a.w)a.fit()}markCurrent();
+ tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setColor(c){color=c;tb.querySelectorAll('.sw').forEach(b=>b.classList.toggle('on',b.dataset.c===c));if(tool==='none'||tool==='erase'||tool==='laser')setTool('pen')}
+function setSize(i){sizeI=i;tb.querySelectorAll('.sz').forEach(b=>b.classList.toggle('on',+b.dataset.s===i))}
+function openTools(open){tb.hidden=!open;if(open){if(tool==='none')setTool('pen')}else{setTool('none');if(!board.hidden)toggleBoard()}if(dbtn)dbtn.classList.toggle('on',open)}
+function toggleBoard(){board.hidden=!board.hidden;tb.querySelector('[data-a="board"]').classList.toggle('on',!board.hidden);if(!board.hidden){bcv.fit();if(tool==='none')setTool('pen')}redraw()}
+function undo(){const L=list();if(L.length)L.pop();else if(backup[key()]){store[key()]=backup[key()];delete backup[key()]}redraw()}
+function clearAll(){const L=list();if(!L.length)return;backup[key()]=L.slice();store[key()]=[];redraw()}
+tb.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)setTool(b.dataset.t);else if(b.dataset.c)setColor(b.dataset.c);else if(b.dataset.s)setSize(+b.dataset.s);
+ else if(b.dataset.a==='undo')undo();else if(b.dataset.a==='clear')clearAll();else if(b.dataset.a==='board')toggleBoard();else if(b.dataset.a==='close')openTools(false)});
+
+let dbtn=null;
+document.addEventListener('lesson:stage',e=>{
+ if(!dbtn){const row=document.querySelector('.top-row');if(row){dbtn=document.createElement('button');dbtn.id='drawB';dbtn.className='tbtn';dbtn.innerHTML='✏️ قلم / سبورة';dbtn.title='أدوات الكتابة (D)';
+  dbtn.onclick=()=>openTools(tb.hidden);row.appendChild(dbtn)}}
+ stage=e.detail;
+ if(!board.hidden){board.hidden=true;tb.querySelector('[data-a="board"]').classList.remove('on')}
+ if(store[String(stage)]||tool!=='none'){const o=stageCanvas(stage);if(o)requestAnimationFrame(()=>o.fit())}
+ markCurrent();
+});
+window.addEventListener('resize',()=>{fitLaser();if(!board.hidden)bcv.fit()});
+setColor(COLORS[0]);setTool('none');setSize(1);
+
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();
+ if((e.ctrlKey||e.metaKey)&&k==='z'){if(!tb.hidden){e.preventDefault();undo()}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(k==='d'){openTools(tb.hidden);return}
+ if(tb.hidden&&!['p','h','w','l'].includes(k))return;
+ if(k==='p'){openTools(true);setTool('pen')}else if(k==='h'){openTools(true);setTool('hl')}else if(k==='e'&&!tb.hidden)setTool('erase')
+ else if(k==='l'){openTools(true);setTool('laser')}else if(k==='v'||k==='escape')setTool('none');else if(k==='w'){openTools(true);toggleBoard()}});
+})();
+
+document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+
+</script>
+
+<!--tq-home--><a href="../" id="tqHome" title="كل الألعاب" aria-label="كل الألعاب" style="position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:75;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0B1E2D;border:2px solid #E2B85C;font-size:20px;text-decoration:none;opacity:.75;box-shadow:0 4px 12px rgba(0,0,0,.3)">🏠</a>
+</body></html>

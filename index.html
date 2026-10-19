@@ -7,44 +7,82 @@
 <meta name="description" content="ألعاب تفاعلية مجانية لتعليم القرآن والتجويد والعربي لغير الناطقين بالعربية — للأطفال والمراهقين والكبار.">
 <meta property="og:title" content="ألعاب ترتيل القرآن | Tarteel Al-Quran Games">
 <meta property="og:description" content="ألعاب تفاعلية مجانية لتعليم القرآن والتجويد والعربي — تعمل على الموبايل وفي الحصص الأونلاين.">
+<meta name="theme-color" content="#0B1E2D">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
 <style>
-/* Layout: one centered column — brand header, filter chips, a wrapping grid of game cards, footer. Navy + gold = Tarteel brand. */
+/* Layout: one centered column — brand header, "newest" spotlight + book of the week, search + two filter rows, a wrapping grid of game cards, footer. Navy + gold = Tarteel brand. */
 :root{
   color-scheme:dark;
   --bg:#0B1E2D; --card:#163A57; --card2:#12304A; --ink:#F4EBD6; --muted:#A9BCCB; --line:#2A5675;
-  --gold:#E2B85C; --kids:#F0A35E; --teens:#5DADE2; --adults:#AF7AC5; --tajweed:#2ECC71;
+  --gold:#E2B85C; --kids:#F0A35E; --teens:#5DADE2; --adults:#AF7AC5; --tajweed:#2ECC71; --hifz:#E2B85C; --arabic:#F1948A; --islamic:#76D7C4;
   --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif; --f-ar:"Amiri","Traditional Arabic",serif;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:radial-gradient(1000px 500px at 80% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);line-height:1.6}
-.wrap{max-width:1100px;margin:0 auto;padding-inline:16px;padding-block:28px 40px;display:flex;flex-direction:column;gap:22px}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(28px + env(safe-area-inset-top,0px)) 40px;display:flex;flex-direction:column;gap:22px}
 header{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
 .logo{font-family:var(--f-ar);font-size:clamp(2.2rem,7vw,3.6rem);font-weight:700;color:var(--gold);line-height:1.2;margin:0}
 .logo small{display:block;font-family:var(--f-ui);font-size:1rem;color:var(--muted);font-weight:700;letter-spacing:.06em}
 .lead{max-width:60ch;margin:0;color:var(--ink);font-size:1.08rem;text-wrap:balance}
 .lead .en{display:block;direction:ltr;color:var(--muted);font-size:.9rem}
+.aboutlink{display:inline-flex;gap:8px;align-items:center;background:#25D366;color:#06331A;font-weight:800;text-decoration:none;border-radius:14px;padding:6px 18px;box-shadow:0 4px 0 #138A40}
+.aboutlink .en{display:inline;color:#06331A;font-size:.8em}
+.aboutlink:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.stat{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:2px 14px;font-weight:700;font-size:.9rem;font-variant-numeric:tabular-nums}
+.stat b{color:var(--gold)}
+
+.top2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px}
+.spot{background:linear-gradient(135deg,#1D4B6E,var(--card));border:2px solid var(--gold);border-radius:22px;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;min-width:0}
+.spot .ico{font-size:3.4rem;line-height:1;grid-row:span 3}
+.spot .eyebrow{font-size:.8rem;font-weight:800;color:var(--gold);letter-spacing:.04em}
+.spot h2{margin:0;font-family:var(--f-ar);font-size:1.8rem;line-height:1.25}
+.spot p{margin:0;color:var(--muted);font-size:.95rem}
+.spot a{grid-column:1/-1;justify-self:start}
+.bow{background:var(--card2);border:2px dashed var(--line);border-radius:22px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.bow .eyebrow{font-size:.8rem;font-weight:800;color:var(--gold)}
+.bow b{font-family:var(--f-ar);font-size:1.35rem;line-height:1.35}
+.bow small{color:var(--muted)}
+
+.tools{display:flex;flex-direction:column;gap:10px;align-items:center}
+.search{width:100%;max-width:520px;font:inherit;font-size:1rem;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:6px 18px;min-height:46px}
+.search::placeholder{color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .chip{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:4px 16px;cursor:pointer;min-height:40px}
 .chip[aria-pressed="true"]{background:var(--gold);color:#10263A;border-color:var(--gold)}
-.chip:focus-visible,.card a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.chip:focus-visible,.card a:focus-visible,.search:focus-visible,.copy:focus-visible,.spot a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.tabs{display:flex;gap:6px;background:var(--card2);border:2px solid var(--line);border-radius:999px;padding:4px}
+.tab{font:inherit;font-weight:800;font-size:1.05rem;border:0;background:transparent;color:var(--muted);border-radius:999px;padding:4px 22px;min-height:42px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:#10263A}
+.tab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.count{color:var(--muted);font-size:.9rem;text-align:center;margin:0}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.card.live{border-color:var(--gold)}
+.card{position:relative;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.live{border-color:#3C6A8A}
+.card.new{border-color:var(--gold)}
+.badge{position:absolute;top:12px;left:12px;background:var(--gold);color:#10263A;font-weight:800;font-size:.75rem;border-radius:999px;padding:0 10px}
 .card .ico{font-size:2.2rem;line-height:1}
 .card h2{margin:0;font-family:var(--f-ar);font-size:1.6rem;line-height:1.3}
 .card h2 .en{display:block;font-family:var(--f-ui);font-size:.85rem;color:var(--muted);direction:ltr;text-align:right}
 .card p{margin:0;font-size:.95rem;color:var(--muted)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
 .tag{font-size:.78rem;font-weight:800;border-radius:999px;padding:0 10px;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c);border:1px solid var(--c)}
-.card a,.card .soon{margin-top:auto;text-align:center;font-weight:800;border-radius:14px;padding:8px 14px;text-decoration:none}
-.card a{background:var(--gold);color:#10263A;box-shadow:0 4px 0 #8C6A25}
-.card a:active{transform:translateY(2px);box-shadow:0 2px 0 #8C6A25}
-.card .soon{border:2px dashed var(--line);color:var(--muted)}
-.book{font-size:.8rem;color:var(--gold)}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--gold);flex-wrap:wrap}
+.meta time{color:var(--muted);font-variant-numeric:tabular-nums}
+.acts{margin-top:auto;display:flex;gap:8px}
+.play,.spot a{flex:1;text-align:center;font-weight:800;border-radius:14px;padding:8px 14px;text-decoration:none;background:var(--gold);color:#10263A;box-shadow:0 4px 0 #8C6A25}
+.play:active,.spot a:active{transform:translateY(2px);box-shadow:0 2px 0 #8C6A25}
+.copy{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:14px;padding:4px 12px;cursor:pointer}
+.soon{margin-top:auto;text-align:center;font-weight:800;border-radius:14px;padding:8px 14px;border:2px dashed var(--line);color:var(--muted)}
+.empty{text-align:center;color:var(--muted);grid-column:1/-1}
 footer{text-align:center;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);padding-top:16px}
 footer b{color:var(--gold)}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:#10263A;font-weight:800;border-radius:999px;padding:6px 18px;z-index:9}
+@media (max-width:760px){.top2{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -53,45 +91,95 @@ footer b{color:var(--gold)}
   <header>
     <h1 class="logo">تَرْتِيلُ القُرْآن<small>TARTEEL AL-QURAN · GAMES</small></h1>
     <p class="lead">أَلْعَابٌ تَفَاعُلِيَّةٌ مَجَّانِيَّةٌ لِتَعْلِيمِ القُرْآنِ وَالتَّجْوِيدِ وَالعَرَبِيَّة — لِلْحِصَصِ الأُونْلَايْن وَلِلْبَيْت.<span class="en">Free interactive games for teaching Qur'an, Tajweed and Arabic to non-Arabic speakers — kids, teens and adults.</span></p>
+    <div class="stats" id="stats"></div>
+    <a class="aboutlink" href="about.html">🎁 احجز حصة تجريبية مجانية · عن المعلم <span class="en">Book a free trial</span></a>
   </header>
 
-  <div class="chips" role="group" aria-label="تصفية">
-    <button class="chip" data-f="all" aria-pressed="true">الكل</button>
-    <button class="chip" data-f="kids" aria-pressed="false">👧 أطفال</button>
-    <button class="chip" data-f="teens" aria-pressed="false">🧑 مراهقين وكبار</button>
-    <button class="chip" data-f="tajweed" aria-pressed="false">📖 تجويد</button>
-    <button class="chip" data-f="hifz" aria-pressed="false">🧠 حفظ</button>
-  </div>
+  <section class="top2" aria-label="الجديد">
+    <div class="spot" id="spot"></div>
+    <div class="bow" id="bow"></div>
+  </section>
+
+  <section class="tools" aria-label="بحث وتصفية">
+    <div class="tabs" role="tablist" aria-label="النوع">
+      <button class="tab" role="tab" data-t="games" aria-selected="true">🎮 الألعاب</button>
+      <button class="tab" role="tab" data-t="lessons" aria-selected="false">📘 الدروس</button>
+    </div>
+    <input class="search" id="q" type="search" placeholder="🔎 ابحث: مد، نون، حفظ، جملة، Madd…" aria-label="بحث">
+    <div class="chips" role="group" aria-label="العمر">
+      <button class="chip" data-g="age" data-f="all" aria-pressed="true">كل الأعمار</button>
+      <button class="chip" data-g="age" data-f="kids" aria-pressed="false">👧 أطفال</button>
+      <button class="chip" data-g="age" data-f="teens" aria-pressed="false">🧑 مراهقين</button>
+      <button class="chip" data-g="age" data-f="adults" aria-pressed="false">🧔 كبار</button>
+    </div>
+    <div class="chips" role="group" aria-label="المادة">
+      <button class="chip" data-g="subj" data-f="all" aria-pressed="true">كل المواد</button>
+      <button class="chip" data-g="subj" data-f="tajweed" aria-pressed="false">📖 تجويد</button>
+      <button class="chip" data-g="subj" data-f="hifz" aria-pressed="false">🧠 حفظ</button>
+      <button class="chip" data-g="subj" data-f="arabic" aria-pressed="false">✍️ عربي</button>
+      <button class="chip" data-g="subj" data-f="islamic" aria-pressed="false">🕌 إسلاميات</button>
+    </div>
+    <p class="count" id="count" aria-live="polite"></p>
+  </section>
 
   <main class="grid" id="grid"></main>
 
   <footer>
     <b>Tarteel Al-Quran · ترتيل القرآن</b> — حصص أونلاين في القرآن والتجويد والعربي لغير الناطقين بالعربية.<br>
-    كل لعبة تذكر مصدرها من كتب أهل العلم بالصفحة.
+    <a href="about.html" style="color:var(--gold)">عن المعلم والحجز</a> · كل لعبة تذكر مصدرها من كتب أهل العلم بالصفحة. لعبة جديدة تقريبًا كل يوم ✨
   </footer>
 </div>
+<script src="games.js"></script>
 <script>
-/* ✏️ أضف كل لعبة جديدة هنا: file = اسم الملف داخل فولدر games (اتركه فارغًا = «قريبًا») */
-const GAMES = [
-  {file:'hifz-chain.html', ico:'🔗', ar:'سِلْسِلَةُ الحُفَّاظ', en:'The Golden Chain of Huffāẓ', tags:['teens','hifz'], desc:'رتّب السند من جبريل إليك، خمّن الحافظ من الأدلة، وسمّع بالتبادل مع معلمك.', book:'كيف تحفظ القرآن الكريم'},
-  {file:'', ico:'🌟', ar:'نُجُومُ القُرْآن', en:'Quran Stars', tags:['kids','hifz'], desc:'رتّب كلمات الآية نجومًا، ثم احفظها والنجوم تختفي واحدة واحدة.', book:'كيف تحفظ القرآن الكريم'},
-  {file:'', ico:'🚦', ar:'إِشَارَاتُ الوَقْف', en:'Waqf Traffic Lights', tags:['teens','tajweed'], desc:'أين أقف؟ ومن أين أبدأ؟ الوقف والابتداء وهمزة الوصل.', book:'الوجيز في علم التجويد'},
-  {file:'', ico:'🐡', ar:'السَّمِينُ وَالنَّحِيف', en:'Puffy & Skinny Letters', tags:['kids','tajweed'], desc:'التفخيم والترقيق بشخصيتين وحركات، ولعبة ذاكرة للحروف المتشابهة.', book:'الوجيز في علم التجويد'},
-  {file:'', ico:'🪜', ar:'سُلَّمُ المُدُود', en:'The Madd Ladder', tags:['teens','tajweed'], desc:'شخّص المد بالأسئلة، وقِس طوله بالحركات.', book:'الوجيز في علم التجويد'},
-  {file:'', ico:'☀️', ar:'عَجَلَةُ الشَّمْسِ وَالقَمَر', en:'Sun & Moon Wheel', tags:['kids','tajweed'], desc:'لِفّ العجلة: اللام قمرية أم شمسية؟', book:'الوجيز في علم التجويد'},
-  {file:'', ico:'⚖️', ar:'مِيزَانُ النُّونِ وَالمِيم', en:'The Nūn & Mīm Scale', tags:['teens','tajweed'], desc:'الحكم ولماذا؟ أحكام النون والميم الساكنتين على آيات حقيقية.', book:'الوجيز في علم التجويد'},
-  {file:'', ico:'🏠', ar:'بُيُوتُ الصِّفَات', en:'Sifat Houses', tags:['kids','tajweed'], desc:'صفات الحروف شخصيات بحركات، اسحب كل حرف إلى بيته.', book:'الوجيز في علم التجويد'},
-  {file:'', ico:'🌬️', ar:'رِحْلَةُ الحَرْف', en:"The Letter's Journey", tags:['teens','tajweed'], desc:'مخارج الحروف على خريطة رحلة الهواء.', book:'الوجيز في علم التجويد'},
-];
-const TAG={kids:['👧 أطفال','var(--kids)'],teens:['🧑 مراهقين وكبار','var(--teens)'],tajweed:['📖 تجويد','var(--tajweed)'],hifz:['🧠 حفظ','var(--adults)']};
+const AGE={kids:['👧 أطفال','var(--kids)'],teens:['🧑 مراهقين','var(--teens)'],adults:['🧔 كبار','var(--adults)']};
+const SUBJ={tajweed:['📖 تجويد','var(--tajweed)'],hifz:['🧠 حفظ','var(--hifz)'],arabic:['✍️ عربي','var(--arabic)'],islamic:['🕌 إسلاميات','var(--islamic)']};
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const fmt=d=>{const [y,m,dd]=d.split('-').map(Number);return `${ar(dd)} ${MONTHS[m-1]} ${ar(y)}`};
+const isNew=d=>d&&(Date.now()-new Date(d+'T00:00:00').getTime())<7*864e5;
+const byDate=a=>(a||[]).slice().sort((x,y)=>(y.date||'').localeCompare(x.date||''));
+const games=byDate(window.GAMES),lessons=byDate(window.LESSONS);
+const live=games.filter(g=>g.file);
+const state={age:'all',subj:'all',q:'',tab:'games'};
+try{const s=JSON.parse(localStorage.getItem('tq-filter')||'{}');Object.assign(state,s,{q:''});if(location.hash==='#lessons')state.tab='lessons'}catch(e){}
+
+document.getElementById('stats').innerHTML=`<span class="stat">🎮 <b>${ar(live.length)}</b> لعبة</span><span class="stat">📘 <b>${ar(lessons.length)}</b> درس</span>`+
+  Object.entries(SUBJ).map(([k,v])=>{const n=live.filter(g=>g.subj===k).length;return n?`<span class="stat">${v[0]} <b>${ar(n)}</b></span>`:''}).join('');
+
+const newest=live[0];
+if(newest){document.getElementById('spot').innerHTML=`<div class="ico" aria-hidden="true">${newest.ico}</div>
+  <span class="eyebrow">✨ أَحْدَثُ لُعْبَة · ${fmt(newest.date)}</span>
+  <h2>${newest.ar}</h2><p>${esc(newest.desc)}</p><a href="games/${newest.file}">▶ اِلْعَبِ الآن</a>`}
+const B=window.SITE&&SITE.bookOfWeek;
+if(B){document.getElementById('bow').innerHTML=`<span class="eyebrow">📚 كِتَابُ الأُسْبُوع (من ${fmt(B.since)})</span><b>«${B.ar}»</b><small>${B.by}</small><small>${B.note||''}</small>`}
+else document.getElementById('bow').hidden=true;
+
 const grid=document.getElementById('grid');
-function render(f){grid.innerHTML=GAMES.filter(g=>f==='all'||g.tags.includes(f)).map(g=>`<article class="card ${g.file?'live':''}">
-  <div class="ico" aria-hidden="true">${g.ico}</div><h2>${g.ar}<span class="en">${g.en}</span></h2>
-  <div class="tags">${g.tags.map(t=>`<span class="tag" style="--c:${TAG[t][1]}">${TAG[t][0]}</span>`).join('')}</div>
-  <p>${g.desc}</p><div class="book">📚 ${g.book}</div>
-  ${g.file?`<a href="games/${g.file}">▶ اِلْعَبِ الآن</a>`:'<span class="soon">قريبًا</span>'}</article>`).join('')}
-document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===c));render(c.dataset.f)});
-render('all');
+function render(){
+  const q=state.q.trim().toLowerCase(),src=state.tab==='lessons'?lessons:games,dir=state.tab==='lessons'?'lessons/':'games/';
+  const list=src.filter(g=>(state.age==='all'||(g.age||[]).includes(state.age))&&(state.subj==='all'||g.subj===state.subj)&&
+    (!q||[g.ar,g.en,g.desc,g.book].join(' ').toLowerCase().replace(/[ً-ْ]/g,'').includes(q.replace(/[ً-ْ]/g,''))));
+  document.getElementById('count').textContent=list.length===src.length?'':`${ar(list.length)} من ${ar(src.length)}`;
+  grid.innerHTML=list.length?list.map(g=>`<article class="card ${g.file?'live':''} ${g.file&&isNew(g.date)?'new':''}">
+    ${g.file&&isNew(g.date)?'<span class="badge">جديد</span>':''}
+    <div class="ico" aria-hidden="true">${g.ico}</div><h2>${g.ar}<span class="en">${esc(g.en)}</span></h2>
+    <div class="tags">${(g.age||[]).map(t=>AGE[t]?`<span class="tag" style="--c:${AGE[t][1]}">${AGE[t][0]}</span>`:'').join('')}${SUBJ[g.subj]?`<span class="tag" style="--c:${SUBJ[g.subj][1]}">${SUBJ[g.subj][0]}</span>`:''}</div>
+    <p>${esc(g.desc)}</p>
+    <div class="meta"><span>📚 ${esc(g.book)}${g.min?` · ⏱️ ${ar(g.min)} د`:''}</span>${g.date?`<time datetime="${g.date}">${fmt(g.date)}</time>`:''}</div>
+    ${g.file?`<div class="acts"><a class="play" href="${dir}${g.file}">${state.tab==='lessons'?'📘 اِفْتَحِ الدَّرْس':'▶ اِلْعَبِ الآن'}</a><button class="copy" data-f="${dir}${g.file}" title="انسخ الرابط لترسله للطالب">🔗</button></div>`:'<span class="soon">قريبًا</span>'}</article>`).join('')
+    :'<p class="empty">لا توجد نتائج بهذا البحث — جرّب كلمة أخرى.</p>';
+}
+document.querySelectorAll('.chip').forEach(c=>{
+  if(state[c.dataset.g]!==undefined)c.setAttribute('aria-pressed',c.dataset.f===state[c.dataset.g]);
+  c.onclick=()=>{state[c.dataset.g]=c.dataset.f;document.querySelectorAll(`.chip[data-g="${c.dataset.g}"]`).forEach(x=>x.setAttribute('aria-pressed',x===c));
+    try{localStorage.setItem('tq-filter',JSON.stringify({age:state.age,subj:state.subj}))}catch(e){}render()}});
+document.querySelectorAll('.tab').forEach(t=>{t.setAttribute('aria-selected',t.dataset.t===state.tab);t.onclick=()=>{state.tab=t.dataset.t;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));history.replaceState(null,'',t.dataset.t==='lessons'?'#lessons':location.pathname);render()}});
+document.getElementById('q').oninput=e=>{state.q=e.target.value;render()};
+grid.addEventListener('click',e=>{const b=e.target.closest('.copy');if(!b)return;const url=new URL(b.dataset.f,location.href).href;
+  const done=()=>{const t=document.createElement('div');t.className='toast';t.textContent='✓ اتنسخ الرابط';document.body.appendChild(t);setTimeout(()=>t.remove(),1500)};
+  (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(done,()=>{prompt('انسخ الرابط:',url)})});
+render();
 </script>
 </body>
 </html>

@@ -1,0 +1,26 @@
+# ألعاب ترتيل القرآن · Tarteel Al-Quran Games
+
+موقع ثابت (GitHub Pages) فيه ألعاب تفاعلية لتعليم القرآن والتجويد والعربي لغير الناطقين بالعربية.
+الرابط: https://mohamedmobark94-a11y.github.io/Games/
+
+## الملفات
+- `about.html` — «عن المعلم والحجز»: حصة تجريبية مجانية، والحجز على واتساب (الرقم في `SITE.contact.whatsapp` داخل `games.js`).
+- `index.html` — الصفحة الرئيسية (بحث + تصفية بالعمر والمادة + أحدث لعبة + كتاب الأسبوع). لا تحتاج تعديل عند إضافة لعبة.
+- `games.js` — **قائمة الألعاب** (`window.GAMES`) و«كتاب الأسبوع» (`window.SITE.bookOfWeek`). أي لعبة جديدة = سطر هنا.
+- `lessons/` — دروس عامة بدون أسماء طلاب (`window.LESSONS` في `games.js`، تظهر في تبويب «📘 الدروس»).
+- `games/` — ملف HTML واحد لكل لعبة (كامل بدون أي ملفات خارجية غير خطوط Google).
+- `tools/add-home-button.py` — يضيف زر 🏠 «كل الألعاب» لأي لعبة جديدة (آمن إن تكرر تشغيله).
+
+## إضافة لعبة جديدة (كل يوم)
+1. ضع الملف في `games/<اسم-قصير>.html` (لو الملف بدون `<!doctype html>` أضف له رأس صفحة كامل: `meta charset` و`viewport`).
+2. شغّل `python3 tools/add-home-button.py` (وللدروس: `python3 tools/add-home-button.py lessons`).
+3. أضف سطرًا في **أول** `window.GAMES` داخل `games.js`:
+   ```js
+   {file:'اسم.html', date:'YYYY-MM-DD', ico:'🎮', ar:'الاسم', en:'Name', age:['kids'|'teens'|'adults'], subj:'tajweed'|'hifz'|'arabic'|'islamic', desc:'…', book:'الكتاب (الصفحات)'},
+   ```
+4. لو بدأ كتاب أسبوع جديد حدّث `SITE.bookOfWeek`.
+5. Commit + push على `main` → GitHub Pages ينشر خلال دقيقة.
+
+## ملاحظات
+- دروس الطلاب الخاصة (فيها أسماء الطلاب) **لا تُرفع هنا** — الموقع عام.
+- الألعاب الأصلية محفوظة أيضًا في بروجكت Claude تحت `claude/games/`.

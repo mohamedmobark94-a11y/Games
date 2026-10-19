@@ -1,0 +1,621 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>عجلة الشمس والقمر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+/* Bright kids theme (one light theme on purpose: screen-share + touch). The play area is a sky that turns day ☀️ / night 🌙. */
+:root{
+  color-scheme:light;
+  --bg:#FFF8EC; --bg2:#FFEFD2; --card:#FFFFFF; --ink:#2A2140; --muted:#6F6585; --line:#F1DDB8;
+  --gold:#F2B705; --gold2:#B07F00; --good:#22A45D; --bad:#E63946; --blue:#3A86FF;
+  --teamA:#3A86FF; --teamB:#EF476F;
+  --moon:#4C3FA8; --moon-bg:#E9E6FF; --sun:#E36414; --sun-bg:#FFF0DA;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;
+  --f-ar:"Amiri","Traditional Arabic","Noto Naskh Arabic",serif;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg) radial-gradient(circle at 10% 0,#FFE3B3 0,transparent 40%) no-repeat;color:var(--ink);font-family:var(--f-ui);direction:rtl;font-size:18px;line-height:1.5}
+.wrap{max-width:1150px;margin:0 auto;padding-inline:16px;padding-block:10px 28px;display:flex;flex-direction:column;gap:12px}
+.top-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.brand{flex:1 1 260px;margin:0;font-size:1.6rem;font-weight:800;line-height:1.2}
+.brand .s{color:var(--sun)} .brand .m{color:var(--moon)}
+.brand small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+.tbtn{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;min-height:40px}
+.tbtn[aria-pressed="true"],.tbtn.on{background:var(--gold);border-color:var(--gold);color:#2A2140}
+.en{display:none;direction:ltr;unicode-bidi:isolate;font-family:system-ui,sans-serif;font-size:.8em;color:var(--muted);font-weight:500}
+body.show-en .en{display:inline}
+body.show-en .en.blk{display:block}
+button:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border-radius:18px;padding:8px 12px;border:2px solid var(--line)}
+.bar label{font-weight:700;font-size:.95rem}
+.bar select{font:inherit;font-size:.95rem;border:2px solid var(--line);border-radius:12px;padding:2px 8px;background:var(--bg);color:var(--ink);min-height:40px;max-width:100%}
+.bar .grow{flex:1}
+.teams{display:flex;gap:10px;flex-wrap:wrap}
+.team{flex:1 1 200px;display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--line);border-radius:20px;padding:6px 14px;transition:transform .2s,border-color .2s}
+.team .nm{font-weight:800;font-size:1.1rem;color:var(--tc)}
+.team .pts{margin-inline-start:auto;font-weight:800;font-size:1.7rem;color:var(--gold2);font-variant-numeric:tabular-nums}
+.team .turn{font-size:.8rem;font-weight:700;background:var(--tc);color:#fff;border-radius:999px;padding:0 10px;visibility:hidden}
+.team.now{border-color:var(--tc);transform:scale(1.02)}
+.team.now .turn{visibility:visible}
+
+/* sky stage */
+#s0{position:relative;overflow:hidden;border:3px solid var(--line);border-radius:26px;padding:14px;min-height:460px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;
+  background:linear-gradient(#BDE6FF,#F3FAFF);transition:background .8s}
+#s0.day{background:linear-gradient(#FFD66B,#FFF4D6)}
+#s0.night{background:linear-gradient(#1D1B4F,#4B4593);color:#fff}
+#s0.night .tip,#s0.night .prog{color:#E6E3FF}
+#s0 > *:not(.skyart):not(.ink-cv){position:relative;z-index:2}
+.skyart{position:absolute!important;inset:0;z-index:0!important;pointer-events:none}
+.skyart .orb{position:absolute;top:14px;inset-inline-start:18px;font-size:3.2rem;opacity:0;transition:opacity .6s,transform .8s;transform:scale(.6)}
+#s0.day .skyart .sunorb,#s0.night .skyart .moonorb{opacity:1;transform:none}
+.skyart .st{position:absolute;color:#FFF7C2;font-size:.9rem;opacity:0;transition:opacity 1s}
+#s0.night .skyart .st{opacity:.9;animation:tw 2s infinite alternate}
+@keyframes tw{to{opacity:.3}}
+.prog{font-weight:700;color:var(--muted);font-size:.95rem;align-self:stretch;display:flex;justify-content:space-between;gap:8px}
+.q{font-weight:800;font-size:1.2rem}
+.tip{font-size:.95rem;color:var(--muted);max-width:62ch}
+.book{font-size:.82rem;color:var(--muted);text-align:center}
+
+/* wheel */
+.wheelbox{position:relative;width:min(420px,86vw);aspect-ratio:1}
+.wheelbox svg{width:100%;height:100%;display:block}
+#wheel{transition:transform 3.6s cubic-bezier(.12,.75,.12,1);transform-origin:50% 50%}
+.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-inline:18px solid transparent;border-top:34px solid #2A2140;filter:drop-shadow(0 3px 0 rgba(0,0,0,.2));z-index:3}
+.hub{position:absolute;inset:0;margin:auto;width:24%;height:24%;border-radius:50%;background:#fff;border:6px solid var(--gold);display:grid;place-items:center;font-weight:800;font-size:clamp(.9rem,3vw,1.2rem);cursor:pointer;color:var(--ink);box-shadow:0 5px 0 #E7C66B;font-family:var(--f-ui)}
+.hub:disabled{cursor:default;opacity:.85}
+.segt{font-size:30px;dominant-baseline:middle;text-anchor:middle}
+.segn{font:800 15px var(--f-ui);fill:#fff;dominant-baseline:middle;text-anchor:middle;paint-order:stroke;stroke:rgba(0,0,0,.25);stroke-width:3px}
+
+/* word card */
+.wcard{background:#fff;color:var(--ink);border:4px solid var(--gold);border-radius:26px;box-shadow:0 8px 0 #E7C66B;padding:6px 30px 10px;animation:pop .35s;max-width:100%}
+.wcard .w{font-family:var(--f-ar);font-weight:700;font-size:clamp(3.2rem,11vw,6rem);line-height:1.45;direction:rtl;white-space:nowrap}
+.wcard .w.long{font-size:clamp(2.2rem,7.5vw,4.2rem);white-space:normal}
+.wcard .meta{font-size:.9rem;color:var(--muted)}
+.lam{color:var(--ink);transition:color .5s}
+.lam.q{color:#2E8B5A}
+.lam.moonL{color:var(--moon);text-shadow:0 0 18px #B9B2FF}
+.lam.sunL{color:#C9C3D6}
+.nx{transition:color .5s}
+.nx.sunN{color:var(--sun);animation:dbl .5s 3}
+@keyframes dbl{50%{color:#FFB000}}
+.zzz{font-size:.35em;vertical-align:super;font-family:var(--f-ui)}
+.look{font-size:.95rem;background:var(--bg2);color:var(--ink);border-radius:14px;padding:2px 12px}
+
+.choices{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-self:stretch}
+.ch{font:inherit;flex:1 1 220px;max-width:360px;border:4px solid var(--cc);background:var(--cb);color:var(--ink);border-radius:24px;padding:8px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0;box-shadow:0 6px 0 var(--cc);min-height:120px}
+.ch .emo{font-size:3rem;line-height:1.1}
+.ch .nm{font-weight:800;font-size:1.3rem;color:var(--cc)}
+.ch .ds{font-size:.9rem}
+.ch.moon{--cc:var(--moon);--cb:var(--moon-bg)}
+.ch.sun{--cc:var(--sun);--cb:var(--sun-bg)}
+.ch:active{transform:translateY(3px);box-shadow:0 3px 0 var(--cc)}
+.ch.bad{animation:shake .4s;opacity:.45}
+.ch.right{outline:5px solid var(--good);outline-offset:3px}
+.ch.right .emo{animation:jump .5s 3}
+.ch:disabled{cursor:default}
+
+.info{align-self:stretch;text-align:start;background:var(--bg2);color:var(--ink);border-inline-start:8px solid var(--hc,var(--gold));border-radius:16px;padding:8px 14px;animation:pop .35s}
+.info .t{font-weight:800}
+.info .bq{font-family:var(--f-ar);font-size:1.25rem;line-height:1.8}
+.info small{display:block;color:var(--gold2);font-weight:700}
+.tpr{align-self:stretch;background:#fff;color:var(--ink);border:3px dashed var(--hc);border-radius:16px;padding:6px 12px;font-weight:700;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.tpr .emo{font-size:2.2rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.big-btn{font:inherit;font-weight:800;font-size:1.1rem;border:0;border-radius:16px;padding:6px 22px;min-height:52px;cursor:pointer;color:#fff;background:var(--blue);box-shadow:0 5px 0 #1F5FC4}
+.big-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1F5FC4}
+.big-btn.green{background:var(--good);box-shadow:0 5px 0 #157A42}
+.big-btn.red{background:var(--bad);box-shadow:0 5px 0 #A3222D}
+.big-btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 5px 0 var(--line)}
+.big-btn .en{color:inherit;opacity:.85}
+
+.posters{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;align-self:stretch}
+.poster{border-radius:20px;padding:8px 12px;border:3px solid var(--cc);background:var(--cb);color:var(--ink)}
+.poster.moon{--cc:var(--moon);--cb:var(--moon-bg)} .poster.sun{--cc:var(--sun);--cb:var(--sun-bg)}
+.poster .h{font-weight:800;color:var(--cc);font-size:1.15rem}
+.poster .ls{font-family:var(--f-ar);font-size:1.7rem;font-weight:700;letter-spacing:.12em;line-height:1.6}
+.poster .key{font-family:var(--f-ar);font-size:1.3rem}
+.poster .pose{font-size:.9rem}
+
+.endmsg{display:flex;flex-direction:column;gap:8px;align-items:center}
+.endmsg .trophy{font-size:4.5rem;line-height:1}
+.endmsg h2{margin:0;font-size:1.9rem;color:var(--gold2)}
+.miss{font-family:var(--f-ar);font-size:1.8rem;line-height:1.7}
+.tbox{align-self:stretch;text-align:start;background:#fff;color:var(--ink);border:2px solid var(--line);border-radius:16px;padding:6px 14px;font-size:.92rem}
+.tbox summary{font-weight:800;cursor:pointer}
+
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+@keyframes shake{25%{transform:translateX(7px)}75%{transform:translateX(-7px)}}
+@keyframes jump{50%{transform:translateY(-16px) scale(1.1)}}
+.cf{position:fixed;top:-20px;width:11px;height:15px;border-radius:3px;pointer-events:none;z-index:80;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.starpop{position:fixed;top:22%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:1.8rem;background:var(--card);color:var(--ink);border:4px solid var(--gold);border-radius:999px;padding:4px 24px;z-index:81;pointer-events:none;white-space:nowrap;animation:sp 1.2s ease forwards}
+@keyframes sp{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}25%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-90%)}}
+
+/* pen tools (from lesson-engine/engine.css) */
+.ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45!important;pointer-events:none;touch-action:none}
+body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
+body.ink-erase .ink-cv{cursor:cell!important}
+body.ink-laser .ink-cv{cursor:none!important}
+#wbLaser{position:fixed;inset:0;width:100%;height:100%;z-index:66;pointer-events:none}
+#wbBoard{position:fixed;inset:0;z-index:60;background-color:#FDFCF8;background-image:linear-gradient(#E6ECEF 1px,transparent 1px),linear-gradient(90deg,#E6ECEF 1px,transparent 1px);background-size:40px 40px}
+#wbBoard[hidden]{display:none!important}
+#wbBoard .bt{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font:700 18px/1 var(--f-ui);color:#86662A;background:#FBF3E1;border:1px solid #EBDDBB;border-radius:20px;padding:8px 16px;z-index:2;pointer-events:none;white-space:nowrap}
+#tools{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:5px;background:rgba(7,23,33,.95);border:1px solid #C9A35A;border-radius:16px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#tools button{width:42px;height:42px;border-radius:10px;border:1px solid #24485A;background:#12303F;color:#E8F1F5;display:grid;place-items:center;padding:0;cursor:pointer}
+#tools button svg{width:22px;height:22px}
+#tools button.on{background:#C9A35A;color:#0B2431;border-color:#C9A35A}
+#tools .sw i{width:22px;height:22px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.6)}
+#tools .sw.on{background:#24485A;border-color:#C9A35A}
+#tools .sz i{display:block;border-radius:50%;background:#E8F1F5}
+#tools .sep{height:1px;background:#2A5266;margin:2px 0}
+#tools[hidden]{display:none!important}
+@media (max-height:980px){#tools{gap:4px;padding:6px}#tools button{width:34px;height:34px}#tools button svg{width:18px;height:18px}#tools .sw i{width:18px;height:18px}}
+@media (max-height:800px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+#drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:640px){#s0{padding:10px}.ch{min-height:96px;flex-basis:140px}.ch .emo{font-size:2.3rem}.ch .ds{font-size:.8rem}.wcard{padding:4px 14px 8px}.brand{font-size:1.3rem}}
+</style>
+
+<div class="wrap">
+  <header class="top-row">
+    <h1 class="brand">عَجَلَةُ <span class="s">الشَّمْسِ</span> وَ<span class="m">القَمَر</span> 🎡 <span class="en">Sun &amp; Moon Wheel</span><small>ترتيل القرآن · Tarteel Al-Quran — اللام الشمسية والقمرية واللامات السواكن من «الوجيز في علم التجويد»</small></h1>
+    <button class="tbtn" id="enB" aria-pressed="false">English</button>
+    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+  </header>
+  <div class="bar">
+    <label for="setSel">الدرس:</label>
+    <select id="setSel"></select>
+    <label for="teamSel">اللاعبون:</label>
+    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <span class="grow"></span>
+    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+  </div>
+  <div class="teams" id="teams"></div>
+  <section id="s0" aria-live="polite"></section>
+  <div class="book" id="bookLine"></div>
+</div>
+
+<script>
+/* ============================================================
+   ✏️ المحتوى — عدّل هنا فقط  (EDIT CONTENT HERE)
+   SETS بنفس «صيغة المحتوى الموحّدة»: { key:{ ar, en, rule, items:[ {ar:'الكلمة بالتشكيل', en:'المعنى', pic:'إيموجي', ref:'السورة: الآية', k?, type?, note?} ] } }
+     rule:'al'  = لام «ال»: الحكم يُحسب تلقائيًا من الحرف بعد اللام (قمرية/شمسية). اكتب الكلمة كما هي.
+     rule:'lr'  = اللامات الساكنة الأخرى: ضع اللام بين [ ] مثل 'قُ[ل] لِّعِبَادِيَ' — تُدغم قبل ل/ر فقط، وغير ذلك تظهر.
+     k:'moon' أو 'sun' لفرض الحكم يدويًا (مثل «بَلْ ۜ رَانَ»)، type نوع اللام (من LAM_TYPES)، note ملاحظة تظهر بعد الإجابة.
+   لتستعمل اللعبة مع سورة الطالب: انسخ مجموعة kids وضع كلمات «ال» من سورته.
+   ============================================================ */
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب اللامات السواكن، ص ٢٢–٢٤ (بترقيم الشاملة آليًّا)'};
+const SETS = {
+  kids:{ar:'① كَلِمَاتُ سُوَرِي القِصَار (٤–٨ سنين)', en:'Words from my short surahs (age 4–8)', rule:'al', round:10, items:[
+    {ar:'الْفَلَقِ',en:'the daybreak',pic:'🌅',ref:'الفلق: ١'},
+    {ar:'النَّاسِ',en:'mankind',pic:'👨‍👩‍👧',ref:'الناس: ١'},
+    {ar:'وَالْعَصْرِ',en:'by the time',pic:'⏳',ref:'العصر: ١'},
+    {ar:'الصَّمَدُ',en:'the Eternal Refuge',pic:'💎',ref:'الإخلاص: ٢'},
+    {ar:'الْفِيلِ',en:'the elephant',pic:'🐘',ref:'الفيل: ١'},
+    {ar:'وَالشَّمْسِ',en:'by the sun',pic:'☀️',ref:'الشمس: ١'},
+    {ar:'وَالْقَمَرِ',en:'and the moon',pic:'🌙',ref:'الشمس: ٢'},
+    {ar:'الْكَوْثَرَ',en:'Al-Kawthar',pic:'🏞️',ref:'الكوثر: ١'},
+    {ar:'الدِّينِ',en:'the Judgement',pic:'⚖️',ref:'الفاتحة: ٤'},
+    {ar:'الرَّحْمَنِ',en:'the Most Merciful',pic:'💖',ref:'الفاتحة: ٣'},
+    {ar:'الْحَمْدُ',en:'all praise',pic:'🤲',ref:'الفاتحة: ٢'},
+    {ar:'الْمُسْتَقِيمَ',en:'the straight (path)',pic:'🛣️',ref:'الفاتحة: ٦'},
+    {ar:'الْخَنَّاسِ',en:'the one who slinks away',pic:'🫥',ref:'الناس: ٤'},
+    {ar:'التَّكَاثُرُ',en:'competing for more',pic:'💰',ref:'التكاثر: ١'},
+    {ar:'الْقَارِعَةُ',en:'the Striking Day',pic:'💥',ref:'القارعة: ١'},
+    {ar:'وَالطَّارِقِ',en:'by the night-comer',pic:'🌠',ref:'الطارق: ١'},
+    {ar:'الْبَلَدِ',en:'the city',pic:'🏙️',ref:'البلد: ١'},
+    {ar:'وَالتِّينِ',en:'by the fig',pic:'🌳',ref:'التين: ١'},
+    {ar:'وَالزَّيْتُونِ',en:'and the olive',pic:'🫒',ref:'التين: ١'},
+    {ar:'وَالضُّحَى',en:'by the morning light',pic:'🌤️',ref:'الضحى: ١'},
+    {ar:'وَاللَّيْلِ',en:'and the night',pic:'🌃',ref:'الضحى: ٢'},
+    {ar:'الْأَعْلَى',en:'the Most High',pic:'⛰️',ref:'الأعلى: ١'},
+  ]},
+  book:{ar:'② أَمْثِلَةُ الكِتَاب: ٢٨ كَلِمَة (٧+ سنين)', en:'The book\'s 28 examples (age 7+)', rule:'al', round:12, items:[
+    {ar:'الْإِنْسَانُ',en:'mankind',pic:'🧍',ref:'النساء: ٢٨'},{ar:'الْبَارِئُ',en:'the Originator',pic:'✨',ref:'الحشر: ٢٤'},
+    {ar:'الْغَنِيُّ',en:'the Self-Sufficient',pic:'💎',ref:'الأنعام: ١٣٣'},{ar:'الْحَكِيمُ',en:'the All-Wise',pic:'📜',ref:'البقرة: ٣٢'},
+    {ar:'الْجَمِيلَ',en:'gracious',pic:'🌸',ref:'الحجر: ٨٥'},{ar:'الْكَرِيمِ',en:'noble',pic:'👑',ref:'المؤمنون: ١١٦'},
+    {ar:'الْوَلِيُّ',en:'the Protector',pic:'🛡️',ref:'الشورى: ٩'},{ar:'الْخَبِيرُ',en:'the All-Aware',pic:'👁️',ref:'الأنعام: ١٨'},
+    {ar:'الْفَتَّاحُ',en:'the Judge / the Opener',pic:'🔑',ref:'سبأ: ٢٦'},{ar:'الْعُلَمَاءُ',en:'the scholars',pic:'📚',ref:'فاطر: ٢٨'},
+    {ar:'الْقَيُّومُ',en:'the Self-Sustaining',pic:'🌌',ref:'البقرة: ٢٥٥'},{ar:'الْيَوْمَ',en:'today',pic:'📅',ref:'البقرة: ٢٤٩'},
+    {ar:'الْمُلْكُ',en:'the kingship',pic:'🏰',ref:'البقرة: ٢٤٧'},{ar:'الْهُدَى',en:'the guidance',pic:'🧭',ref:'البقرة: ١٢٠'},
+    {ar:'الطَّيِّبَاتُ',en:'good things',pic:'🍯',ref:'المائدة: ٤–٥'},{ar:'الثَّوَابِ',en:'the reward',pic:'🎁',ref:'آل عمران: ١٩٥'},
+    {ar:'الصَّالِحِينَ',en:'the righteous',pic:'🤝',ref:'البقرة: ١٣٠'},{ar:'الرَّزَّاقُ',en:'the Provider',pic:'🌾',ref:'الذاريات: ٥٨'},
+    {ar:'التَّائِبُونَ',en:'those who repent',pic:'🤲',ref:'التوبة: ١١٢'},{ar:'الضَّالِّينَ',en:'those astray',pic:'🧭',ref:'الفاتحة: ٧'},
+    {ar:'الذَّكَرُ',en:'the male',pic:'👦',ref:'آل عمران: ٣٦'},{ar:'النَّعِيمِ',en:'bliss',pic:'🌴',ref:'المائدة: ٦٥'},
+    {ar:'الدَّاعِ',en:'the caller',pic:'📣',ref:'البقرة: ١٨٦'},{ar:'السَّمِيعُ',en:'the All-Hearing',pic:'👂',ref:'البقرة: ١٢٧'},
+    {ar:'الظَّالِمِينَ',en:'the wrongdoers',pic:'⛔',ref:'البقرة: ٣٥'},{ar:'الزَّبُورِ',en:'the Psalms',pic:'📖',ref:'الأنبياء: ١٠٥'},
+    {ar:'الشَّكُورُ',en:'the grateful',pic:'🙏',ref:'سبأ: ١٣'},{ar:'اللَّيْلِ',en:'the night',pic:'🌃',ref:'البقرة: ١٦٤'},
+  ]},
+  lams:{ar:'③ اللَّامَاتُ الخَمْس: قُلْ · بَلْ · هَلْ (٨+ ومراهقون)', en:'The five silent Lāms (age 8+ / teens)', rule:'lr', round:12, items:[
+    {ar:'قُ[لْ]نَا',en:'We said',pic:'🗣️',ref:'البقرة: ٣٤',type:'fiel'},
+    {ar:'يَ[لْ]تَقِطْهُ',en:'will pick him up',pic:'🫳',ref:'يوسف: ١٠',type:'fiel'},
+    {ar:'قُ[لْ] أَتَّخَذْتُمْ',en:'Say: have you taken…',pic:'💬',ref:'البقرة: ٨٠',type:'fiel'},
+    {ar:'قُ[ل] لِّعِبَادِيَ',en:'Say to My servants',pic:'📢',ref:'إبراهيم: ٣١',type:'fiel'},
+    {ar:'وَقُ[ل] رَّبِّ',en:'and say: my Lord',pic:'🤲',ref:'الإسراء: ٢٤',type:'fiel'},
+    {ar:'فَهَ[لْ] أَنْتُمْ مُسْلِمُونَ',en:'will you then submit?',pic:'❓',ref:'هود: ١٤',type:'harf'},
+    {ar:'بَ[لْ] عِبَادٌ مُكْرَمُونَ',en:'rather, honoured servants',pic:'🌟',ref:'الأنبياء: ٢٦',type:'harf'},
+    {ar:'فَهَ[ل] لَّنَا',en:'are there for us…?',pic:'❔',ref:'الأعراف: ٥٣',type:'harf'},
+    {ar:'بَ[ل] لَّا يَخَافُونَ',en:'rather, they do not fear',pic:'🙈',ref:'المدثر: ٥٣',type:'harf'},
+    {ar:'بَ[ل] رَّفَعَهُ اللَّهُ',en:'rather, Allah raised him',pic:'☁️',ref:'النساء: ١٥٨',type:'harf'},
+    {ar:'سُ[لْ]طَانٍ',en:'authority',pic:'📜',ref:'الأعراف: ٧١',type:'ism'},
+    {ar:'أَ[لْ]سِنَتُكُمُ',en:'your tongues',pic:'👅',ref:'النحل: ١١٦',type:'ism'},
+    {ar:'عِ[لْ]مًا',en:'knowledge',pic:'📚',ref:'الأنعام: ٨٠',type:'ism'},
+    {ar:'سَ[لْ]سَبِيلًا',en:'Salsabīl (a spring)',pic:'⛲',ref:'الإنسان: ١٨',type:'ism'},
+    {ar:'وَ[لْ]يَكْتُبْ',en:'and let him write',pic:'✍️',ref:'البقرة: ٢٨٢',type:'amr'},
+    {ar:'وَ[لْ]يُوفُوا',en:'and let them fulfil',pic:'🤝',ref:'الحج: ٢٩',type:'amr'},
+    {ar:'بَ[لْ] ۜ رَانَ',en:'rather, it has covered',pic:'⭐',ref:'المطففين: ١٤',type:'harf',k:'moon',note:'sakt'},
+  ]},
+};
+/* الحروف القمرية «ابْغِ حَجَّكَ وَخَفْ عَقِيمَهُ» (الوجيز ص ٢٢) — وكل ما عداها شمسي */
+const MOON_LETTERS = 'ا أ إ ء ب غ ح ج ك و خ ف ع ق ي م ه';
+const SUN_LETTERS  = 'ط ث ص ر ت ض ذ ن د س ظ ز ش ل';
+/* كلمات أزرار الحكم لكل نوع قاعدة */
+const LABELS = {
+  al:{moon:{ar:'قَمَرِيَّة',ds:'اللَّامُ تَظْهَر: «أَلْ»',en:'Moon: say the L'}, sun:{ar:'شَمْسِيَّة',ds:'اللَّامُ تَخْتَفِي وَالحَرْفُ بَعْدَهَا مُشَدَّد',en:'Sun: L hides, next letter doubles'}},
+  lr:{moon:{ar:'إِظْهَار',ds:'اللَّامُ تَظْهَر سَاكِنَة',en:'Clear: say the L'}, sun:{ar:'إِدْغَام',ds:'اللَّامُ تَدْخُلُ فِي الحَرْفِ بَعْدَهَا',en:'Merge into the next letter'}},
+};
+/* نص الكتاب (المتن) لكل حكم — بترقيم الشاملة آليًّا */
+const BQ = {
+  moon:{t:'لامٌ قَمَرِيَّة 🌙 — إِظْهَارٌ قَمَرِيّ',bq:'فيجب إظهارها إذا وقع بعدها حرف من الحروف الأربعة عشر المجموعة في: "ابغ حجك وخف عقيمه"… ويسمى هذا النوع من الإظهار إظهارا قمريا، وتسمى هذه اللام لاما قمرية.',pg:'٢٢–٢٣',c:'var(--moon)'},
+  sun:{t:'لامٌ شَمْسِيَّة ☀️ — إِدْغَامٌ شَمْسِيّ',bq:'ويجب إدغامها إذا وقع بعدها حرف من الحروف الأربعة عشر الباقية من حروف الهجاء… ويسمى هذا النوع من الإدغام إدغاما شمسيا، وتسمى هذه اللام لاما شمسية.',pg:'٢٣',c:'var(--sun)'},
+};
+const LAM_TYPES = {
+  fiel:{ar:'لَامُ الفِعْل',en:'Lām of a verb',bq:'سواء أكان الفعل ماضيا… أم مضارعا… أم أمرا… وحكمها الإظهار إلا لام "قل" فإنها تدغم في حرفين: اللام… للتماثل. الراء… للتقارب.',pg:'٢٤'},
+  harf:{ar:'لَامُ الحَرْف (هَلْ · بَلْ)',en:'Lām of hal / bal',bq:'وحكمها الإظهار إلا إذا وقع بعدها لام أو راء؛ فإنها تدغم فيهما كاللام في "قل".',pg:'٢٤'},
+  ism:{ar:'لَامُ الاسْم',en:'Lām inside a noun',bq:'وحكمها الإظهار مطلقا.',pg:'٢٤'},
+  amr:{ar:'لَامُ الأَمْر',en:'Lām of command',bq:'وهي من أدوات جزم المضارع… وحكمها الإظهار مطلقا كلام الاسم.',pg:'٢٤'},
+};
+const NOTES = {
+  sakt:{ar:'⭐ حَالَةٌ خَاصَّة: «بَلْ ۜ رَانَ» تُظْهَرُ اللَّامُ لِحَفْصٍ لِأَجْلِ السَّكْت (سَكْتَةٌ يَسِيرَة بِلَا نَفَس).',bq:'كما يستثنى من قاعدة إدغام لام الحرف بَلْ رَانَ في المطففين آية ١٤؛ فإن حكمها الإظهار لحفص من طريق الشاطبية؛ لوجود السكت على اللام، والسكت مانع من الإدغام.',pg:'٢٤'},
+};
+/* حركات الجسم (TPR) */
+const POSES = {
+  moon:{emo:'🌕',ar:'اعْمَلْ دَائِرَةً بِيَدَيْكَ فَوْقَ رَأْسِكَ (قَمَر) وَقُلْ: «أَلْ»',en:'Hands make a full moon above your head, say "al"'},
+  sun:{emo:'☀️',ar:'افْتَحْ ذِرَاعَيْكَ مِثْلَ أَشِعَّةِ الشَّمْس وَصَفِّقْ مَرَّةً لِلشَّدَّة 👏',en:'Open your arms like sun rays and clap once for the shaddah'},
+  moon_lr:{emo:'🌕',ar:'اعْمَلْ دَائِرَةً بِيَدَيْكَ فَوْقَ رَأْسِكَ وَأَظْهِرِ اللَّامَ سَاكِنَةً: «لْ»',en:'Full-moon hands, and say the Lām clearly'},
+};
+const pose=(k,rule)=>POSES[k+'_'+rule]||POSES[k];
+/* بطاقات خاصة على العجلة */
+const SPECIALS = [
+  {k:'gift',pic:'🎁',ar:'هَدِيَّة! +٢',en:'Gift! +2',pts:2},
+  {k:'pose',pic:'🤸',ar:'الشَّمْسُ تَقُول!',en:'Sun says!'},
+];
+const WHEEL_SIZE = 8;          // عدد خانات العجلة
+const SEG_COLORS = ['#FF6B5E','#FF9F1C','#2EC4B6','#3A86FF','#8E5CF7','#F15BB5','#22A45D','#E76F51','#118AB2','#B5179E'];
+const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَكَ اللهُ فِيك!','مُمْتَاز!'], PRAISE_EN=['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'];
+/* ============================================================ */
+
+const $=s=>document.querySelector(s);
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const MARKS=/[ً-ْٰۜـ]/;
+const MOON=MOON_LETTERS.split(' ');
+
+/* split a word into: before · lam · next letter · after */
+function parse(it,rule){
+  let s=it.ar,pre,lam,rest;
+  if(s.includes('[')){const a=s.indexOf('['),b=s.indexOf(']');pre=s.slice(0,a);lam=s.slice(a+1,b);rest=s.slice(b+1)}
+  else{let i=-1;for(let j=0;j<s.length-1;j++){if('اٱ'.includes(s[j])){let k=j+1;while(k<s.length&&MARKS.test(s[k]))k++;if(s[k]==='ل'){i=k;break}}}
+    let e=i+1;while(e<s.length&&MARKS.test(s[e]))e++;pre=s.slice(0,i);lam=s.slice(i,e);rest=s.slice(e)}
+  let k0=0;while(k0<rest.length&&(rest[k0]===' '||MARKS.test(rest[k0])))k0++;
+  let k1=k0+1;while(k1<rest.length&&MARKS.test(rest[k1]))k1++;
+  const gap=rest.slice(0,k0),nx=rest.slice(k0,k1),after=rest.slice(k1),letter=rest[k0];
+  let k=it.k;if(!k){k=rule==='al'?(MOON.includes(letter)?'moon':'sun'):(letter==='ل'||letter==='ر'?'sun':'moon')}
+  return {pre,lam,gap,nx,after,letter,k};
+}
+
+/* ---------- sound ---------- */
+let AC=null,soundOn=true;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
+const sfx={
+  tick:()=>tone(1400,.03,'square',.05),
+  good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
+  bad:()=>tone(196,.22,'sawtooth',.08),
+  moon:()=>[1568,1319,1760,2093].forEach((f,i)=>tone(f,.5,'sine',.09,i*.16)),          // twinkle
+  sun:()=>{tone(392,.6,'triangle',.14);tone(494,.6,'triangle',.12,.05);tone(587,.7,'triangle',.12,.1);tone(880,.25,'sine',.12,.35,330)}, // warm chord + gulp
+  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13)),
+  pop:()=>tone(660,.08,'sine',.15)};
+function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2B705','#E36414','#3A86FF','#22A45D','#4C3FA8','#EF476F'];
+  for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+
+/* ---------- state ---------- */
+const S0=$('#s0');
+let setK='kids',teams=[],turn=0,pool=[],segs=[],rot=0,done=0,goal=10,missed=[],usedSpecial={},spinning=false;
+function teamDefs(){const v=$('#teamSel').value;
+  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
+  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
+function stage(){document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}))}
+function cite(pg){return `${BOOK.ar}، ص ${pg} (بترقيم الشاملة آليًّا)`}
+function sky(c){S0.classList.remove('day','night');if(c)S0.classList.add(c)}
+const SKY=`<div class="skyart" aria-hidden="true"><span class="orb sunorb">☀️</span><span class="orb moonorb">🌙</span>${[[12,30],[22,70],[40,88],[62,12],[75,55],[30,48],[85,82],[55,35]].map(([t,l])=>`<span class="st" style="top:${t}%;left:${l}%">✦</span>`).join('')}</div>`;
+
+$('#setSel').innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}">${g.ar}</option>`).join('');
+$('#bookLine').textContent=`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الكلمات من القرآن الكريم (رواية حفص) بمواضعها؛ أمثلة الدرس ② و③ من الكتاب نفسه.`;
+
+function newGame(){setK=$('#setSel').value;const g=SETS[setK];teams=teamDefs().map(t=>({...t,pts:0}));turn=0;done=0;missed=[];usedSpecial={};
+  goal=Math.min(g.round||10,g.items.length);pool=shuffle(g.items).slice(0,goal);
+  segs=[];const nWords=Math.min(WHEEL_SIZE-SPECIALS.length,pool.length);for(let i=0;i<nWords;i++)segs.push({type:'word',item:pool.shift()});
+  SPECIALS.forEach(s=>segs.splice(Math.floor(Math.random()*(segs.length+1)),0,{type:'sp',sp:s}));
+  rot=0;renderTeams();intro();}
+
+/* ---------- intro: the story ---------- */
+function intro(){const g=SETS[setK];sky('');
+  const lr=g.rule==='lr';
+  S0.innerHTML=SKY+`<div class="q">${lr?'🔎 اللَّامُ السَّاكِنَة: تَظْهَرُ أَمْ تُدْغَم؟':'☀️🌙 اللَّامُ فِي «ال»: تَظْهَرُ مِثْلَ القَمَر أَمْ تَخْتَفِي فِي نُورِ الشَّمْس؟'}
+     <span class="en blk">${lr?'A silent Lām: clear or merged?':'The Lām of "al": does it shine like the moon, or hide in the sunlight?'}</span></div>
+   <div class="posters">
+    <div class="poster moon"><div class="h">🌙 ${lr?'إِظْهَار':'الحُرُوفُ القَمَرِيَّة'} <span class="en">${lr?'Clear Lām':'Moon letters'}</span></div>
+      ${lr?'<div class="key">لَامُ الاسْم · لَامُ الأَمْر · وَ«قُلْ/بَلْ/هَلْ» قَبْلَ غَيْرِ ل وَر</div>':`<div class="ls">${MOON_LETTERS.split(' ').filter(l=>!'اأإ'.includes(l)).join(' ')}</div><div class="key">«ابْغِ حَجَّكَ وَخَفْ عَقِيمَهُ»</div>`}
+      <div class="pose">${pose('moon',g.rule).emo} ${pose('moon',g.rule).ar}<span class="en blk">${pose('moon',g.rule).en}</span></div></div>
+    <div class="poster sun"><div class="h">☀️ ${lr?'إِدْغَام':'الحُرُوفُ الشَّمْسِيَّة'} <span class="en">${lr?'Merged Lām':'Sun letters'}</span></div>
+      ${lr?'<div class="key">«قُلْ» وَ«بَلْ» وَ«هَلْ» قَبْلَ <b>ل</b> أَوْ <b>ر</b> فَقَطْ</div>':`<div class="ls">${SUN_LETTERS}</div><div class="key">«طِبْ ثُمَّ صِلْ رَحْمًا تَفُزْ ضِفْ ذَا نِعَمْ ** دَعْ سُوءَ ظَنٍّ زُرْ شَرِيفًا لِلْكَرَمْ»</div>`}
+      <div class="pose">${POSES.sun.emo} ${POSES.sun.ar}<span class="en blk">${POSES.sun.en}</span></div></div>
+   </div>
+   <div class="tip">🎯 سِرُّ القِرَاءَة: انْظُرْ إِلَى الكَلِمَة — ${lr?'هَلْ عَلَى اللَّامِ سُكُون ( ْ )؟ أَمْ عَلَى الحَرْفِ بَعْدَهَا شَدَّة ( ّ )؟':'سُكُونٌ عَلَى اللَّام ( لْ ) ← قَمَرِيَّة 🌙 · شَدَّةٌ عَلَى الحَرْفِ بَعْدَهَا ( ّ ) ← شَمْسِيَّة ☀️'}
+     <span class="en blk">Reading secret: a sukūn on the Lām = clear (moon); a shaddah on the next letter = the Lām hides (sun).</span></div>
+   <div class="row"><button class="big-btn ghost" id="tryM">🌙 جَرِّبِ الحَرَكَة</button><button class="big-btn ghost" id="tryS">☀️ جَرِّبِ الحَرَكَة</button>
+     <button class="big-btn green" id="goB">ابْدَأْ — لِفَّ العَجَلَة 🎡 <span class="en">Start</span></button></div>`;
+  $('#tryM').onclick=()=>{ac();sky('night');sfx.moon()};$('#tryS').onclick=()=>{ac();sky('day');sfx.sun()};
+  $('#goB').onclick=()=>{ac();showWheel()};
+  stage();
+}
+
+/* ---------- wheel ---------- */
+function wheelSVG(){const n=segs.length,R=200,cx=210,cy=210,a=360/n;let out='';
+  const P=(deg,r)=>{const t=(deg-90)*Math.PI/180;return [cx+r*Math.cos(t),cy+r*Math.sin(t)]};
+  segs.forEach((s,i)=>{const a0=i*a,a1=(i+1)*a,[x0,y0]=P(a0,R),[x1,y1]=P(a1,R),large=a>180?1:0,c=s.type==='sp'?'#F2B705':SEG_COLORS[i%SEG_COLORS.length];
+    out+=n===1?`<circle cx="${cx}" cy="${cy}" r="${R}" fill="${c}" stroke="#fff" stroke-width="4"/>`:`<path d="M${cx},${cy} L${x0},${y0} A${R},${R} 0 ${large} 1 ${x1},${y1} Z" fill="${c}" stroke="#fff" stroke-width="4"/>`;
+    const [tx,ty]=P(a0+a/2,R*.68),[nx,ny]=P(a0+a/2,R*.88);
+    out+=`<text class="segt" x="${tx}" y="${ty}" transform="rotate(${a0+a/2} ${tx} ${ty})">${s.type==='sp'?s.sp.pic:s.item.pic}</text>`;
+    if(s.type==='word')out+=`<text class="segn" x="${nx}" y="${ny}" transform="rotate(${a0+a/2} ${nx} ${ny})">${ar(i+1)}</text>`});
+  return `<svg viewBox="0 0 420 420" role="img" aria-label="عجلة دوارة"><circle cx="210" cy="210" r="208" fill="#2A2140"/><g id="wheel" style="transform:rotate(${rot}deg)">${out}</g></svg>`}
+function showWheel(){
+  if(done>=goal||!segs.some(s=>s.type==='word')){end();return}
+  sky('');spinning=false;
+  S0.innerHTML=SKY+`<div class="prog"><span>الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}</span><span>${teams[turn].nm}</span></div>
+    <div class="q">🎡 لِفَّ العَجَلَة! <span class="en">Spin the wheel!</span></div>
+    <div class="wheelbox"><div class="pointer"></div>${wheelSVG()}<button class="hub" id="spinB" aria-label="لف العجلة">لِفّ!<br>SPIN</button></div>
+    <div class="tip">اضْغَطْ «لِفّ!» أَوْ زِرَّ المَسَافَة (Space) <span class="en blk">Tap SPIN or press Space</span></div>`;
+  $('#spinB').onclick=spin;stage();
+}
+function spin(){if(spinning)return;spinning=true;ac();$('#spinB').disabled=true;
+  const n=segs.length,a=360/n,i=Math.floor(Math.random()*n),c=i*a+a/2,jit=(Math.random()-.5)*a*.6;
+  const cur=((rot%360)+360)%360;let delta=(360-c-jit-cur)%360;if(delta<0)delta+=360;rot+=360*5+delta;
+  const w=document.getElementById('wheel');requestAnimationFrame(()=>{w.style.transform=`rotate(${rot}deg)`});
+  let t=0,gap=45;const tick=()=>{if(t>3400)return;sfx.tick();t+=gap;gap*=1.09;setTimeout(tick,gap)};tick();
+  setTimeout(()=>land(i),3700);
+}
+function land(i){const s=segs[i];
+  if(s.type==='sp'){segs.splice(i,1);if(pool.length)segs.splice(i,0,{type:'word',item:pool.shift()});
+    if(s.sp.k==='gift'){sfx.win();award(s.sp.pts);S0.querySelector('.q').innerHTML=`🎁 ${s.sp.ar} <span class="en">${s.sp.en}</span>`;setTimeout(()=>{turn=(turn+1)%teams.length;renderTeams();showWheel()},1600)}
+    else poseGame();return}
+  segs.splice(i,1);if(pool.length)segs.splice(i,0,{type:'word',item:pool.shift()});
+  showWord(s.item);
+}
+
+/* ---------- word card ---------- */
+function wordHTML(p,state){
+  const lamCls=state==='q'?'lam q':state==='moon'?'lam moonL':'lam sunL';
+  const nxCls=state==='sun'?'nx sunN':'nx';
+  /* ZWJ keeps Arabic letters joined across the coloured <span>s */
+  const J='\u200D',joins=t=>{const b=t.replace(/[\u064B-\u0652\u0670\u06DC\u0640]/g,'');const c=b[b.length-1];return !!c&&!' اأإآٱدذرزوةء'.includes(c)};
+  const a1=joins(p.pre)?J:'',a2=(!p.gap&&joins(p.lam))?J:'',a3=(p.after&&joins(p.nx))?J:'';
+  return `${p.pre}${a1}<span class="${lamCls}">${a1}${p.lam}${a2}</span>${p.gap}<span class="${nxCls}">${a2}${p.nx}${a3}</span>${a3}${p.after}${state==='sun'?'<span class="zzz">😴</span>':''}`}
+function showWord(it){
+  const g=SETS[setK],p=parse(it,g.rule),L=LABELS[g.rule];let tries=0,over=false;
+  S0.innerHTML=SKY+`<div class="prog"><span>الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}</span><span>${teams[turn].nm}</span></div>
+    <div class="wcard"><div class="w ${it.ar.length>12?'long':''}" id="wd">${wordHTML(p,'q')}</div>
+      <div class="meta">${it.pic} ${it.ref?`(${it.ref})`:''} <span class="en">— ${it.en}</span></div></div>
+    <div class="look">① اقْرَأِ الكَلِمَةَ بِصَوْتٍ عَالٍ ② انْظُرْ: سُكُونٌ عَلَى اللَّام؟ أَمْ شَدَّةٌ بَعْدَهَا؟ ③ اخْتَرْ <span class="en blk">① Read it aloud ② Look: sukūn on the Lām, or shaddah after it? ③ Choose</span></div>
+    <div class="choices">
+      <button class="ch moon" data-k="moon"><span class="emo">🌙</span><span class="nm">${L.moon.ar}</span><span class="ds">${L.moon.ds}</span><span class="en">${L.moon.en}</span></button>
+      <button class="ch sun" data-k="sun"><span class="emo">☀️</span><span class="nm">${L.sun.ar}</span><span class="ds">${L.sun.ds}</span><span class="en">${L.sun.en}</span></button>
+    </div><div id="after"></div>`;
+  const bs=[...S0.querySelectorAll('.ch')];
+  function pick(k){if(over)return;const b=bs.find(x=>x.dataset.k===k);if(b.classList.contains('bad'))return;ac();
+    if(k===p.k){over=true;b.classList.add('right');reveal();if(tries===0)setTimeout(()=>award(1),500);else sfx.pop()}
+    else{tries++;b.classList.add('bad');sfx.bad();over=true;missed.push(it.ar.replace(/[\[\]]/g,''));bs.find(x=>x.dataset.k===p.k).classList.add('right');setTimeout(reveal,400)}}
+  function reveal(){bs.forEach(x=>x.disabled=true);sky(p.k==='moon'?'night':'day');(p.k==='moon'?sfx.moon:sfx.sun)();
+    $('#wd').innerHTML=wordHTML(p,p.k);
+    const base=g.rule==='al'?BQ[p.k]:null,T=it.type&&LAM_TYPES[it.type],N=it.note&&NOTES[it.note],P=pose(p.k,g.rule);
+    const head=g.rule==='al'?`${base.t}: بَعْدَ اللَّامِ حَرْفُ «${p.letter}»`:`${T?T.ar:''} ← ${p.k==='moon'?'إِظْهَار 🌙':'إِدْغَام ☀️'}${p.k==='sun'?` فِي «${p.letter}» (${p.letter==='ل'?'لِلتَّمَاثُل':'لِلتَّقَارُب'})`:''}`;
+    const bq=N?N.bq:base?base.bq:T.bq,pg=N?N.pg:base?base.pg:T.pg;
+    $('#after').innerHTML=`<div class="tpr" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><span class="emo">${P.emo}</span><span>${P.ar}<span class="en blk">${P.en}</span></span>
+        <button class="big-btn green" id="bonusB">✓ عَمِلَ الحَرَكَة وَقَرَأَ صَحِيحًا (+١)</button></div>
+      <div class="info" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><div class="t">${head}</div>${N?`<div>${N.ar}</div>`:''}
+        <div class="bq">«${bq}»</div><small>${cite(pg)}</small></div>
+      <div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en">Next</span></button></div>`;
+    $('#bonusB').onclick=()=>{$('#bonusB').remove();award(1)};
+    $('#nextB').onclick=()=>{done++;turn=(turn+1)%teams.length;renderTeams();showWheel()};$('#nextB').focus({preventScroll:true})}
+  bs.forEach(b=>b.onclick=()=>pick(b.dataset.k));
+  stage();
+}
+
+/* ---------- «الشمس تقول» — TPR special ---------- */
+function poseGame(){const g=SETS[setK],words=shuffle(g.items).slice(0,4);let i=0,pts=0;
+  function one(){if(i>=words.length){if(pts)award(pts);setTimeout(()=>{turn=(turn+1)%teams.length;renderTeams();showWheel()},900);return}
+    const it=words[i],p=parse(it,g.rule);sky('');
+    S0.innerHTML=SKY+`<div class="q">🤸 الشَّمْسُ تَقُول! — بِلَا أَزْرَار: اقْرَأْ وَاعْمَلِ الحَرَكَة 🌕 أَوْ ☀️ <span class="en blk">Sun says! No buttons: read it and do the moon or sun pose</span></div>
+      <div class="prog"><span>${ar(i+1)} / ${ar(words.length)}</span><span>${teams[turn].nm}</span></div>
+      <div class="wcard"><div class="w ${it.ar.length>12?'long':''}" id="wd">${wordHTML(p,'q')}</div></div>
+      <div class="row"><button class="big-btn ghost" id="revB">👀 أَظْهِرِ الجَوَاب <span class="en">Reveal</span></button></div><div id="after"></div>`;
+    $('#revB').onclick=()=>{ac();$('#revB').remove();sky(p.k==='moon'?'night':'day');(p.k==='moon'?sfx.moon:sfx.sun)();$('#wd').innerHTML=wordHTML(p,p.k);
+      $('#after').innerHTML=`<div class="tpr" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><span class="emo">${pose(p.k,g.rule).emo}</span><span>${pose(p.k,g.rule).ar}</span></div>
+        <div class="row"><button class="big-btn green" id="okB">✓ صَحّ (+١)</button><button class="big-btn red" id="noB">✗ لَيْسَ بَعْد</button></div>`;
+      $('#okB').onclick=()=>{pts++;sfx.pop();i++;one()};$('#noB').onclick=()=>{missed.push(it.ar.replace(/[\[\]]/g,''));i++;one()}};
+    stage()}
+  one();
+}
+
+/* ---------- end ---------- */
+function end(){sky('night');
+  const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
+  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const ms=[...new Set(missed)];
+  S0.innerHTML=SKY+`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2 style="color:#FFE08A">${msg}</h2>
+    ${ms.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${ms.join(' · ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
+    <div class="info"><div class="t">🏠 تَحَدِّي البَيْت <span class="en">Home challenge</span></div>
+      افْتَحْ سُورَتَكَ وَابْحَثْ عَنْ ٣ كَلِمَاتٍ قَمَرِيَّة 🌙 وَ٣ شَمْسِيَّة ☀️ — نُضِيفُهَا لِلْعَجَلَةِ فِي الحِصَّةِ القَادِمَة!
+      <span class="en blk">Find 3 moon words and 3 sun words in your surah: we'll add them to the wheel next class!</span></div>
+    <div class="row"><button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div></div>`;
+  $('#againB').onclick=newGame;sfx.win();confetti(90);stage();
+}
+
+$('#setSel').onchange=newGame;$('#teamSel').onchange=newGame;$('#newB').onclick=newGame;
+$('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;
+  if(e.key==='Enter'&&$('#nextB')&&e.target.id!=='nextB'){e.preventDefault();$('#nextB').click()}
+  else if(e.key===' '&&$('#spinB')&&!spinning){e.preventDefault();spin()}});
+window.__t={SETS,parse,MOON};
+newGame();
+</script>
+<script>
+(function(){
+// Pen tools + whiteboard, ported from the "عينك أمانة" deck to the scrolling lesson pages.
+// Ink lives inside each station (scrolls with the text); the whiteboard is a full-screen grid board.
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ hand:SV('<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V12M16 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L7 15"/>'),
+ pen:SV('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ hl:SV('<path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ erase:SV('<path d="M20 20H8l-5-5a2 2 0 0 1 0-2.8L12.2 3a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L13 20"/><path d="M6 11l7 7"/>'),
+ laser:SV('<circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'),
+ undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+ clear:SV('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'),
+ board:SV('<rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21l4-4 4 4"/>'),
+ close:SV('<path d="M6 6l12 12M18 6L6 18"/>')
+};
+const COLORS=['#C2453A','#14374A','#2E8B5A','#2F6FB3','#C9A35A','#FFFFFF'];
+const SIZES=[2.5,5,9];
+
+// toolbar
+const tb=document.createElement('div');tb.id='tools';tb.hidden=true;tb.setAttribute('role','toolbar');tb.setAttribute('aria-label','أدوات الكتابة');
+tb.innerHTML=`
+ <button data-t="none" title="تحكم في الدرس (V / Esc)" aria-label="تحكم في الدرس">${IC.hand}</button>
+ <button data-t="pen" title="قلم (P)" aria-label="قلم">${IC.pen}</button>
+ <button data-t="hl" title="هايلايتر لتظليل الكلمات (H)" aria-label="هايلايتر">${IC.hl}</button>
+ <button data-t="erase" title="ممحاة (E)" aria-label="ممحاة">${IC.erase}</button>
+ <button data-t="laser" title="مؤشر ليزر (L)" aria-label="مؤشر ليزر">${IC.laser}</button>
+ <div class="sep"></div>
+ ${COLORS.map(c=>`<button class="sw" data-c="${c}" title="لون" aria-label="لون ${c}"><i style="background:${c}"></i></button>`).join('')}
+ <div class="sep"></div>
+ ${SIZES.map((s,i)=>`<button class="sz" data-s="${i}" title="سُمك" aria-label="سمك ${i+1}"><i style="width:${6+i*6}px;height:${6+i*6}px"></i></button>`).join('')}
+ <div class="sep"></div>
+ <button data-a="undo" title="تراجع (Ctrl+Z)" aria-label="تراجع">${IC.undo}</button>
+ <button data-a="clear" title="امسح كتابة هذه المحطة" aria-label="مسح">${IC.clear}</button>
+ <button data-a="board" title="سبورة بيضاء (W)" aria-label="سبورة بيضاء">${IC.board}</button>
+ <button data-a="close" title="إغلاق أدوات الكتابة (D)" aria-label="إغلاق">${IC.close}</button>`;
+document.body.appendChild(tb);
+
+// whiteboard overlay + laser layer
+const board=document.createElement('div');board.id='wbBoard';board.hidden=true;board.innerHTML='<span class="bt">سبورة بيضاء · Whiteboard</span>';document.body.appendChild(board);
+const lz=document.createElement('canvas');lz.id='wbLaser';document.body.appendChild(lz);const lctx=lz.getContext('2d');
+
+let tool='none',color=COLORS[0],sizeI=1,stage=0;
+const store={},backup={};
+const key=()=>stage+(board.hidden?'':'-wb');
+const list=()=>store[key()]||(store[key()]=[]);
+
+function lw(s,pr){return s.t==='hl'?s.w*5:s.w*(0.45+1.1*(pr==null?.5:pr))}
+function seg(c,s,i){const p=s.pts,a=p[i-1],b=p[i];const m0=i===1?a:[(p[i-2][0]+a[0])/2,(p[i-2][1]+a[1])/2];const m1=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ c.lineWidth=lw(s,(a[2]+b[2])/2);c.beginPath();c.moveTo(m0[0],m0[1]);c.quadraticCurveTo(a[0],a[1],m1[0],m1[1]);c.stroke()}
+function drawStroke(c,s){const p=s.pts;if(!p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.c;c.fillStyle=s.c;
+ if(s.t==='hl'){c.globalAlpha=.35;c.lineWidth=lw(s);c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++){const m=[(p[i-1][0]+p[i][0])/2,(p[i-1][1]+p[i][1])/2];c.quadraticCurveTo(p[i-1][0],p[i-1][1],m[0],m[1])}c.lineTo(p[p.length-1][0],p[p.length-1][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]);c.stroke()}
+ else{if(p.length===1){c.beginPath();c.arc(p[0][0],p[0][1],lw(s,p[0][2])/2,0,7);c.fill()}else for(let i=1;i<p.length;i++)seg(c,s,i)}
+ c.restore()}
+
+// canvases: one per station + one on the board
+const cvs={};
+function makeCanvas(host,k){
+ const cv=document.createElement('canvas');cv.className='ink-cv';host.appendChild(cv);
+ const o={cv,ctx:cv.getContext('2d'),w:0,h:0,k};
+ o.fit=()=>{const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;o.w=r.width;o.h=r.height;cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));o.ctx.setTransform(d,0,0,d,0,0);o.redraw()};
+ o.redraw=extra=>{o.ctx.clearRect(0,0,o.w,o.h);(store[o.k()]||[]).forEach(s=>drawStroke(o.ctx,s));if(extra)drawStroke(o.ctx,extra)};
+ bind(o);return o;
+}
+function stageCanvas(i){
+ if(cvs[i])return cvs[i];const sec=document.getElementById('s'+i);if(!sec)return null;
+ const o=makeCanvas(sec,()=>String(i));new ResizeObserver(()=>o.fit()).observe(sec);return cvs[i]=o;
+}
+const bcv=makeCanvas(board,()=>stage+'-wb');
+const active=()=>board.hidden?stageCanvas(stage):bcv;
+function redraw(){const a=active();if(a)a.redraw()}
+
+let cur=null,erasing=false,trail=[];
+function bind(o){
+ const cv=o.cv;
+ const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?(e.pressure||.5):.5]};
+ const eraseAt=(x,y)=>{const L=store[o.k()]||[],r=14;let ch=false;for(let i=L.length-1;i>=0;i--){if(L[i].pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<r+lw(L[i],p[2])/2)){L.splice(i,1);ch=true}}if(ch)o.redraw()};
+ cv.addEventListener('pointerdown',e=>{if(tool==='none')return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=pos(e);
+  erasing=tool==='erase'||e.button===5||!!(e.buttons&32);
+  if(tool==='laser'){trail=[[e.clientX,e.clientY,performance.now()]];return}
+  if(erasing){eraseAt(p[0],p[1]);return}
+  cur={t:tool,c:color,w:SIZES[sizeI],pts:[p]};if(tool==='pen')drawStroke(o.ctx,cur)});
+ cv.addEventListener('pointermove',e=>{if(tool==='none')return;const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce.length?ce:[e];
+  if(tool==='laser'){trail.push([e.clientX,e.clientY,performance.now()]);return}
+  if(!e.buttons)return;
+  for(const ev of evs){const p=pos(ev);if(erasing){eraseAt(p[0],p[1]);continue}if(!cur)continue;const l=cur.pts[cur.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])<1.2)continue;cur.pts.push(p);
+   if(cur.t==='pen'){o.ctx.save();o.ctx.lineCap='round';o.ctx.strokeStyle=cur.c;seg(o.ctx,cur,cur.pts.length-1);o.ctx.restore()}}
+  if(cur&&cur.t==='hl')o.redraw(cur)});
+ const up=()=>{if(cur){(store[o.k()]||(store[o.k()]=[])).push(cur);cur=null;o.redraw()}erasing=false};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(tool==='laser')trail.push(null)});
+ cv.addEventListener('contextmenu',e=>{if(tool!=='none')e.preventDefault()});
+}
+
+function fitLaser(){const d=window.devicePixelRatio||1;lz.width=innerWidth*d;lz.height=innerHeight*d;lctx.setTransform(d,0,0,d,0,0)}
+fitLaser();
+(function loop(){const now=performance.now();lctx.clearRect(0,0,innerWidth,innerHeight);
+ if(tool==='laser'){trail=trail.filter(p=>p&&now-p[2]<450);for(let i=1;i<trail.length;i++){const a=trail[i-1],b=trail[i],k=1-(now-b[2])/450;lctx.strokeStyle=`rgba(255,40,40,${.7*k})`;lctx.lineWidth=8*k+2;lctx.lineCap='round';lctx.beginPath();lctx.moveTo(a[0],a[1]);lctx.lineTo(b[0],b[1]);lctx.stroke()}
+  const t=trail[trail.length-1];if(t){lctx.fillStyle='rgba(255,40,40,.25)';lctx.beginPath();lctx.arc(t[0],t[1],16,0,7);lctx.fill();lctx.fillStyle='#FF2A2A';lctx.beginPath();lctx.arc(t[0],t[1],7,0,7);lctx.fill()}}
+ requestAnimationFrame(loop)})();
+
+function markCurrent(){Object.entries(cvs).forEach(([i,o])=>o.cv.classList.toggle('cur',+i===stage))}
+function setTool(t){tool=t;if(t!=='laser')trail=[];
+ document.body.classList.toggle('ink-on',t!=='none');document.body.classList.toggle('ink-erase',t==='erase');document.body.classList.toggle('ink-laser',t==='laser');
+ if(t!=='none'){const a=stageCanvas(stage);if(a&&!a.w)a.fit()}markCurrent();
+ tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setColor(c){color=c;tb.querySelectorAll('.sw').forEach(b=>b.classList.toggle('on',b.dataset.c===c));if(tool==='none'||tool==='erase'||tool==='laser')setTool('pen')}
+function setSize(i){sizeI=i;tb.querySelectorAll('.sz').forEach(b=>b.classList.toggle('on',+b.dataset.s===i))}
+function openTools(open){tb.hidden=!open;if(open){if(tool==='none')setTool('pen')}else{setTool('none');if(!board.hidden)toggleBoard()}if(dbtn)dbtn.classList.toggle('on',open)}
+function toggleBoard(){board.hidden=!board.hidden;tb.querySelector('[data-a="board"]').classList.toggle('on',!board.hidden);if(!board.hidden){bcv.fit();if(tool==='none')setTool('pen')}redraw()}
+function undo(){const L=list();if(L.length)L.pop();else if(backup[key()]){store[key()]=backup[key()];delete backup[key()]}redraw()}
+function clearAll(){const L=list();if(!L.length)return;backup[key()]=L.slice();store[key()]=[];redraw()}
+tb.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)setTool(b.dataset.t);else if(b.dataset.c)setColor(b.dataset.c);else if(b.dataset.s)setSize(+b.dataset.s);
+ else if(b.dataset.a==='undo')undo();else if(b.dataset.a==='clear')clearAll();else if(b.dataset.a==='board')toggleBoard();else if(b.dataset.a==='close')openTools(false)});
+
+let dbtn=null;
+document.addEventListener('lesson:stage',e=>{
+ if(!dbtn){const row=document.querySelector('.top-row');if(row){dbtn=document.createElement('button');dbtn.id='drawB';dbtn.className='tbtn';dbtn.innerHTML='✏️ قلم / سبورة';dbtn.title='أدوات الكتابة (D)';
+  dbtn.onclick=()=>openTools(tb.hidden);row.appendChild(dbtn)}}
+ stage=e.detail;
+ if(!board.hidden){board.hidden=true;tb.querySelector('[data-a="board"]').classList.remove('on')}
+ if(store[String(stage)]||tool!=='none'){const o=stageCanvas(stage);if(o)requestAnimationFrame(()=>o.fit())}
+ markCurrent();
+});
+window.addEventListener('resize',()=>{fitLaser();if(!board.hidden)bcv.fit()});
+setColor(COLORS[0]);setTool('none');setSize(1);
+
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();
+ if((e.ctrlKey||e.metaKey)&&k==='z'){if(!tb.hidden){e.preventDefault();undo()}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(k==='d'){openTools(tb.hidden);return}
+ if(tb.hidden&&!['p','h','w','l'].includes(k))return;
+ if(k==='p'){openTools(true);setTool('pen')}else if(k==='h'){openTools(true);setTool('hl')}else if(k==='e'&&!tb.hidden)setTool('erase')
+ else if(k==='l'){openTools(true);setTool('laser')}else if(k==='v'||k==='escape')setTool('none');else if(k==='w'){openTools(true);toggleBoard()}});
+})();
+
+document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+</script>
+
+
+<!--tq-home--><a href="../" id="tqHome" title="كل الألعاب" aria-label="كل الألعاب" style="position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:75;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0B1E2D;border:2px solid #E2B85C;font-size:20px;text-decoration:none;opacity:.75;box-shadow:0 4px 12px rgba(0,0,0,.3)">🏠</a>
+</body></html>

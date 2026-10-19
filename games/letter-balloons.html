@@ -1,0 +1,557 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>بالونات الحروف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Noto+Naskh+Arabic:wght@600;700&display=swap">
+<style>
+/* Layout: one-screen game — header bar, target "sun" card, open sky where letter balloons rise from green hills.
+   Single deliberate visual world (bright morning sky) for young kids on a shared screen, so no dark variant. */
+:root{
+  color-scheme:light;
+  --sky-top:#7CC8F7; --sky-low:#D9F1FF; --hill:#78C850; --hill-2:#5BB043;
+  --ink:#17324D; --muted:#4A6684; --card:#FFFFFF; --line:#C9E3F5;
+  --sun:#FFC93C; --sun-ink:#8A5A00; --coral:#FF6B5E; --good:#22A45D; --good-bg:#E3F7EB;
+  --f-body:"Baloo Bhaijaan 2","Noto Naskh Arabic",system-ui,sans-serif;
+  --f-letter:"Noto Naskh Arabic","Amiri","Traditional Arabic",serif;
+  --bsize:clamp(74px,11vw,116px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--sky-low);color:var(--ink);font-family:var(--f-body);direction:rtl;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.en{display:none;font-family:system-ui,sans-serif;direction:ltr;unicode-bidi:isolate;font-size:.78em;color:var(--muted);font-weight:500}
+body.show-en .en{display:inline}
+body.show-en .en.blk{display:block}
+.app{height:100%;display:flex;flex-direction:column}
+
+header.top{background:var(--card);border-bottom:3px solid var(--line);padding:8px 16px;position:relative;z-index:20}
+.top-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.brand{margin:0;font-size:1.25rem;font-weight:800;line-height:1.3;flex:1 1 180px;min-width:0}
+.brand small{display:block;font-size:.78rem;font-weight:500;color:var(--muted)}
+.tbtn,.seg button,select{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:3px 14px;cursor:pointer;min-height:38px}
+.tbtn[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tbtn:focus-visible,.seg button:focus-visible,select:focus-visible,.bigbtn:focus-visible,.balloon:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.stars{display:inline-flex;align-items:center;gap:4px;background:#FFF6D6;border:2px solid var(--sun);color:var(--sun-ink);border-radius:999px;padding:2px 14px;font-weight:800;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.ctrl label{font-size:.85rem;color:var(--muted);font-weight:700}
+.seg{display:inline-flex;gap:4px}
+.seg button[aria-pressed="true"]{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+
+#s0{position:relative;flex:1;min-height:300px;overflow:hidden;background:linear-gradient(var(--sky-top),var(--sky-low) 75%)}
+#s0::before{content:"";position:absolute;left:-10%;right:-10%;bottom:-60px;height:130px;background:var(--hill);border-radius:50% 50% 0 0;z-index:1}
+#s0::after{content:"";position:absolute;left:30%;right:-20%;bottom:-80px;height:120px;background:var(--hill-2);border-radius:50% 50% 0 0;z-index:1}
+.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85;z-index:0}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:55%;height:160%;top:-70%;right:15%}
+.cloud::after{width:40%;height:120%;top:-45%;left:12%}
+
+/* target card */
+.target{position:absolute;top:12px;right:50%;transform:translateX(50%);z-index:12;display:flex;align-items:center;gap:14px;background:var(--card);border:4px solid var(--sun);border-radius:28px;padding:6px 18px 6px 10px;box-shadow:0 6px 0 rgba(23,50,77,.12);max-width:calc(100% - 32px)}
+.target .glyph{font-family:var(--f-letter);font-size:clamp(3rem,9vw,4.6rem);line-height:1.15;min-width:1.2em;text-align:center;color:var(--coral);font-weight:700}
+.target .glyph.hide{color:transparent;text-shadow:0 0 0 transparent;background:repeating-linear-gradient(45deg,#FFE9A8 0 10px,#FFF6D6 10px 20px);border-radius:16px}
+.target .ask{font-size:1.1rem;font-weight:800;line-height:1.35}
+.target .ask b{font-family:var(--f-letter);color:var(--coral)}
+.dots{display:flex;gap:6px;margin-top:4px}
+.dots i{width:16px;height:16px;border-radius:50%;background:#E6EEF5;border:2px solid var(--line)}
+.dots i.on{background:var(--good);border-color:var(--good)}
+.say{font:inherit;font-weight:800;font-size:1.4rem;width:52px;height:52px;border-radius:50%;border:3px solid var(--line);background:#F2F9FF;cursor:pointer;flex:0 0 auto}
+.target.flash{animation:flash .5s}
+@keyframes flash{50%{transform:translateX(50%) scale(1.08)}}
+
+/* balloons */
+.balloon{position:absolute;left:0;top:0;width:var(--bsize);height:calc(var(--bsize)*1.18);z-index:5;border:0;padding:0;background:none;cursor:pointer;touch-action:manipulation;will-change:transform}
+.balloon .body{position:absolute;inset:0;border-radius:50% 50% 48% 48% / 55% 55% 45% 45%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.75) 0 9%,transparent 10%),var(--c);box-shadow:inset -8px -10px 0 rgba(0,0,0,.12);display:grid;place-items:center}
+.balloon .body::after{content:"";position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);border:8px solid transparent;border-bottom:10px solid var(--c);border-top:0}
+.balloon .str{position:absolute;top:100%;left:50%;width:2px;height:46px;background:rgba(23,50,77,.45);margin-top:8px;transform-origin:top;animation:str 1.6s ease-in-out infinite alternate}
+@keyframes str{from{transform:rotate(6deg)}to{transform:rotate(-6deg)}}
+.balloon .t{font-family:var(--f-letter);font-weight:700;font-size:calc(var(--bsize)*.5);line-height:1;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25);margin-top:-6%}
+.balloon.no{animation:no .4s}
+@keyframes no{25%{margin-left:-10px}75%{margin-left:10px}}
+.pop{position:absolute;z-index:6;pointer-events:none;font-family:var(--f-letter);font-weight:800;font-size:2rem;color:var(--good);animation:up .9s ease forwards}
+@keyframes up{from{opacity:1;transform:translate(-50%,0) scale(.8)}to{opacity:0;transform:translate(-50%,-70px) scale(1.4)}}
+
+/* overlays */
+.overlay{position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:rgba(124,200,247,.55);padding:16px;backdrop-filter:blur(2px)}
+.panel{background:var(--card);border:4px solid var(--sun);border-radius:32px;padding:20px 24px;text-align:center;max-width:520px;width:100%;box-shadow:0 10px 0 rgba(23,50,77,.12)}
+.panel h2{margin:0 0 6px;font-size:clamp(1.5rem,5vw,2.2rem);line-height:1.3;text-wrap:balance}
+.panel p{margin:0 0 12px;font-size:1.05rem;color:var(--muted);line-height:1.6}
+.panel .emo{font-size:clamp(3.5rem,12vw,5.5rem);line-height:1.1}
+.panel .cmd{font-family:var(--f-letter);font-size:clamp(2.6rem,9vw,4rem);color:var(--coral);line-height:1.5}
+.bigbtn{font:inherit;font-weight:800;font-size:1.25rem;border:0;border-radius:999px;padding:10px 28px;background:var(--good);color:#fff;cursor:pointer;box-shadow:0 5px 0 #17803F;min-height:52px;margin:4px}
+.bigbtn.alt{background:var(--card);color:var(--ink);border:3px solid var(--line);box-shadow:0 5px 0 var(--line)}
+.bigbtn:active{transform:translateY(3px);box-shadow:none}
+.ring{width:64px;height:64px;margin:6px auto 10px;display:block}
+.final{font-size:3.2rem;font-weight:800;color:var(--sun-ink);font-variant-numeric:tabular-nums;line-height:1.2}
+.howto{text-align:start;font-size:.95rem;color:var(--ink);margin:6px 0 12px;padding-inline-start:20px;line-height:1.7}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+
+.tnote{display:none;position:absolute;bottom:10px;right:16px;left:16px;z-index:12;background:#FFF6D6;border:2px solid var(--sun);border-radius:14px;padding:8px 12px;font-size:.88rem;line-height:1.6}
+body.teacher .tnote{display:block}
+kbd{font-family:system-ui,sans-serif;border:1px solid #D9C27A;border-radius:5px;padding:0 5px;background:#fff;font-size:.8rem}
+
+@media (max-width:560px){.brand{font-size:1.05rem}.target{top:8px;gap:8px;padding:4px 10px}.target .ask{font-size:.95rem}.say{width:44px;height:44px;font-size:1.15rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Pen tools & whiteboard (shared lesson-engine design) */
+.stage{position:relative}
+.ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45;pointer-events:none;touch-action:none}
+body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
+body.ink-erase .ink-cv{cursor:cell!important}
+body.ink-laser .ink-cv{cursor:none!important}
+#wbLaser{position:fixed;inset:0;width:100%;height:100%;z-index:66;pointer-events:none}
+#wbBoard{position:fixed;inset:0;z-index:60;background-color:#FDFCF8;background-image:linear-gradient(#E6ECEF 1px,transparent 1px),linear-gradient(90deg,#E6ECEF 1px,transparent 1px);background-size:40px 40px}
+#wbBoard[hidden]{display:none!important}
+#wbBoard .bt{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font:700 18px/1 var(--f-body);color:#86662A;background:#FBF3E1;border:1px solid #EBDDBB;border-radius:20px;padding:8px 16px;z-index:2;pointer-events:none;white-space:nowrap}
+#tools{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:5px;background:rgba(7,23,33,.95);border:1px solid #C9A35A;border-radius:16px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#tools button{width:42px;height:42px;border-radius:10px;border:1px solid #24485A;background:#12303F;color:#E8F1F5;display:grid;place-items:center;padding:0;cursor:pointer}
+#tools button svg{width:22px;height:22px}
+#tools button.on{background:#C9A35A;color:#0B2431;border-color:#C9A35A}
+#tools button:focus-visible{outline:3px solid #C9A35A;outline-offset:2px}
+#tools .sw i{width:22px;height:22px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.6)}
+#tools .sw.on{background:#24485A;border-color:#C9A35A}
+#tools .sz i{display:block;border-radius:50%;background:#E8F1F5}
+#tools .sep{height:1px;background:#2A5266;margin:2px 0}
+#tools[hidden]{display:none!important}
+@media (max-height:980px){#tools{gap:4px;padding:6px}#tools button{width:34px;height:34px}#tools button svg{width:18px;height:18px}#tools .sw i{width:18px;height:18px}}
+@media (max-height:800px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+#drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
+</style>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="top-row">
+      <h1 class="brand">بَالُونَاتُ الحُرُوف <span class="en">Letter Balloons</span><small>ترتيل القرآن | Tarteel Al-Quran</small></h1>
+      <span class="stars" aria-live="polite">★ <span id="sc">٠</span></span>
+      <button class="tbtn" id="pauseB" aria-pressed="false" title="إيقاف مؤقت (Space)">⏸ إيقاف</button>
+      <button class="tbtn" id="enT" aria-pressed="false">English</button>
+      <button class="tbtn" id="tT" aria-pressed="false">للمعلم</button>
+    </div>
+    <div class="ctrl">
+      <label for="setSel">الدرس <span class="en">Set</span></label>
+      <select id="setSel"></select>
+      <label>السرعة <span class="en">Speed</span></label>
+      <div class="seg" id="spd">
+        <button data-v="0" aria-pressed="true">🐢</button><button data-v="1" aria-pressed="false">🐇</button><button data-v="2" aria-pressed="false">🚀</button>
+      </div>
+      <button class="tbtn" id="lisT" aria-pressed="false" title="اخفِ الحرف: الطالب يسمع فقط">👂 بالسمع فقط <span class="en">Listen only</span></button>
+    </div>
+  </header>
+
+  <section class="stage" id="s0" aria-label="ساحة اللعب">
+    <div class="cloud" style="width:120px;height:34px;top:28%;left:8%"></div>
+    <div class="cloud" style="width:90px;height:26px;top:52%;right:10%"></div>
+    <div class="cloud" style="width:150px;height:40px;top:72%;left:42%"></div>
+
+    <div class="target" id="target">
+      <div class="glyph" id="glyph" aria-live="polite">ب</div>
+      <div>
+        <div class="ask" id="ask">طَيِّرْ حَرْفَ <b id="tname">بَاء</b>!</div>
+        <div class="en blk" id="askEn">Pop every “Baa”!</div>
+        <div class="dots" id="dots"></div>
+      </div>
+      <button class="say" id="sayB" title="اسمع (S)" aria-label="اسمع الحرف">🔊</button>
+    </div>
+    <div class="tnote" id="tnote">ملاحظة للمعلم: قل اسم الحرف بصوتك ٣ مرات والطفل يفرقع البالونات. زر 👂 يخفي الحرف (تدريب السمع: ح/ه، ع/أ، س/ص). كل ٣ حروف تأتي «استراحة حركة»: قل الأمر بالعربي والطفل ينفذه. اختصارات: <kbd>Space</kbd> إيقاف · <kbd>N</kbd> الحرف التالي · <kbd>S</kbd> نطق · <kbd>D</kbd> القلم · <kbd>W</kbd> السبورة.</div>
+
+    <div class="overlay" id="startOv">
+      <div class="panel">
+        <div class="emo">🎈</div>
+        <h2>بَالُونَاتُ الحُرُوف <span class="en blk">Letter Balloons</span></h2>
+        <ol class="howto">
+          <li>اسمع الحرف <span class="en">Listen to the letter</span></li>
+          <li>فرقع بالونات نفس الحرف 🎈 <span class="en">Pop the balloons with that letter</span></li>
+          <li>اجمع النجوم ⭐ <span class="en">Collect stars</span></li>
+        </ol>
+        <button class="bigbtn" id="startB">يَلَّا نَلْعَب ▶ <span class="en">Play</span></button>
+      </div>
+    </div>
+    <div class="overlay" id="tprOv" hidden>
+      <div class="panel">
+        <p>اسْتِرَاحَةُ حَرَكَة! <span class="en">Move break!</span></p>
+        <div class="emo" id="tprEmo">👏</div>
+        <div class="cmd" id="tprAr">صَفِّقْ</div>
+        <p class="en blk" id="tprEn">Clap!</p>
+        <svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" fill="none" stroke="#E6EEF5" stroke-width="7"/><circle id="ringC" cx="32" cy="32" r="27" fill="none" stroke="#22A45D" stroke-width="7" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="0" transform="rotate(-90 32 32)"/></svg>
+        <button class="bigbtn" id="tprB">نُكْمِل ▶ <span class="en">Continue</span></button>
+      </div>
+    </div>
+    <div class="overlay" id="endOv" hidden>
+      <div class="panel">
+        <div class="emo">🏆</div>
+        <h2>مَا شَاءَ اللهُ! أَحْسَنْت <span class="en blk">Well done!</span></h2>
+        <div class="final">★ <span id="finalSc">٠</span></div>
+        <p id="finalTxt"></p>
+        <button class="bigbtn" id="againB">مَرَّةً أُخْرَى ↻ <span class="en">Again</span></button>
+        <button class="bigbtn alt" id="nextSetB">الدَّرْسُ التَّالِي ← <span class="en">Next set</span></button>
+      </div>
+    </div>
+  </section>
+</div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<script>
+/* =====================================================================
+   المحتوى — عدّل هنا فقط  |  EDIT CONTENT HERE
+   كل درس (set) فيه عناصر items:  t = ما يظهر على البالون،
+   name = الاسم الذي يظهر في السؤال (ويُنطق)، en = الاسم بالإنجليزي.
+   t يمكن أن يكون حرفًا، أو حرفًا بحركة (بَ)، أو كلمة قصيرة (بَيْت).
+   twins:true  ⇒ البالونات الخاطئة تأتي غالبًا من «أخوات الصوت» في groups.
+   ===================================================================== */
+const GAME = {
+  roundsPerGame: 8,     // كم حرفًا في الجولة
+  popsPerTarget: 3,     // كم بالونًا صحيحًا لكل حرف
+  tprEvery: 3,          // استراحة حركة بعد كل كم حرف (0 = بدون)
+  tprSeconds: 10,
+  sets: [
+    { ar:'الحروف ١: أ – خ', en:'Letters 1: Alif – Khaa', items:[
+      {t:'ا',name:'أَلِف',en:'Alif'},{t:'ب',name:'بَاء',en:'Baa'},{t:'ت',name:'تَاء',en:'Taa'},
+      {t:'ث',name:'ثَاء',en:'Thaa'},{t:'ج',name:'جِيم',en:'Jeem'},{t:'ح',name:'حَاء',en:'Ḥaa'},{t:'خ',name:'خَاء',en:'Khaa'}]},
+    { ar:'الحروف ٢: د – ض', en:'Letters 2: Daal – Ḍaad', items:[
+      {t:'د',name:'دَال',en:'Daal'},{t:'ذ',name:'ذَال',en:'Dhaal'},{t:'ر',name:'رَاء',en:'Raa'},{t:'ز',name:'زَاي',en:'Zaay'},
+      {t:'س',name:'سِين',en:'Seen'},{t:'ش',name:'شِين',en:'Sheen'},{t:'ص',name:'صَاد',en:'Ṣaad'},{t:'ض',name:'ضَاد',en:'Ḍaad'}]},
+    { ar:'الحروف ٣: ط – غ', en:'Letters 3: Ṭaa – Ghayn', items:[
+      {t:'ط',name:'طَاء',en:'Ṭaa'},{t:'ظ',name:'ظَاء',en:'Ẓaa'},{t:'ع',name:'عَيْن',en:'ʿAyn'},{t:'غ',name:'غَيْن',en:'Ghayn'}]},
+    { ar:'الحروف ٤: ف – ي', en:'Letters 4: Faa – Yaa', items:[
+      {t:'ف',name:'فَاء',en:'Faa'},{t:'ق',name:'قَاف',en:'Qaaf'},{t:'ك',name:'كَاف',en:'Kaaf'},{t:'ل',name:'لَام',en:'Laam'},
+      {t:'م',name:'مِيم',en:'Meem'},{t:'ن',name:'نُون',en:'Noon'},{t:'ه',name:'هَاء',en:'Haa'},{t:'و',name:'وَاو',en:'Waaw'},{t:'ي',name:'يَاء',en:'Yaa'}]},
+    { ar:'أخوات الصوت 👂 (حروف متشابهة)', en:'Sound twins (similar sounds)', twins:true, items:[
+      {t:'ح',name:'حَاء',en:'Ḥaa'},{t:'ه',name:'هَاء',en:'Haa'},{t:'ع',name:'عَيْن',en:'ʿAyn'},{t:'ء',name:'هَمْزَة',en:'Hamzah'},
+      {t:'س',name:'سِين',en:'Seen'},{t:'ص',name:'صَاد',en:'Ṣaad'},{t:'ت',name:'تَاء',en:'Taa'},{t:'ط',name:'طَاء',en:'Ṭaa'},
+      {t:'د',name:'دَال',en:'Daal'},{t:'ض',name:'ضَاد',en:'Ḍaad'},{t:'ك',name:'كَاف',en:'Kaaf'},{t:'ق',name:'قَاف',en:'Qaaf'},
+      {t:'ذ',name:'ذَال',en:'Dhaal'},{t:'ز',name:'زَاي',en:'Zaay'},{t:'ظ',name:'ظَاء',en:'Ẓaa'},{t:'ث',name:'ثَاء',en:'Thaa'},
+      {t:'خ',name:'خَاء',en:'Khaa'},{t:'غ',name:'غَيْن',en:'Ghayn'}],
+      groups:[['ح','ه'],['ع','ء'],['س','ص','ث'],['ت','ط'],['د','ض'],['ذ','ز','ظ'],['ك','ق'],['خ','غ']] },
+    { ar:'الحركات: بَ بِ بُ (نور البيان)', en:'Short vowels: ba bi bu', twins:true, items:[
+      {t:'بَ',name:'بَ',en:'ba'},{t:'بِ',name:'بِ',en:'bi'},{t:'بُ',name:'بُ',en:'bu'},
+      {t:'تَ',name:'تَ',en:'ta'},{t:'تِ',name:'تِ',en:'ti'},{t:'تُ',name:'تُ',en:'tu'},
+      {t:'مَ',name:'مَ',en:'ma'},{t:'مِ',name:'مِ',en:'mi'},{t:'مُ',name:'مُ',en:'mu'}],
+      groups:[['بَ','بِ','بُ'],['تَ','تِ','تُ'],['مَ','مِ','مُ']] }
+  ],
+  // استراحة الحركة (TPR): المعلم يقول الأمر والطفل ينفذه
+  tpr: [
+    {ar:'قُمْ',en:'Stand up!',emo:'🧍'},{ar:'اِجْلِسْ',en:'Sit down!',emo:'🪑'},
+    {ar:'صَفِّقْ',en:'Clap!',emo:'👏'},{ar:'اِقْفِزْ',en:'Jump!',emo:'🦘'},
+    {ar:'اِرْفَعْ يَدَيْكَ',en:'Raise your hands!',emo:'🙌'},{ar:'اِلْمِسْ رَأْسَكَ',en:'Touch your head!',emo:'🙆'},
+    {ar:'اِبْتَسِمْ',en:'Smile!',emo:'😊'},{ar:'لَوِّحْ بِيَدِكَ',en:'Wave your hand!',emo:'👋'}
+  ],
+  colors: ['#FF6B5E','#FF9F1C','#2EC4B6','#3A86FF','#8E5CF7','#F15BB5','#22A45D','#E76F51']
+};
+
+/* ===================== المحرك — Game engine ===================== */
+(function(){
+const $=s=>document.querySelector(s);
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const field=$('#s0');
+const SPEEDS=[{v:55,gap:1500},{v:85,gap:1150},{v:125,gap:850}]; // px/s, ms between balloons
+
+let st={set:0,speed:0,listen:false,stars:0,round:0,pops:0,queue:[],target:null,running:false,paused:false,phase:'start'};
+let balloons=[],lastSpawn=0,lastT=0,lanesUsed=[];
+
+/* ---------- sound (Web Audio, starts after first tap) ---------- */
+let AC=null;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,t0,dur,type='sine',vol=.18,f2){const c=ac();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,c.currentTime+t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,c.currentTime+t0+dur);g.gain.setValueAtTime(0,c.currentTime+t0);g.gain.linearRampToValueAtTime(vol,c.currentTime+t0+.01);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+t0+dur);o.connect(g).connect(c.destination);o.start(c.currentTime+t0);o.stop(c.currentTime+t0+dur+.02)}
+function popSnd(){const c=ac();if(!c)return;const n=c.createBufferSource(),b=c.createBuffer(1,c.sampleRate*.08,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);n.buffer=b;const g=c.createGain();g.gain.value=.35;n.connect(g).connect(c.destination);n.start();tone(660,0,.12,'triangle',.15,1320)}
+const SND={
+  good(){popSnd();tone(880,.06,.18,'sine',.12)},
+  bad(){tone(220,0,.25,'square',.06,150)},
+  level(){[523,659,784].forEach((f,i)=>tone(f,i*.11,.22,'triangle',.15))},
+  win(){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.13,.28,'triangle',.16))},
+  tick(){tone(1200,0,.05,'sine',.05)}
+};
+
+/* ---------- speech (only if the device has an Arabic voice) ---------- */
+let arVoice=null;
+function findVoice(){try{const vs=speechSynthesis.getVoices();arVoice=vs.find(v=>/^ar/i.test(v.lang))||null}catch(e){}}
+if('speechSynthesis' in window){findVoice();try{speechSynthesis.onvoiceschanged=findVoice}catch(e){}}
+function speak(txt){if(!arVoice)return false;try{const u=new SpeechSynthesisUtterance(txt);u.voice=arVoice;u.lang=arVoice.lang;u.rate=.75;speechSynthesis.cancel();speechSynthesis.speak(u);return true}catch(e){return false}}
+
+/* ---------- confetti ---------- */
+const fx=$('#fx'),fctx=fx.getContext('2d');let parts=[];
+function fitFx(){const d=devicePixelRatio||1;fx.width=innerWidth*d;fx.height=innerHeight*d;fctx.setTransform(d,0,0,d,0,0)}
+fitFx();addEventListener('resize',fitFx);
+function burst(x,y,n=24,spread=1){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=(2+Math.random()*5)*spread;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-3,life:60+Math.random()*30,c:rnd(GAME.colors),r:3+Math.random()*4,star:Math.random()<.3})}}
+function rain(){for(let i=0;i<120;i++)parts.push({x:Math.random()*innerWidth,y:-20-Math.random()*200,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,life:160,c:rnd(GAME.colors),r:4+Math.random()*4,star:Math.random()<.4})}
+function drawStar(x,y,r){fctx.beginPath();for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2,rr=i%2?r*.45:r;fctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}fctx.closePath();fctx.fill()}
+
+/* ---------- UI setup ---------- */
+const sel=$('#setSel');
+GAME.sets.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=s.ar;sel.appendChild(o)});
+sel.onchange=()=>{st.set=+sel.value;restart()};
+document.querySelectorAll('#spd button').forEach(b=>b.onclick=()=>{st.speed=+b.dataset.v;document.querySelectorAll('#spd button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+const tog=(btn,fn)=>btn.onclick=()=>{const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',on);fn(on)};
+tog($('#enT'),on=>document.body.classList.toggle('show-en',on));
+tog($('#tT'),on=>document.body.classList.toggle('teacher',on));
+tog($('#lisT'),on=>{st.listen=on;$('#glyph').classList.toggle('hide',on)});
+$('#pauseB').onclick=()=>setPause(!st.paused);
+$('#sayB').onclick=()=>sayTarget(true);
+$('#startB').onclick=()=>{ac();$('#startOv').hidden=true;newGame()};
+$('#againB').onclick=()=>{$('#endOv').hidden=true;newGame()};
+$('#nextSetB').onclick=()=>{st.set=(st.set+1)%GAME.sets.length;sel.value=st.set;$('#endOv').hidden=true;newGame()};
+$('#tprB').onclick=()=>endTPR();
+
+function setPause(p){st.paused=p;$('#pauseB').setAttribute('aria-pressed',p);$('#pauseB').innerHTML=p?'▶ تشغيل':'⏸ إيقاف'}
+function setStars(n){st.stars=n;$('#sc').textContent=ar(n)}
+
+/* ---------- game flow ---------- */
+function curSet(){return GAME.sets[st.set]}
+function restart(){clearBalloons();setPause(false);['#endOv','#tprOv'].forEach(s=>$(s).hidden=true);if(st.phase!=='start')newGame()}
+function newGame(){
+  const items=curSet().items;let q=[];while(q.length<GAME.roundsPerGame)q=q.concat(shuffle(items));
+  // avoid same letter twice in a row
+  for(let i=1;i<q.length;i++)if(q[i].t===q[i-1].t){const j=q.findIndex((x,k)=>k>i&&x.t!==q[i].t);if(j>0)[q[i],q[j]]=[q[j],q[i]]}
+  st.queue=q.slice(0,GAME.roundsPerGame);st.round=0;setStars(0);st.running=true;st.phase='play';setPause(false);
+  clearBalloons();nextTarget();
+}
+function nextTarget(){
+  if(st.round>=st.queue.length){finish();return}
+  st.target=st.queue[st.round];st.pops=0;st.phase='play';
+  $('#glyph').textContent=st.target.t;$('#tname').textContent=st.target.name;
+  $('#askEn').textContent=`Pop every “${st.target.en}”!`;
+  $('#dots').innerHTML='<i></i>'.repeat(GAME.popsPerTarget);
+  const tc=$('#target');tc.classList.remove('flash');void tc.offsetWidth;tc.classList.add('flash');
+  fadeBalloons();lastSpawn=performance.now()-SPEEDS[st.speed].gap+300;
+  setTimeout(()=>sayTarget(false),250);
+}
+function sayTarget(byTap){const ok=speak(st.target?st.target.name:'');if(!ok&&byTap){const g=$('#glyph');g.classList.remove('hide');setTimeout(()=>{if(st.listen)g.classList.add('hide')},1200)}}
+function targetDone(){
+  SND.level();const r=$('#target').getBoundingClientRect();burst(r.left+r.width/2,r.bottom,40,1.3);
+  st.round++;
+  if(st.round>=st.queue.length){setTimeout(finish,700);return}
+  if(GAME.tprEvery&&st.round%GAME.tprEvery===0)setTimeout(startTPR,700);else setTimeout(nextTarget,700);
+}
+function finish(){
+  st.running=false;st.phase='end';clearBalloons();SND.win();rain();
+  $('#finalSc').textContent=ar(st.stars);
+  $('#finalTxt').innerHTML=`طَيَّرْتَ ${ar(st.queue.length)} حُرُوف! <span class="en">You found ${st.queue.length} letters!</span>`;
+  $('#endOv').hidden=false;
+}
+/* TPR movement break */
+let tprTimer=null;
+function startTPR(){
+  st.phase='tpr';fadeBalloons();const c=rnd(GAME.tpr);
+  $('#tprEmo').textContent=c.emo;$('#tprAr').textContent=c.ar;$('#tprEn').textContent=c.en;$('#tprOv').hidden=false;speak(c.ar);
+  const ring=$('#ringC'),total=GAME.tprSeconds*1000,t0=performance.now();ring.style.strokeDashoffset=0;
+  clearInterval(tprTimer);tprTimer=setInterval(()=>{if(st.paused)return;const k=Math.min(1,(performance.now()-t0)/total);ring.style.strokeDashoffset=169.6*k;if(k>=1)endTPR()},100);
+}
+function endTPR(){clearInterval(tprTimer);if($('#tprOv').hidden)return;$('#tprOv').hidden=true;st.phase='play';nextTarget()}
+
+/* ---------- balloons ---------- */
+function bw(){return parseFloat(getComputedStyle(document.querySelector('.balloon')||field).getPropertyValue('--bsize'))||90}
+function pickItem(){
+  const s=curSet(),T=st.target,onScreen=balloons.some(b=>b.item.t===T.t&&!b.dead);
+  if(!onScreen||Math.random()<.42)return T;
+  const others=s.items.filter(x=>x.t!==T.t);
+  if(s.twins&&s.groups){const g=s.groups.find(g=>g.includes(T.t));if(g&&Math.random()<.7){const tw=others.filter(x=>g.includes(x.t));if(tw.length)return rnd(tw)}}
+  return rnd(others.length?others:[T]);
+}
+function spawn(){
+  const W=field.clientWidth,H=field.clientHeight,size=Math.min(116,Math.max(74,W*.11));
+  const lanes=Math.max(3,Math.floor(W/(size*1.25)));
+  let lane,tries=0;do{lane=Math.floor(Math.random()*lanes);tries++}while(lanesUsed.includes(lane)&&tries<8);
+  lanesUsed.push(lane);if(lanesUsed.length>Math.min(3,lanes-1))lanesUsed.shift();
+  const x=(W/lanes)*lane+(W/lanes-size)/2;
+  const item=pickItem(),c=rnd(GAME.colors);
+  const el=document.createElement('button');el.className='balloon';el.style.setProperty('--c',c);
+  el.setAttribute('aria-label',item.name);
+  el.innerHTML=`<span class="body"><span class="t">${item.t}</span></span><span class="str"></span>`;
+  field.appendChild(el);
+  const b={el,item,x,y:H+10,v:SPEEDS[st.speed].v*(.85+Math.random()*.3),ph:Math.random()*6,size};
+  el.addEventListener('pointerdown',e=>{e.preventDefault();hit(b)});
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();hit(b)}});
+  balloons.push(b);place(b,0);
+}
+function place(b,t){b.el.style.transform=`translate(${b.x+Math.sin(t/900+b.ph)*12}px,${b.y}px)`}
+function hit(b){
+  if(b.dead||st.phase!=='play'||st.paused)return;
+  if(b.item.t===st.target.t){
+    b.dead=true;SND.good();const r=b.el.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,26);
+    const p=document.createElement('div');p.className='pop';p.textContent='★';const fr=field.getBoundingClientRect();
+    p.style.left=(r.left-fr.left+r.width/2)+'px';p.style.top=(r.top-fr.top)+'px';field.appendChild(p);setTimeout(()=>p.remove(),900);
+    b.el.remove();st.pops++;setStars(st.stars+1);
+    const ds=document.querySelectorAll('#dots i');if(ds[st.pops-1])ds[st.pops-1].classList.add('on');
+    if(st.pops>=GAME.popsPerTarget){st.phase='between';targetDone()}
+  }else{
+    SND.bad();b.el.classList.remove('no');void b.el.offsetWidth;b.el.classList.add('no');
+    if(st.listen){const g=$('#glyph');g.classList.remove('hide');setTimeout(()=>{if(st.listen)g.classList.add('hide')},900)}
+  }
+}
+function fadeBalloons(){balloons.forEach(b=>{b.dead=true;b.el.style.transition='opacity .35s';b.el.style.opacity=0;setTimeout(()=>b.el.remove(),400)});balloons=[]}
+function clearBalloons(){balloons.forEach(b=>b.el.remove());balloons=[]}
+
+/* ---------- main loop ---------- */
+function loop(t){
+  const dt=Math.min(.05,(t-(lastT||t))/1000);lastT=t;
+  if(st.running&&!st.paused&&st.phase==='play'){
+    if(t-lastSpawn>SPEEDS[st.speed].gap&&balloons.length<7){spawn();lastSpawn=t}
+    for(const b of balloons){b.y-=b.v*dt;place(b,t)}
+    balloons=balloons.filter(b=>{if(b.y<-b.size*1.8||b.dead){if(!b.dead)b.el.remove();return false}return true});
+  }
+  fctx.clearRect(0,0,innerWidth,innerHeight);
+  parts=parts.filter(p=>p.life>0&&p.y<innerHeight+30);
+  for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.life--;fctx.globalAlpha=Math.min(1,p.life/30);fctx.fillStyle=p.c;if(p.star)drawStar(p.x,p.y,p.r*1.6);else fctx.fillRect(p.x,p.y,p.r,p.r*1.6)}
+  fctx.globalAlpha=1;
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',e=>{
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;
+  const k=e.key.toLowerCase();
+  if(k===' '&&e.target.tagName!=='BUTTON'){e.preventDefault();if(st.running)setPause(!st.paused)}
+  else if(k==='n'&&st.phase==='play'){st.phase='between';targetDone()}
+  else if(k==='s')sayTarget(true);
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&st.running)setPause(true)});
+
+/* first target preview + pen tools hook */
+st.target=GAME.sets[0].items[1];
+$('#dots').innerHTML='<i></i>'.repeat(GAME.popsPerTarget);
+window.__game={st,GAME}; // for testing
+})();
+</script>
+<script>
+(function(){
+// Pen tools + whiteboard, ported from the "عينك أمانة" deck to the scrolling lesson pages.
+// Ink lives inside each station (scrolls with the text); the whiteboard is a full-screen grid board.
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ hand:SV('<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V12M16 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L7 15"/>'),
+ pen:SV('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ hl:SV('<path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ erase:SV('<path d="M20 20H8l-5-5a2 2 0 0 1 0-2.8L12.2 3a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L13 20"/><path d="M6 11l7 7"/>'),
+ laser:SV('<circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'),
+ undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+ clear:SV('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'),
+ board:SV('<rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21l4-4 4 4"/>'),
+ close:SV('<path d="M6 6l12 12M18 6L6 18"/>')
+};
+const COLORS=['#C2453A','#14374A','#2E8B5A','#2F6FB3','#C9A35A','#FFFFFF'];
+const SIZES=[2.5,5,9];
+
+// toolbar
+const tb=document.createElement('div');tb.id='tools';tb.hidden=true;tb.setAttribute('role','toolbar');tb.setAttribute('aria-label','أدوات الكتابة');
+tb.innerHTML=`
+ <button data-t="none" title="تحكم في الدرس (V / Esc)" aria-label="تحكم في الدرس">${IC.hand}</button>
+ <button data-t="pen" title="قلم (P)" aria-label="قلم">${IC.pen}</button>
+ <button data-t="hl" title="هايلايتر لتظليل الكلمات (H)" aria-label="هايلايتر">${IC.hl}</button>
+ <button data-t="erase" title="ممحاة (E)" aria-label="ممحاة">${IC.erase}</button>
+ <button data-t="laser" title="مؤشر ليزر (L)" aria-label="مؤشر ليزر">${IC.laser}</button>
+ <div class="sep"></div>
+ ${COLORS.map(c=>`<button class="sw" data-c="${c}" title="لون" aria-label="لون ${c}"><i style="background:${c}"></i></button>`).join('')}
+ <div class="sep"></div>
+ ${SIZES.map((s,i)=>`<button class="sz" data-s="${i}" title="سُمك" aria-label="سمك ${i+1}"><i style="width:${6+i*6}px;height:${6+i*6}px"></i></button>`).join('')}
+ <div class="sep"></div>
+ <button data-a="undo" title="تراجع (Ctrl+Z)" aria-label="تراجع">${IC.undo}</button>
+ <button data-a="clear" title="امسح كتابة هذه المحطة" aria-label="مسح">${IC.clear}</button>
+ <button data-a="board" title="سبورة بيضاء (W)" aria-label="سبورة بيضاء">${IC.board}</button>
+ <button data-a="close" title="إغلاق أدوات الكتابة (D)" aria-label="إغلاق">${IC.close}</button>`;
+document.body.appendChild(tb);
+
+// whiteboard overlay + laser layer
+const board=document.createElement('div');board.id='wbBoard';board.hidden=true;board.innerHTML='<span class="bt">سبورة بيضاء · Whiteboard</span>';document.body.appendChild(board);
+const lz=document.createElement('canvas');lz.id='wbLaser';document.body.appendChild(lz);const lctx=lz.getContext('2d');
+
+let tool='none',color=COLORS[0],sizeI=1,stage=0;
+const store={},backup={};
+const key=()=>stage+(board.hidden?'':'-wb');
+const list=()=>store[key()]||(store[key()]=[]);
+
+function lw(s,pr){return s.t==='hl'?s.w*5:s.w*(0.45+1.1*(pr==null?.5:pr))}
+function seg(c,s,i){const p=s.pts,a=p[i-1],b=p[i];const m0=i===1?a:[(p[i-2][0]+a[0])/2,(p[i-2][1]+a[1])/2];const m1=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ c.lineWidth=lw(s,(a[2]+b[2])/2);c.beginPath();c.moveTo(m0[0],m0[1]);c.quadraticCurveTo(a[0],a[1],m1[0],m1[1]);c.stroke()}
+function drawStroke(c,s){const p=s.pts;if(!p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.c;c.fillStyle=s.c;
+ if(s.t==='hl'){c.globalAlpha=.35;c.lineWidth=lw(s);c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++){const m=[(p[i-1][0]+p[i][0])/2,(p[i-1][1]+p[i][1])/2];c.quadraticCurveTo(p[i-1][0],p[i-1][1],m[0],m[1])}c.lineTo(p[p.length-1][0],p[p.length-1][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]);c.stroke()}
+ else{if(p.length===1){c.beginPath();c.arc(p[0][0],p[0][1],lw(s,p[0][2])/2,0,7);c.fill()}else for(let i=1;i<p.length;i++)seg(c,s,i)}
+ c.restore()}
+
+// canvases: one per station + one on the board
+const cvs={};
+function makeCanvas(host,k){
+ const cv=document.createElement('canvas');cv.className='ink-cv';host.appendChild(cv);
+ const o={cv,ctx:cv.getContext('2d'),w:0,h:0,k};
+ o.fit=()=>{const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;o.w=r.width;o.h=r.height;cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));o.ctx.setTransform(d,0,0,d,0,0);o.redraw()};
+ o.redraw=extra=>{o.ctx.clearRect(0,0,o.w,o.h);(store[o.k()]||[]).forEach(s=>drawStroke(o.ctx,s));if(extra)drawStroke(o.ctx,extra)};
+ bind(o);return o;
+}
+function stageCanvas(i){
+ if(cvs[i])return cvs[i];const sec=document.getElementById('s'+i);if(!sec)return null;
+ const o=makeCanvas(sec,()=>String(i));new ResizeObserver(()=>o.fit()).observe(sec);return cvs[i]=o;
+}
+const bcv=makeCanvas(board,()=>stage+'-wb');
+const active=()=>board.hidden?stageCanvas(stage):bcv;
+function redraw(){const a=active();if(a)a.redraw()}
+
+let cur=null,erasing=false,trail=[];
+function bind(o){
+ const cv=o.cv;
+ const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?(e.pressure||.5):.5]};
+ const eraseAt=(x,y)=>{const L=store[o.k()]||[],r=14;let ch=false;for(let i=L.length-1;i>=0;i--){if(L[i].pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<r+lw(L[i],p[2])/2)){L.splice(i,1);ch=true}}if(ch)o.redraw()};
+ cv.addEventListener('pointerdown',e=>{if(tool==='none')return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=pos(e);
+  erasing=tool==='erase'||e.button===5||!!(e.buttons&32);
+  if(tool==='laser'){trail=[[e.clientX,e.clientY,performance.now()]];return}
+  if(erasing){eraseAt(p[0],p[1]);return}
+  cur={t:tool,c:color,w:SIZES[sizeI],pts:[p]};if(tool==='pen')drawStroke(o.ctx,cur)});
+ cv.addEventListener('pointermove',e=>{if(tool==='none')return;const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce.length?ce:[e];
+  if(tool==='laser'){trail.push([e.clientX,e.clientY,performance.now()]);return}
+  if(!e.buttons)return;
+  for(const ev of evs){const p=pos(ev);if(erasing){eraseAt(p[0],p[1]);continue}if(!cur)continue;const l=cur.pts[cur.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])<1.2)continue;cur.pts.push(p);
+   if(cur.t==='pen'){o.ctx.save();o.ctx.lineCap='round';o.ctx.strokeStyle=cur.c;seg(o.ctx,cur,cur.pts.length-1);o.ctx.restore()}}
+  if(cur&&cur.t==='hl')o.redraw(cur)});
+ const up=()=>{if(cur){(store[o.k()]||(store[o.k()]=[])).push(cur);cur=null;o.redraw()}erasing=false};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(tool==='laser')trail.push(null)});
+ cv.addEventListener('contextmenu',e=>{if(tool!=='none')e.preventDefault()});
+}
+
+function fitLaser(){const d=window.devicePixelRatio||1;lz.width=innerWidth*d;lz.height=innerHeight*d;lctx.setTransform(d,0,0,d,0,0)}
+fitLaser();
+(function loop(){const now=performance.now();lctx.clearRect(0,0,innerWidth,innerHeight);
+ if(tool==='laser'){trail=trail.filter(p=>p&&now-p[2]<450);for(let i=1;i<trail.length;i++){const a=trail[i-1],b=trail[i],k=1-(now-b[2])/450;lctx.strokeStyle=`rgba(255,40,40,${.7*k})`;lctx.lineWidth=8*k+2;lctx.lineCap='round';lctx.beginPath();lctx.moveTo(a[0],a[1]);lctx.lineTo(b[0],b[1]);lctx.stroke()}
+  const t=trail[trail.length-1];if(t){lctx.fillStyle='rgba(255,40,40,.25)';lctx.beginPath();lctx.arc(t[0],t[1],16,0,7);lctx.fill();lctx.fillStyle='#FF2A2A';lctx.beginPath();lctx.arc(t[0],t[1],7,0,7);lctx.fill()}}
+ requestAnimationFrame(loop)})();
+
+function markCurrent(){Object.entries(cvs).forEach(([i,o])=>o.cv.classList.toggle('cur',+i===stage))}
+function setTool(t){tool=t;if(t!=='laser')trail=[];
+ document.body.classList.toggle('ink-on',t!=='none');document.body.classList.toggle('ink-erase',t==='erase');document.body.classList.toggle('ink-laser',t==='laser');
+ if(t!=='none'){const a=stageCanvas(stage);if(a&&!a.w)a.fit()}markCurrent();
+ tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setColor(c){color=c;tb.querySelectorAll('.sw').forEach(b=>b.classList.toggle('on',b.dataset.c===c));if(tool==='none'||tool==='erase'||tool==='laser')setTool('pen')}
+function setSize(i){sizeI=i;tb.querySelectorAll('.sz').forEach(b=>b.classList.toggle('on',+b.dataset.s===i))}
+function openTools(open){tb.hidden=!open;if(open){if(tool==='none')setTool('pen')}else{setTool('none');if(!board.hidden)toggleBoard()}if(dbtn)dbtn.classList.toggle('on',open)}
+function toggleBoard(){board.hidden=!board.hidden;tb.querySelector('[data-a="board"]').classList.toggle('on',!board.hidden);if(!board.hidden){bcv.fit();if(tool==='none')setTool('pen')}redraw()}
+function undo(){const L=list();if(L.length)L.pop();else if(backup[key()]){store[key()]=backup[key()];delete backup[key()]}redraw()}
+function clearAll(){const L=list();if(!L.length)return;backup[key()]=L.slice();store[key()]=[];redraw()}
+tb.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)setTool(b.dataset.t);else if(b.dataset.c)setColor(b.dataset.c);else if(b.dataset.s)setSize(+b.dataset.s);
+ else if(b.dataset.a==='undo')undo();else if(b.dataset.a==='clear')clearAll();else if(b.dataset.a==='board')toggleBoard();else if(b.dataset.a==='close')openTools(false)});
+
+let dbtn=null;
+document.addEventListener('lesson:stage',e=>{
+ if(!dbtn){const row=document.querySelector('.top-row');if(row){dbtn=document.createElement('button');dbtn.id='drawB';dbtn.className='tbtn';dbtn.innerHTML='✏️ قلم / سبورة';dbtn.title='أدوات الكتابة (D)';
+  dbtn.onclick=()=>openTools(tb.hidden);row.appendChild(dbtn)}}
+ stage=e.detail;
+ if(!board.hidden){board.hidden=true;tb.querySelector('[data-a="board"]').classList.remove('on')}
+ if(store[String(stage)]||tool!=='none'){const o=stageCanvas(stage);if(o)requestAnimationFrame(()=>o.fit())}
+ markCurrent();
+});
+window.addEventListener('resize',()=>{fitLaser();if(!board.hidden)bcv.fit()});
+setColor(COLORS[0]);setTool('none');setSize(1);
+
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();
+ if((e.ctrlKey||e.metaKey)&&k==='z'){if(!tb.hidden){e.preventDefault();undo()}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(k==='d'){openTools(tb.hidden);return}
+ if(tb.hidden&&!['p','h','w','l'].includes(k))return;
+ if(k==='p'){openTools(true);setTool('pen')}else if(k==='h'){openTools(true);setTool('hl')}else if(k==='e'&&!tb.hidden)setTool('erase')
+ else if(k==='l'){openTools(true);setTool('laser')}else if(k==='v'||k==='escape')setTool('none');else if(k==='w'){openTools(true);toggleBoard()}});
+})();
+
+</script>
+<script>document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));</script>
+
+<!--tq-home--><a href="../" id="tqHome" title="كل الألعاب" aria-label="كل الألعاب" style="position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:75;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0B1E2D;border:2px solid #E2B85C;font-size:20px;text-decoration:none;opacity:.75;box-shadow:0 4px 12px rgba(0,0,0,.3)">🏠</a>
+</body></html>

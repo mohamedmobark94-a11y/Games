@@ -1,0 +1,676 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>سلم المدود</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+/* «سُلَّمُ المُدُود» — mushaf-paper style for teens & adults (single light look on purpose: screen-share + tajweed colours).
+   Left: the word card + the detective questions. Right: the strength ladder (مراتب المدود) + the "stretch meter" that times the madd. */
+:root{
+  color-scheme:light;
+  --bg:#FBF6EA; --bg2:#F3EAD3; --card:#FFFDF7; --ink:#2B2118; --muted:#76654F; --line:#E2D4B4;
+  --gold:#C9A35A; --gold2:#94712E;
+  --tabii:#A67C00; --muttasil:#C0392B; --munfasil:#D35400; --badal:#138D75; --arid:#2471A3; --lazim:#7B1E1E; --none:#7B7D7D;
+  --hamza:#B9770E; --sukun:#1B4F72;
+  --teamA:#2471A3; --teamB:#C0392B; --ok:#1E8449; --bad:#C0392B;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;
+  --f-ar:"Amiri","Traditional Arabic","Noto Naskh Arabic",serif;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-ui);direction:rtl;font-size:18px;line-height:1.5;overflow-x:hidden}
+.wrap{max-width:1150px;margin:0 auto;padding-inline:16px;padding-block:10px 28px;display:flex;flex-direction:column;gap:12px}
+.top-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.brand{flex:1 1 260px;margin:0;font-size:1.55rem;font-weight:800;line-height:1.2;text-wrap:balance}
+.brand b{color:var(--lazim)}
+.brand small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+.tbtn{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;min-height:40px}
+.tbtn[aria-pressed="true"],.tbtn.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.en{display:none;direction:ltr;unicode-bidi:isolate;font-family:system-ui,sans-serif;font-size:.8em;color:var(--muted);font-weight:500}
+body.show-en .en{display:inline}
+body.show-en .en.blk{display:block}
+button:focus-visible,select:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border-radius:18px;padding:8px 12px;border:2px solid var(--line)}
+.bar label{font-weight:700;font-size:.95rem}
+.bar select{font:inherit;font-size:.95rem;border:2px solid var(--line);border-radius:12px;padding:2px 8px;background:var(--bg);color:var(--ink);min-height:40px;max-width:100%}
+.bar .grow{flex:1}
+.teams{display:flex;gap:10px;flex-wrap:wrap}
+.team{flex:1 1 200px;display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--line);border-radius:20px;padding:6px 14px;transition:transform .2s,border-color .2s}
+.team .nm{font-weight:800;font-size:1.1rem;color:var(--tc)}
+.team .pts{margin-inline-start:auto;font-weight:800;font-size:1.7rem;color:var(--gold2);font-variant-numeric:tabular-nums}
+.team .turn{font-size:.8rem;font-weight:700;background:var(--tc);color:#fff;border-radius:999px;padding:0 10px;visibility:hidden}
+.team.now{border-color:var(--tc);transform:scale(1.02)}
+.team.now .turn{visibility:visible}
+
+#s0{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.panel{background:var(--card);border:3px solid var(--line);border-radius:24px;padding:14px;min-width:0}
+.card{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.prog{font-weight:700;color:var(--muted);font-size:.95rem;align-self:stretch;display:flex;justify-content:space-between;gap:8px}
+.phrase{font-family:var(--f-ar);font-weight:700;font-size:clamp(2.6rem,8vw,4.4rem);line-height:1.6;color:var(--ink);background:var(--bg2);border-radius:20px;padding:4px 22px;max-width:100%;overflow-wrap:anywhere}
+.phrase .mk{color:var(--mc,var(--lazim));text-decoration:underline 4px var(--gold);text-underline-offset:14px}
+.phrase .cz{color:inherit}
+.phrase.rev .cz.h{color:var(--hamza);background:color-mix(in srgb,var(--hamza) 14%,transparent);border-radius:8px}
+.phrase.rev .cz.s{color:var(--sukun);background:color-mix(in srgb,var(--sukun) 12%,transparent);border-radius:8px}
+.stopb{font-size:.95rem;font-weight:800;color:#fff;background:var(--arid);border-radius:999px;padding:0 12px}
+.ref{font-size:.9rem;color:var(--gold2);font-weight:700}
+.tip{font-size:.95rem;color:var(--muted);max-width:56ch}
+.q{font-weight:800;font-size:1.15rem}
+.step{align-self:stretch;display:flex;flex-direction:column;gap:6px;background:var(--bg);border:2px solid var(--line);border-radius:16px;padding:8px 10px;animation:pop .3s}
+.step .q{font-size:1.05rem;text-align:start}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.ob{font:inherit;font-weight:800;min-height:56px;border-radius:14px;border:2px solid var(--line);border-inline-start:8px solid var(--ac,var(--gold));background:var(--card);color:var(--ink);cursor:pointer;font-size:1rem;padding:4px 10px;line-height:1.25;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:start}
+.ob small{font-weight:600;font-size:.78rem;color:var(--muted)}
+.ob .en{display:none}
+body.show-en .ob .en{display:block}
+.ob:hover:not(:disabled){transform:translateY(-2px);border-color:var(--ac,var(--gold))}
+.ob.right{background:color-mix(in srgb,var(--ok) 16%,#fff);border-color:var(--ok)}
+.ob.bad{opacity:.4;animation:shake .35s}
+.ob:disabled{cursor:default}
+.trail{align-self:stretch;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-weight:700;font-size:.9rem}
+.trail span{background:var(--bg2);border-radius:999px;padding:0 10px}
+@keyframes shake{25%{transform:translateX(6px)}75%{transform:translateX(-6px)}}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+.info{align-self:stretch;text-align:start;background:var(--bg2);border-inline-start:7px solid var(--ac,var(--gold));border-radius:14px;padding:8px 14px;animation:pop .35s}
+.info .t{font-weight:800;font-size:1.15rem;color:var(--ac)}
+.info .bq{font-family:var(--f-ar);font-size:1.2rem;line-height:1.85;margin-top:2px}
+.info .why{margin-top:4px;font-weight:700}
+.info small{display:block;color:var(--gold2);font-weight:700}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.big-btn{font:inherit;font-weight:800;font-size:1.1rem;border:0;border-radius:16px;padding:6px 22px;min-height:52px;cursor:pointer;color:#fff;background:var(--arid);box-shadow:0 5px 0 #17507A}
+.big-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #17507A}
+.big-btn.green{background:var(--ok);box-shadow:0 5px 0 #145A32}
+.big-btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 5px 0 var(--line)}
+
+/* fawatih tiles */
+.tiles{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;direction:rtl}
+.tile{font-family:var(--f-ar);font-weight:700;font-size:2.4rem;min-width:84px;padding:2px 10px;border-radius:16px;border:3px solid var(--line);background:var(--card);line-height:1.4;display:flex;flex-direction:column;align-items:center}
+.tile small{font-family:var(--f-ui);font-size:.85rem;color:var(--muted);font-weight:700;min-height:1.3em}
+.tile.cur{border-color:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 30%,transparent);transform:scale(1.06)}
+.tile.done{border-color:var(--tc,var(--ok))}
+
+/* ladder */
+.side h2{margin:0 0 4px;font-size:1.05rem;color:var(--muted)}
+.ladder{display:flex;flex-direction:column;gap:5px;align-items:center;position:relative;padding:4px 0}
+.ladder::before,.ladder::after{content:"";position:absolute;top:0;bottom:26px;width:6px;border-radius:3px;background:var(--line)}
+.ladder::before{right:8%}.ladder::after{left:8%}
+.rung{position:relative;z-index:1;width:var(--w);min-height:42px;border-radius:12px;border:2px solid var(--ac);background:var(--card);display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 10px;font-weight:800;font-size:.95rem;transition:all .35s}
+.rung .c{font-variant-numeric:tabular-nums;color:var(--ac)}
+.rung.on{background:var(--ac);color:#fff;transform:scale(1.06);box-shadow:0 6px 16px color-mix(in srgb,var(--ac) 40%,transparent)}
+.rung.on .c{color:#fff}
+.rung.lose{opacity:.35;text-decoration:line-through}
+.rung.ground{border-style:dashed;margin-top:8px}
+.poem{font-family:var(--f-ar);font-size:1.05rem;color:#5B4A33;text-align:center;margin-top:6px}
+.poem small{display:block;font-family:var(--f-ui);font-size:.75rem;color:var(--muted)}
+
+/* stretch meter */
+.meter{margin-top:12px;background:var(--bg2);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.meter h3{margin:0;font-size:1rem}
+.mbar{position:relative;height:42px;background:var(--card);border:2px solid var(--line);border-radius:12px;overflow:hidden;direction:rtl}
+.mbar .zone{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--ok) 22%,transparent);border-inline:2px dashed var(--ok)}
+.mbar .fill{position:absolute;top:6px;bottom:6px;right:0;width:0;border-radius:8px;background:var(--mc,var(--arid));opacity:.85}
+.mbar .tick{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.mnums{position:relative;height:1.3em;font-size:.8rem;font-weight:800;color:var(--muted);direction:rtl}
+.mnums span{position:absolute;transform:translateX(50%)}
+.mctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.hold{font:inherit;font-weight:800;font-size:1.05rem;border:0;border-radius:999px;min-height:56px;padding:4px 22px;background:var(--lazim);color:#fff;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 5px 0 #4A1010}
+.hold.on{transform:translateY(3px);box-shadow:0 2px 0 #4A1010;background:var(--muttasil)}
+.mres{font-weight:800;min-height:1.6em;text-align:center}
+.hand{font-size:2rem;line-height:1;min-width:2.2em;text-align:center}
+.mctl select{font:inherit;font-size:.9rem;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);min-height:40px}
+.book{margin-top:8px;font-size:.82rem;color:var(--muted)}
+
+.endmsg{text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;align-self:stretch}
+.endmsg .trophy{font-size:4.5rem;line-height:1}
+.endmsg h2{margin:0;font-size:1.9rem;color:var(--gold2)}
+.report{align-self:stretch;display:flex;flex-direction:column;gap:5px;text-align:start}
+.report .r{display:grid;grid-template-columns:9em 1fr 3.2em;gap:8px;align-items:center;font-weight:700;font-size:.92rem}
+.report .bar2{height:14px;background:var(--bg2);border-radius:99px;overflow:hidden}
+.report .bar2 i{display:block;height:100%;background:var(--ac)}
+.miss{font-family:var(--f-ar);font-size:1.5rem;line-height:1.9}
+.sort{display:flex;flex-direction:column;gap:6px;align-self:stretch}
+.sort .ob{min-height:48px}
+
+.cf{position:fixed;top:-20px;width:11px;height:15px;border-radius:3px;pointer-events:none;z-index:80;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.starpop{position:fixed;top:22%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:1.8rem;background:var(--card);border:4px solid var(--gold);border-radius:999px;padding:4px 24px;z-index:81;pointer-events:none;white-space:nowrap;animation:sp 1.2s ease forwards}
+@keyframes sp{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}25%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-90%)}}
+
+/* pen tools (from lesson-engine/engine.css) */
+.ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45;pointer-events:none;touch-action:none}
+body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
+body.ink-erase .ink-cv{cursor:cell!important}
+body.ink-laser .ink-cv{cursor:none!important}
+#wbLaser{position:fixed;inset:0;width:100%;height:100%;z-index:66;pointer-events:none}
+#wbBoard{position:fixed;inset:0;z-index:60;background-color:#FDFCF8;background-image:linear-gradient(#E6ECEF 1px,transparent 1px),linear-gradient(90deg,#E6ECEF 1px,transparent 1px);background-size:40px 40px}
+#wbBoard[hidden]{display:none!important}
+#wbBoard .bt{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font:700 18px/1 var(--f-ui);color:#86662A;background:#FBF3E1;border:1px solid #EBDDBB;border-radius:20px;padding:8px 16px;z-index:2;pointer-events:none;white-space:nowrap}
+#tools{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:5px;background:rgba(7,23,33,.95);border:1px solid #C9A35A;border-radius:16px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#tools button{width:42px;height:42px;border-radius:10px;border:1px solid #24485A;background:#12303F;color:#E8F1F5;display:grid;place-items:center;padding:0;cursor:pointer}
+#tools button svg{width:22px;height:22px}
+#tools button.on{background:#C9A35A;color:#0B2431;border-color:#C9A35A}
+#tools .sw i{width:22px;height:22px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.6)}
+#tools .sw.on{background:#24485A;border-color:#C9A35A}
+#tools .sz i{display:block;border-radius:50%;background:#E8F1F5}
+#tools .sep{height:1px;background:#2A5266;margin:2px 0}
+#tools[hidden]{display:none!important}
+@media (max-height:980px){#tools{gap:4px;padding:6px}#tools button{width:34px;height:34px}#tools button svg{width:18px;height:18px}#tools .sw i{width:18px;height:18px}}
+@media (max-height:800px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+#drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:860px){#s0{grid-template-columns:1fr}.report .r{grid-template-columns:7.5em 1fr 3em}.tile{min-width:64px;font-size:2rem}}
+</style>
+
+<div class="wrap">
+  <header class="top-row">
+    <h1 class="brand">سُلَّمُ <b>المُدُود</b> 🪜 <span class="en">The Madd Ladder</span><small>ترتيل القرآن · Tarteel Al-Quran — باب المد والقصر من «الوجيز في علم التجويد»</small></h1>
+    <button class="tbtn" id="enB" aria-pressed="false">English</button>
+    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+  </header>
+  <div class="bar">
+    <label for="modeSel">اللعبة:</label>
+    <select id="modeSel">
+      <option value="detect">🔎 مُحَقِّقُ المَدّ (ما نوعه؟ كم يُمَدّ؟)</option>
+      <option value="duel">⚔️ مُبَارَزَةُ السَّبَبَيْن (السلم + الفخاخ)</option>
+      <option value="fawatih">🔤 فَوَاتِحُ السُّوَر (الم، كهيعص…)</option>
+    </select>
+    <label for="setSel">الأمثلة:</label>
+    <select id="setSel"></select>
+    <label for="teamSel">اللاعبون:</label>
+    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <span class="grow"></span>
+    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+  </div>
+  <div class="teams" id="teams"></div>
+  <section id="s0">
+    <div class="panel card" id="qa" aria-live="polite"></div>
+    <div class="panel side">
+      <h2>🪜 مَرَاتِبُ المُدُود: مِنَ الأَقْوَى إِلَى الأَضْعَف <span class="en blk">Ranks of the madd: strongest at the top</span></h2>
+      <div class="ladder" id="ladder"></div>
+      <div class="poem">أقوى المدود لازمٌ فما اتصل ۞ فعارضٌ فذو انفصالٍ فبدل<small>«لآلئ البيان» كما نقله المؤلف، ص ٣٤</small></div>
+      <div class="meter" id="meter">
+        <h3>⏱️ مِقْيَاسُ المَدّ: اِضْغَطْ وَاسْتَمِرَّ طُولَ المَدّ <span class="en blk">Stretch meter: hold while you stretch the sound</span></h3>
+        <div class="mbar" id="mbar"><div class="fill" id="mfill"></div></div>
+        <div class="mnums" id="mnums"></div>
+        <div class="mctl">
+          <button class="hold" id="holdB">✋ اِضْغَطْ وَمُدّ <span class="en" style="color:#fff">Hold &amp; stretch</span></button>
+          <span class="hand" id="hand" aria-hidden="true">✋</span>
+          <button class="tbtn" id="demoB">▶️ اِسْمَعِ الطُّول</button>
+          <label for="tempoSel" style="font-weight:700;font-size:.85rem">السُّرْعَة:</label>
+          <select id="tempoSel"><option value="650">تَرْتِيل (بطيء)</option><option value="500" selected>تَدْوِير (متوسط)</option><option value="380">حَدْر (سريع)</option></select>
+        </div>
+        <div class="mres" id="mres">👋 حَرِّكْ يَدَكَ أُفُقِيًّا طُولَ المَدّ، وَعُدَّ بِقَبْضِ الأَصَابِع. <span class="en blk">Sweep your hand sideways while stretching; count by closing fingers.</span></div>
+      </div>
+      <div class="book" id="bookRef"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================================================
+   ✏️ المحتوى — عدّل هنا فقط  (EDIT CONTENT HERE)
+   TYPES  = أنواع المد: الاسم، اللون c، العدد counts (لحفص من طريق الشاطبية)، الحكم hukm، نص الكتاب bq، السبب why، المرتبة rank (١ = الأقوى)
+   SETS   = أمثلة «مُحَقِّق المد» بنفس فكرة «صيغة المحتوى الموحّدة»: { key:{ ar, en, items:[ {t, ref, k, stop?, lin?} ] } }
+            t = الكلمة بالتشكيل: حرف المد بين [ ] وسبب المد (الهمز أو السكون) بين { } — k = نوع المد (مفتاح من TYPES)
+            stop:1 = «قِفْ عَلَيْهَا» (للعارض) ، lin:1 = حرف لين.
+   DUELS  = «مبارزة السببين» والفخاخ: {t, ref, causes:[نوعان], win} أو {t, ref, kind:'drop'|'change', counts}
+   FAWATIH= فواتح السور: {t, ref, letters:[ {l, say, n} ]}   n = 0 / 2 / 46 (العين: ٤ أو ٦) / 6
+   ============================================================ */
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب المد والقصر، ص ٢٨–٣٤ (بترقيم الشاملة آليًّا)'};
+const TYPES = {
+  lazim:{ar:'مَدٌّ لَازِم',en:'Necessary madd',c:'var(--lazim)',counts:[6],cTxt:'٦',hukm:'اللُّزُوم',rank:1,
+    bq:'«حرف مد أتى بعده سكون لازم وصلا ووقفا… ومقدار مده: ست حركات عند الجميع» (ص ٣١)، وهو كلمي مثقل (الْحَاقَّةُ) ومخفف (آلآن) وحرفي في فواتح السور (ص ٣٢).',
+    why:'لِمَاذَا ٦؟ «لالتزام جميع القراء مده ست حركات للفصل بين الساكنين» (ص ٣١).',whyEn:'Why 6? To separate two sākin sounds.'},
+  muttasil:{ar:'مَدٌّ مُتَّصِل',en:'Joined madd',c:'var(--muttasil)',counts:[4,5],cTxt:'٤ أَوْ ٥',hukm:'الوُجُوب',rank:2,
+    bq:'«حرف مد أتى بعده همز متصل به في كلمة واحدة… مقدار مده عند حفص: أربع حركات، أو خمس» (ص ٢٩)، وإذا وُقف على همزة متطرفة (اسْتِحْيَاءٍ) جاز وجه ثالث: ست حركات (ص ٢٩).',
+    why:'لِمَاذَا نَزِيدُه؟ «أن حرف المد ضعيف، والهمز قوي، فزيد في المد تقوية للضعيف عند مجاورة القوي» (ص ٢٩).',whyEn:'Why longer? The weak madd letter is strengthened next to the strong hamza.'},
+  arid:{ar:'مَدٌّ عَارِضٌ لِلسُّكُون',en:'Madd at a stop',c:'var(--arid)',counts:[2,4,6],cTxt:'٢ أَوْ ٤ أَوْ ٦',hukm:'الجَوَاز',rank:3,
+    bq:'«حرف مد أتى بعده سكون عارض لأجل الوقف… القصر: ومقداره حركتان. والتوسط: ومقداره أربع حركات. والمد: ومقداره ست» (ص ٣٠)، «ويلحق اللين وقفا بالعارض للسكون… إلا أن الطول في اللين قليل» (ص ٣١).',
+    why:'لِمَاذَا ٣ أَوْجُه؟ «فمن قصره لم يعتد بالسكون لعروضه. ومن مده اعتد بالسكون وقاسه على اللازم. ومن وسطه اعتد بالسكون، ولاحظ عروضه» (ص ٣٠).',whyEn:'Why 3 options? Scholars differ on whether a temporary sukūn counts.'},
+  munfasil:{ar:'مَدٌّ مُنْفَصِل',en:'Separated madd',c:'var(--munfasil)',counts:[4,5],cTxt:'٤ أَوْ ٥',hukm:'الجَوَاز',rank:4,
+    bq:'«حرف مد أتى بعده همز منفصل عنه في كلمة أخرى… ومقدار مده عند حفص: أربع حركات أو خمس من طريق الشاطبية. وحكم المنفصل: الجواز» (ص ٢٩).',
+    why:'لِمَاذَا «جَائِز»؟ «لجواز مده وقصره عند القراء… وحفص من الذين يمدونه من طريق الشاطبية» (ص ٢٩).',whyEn:'"Permissible": some reciters shorten it; Ḥafṣ (Shāṭibiyyah) lengthens it.'},
+  badal:{ar:'مَدُّ بَدَل',en:'Substitute madd',c:'var(--badal)',counts:[2],cTxt:'٢',hukm:'الجَوَاز',rank:5,
+    bq:'«حرف مد تقدم عليه همز… وسمي بدلا؛ لإبدال حرف المد من الهمز، فأصل الكلمات السابقة أأمنوا، وإئمان، وأؤتي… ومقدار مده: حركتان… وحفص من الذين يقصرونه» (ص ٣٠).',
+    why:'لِمَاذَا «بَدَل»؟ الأَصْلُ هَمْزَتَان (أَأْمَنُوا) فَأُبْدِلَتِ الثَّانِيَةُ حَرْفَ مَدّ (ص ٣٠).',whyEn:'Why "substitute"? The original second hamza became a madd letter.'},
+  tabii:{ar:'مَدٌّ طَبِيعِيّ',en:'Natural madd',c:'var(--tabii)',counts:[2],cTxt:'٢',hukm:'أَصْلِيّ',rank:6,
+    bq:'«هو الذي لا تقوم ذات الحرف إلا به، ولا يتوقف على سبب من سببي المد، وهما الهمز أو السكون… ويسمى أيضا مدا طبيعيا؛ لأن صاحب الطبيعة السليمة لا ينقصه عن مقداره، ولا يزيد عليه. ومقدار مده: حركتان» (ص ٢٨).',
+    why:'لَا سَبَب ← لَا زِيَادَة: هُوَ «الأَصْل» الَّذِي يُبْنَى عَلَيْهِ كُلُّ مَدٍّ فَرْعِيّ (ص ٢٨).',whyEn:'No cause → no extra length. It is the base of all other madds.'},
+};
+const SETS = {
+  book:{ar:'📖 أمثلة الكتاب (الوجيز)',en:'Book examples',items:[
+    {t:'مَ[ا]لِكِ',ref:'الفاتحة: ٤',k:'tabii'},{t:'كَثِ[ي]رَةً',ref:'البقرة: ٢٤٥',k:'tabii'},{t:'مَرْفُ[و]عَةٍ',ref:'الواقعة: ٣٤',k:'tabii'},
+    {t:'السَّمَ[ا]{ءِ}',ref:'البقرة: ١٩',k:'muttasil'},{t:'النَّسِ[ي]{ءُ}',ref:'التوبة: ٣٧',k:'muttasil'},{t:'قُرُ[و]{ءٍ}',ref:'البقرة: ٢٢٨',k:'muttasil'},{t:'الْأَرَ[ا]{ئِ}كِ',ref:'الكهف: ٣١',k:'muttasil'},
+    {t:'بِمَ[ا] {أُ}نْزِلَ',ref:'البقرة: ٤',k:'munfasil'},{t:'قَالُ[و]ا {آ}مَنَّا',ref:'البقرة: ١٤',k:'munfasil'},{t:'ارْجِعِ[ي] {إِ}لَى رَبِّكِ',ref:'الفجر: ٢٨',k:'munfasil'},
+    {t:'[آ]مَنُوا',ref:'البقرة: ٩',k:'badal',note:'الهمزة وحرف المد في حرف واحد: آ = أَا (أصلها أَأْمَنُوا)'},{t:'{إِ}[ي]مَانًا',ref:'آل عمران: ١٧٣',k:'badal'},{t:'{أُ}[و]تِيَ',ref:'البقرة: ١٣٦',k:'badal'},
+    {t:'الْبَيَ[ا]{نْ}',ref:'الرحمن: ٤',k:'arid',stop:1},{t:'نَسْتَعِ[ي]{نْ}',ref:'الفاتحة: ٥',k:'arid',stop:1},{t:'الْمُفْلِحُ[و]{نْ}',ref:'البقرة: ٥',k:'arid',stop:1},
+    {t:'خَ[وْ]{فْ}',ref:'البقرة: ٣٨',k:'arid',stop:1,lin:1},{t:'الْبَ[يْ]{تْ}',ref:'البقرة: ١٢٥',k:'arid',stop:1,lin:1},
+    {t:'الصَّ[ا]{خَّ}ةُ',ref:'عبس: ٣٣',k:'lazim'},{t:'الْحَ[ا]{قَّ}ةُ',ref:'الحاقة: ١',k:'lazim'},{t:'الضَّ[ا]{لِّ}ينَ',ref:'الفاتحة: ٧',k:'lazim'},{t:'أَتُحَ[ا]{جُّ}ونِّي',ref:'الأنعام: ٨٠',k:'lazim'},
+    {t:'ءَ[ا]{لْ}آنَ',ref:'يونس: ٥١',k:'lazim',note:'لَازِمٌ كَلِمِيٌّ مُخَفَّف — في موضعي يونس فقط (ص ٣٢)'},
+  ]},
+  juz:{ar:'🌙 من قصار السور',en:'Short surahs',items:[
+    {t:'الرَّحِ[ي]{مْ}',ref:'الفاتحة: ٣',k:'arid',stop:1},{t:'إِذَا جَ[ا]{ءَ}',ref:'النصر: ١',k:'muttasil'},{t:'وَالسَّمَ[ا]{ءِ}',ref:'الشمس: ٥',k:'muttasil'},
+    {t:'إِنَّ[ا] {أَ}عْطَيْنَاكَ',ref:'الكوثر: ١',k:'munfasil'},{t:'يَ[ا] {أَ}يُّهَا',ref:'الكافرون: ١',k:'munfasil'},{t:'فِ[ي] {أَ}حْسَنِ تَقْوِيمٍ',ref:'التين: ٤',k:'munfasil'},
+    {t:'لِ{إِ}[ي]لَافِ قُرَيْشٍ',ref:'قريش: ١',k:'badal'},{t:'{أُ}[و]تِيَ كِتَابَهُ',ref:'الحاقة: ١٩',k:'badal'},
+    {t:'الْكَافِرُ[و]{نْ}',ref:'الكافرون: ١',k:'arid',stop:1},{t:'قُرَ[يْ]{شْ}',ref:'قريش: ١',k:'arid',stop:1,lin:1},{t:'مِنْ خَ[وْ]{فْ}',ref:'قريش: ٤',k:'arid',stop:1,lin:1},
+    {t:'الطَّ[ا]{مَّ}ةُ',ref:'النازعات: ٣٤',k:'lazim'},{t:'وَلَا الضَّ[ا]{لِّ}ينَ',ref:'الفاتحة: ٧',k:'lazim'},
+    {t:'نَ[ا]رٌ حَامِيَةٌ',ref:'القارعة: ١١',k:'tabii'},{t:'فِي جِ[ي]دِهَا',ref:'المسد: ٥',k:'tabii'},
+  ]},
+};
+SETS.mix={ar:'🔀 الكل مخلوط',en:'All mixed',items:[...SETS.book.items,...SETS.juz.items]};
+const DUELS = [
+  {t:'وَلَا [آ]{مِّ}ينَ الْبَيْتَ',ref:'المائدة: ٢',causes:['badal','lazim'],win:'lazim',bq:'«فيمد ست حركات إعمالا للمد اللازم لقوته، ويلغى البدل لضعفه» (ص ٣٤).'},
+  {t:'وَجَا{ءُ}[و]ا {أَ}بَاهُمْ',ref:'يوسف: ١٦',causes:['badal','munfasil'],win:'munfasil',bq:'«فيعمل بالمنفصل لقوته، فيمد أربع حركات أو خمس، ويلغى البدل لضعفه» (ص ٣٤).'},
+  {t:'بُرَ[آ]{ءُ}',ref:'الممتحنة: ٤',causes:['badal','muttasil'],win:'muttasil',bq:'قاعدة الكتاب: «إذا اجتمع سببان من أسباب المد أحدهما قوي والآخر ضعيف عمل بالقوي، وألغي الضعيف» (ص ٣٤) — والمتصل أقوى من البدل.'},
+  {t:'حُسْنُ الْمَ[آ]{بْ}',ref:'آل عمران: ١٤',causes:['badal','arid'],win:'arid',stop:1,bq:'قاعدة الكتاب: «عمل بالقوي، وألغي الضعيف» (ص ٣٤) — والعارض أقوى من البدل، فيجوز ٢ أو ٤ أو ٦ عند الوقف.'},
+  {t:'وَقَالُ[و]ا اتَّخَذَ',ref:'البقرة: ١١٦',kind:'drop',counts:[0],bq:'«إذا كان حرف المد في كلمة، والحرف الساكن في كلمة أخرى حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَقَالُتَّخَذَ.'},
+  {t:'وَالْمُقِيمِ[ي] الصَّلَاةِ',ref:'الحج: ٣٥',kind:'drop',counts:[0],bq:'«حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَالْمُقِيمِصَّلَاةِ.'},
+  {t:'وَقَالَ[ا] الْحَمْدُ لِلَّهِ',ref:'النمل: ١٥',kind:'drop',counts:[0],bq:'«حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَقَالَلْحَمْدُ لِلَّهِ.'},
+  {t:'الٓمٓ ۝ اللَّهُ لَا إِلَهَ إِلَّا هُوَ',ref:'آل عمران: ١–٢',kind:'change',counts:[2,6],bq:'«إذا تغير سبب المد جاز المد والقصر… فمن أشبع نظر إلى الأصل -وهو سكون الميم-… ومن قصر نظر إلى الحركة العارضة… أما إذا وقفت على \"آلم\" فلا بد من الإشباع» (ص ٣٣). (الميم تُقرأ مفتوحة في الوصل: مِيمَ اللَّهُ)'},
+];
+const FAWATIH = [
+  {t:'الٓمٓ',ref:'البقرة: ١',letters:[{l:'ا',say:'أَلِفْ',n:0},{l:'ل',say:'لَآمْ',n:6},{l:'م',say:'مِيمْ',n:6}]},
+  {t:'الٓمٓصٓ',ref:'الأعراف: ١',letters:[{l:'ا',say:'أَلِفْ',n:0},{l:'ل',say:'لَآمْ',n:6},{l:'م',say:'مِيمْ',n:6},{l:'ص',say:'صَآدْ',n:6}]},
+  {t:'الٓر',ref:'يونس: ١',letters:[{l:'ا',say:'أَلِفْ',n:0},{l:'ل',say:'لَآمْ',n:6},{l:'ر',say:'رَا',n:2}]},
+  {t:'الٓمٓر',ref:'الرعد: ١',letters:[{l:'ا',say:'أَلِفْ',n:0},{l:'ل',say:'لَآمْ',n:6},{l:'م',say:'مِيمْ',n:6},{l:'ر',say:'رَا',n:2}]},
+  {t:'كٓهيعٓصٓ',ref:'مريم: ١',letters:[{l:'ك',say:'كَآفْ',n:6},{l:'ه',say:'هَا',n:2},{l:'ي',say:'يَا',n:2},{l:'ع',say:'عَيْنْ',n:46},{l:'ص',say:'صَآدْ',n:6}]},
+  {t:'طه',ref:'طه: ١',letters:[{l:'ط',say:'طَا',n:2},{l:'ه',say:'هَا',n:2}]},
+  {t:'طسٓمٓ',ref:'الشعراء: ١',letters:[{l:'ط',say:'طَا',n:2},{l:'س',say:'سِينْ',n:6},{l:'م',say:'مِيمْ',n:6}]},
+  {t:'طسٓ',ref:'النمل: ١',letters:[{l:'ط',say:'طَا',n:2},{l:'س',say:'سِينْ',n:6}]},
+  {t:'يسٓ',ref:'يس: ١',letters:[{l:'ي',say:'يَا',n:2},{l:'س',say:'سِينْ',n:6}]},
+  {t:'صٓ',ref:'ص: ١',letters:[{l:'ص',say:'صَآدْ',n:6}]},
+  {t:'حمٓ',ref:'غافر: ١',letters:[{l:'ح',say:'حَا',n:2},{l:'م',say:'مِيمْ',n:6}]},
+  {t:'عٓسٓقٓ',ref:'الشورى: ٢',letters:[{l:'ع',say:'عَيْنْ',n:46},{l:'س',say:'سِينْ',n:6},{l:'ق',say:'قَآفْ',n:6}]},
+  {t:'قٓ',ref:'ق: ١',letters:[{l:'ق',say:'قَآفْ',n:6}]},
+  {t:'نٓ',ref:'القلم: ١',letters:[{l:'ن',say:'نُونْ',n:6}]},
+];
+const F_BINS = [
+  {n:0,ar:'لَا يُمَدّ (٠)',sub:'الأَلِف',c:'var(--none)',bq:'«ما لا يمد أصلا وهو \"ألف\" لكون هجائه ثلاثة أحرف ليس وسطها حرف مد» (ص ٣٣).'},
+  {n:2,ar:'طَبِيعِيّ (٢)',sub:'«حَيٌّ طَهُرَ»',c:'var(--tabii)',bq:'«وإنما مدت هذه الأحرف الخمسة مدا طبيعيا؛ لأنها حروف ثنائية… فليس بعد حرف المد فيها ساكن» (ص ٢٩).'},
+  {n:46,ar:'العَيْن: ٤ أَوْ ٦',sub:'حَرْفُ لِين',c:'var(--arid)',bq:'«وفيها للجميع وجهان: الطول: وهو الأفضل… والتوسط: لسكون الياء وانفتاح ما قبلها، فهي حرف لين لا حرف مد» (ص ٣٣).'},
+  {n:6,ar:'لَازِمٌ حَرْفِيّ (٦)',sub:'«سَنَقُصُّ عِلْمَكَ» إِلَّا العَيْن',c:'var(--lazim)',bq:'«مد أتى بعده سكون لازم في حرف هجاؤه ثلاثة أحرف وسطها حرف مد… مجموعة في قول بعضهم: \"سنقص علمك\" ما عدا العين» (ص ٣٢).'},
+];
+const COUNT_OPTS = [{v:[0],ar:'٠ — يُحْذَفُ وَصْلًا',en:'0 – dropped'},{v:[2],ar:'٢ حَرَكَتَان',en:'2 counts'},{v:[4,5],ar:'٤ أَوْ ٥',en:'4 or 5'},{v:[2,4,6],ar:'٢ أَوْ ٤ أَوْ ٦',en:'2, 4 or 6'},{v:[6],ar:'٦ حَرَكَات',en:'6 counts'},{v:[2,6],ar:'٢ أَوْ ٦',en:'2 or 6'}];
+const ROUND = 10;     // عدد الكلمات في الجولة
+const RETRY_GAP = 3;  // الكلمة الخطأ ترجع بعد ٣ أسئلة
+const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَكَ اللهُ فِيك!','مُمْتَاز!'], PRAISE_EN=['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'];
+/* ============================================================ */
+
+const $=s=>document.querySelector(s);
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const same=(a,b)=>a.length===b.length&&a.every((x,i)=>x===b[i]);
+const cTxt=v=>COUNT_OPTS.find(o=>same(o.v,v))?.ar||v.map(ar).join('/');
+
+/* ---------- word HTML: [madd letter] {cause}; ZWJ keeps letters joined across coloured spans ---------- */
+const LET=/[ء-ي]/, NOJOIN='اأإآٱدذرزوؤةء';
+function lastBase(s){for(let i=s.length-1;i>=0;i--)if(LET.test(s[i]))return {ch:s[i],end:i===s.length-1||!/\s/.test(s.slice(i+1))};return null}
+function firstIsLetter(s){return s.length&&LET.test(s[0])}
+function wordHTML(t,rev,mc){
+  const parts=[];const re=/(\[[^\]]*\]|\{[^}]*\})/g;let last=0,m;
+  while((m=re.exec(t))){if(m.index>last)parts.push({x:t.slice(last,m.index)});const v=m[0];parts.push({x:v.slice(1,-1),cls:v[0]==='['?'mk':'cz'});last=re.lastIndex}
+  if(last<t.length)parts.push({x:t.slice(last)});
+  let out='';
+  parts.forEach((p,i)=>{let x=p.x;const prev=parts[i-1],next=parts[i+1];
+    const lbPrev=prev&&lastBase(prev.x);
+    if(prev&&(p.cls||prev.cls)&&lbPrev&&lbPrev.end&&!NOJOIN.includes(lbPrev.ch)&&firstIsLetter(x))x='‍'+x;
+    const lb=lastBase(x);
+    if(next&&(p.cls||next.cls)&&lb&&lb.end&&!NOJOIN.includes(lb.ch)&&firstIsLetter(next.x))x=x+'‍';
+    if(p.cls==='cz'){const isH=/[أإآؤئءء]/.test(p.x);out+=`<span class="cz ${isH?'h':'s'}">${x}</span>`}
+    else if(p.cls==='mk')out+=`<span class="mk"${mc?` style="--mc:${mc}"`:''}>${x}</span>`;
+    else out+=x});
+  return out;
+}
+
+/* ---------- sound ---------- */
+let AC=null,soundOn=true;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
+function hold(f,d,when=0,v=.12){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(.001,t);g.gain.linearRampToValueAtTime(v,t+.05);g.gain.setValueAtTime(v,t+d-.08);g.gain.linearRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
+const tick=(hi)=>tone(hi?1320:990,.05,'square',.06);
+const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
+  climb:()=>[392,440,494,523,587,659].forEach((f,i)=>tone(f,.1,'triangle',.14,i*.06)),
+  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
+function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#C9A35A','#7B1E1E','#C0392B','#D35400','#2471A3','#138D75','#A67C00'];
+  for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+
+/* ---------- ladder ---------- */
+const ORDER=['lazim','muttasil','arid','munfasil','badal'];
+function drawLadder(){$('#ladder').innerHTML=ORDER.map((k,i)=>`<div class="rung" data-k="${k}" style="--ac:${TYPES[k].c};--w:${92-i*9}%"><span>${ar(i+1)}. ${TYPES[k].ar}</span><span class="c">${TYPES[k].cTxt}</span></div>`).join('')+
+  `<div class="rung ground" data-k="tabii" style="--ac:${TYPES.tabii.c};--w:92%"><span>الأَصْل: ${TYPES.tabii.ar}</span><span class="c">${TYPES.tabii.cTxt}</span></div>`}
+function lightLadder(on=[],lose=[]){document.querySelectorAll('.rung').forEach(r=>{r.classList.toggle('on',on.includes(r.dataset.k));r.classList.toggle('lose',lose.includes(r.dataset.k))});if(on.length)sfx.climb()}
+
+/* ---------- stretch meter ---------- */
+const MAXB=8;let target=[2],beatMs=500,mc='var(--arid)';
+function drawMeter(){const bar=$('#mbar');bar.querySelectorAll('.zone,.tick').forEach(e=>e.remove());
+  for(let i=1;i<MAXB;i++){const d=document.createElement('i');d.className='tick';d.style.right=(i/MAXB*100)+'%';bar.appendChild(d)}
+  if(target.length&&!(target.length===1&&target[0]===0)){const lo=Math.min(...target)-.5,hi=Math.max(...target)+.5;const z=document.createElement('div');z.className='zone';z.style.right=(Math.max(0,lo)/MAXB*100)+'%';z.style.width=((hi-Math.max(0,lo))/MAXB*100)+'%';bar.insertBefore(z,bar.firstChild)}
+  $('#mnums').innerHTML=Array.from({length:MAXB+1},(_,i)=>`<span style="right:${i/MAXB*100}%">${ar(i)}</span>`).join('');
+  $('#mfill').style.width='0';$('#mbar').style.setProperty('--mc',mc)}
+function setTarget(v,c,label){target=v;mc=c;drawMeter();$('#mres').innerHTML=label||'👋 حَرِّكْ يَدَكَ أُفُقِيًّا طُولَ المَدّ، وَعُدَّ بِقَبْضِ الأَصَابِع. <span class="en blk">Sweep your hand sideways while stretching.</span>'}
+let hStart=0,hRaf=0,hTimer=0,holding=false,meterBonus=null;
+function startHold(){if(holding)return;ac();holding=true;hStart=performance.now();$('#holdB').classList.add('on');let b=0;tick(true);$('#hand').textContent='✋';
+  hTimer=setInterval(()=>{b++;tick(false);$('#hand').textContent=b%2?'✊':'✋'},beatMs);
+  const loop=()=>{const el=(performance.now()-hStart)/beatMs;$('#mfill').style.width=Math.min(100,el/MAXB*100)+'%';if(holding)hRaf=requestAnimationFrame(loop)};loop()}
+function stopHold(){if(!holding)return;holding=false;clearInterval(hTimer);cancelAnimationFrame(hRaf);$('#holdB').classList.remove('on');$('#hand').textContent='✋';
+  const beats=(performance.now()-hStart)/beatMs,r=Math.round(beats*2)/2;
+  const ok=target.some(t=>t>0&&Math.abs(beats-t)<=.6);
+  $('#mres').innerHTML=`مَدَدْتَ ≈ <b>${ar(r)}</b> حَرَكَات ${ok?'✅ فِي المَنْطِقَة الخَضْرَاء':`— المَطْلُوب: ${cTxt(target)}`}`;
+  if(ok){sfx.pop();if(meterBonus){const f=meterBonus;meterBonus=null;f()}}else tone(220,.15,'sine',.1)}
+function demo(){ac();const n=target.find(t=>t>0)||2;const d=n*beatMs/1000;hold(392,d,0,.1);for(let i=0;i<=n;i++)setTimeout(()=>{tick(i===0);$('#hand').textContent=i%2?'✊':'✋';$('#mfill').style.width=(i/MAXB*100)+'%'},i*beatMs);setTimeout(()=>$('#hand').textContent='✋',n*beatMs+200)}
+const hb=$('#holdB');
+hb.addEventListener('pointerdown',e=>{e.preventDefault();try{hb.setPointerCapture(e.pointerId)}catch(_){}startHold()});
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>hb.addEventListener(ev,stopHold));
+hb.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat&&!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)&&!document.body.classList.contains('ink-on')){e.preventDefault();startHold()}});
+document.addEventListener('keyup',e=>{if(e.code==='Space'){e.preventDefault();stopHold()}});
+$('#demoB').onclick=demo;$('#tempoSel').onchange=()=>{beatMs=+$('#tempoSel').value;drawMeter()};
+
+/* ---------- state ---------- */
+let teams=[],turn=0,queue=[],idx=0,mode='detect',missed=[],stats={};
+function teamDefs(){const v=$('#teamSel').value;
+  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
+  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+const qa=$('#qa');
+function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
+function stat(k,ok){const s=stats[k]||(stats[k]={ok:0,n:0});s.n++;if(ok)s.ok++}
+function miss(it){missed.push(it);const q=queue[idx];if(!q.retry)queue.splice(Math.min(idx+1+RETRY_GAP,queue.length),0,{it,retry:true})}
+function buildRound(items){const by={};items.forEach(it=>{(by[it.k]=by[it.k]||[]).push(it)});
+  let pick=Object.keys(TYPES).filter(k=>by[k]).map(k=>shuffle(by[k])[0]);const rest=shuffle(items.filter(it=>!pick.includes(it)));
+  return shuffle(pick.concat(rest).slice(0,Math.max(ROUND,pick.length))).map(it=>({it,retry:false}))}
+function setOptions(){mode=$('#modeSel').value;const sel=$('#setSel');
+  sel.disabled=mode!=='detect';sel.innerHTML=mode==='detect'?Object.entries(SETS).map(([k,s])=>`<option value="${k}">${s.ar}</option>`).join(''):'<option>—</option>'}
+function newGame(){
+  mode=$('#modeSel').value;teams=teamDefs().map(t=>({...t,pts:0}));turn=0;idx=0;missed=[];stats={};meterBonus=null;
+  if(mode==='detect')queue=buildRound(SETS[$('#setSel').value].items);
+  else if(mode==='duel')queue=[{it:{ladder:1},retry:false},...shuffle(DUELS).map(it=>({it,retry:false}))];
+  else queue=shuffle(FAWATIH).slice(0,8).map(it=>({it,retry:false}));
+  drawLadder();lightLadder();setTarget([2],'var(--tabii)');renderTeams();
+  $('#bookRef').textContent='📚 المصدر: '+BOOK.ar+'، '+BOOK.ref+'. المقادير لحفص عن عاصم من طريق الشاطبية كما في الكتاب. أمثلة «قصار السور» أضفناها للتدريب.';
+  show();
+}
+function header(){return `<div class="prog"><span>${ar(idx+1)} مِنْ ${ar(queue.length)}${queue[idx].retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>`}
+function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en" style="color:#fff">Next</span></button></div>`}
+function bindNext(){$('#nextB').onclick=()=>{idx++;turn=(turn+1)%teams.length;renderTeams();show()};$('#nextB').focus({preventScroll:true})}
+function show(){if(idx>=queue.length){end();return}
+  lightLadder();meterBonus=null;const {it}=queue[idx];
+  if(mode==='detect')showDetect(it);else if(mode==='duel')(it.ladder?showLadderSort():showDuel(it));else showFawatih(it);
+  document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+}
+function opts(list,id){return `<div class="opts" id="${id}">${list.map((o,i)=>`<button class="ob" data-i="${i}" style="--ac:${o.c||'var(--gold)'}">${o.ar}${o.sub?`<small>${o.sub}</small>`:''}<span class="en">${o.en||''}</span></button>`).join('')}</div>`}
+// ask one multiple-choice step; cb(ok)
+function ask(host,qHtml,list,correctI,cb,tries=1){
+  const id='o'+Math.random().toString(36).slice(2,7);host.insertAdjacentHTML('beforeend',`<div class="step"><div class="q">${qHtml}</div>${opts(list,id)}</div>`);
+  let left=tries+1,done=false;
+  document.querySelectorAll(`#${id} .ob`).forEach(b=>b.onclick=()=>{if(done||b.classList.contains('bad'))return;ac();
+    const ok=+b.dataset.i===correctI;
+    if(ok){done=true;b.classList.add('right');lockAll();cb(left===tries+1)}
+    else{left--;b.classList.add('bad');sfx.bad();if(left<=0){done=true;document.querySelector(`#${id} .ob[data-i="${correctI}"]`).classList.add('right');lockAll();cb(false)}}});
+  function lockAll(){document.querySelectorAll(`#${id} .ob`).forEach(x=>x.disabled=true)}
+}
+
+/* ---------- mode 1: madd detective ---------- */
+const CAUSE=[{ar:'لَا شَيْء',sub:'لَا هَمْزَ وَلَا سُكُون',en:'Nothing',c:'var(--tabii)'},{ar:'هَمْزَة ء',sub:'قَبْلَهُ أَوْ بَعْدَه',en:'A hamza',c:'var(--hamza)'},{ar:'سُكُون (ـْـ) أَوْ شَدَّة (ـّـ)',sub:'بَعْدَه',en:'A sukūn / shaddah',c:'var(--sukun)'}];
+const H_POS=[{ar:'قَبْلَ حَرْفِ المَدّ',sub:'ءَا ← آ',en:'Before',c:'var(--badal)'},{ar:'بَعْدَهُ فِي نَفْسِ الكَلِمَة',en:'After, same word',c:'var(--muttasil)'},{ar:'بَعْدَهُ فِي كَلِمَةٍ ثَانِيَة',en:'After, next word',c:'var(--munfasil)'}];
+const S_KIND=[{ar:'ثَابِتٌ وَصْلًا وَوَقْفًا',sub:'سُكُونٌ لَازِم',en:'Always there',c:'var(--lazim)'},{ar:'بِسَبَبِ الوَقْفِ فَقَط',sub:'سُكُونٌ عَارِض',en:'Only when stopping',c:'var(--arid)'}];
+function showDetect(it){const T=TYPES[it.k];
+  qa.innerHTML=`${header()}<div class="phrase" id="ph">${wordHTML(it.t,false)}</div>
+    <div class="row"><span class="ref">﴿${it.ref}﴾</span>${it.stop?'<span class="stopb">✋ قِفْ عَلَيْهَا</span>':''}</div>
+    <div class="q">🎙️ اِقْرَأْهَا ← ثُمَّ اسْأَلْ مِثْلَ المُحَقِّق: <span class="en blk">Read it, then investigate like a detective:</span></div>
+    <div class="trail" id="trail"></div><div id="steps" style="display:contents"></div>`;
+  const steps=$('#steps');let clean=true;
+  const ci=it.k==='tabii'?0:['muttasil','munfasil','badal'].includes(it.k)?1:2;
+  const finish=()=>{
+    $('#ph').classList.add('rev');lightLadder([it.k]);
+    const cIdx=COUNT_OPTS.findIndex(o=>same(o.v,T.counts));
+    ask(steps,`⏱️ كَمْ حَرَكَةً لِحَفْص؟ <span class="en blk">How many counts for Ḥafṣ?</span>`,COUNT_OPTS.filter(o=>!same(o.v,[0])&&!same(o.v,[2,6])),COUNT_OPTS.filter(o=>!same(o.v,[0])&&!same(o.v,[2,6])).findIndex(o=>same(o.v,T.counts)),ok2=>{
+      stat(it.k,clean&&ok2);if(clean&&ok2)setTimeout(()=>award(1),150);else{sfx.pop();miss(it)}
+      reveal(it,T)});
+  };
+  ask(steps,`① مَاذَا بِجِوَارِ حَرْفِ المَدِّ المُلَوَّن؟ <span class="en blk">What is next to the coloured madd letter?</span>`,CAUSE,ci,ok=>{
+    if(!ok)clean=false;$('#trail').innerHTML=`<span>${CAUSE[ci].ar}</span>`;
+    if(ci===0){finish();return}
+    if(ci===1){const pi=it.k==='badal'?0:it.k==='muttasil'?1:2;
+      ask(steps,`② أَيْنَ الهَمْزَة؟ <span class="en blk">Where is the hamza?</span>`,H_POS,pi,ok=>{if(!ok)clean=false;$('#trail').innerHTML+=`<span>${H_POS[pi].ar}</span>`;finish()})}
+    else{const si=it.k==='lazim'?0:1;
+      ask(steps,`② هَذَا السُّكُون… <span class="en blk">This sukūn is…</span>`,S_KIND,si,ok=>{if(!ok)clean=false;$('#trail').innerHTML+=`<span>${S_KIND[si].ar}</span>`;finish()})}
+  });
+}
+function reveal(it,T){
+  setTarget(T.counts,T.c,`🎙️ الآنَ مُدَّهَا: المَطْلُوب <b>${T.cTxt}</b> — اِضْغَطْ وَاسْتَمِرّ (أَوْ Space). <span class="en blk">Now stretch it: hold the button (or Space).</span>`);
+  meterBonus=()=>award(1);
+  const ex=document.createElement('div');ex.style.display='contents';
+  ex.innerHTML=`<div class="info" style="--ac:${T.c}"><div class="t">${T.ar} — ${T.cTxt} — حُكْمُهُ: ${T.hukm} <span class="en">${T.en}</span></div>
+    ${it.lin?'<div class="why">🔸 حَرْفُ لِين (سَاكِنٌ مَفْتُوحٌ مَا قَبْلَه): «يلحق اللين وقفا بالعارض… إلا أن الطول في اللين قليل» (ص ٣١).</div>':''}
+    ${it.note?`<div class="why">🔸 ${it.note}</div>`:''}
+    <div class="bq">${T.bq}</div><div class="why" style="color:${T.c}">${T.why} <span class="en blk">${T.whyEn}</span></div>
+    <small>${BOOK.ar}، ${BOOK.ref}</small></div>
+    <div class="tip">⏱️ مُدَّهَا عَلَى «مِقْيَاسِ المَدّ» (+١ إِذَا وَقَفْتَ فِي الأَخْضَر) <span class="en blk">Stretch it on the meter (+1 in the green zone)</span></div>${nextBtn()}`;
+  qa.appendChild(ex);bindNext();
+}
+
+/* ---------- mode 2a: build the ladder ---------- */
+function showLadderSort(){document.querySelectorAll('.rung').forEach(r=>r.classList.add('lose'));
+  const pool=shuffle(ORDER);let pos=0,errs=0;
+  qa.innerHTML=`${header()}<div class="q">🪜 اِبْنِ السُّلَّم! اِضْغَطْ عَلَى المُدُودِ مِنَ <b>الأَقْوَى</b> إِلَى <b>الأَضْعَف</b> <span class="en blk">Build the ladder: tap from strongest to weakest</span></div>
+   <div class="tip">«للمدود مراتب خمس: فأقواها المد اللازم، فالمتصل، فالعارض، فالمنفصل، فالبدل» (ص ٣٣) — جَرِّبْ قَبْلَ أَنْ تَنْظُر!</div>
+   <div class="sort" id="sort">${pool.map(k=>`<button class="ob" data-k="${k}" style="--ac:${TYPES[k].c}">${TYPES[k].ar}<small>${TYPES[k].cTxt}</small></button>`).join('')}</div><div id="after" style="display:contents"></div>`;
+  document.querySelectorAll('#sort .ob').forEach(b=>b.onclick=()=>{ac();if(b.disabled)return;
+    if(b.dataset.k===ORDER[pos]){b.classList.add('right');b.disabled=true;b.insertAdjacentHTML('afterbegin',`<small>${ar(pos+1)}</small>`);
+      document.querySelector(`.rung[data-k="${b.dataset.k}"]`).classList.remove('lose');tone(392+pos*80,.12,'triangle',.18);pos++;
+      if(pos===ORDER.length){const pts=errs===0?2:1;stat('ladder',errs===0);setTimeout(()=>award(pts),200);
+        $('#after').innerHTML=`<div class="info" style="--ac:var(--gold2)"><div class="t">لِمَاذَا هَذَا التَّرْتِيب؟</div><div class="bq">«فإذا اجتمع سببان من أسباب المد أحدهما قوي والآخر ضعيف عمل بالقوي، وألغي الضعيف» (ص ٣٤).</div><div class="why">الآنَ: مُبَارَزَاتٌ بَيْنَ سَبَبَيْن… مَنْ يَفُوز؟ ⚔️</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;bindNext()}}
+    else{errs++;b.classList.add('bad');sfx.bad();setTimeout(()=>b.classList.remove('bad'),400)}});
+}
+/* ---------- mode 2b: duel of two causes + traps ---------- */
+function showDuel(it){
+  const lbl=it.kind==='drop'?'🪤 فَخّ! اِقْرَأْهَا مَوْصُولَة':it.kind==='change'?'⭐ حَالَةٌ خَاصَّة: صِلْهَا':'⚔️ سَبَبَانِ عَلَى حَرْفِ مَدٍّ وَاحِد';
+  qa.innerHTML=`${header()}<div class="q">${lbl}</div><div class="phrase" id="ph">${wordHTML(it.t,false)}</div>
+    <div class="row"><span class="ref">﴿${it.ref}﴾</span>${it.stop?'<span class="stopb">✋ قِفْ عَلَيْهَا</span>':''}</div><div id="steps" style="display:contents"></div>`;
+  const steps=$('#steps');
+  const countStep=(clean)=>{const list=COUNT_OPTS;const ci=list.findIndex(o=>same(o.v,it.counts||TYPES[it.win].counts));
+    ask(steps,`⏱️ كَمْ تَمُدُّهُ ${it.stop?'وَقْفًا':'وَصْلًا'}؟ <span class="en blk">How many counts?</span>`,list,ci,ok=>{
+      const good=clean&&ok;stat(it.kind||'duel',good);if(good)setTimeout(()=>award(it.kind?1:2),150);else{sfx.pop();miss(it)}
+      $('#ph').classList.add('rev');
+      const v=it.counts||TYPES[it.win].counts,c=it.win?TYPES[it.win].c:it.kind==='drop'?'var(--none)':'var(--lazim)';
+      setTarget(v,c,v[0]===0?'🪤 لَا مَدَّ هُنَا وَصْلًا: اِقْرَأْهَا قَصِيرَة! <span class="en blk">No madd here when joined.</span>':`🎙️ الآنَ مُدَّهَا: <b>${cTxt(v)}</b> <span class="en blk">Now stretch it</span>`);
+      if(v[0]!==0)meterBonus=()=>award(1);
+      if(it.win)lightLadder([it.win],it.causes.filter(k=>k!==it.win));
+      const ex=document.createElement('div');ex.style.display='contents';
+      ex.innerHTML=`<div class="info" style="--ac:${c}"><div class="t">${it.win?`الفَائِز: ${TYPES[it.win].ar} 🏆 — ${TYPES[it.win].cTxt}`:it.kind==='drop'?'يُحْذَفُ حَرْفُ المَدِّ وَصْلًا (٠)':'المَدُّ (٦) أَوِ القَصْر (٢)'}</div><div class="bq">${it.bq}</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+      steps.appendChild(ex);bindNext()})};
+  if(it.causes){const list=it.causes.map(k=>({ar:TYPES[k].ar,sub:`المَرْتَبَة ${ar(TYPES[k].rank)} · ${TYPES[k].cTxt}`,en:TYPES[k].en,c:TYPES[k].c}));
+    lightLadder(it.causes);
+    ask(steps,`هُنَا سَبَبَان: <b style="color:${TYPES[it.causes[0]].c}">${TYPES[it.causes[0]].ar}</b> وَ<b style="color:${TYPES[it.causes[1]].c}">${TYPES[it.causes[1]].ar}</b> — أَيُّهُمَا يَفُوز؟ <span class="en blk">Two causes — which one wins?</span>`,list,it.causes.indexOf(it.win),ok=>countStep(ok),0)}
+  else countStep(true);
+}
+
+/* ---------- mode 3: openings of surahs ---------- */
+function showFawatih(it){let k=0,clean=true;
+  qa.innerHTML=`${header()}<div class="phrase" style="font-size:clamp(3rem,10vw,5rem)">${it.t}</div><div class="ref">﴿${it.ref}﴾</div>
+   <div class="q">🔤 اِقْرَأْ كُلَّ حَرْفٍ بِاسْمِه، ثُمَّ: كَمْ تَمُدُّه؟ <span class="en blk">Say each letter's name: how long is it?</span></div>
+   <div class="tiles" id="tiles">${it.letters.map((L,i)=>`<div class="tile" data-i="${i}">${L.l}<small></small></div>`).join('')}</div>
+   <div id="steps" style="display:contents"></div>`;
+  const steps=$('#steps');
+  const next=()=>{document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('cur',+t.dataset.i===k));
+    if(k>=it.letters.length){stat('fawatih',clean);if(clean)setTimeout(()=>award(2),150);else{sfx.pop();miss(it)}
+      const say=it.letters.map(L=>L.say).join(' ');setTarget([6],'var(--lazim)',`🎙️ اِقْرَأْهَا كُلَّهَا: <b style="font-family:var(--f-ar);font-size:1.3rem">${say}</b>`);meterBonus=null;
+      const ex=document.createElement('div');ex.style.display='contents';
+      ex.innerHTML=`<div class="info" style="--ac:var(--lazim)"><div class="t">الحروف الأربعة عشر في فواتح السور أربعة أقسام (ص ٣٣)</div><div class="bq">${F_BINS.map(b=>`<div style="color:${b.c}">● ${b.ar}: <span style="color:var(--ink)">${b.bq}</span></div>`).join('')}</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+      steps.appendChild(ex);bindNext();return}
+    const L=it.letters[k];steps.innerHTML='';
+    ask(steps,`الحَرْف: <b style="font-family:var(--f-ar);font-size:1.6rem">${L.l}</b> — اِسْمُهُ: <b style="font-family:var(--f-ar);font-size:1.4rem">${L.say}</b> … كَمْ يُمَدّ؟`,F_BINS.map(b=>({ar:b.ar,sub:b.sub,c:b.c})),F_BINS.findIndex(b=>b.n===L.n),ok=>{
+      if(!ok)clean=false;const B=F_BINS.find(b=>b.n===L.n);const t=document.querySelector(`.tile[data-i="${k}"]`);t.classList.add('done');t.style.setProperty('--tc',B.c);t.querySelector('small').textContent=B.n===46?'٤/٦':ar(B.n);
+      if(B.n===6||B.n===46)lightLadder(['lazim']);else lightLadder(B.n===2?['tabii']:[]);
+      setTimeout(()=>{k++;next()},ok?650:1200)});
+  };next();
+}
+
+/* ---------- end ---------- */
+const STAT_NAMES={...Object.fromEntries(Object.entries(TYPES).map(([k,T])=>[k,{ar:T.ar,c:T.c}])),ladder:{ar:'بِنَاءُ السُّلَّم',c:'var(--gold2)'},duel:{ar:'مُبَارَزَةُ السَّبَبَيْن',c:'var(--muttasil)'},drop:{ar:'فَخُّ الحَذْف',c:'var(--none)'},change:{ar:'تَغَيُّرُ السَّبَب',c:'var(--lazim)'},fawatih:{ar:'فَوَاتِحُ السُّوَر',c:'var(--lazim)'}};
+function end(){lightLadder();setTarget([2],'var(--tabii)');
+  const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
+  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${STAT_NAMES[k].c}"><span>${STAT_NAMES[k].ar}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${ar(s.ok)}/${ar(s.n)}</span></div>`).join('');
+  const uniq=[...new Set(missed)];
+  qa.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
+    <div class="q">📊 تَقْرِيرُ المُدُود (صَحّ بِلَا خَطَأ) <span class="en">Madd report</span></div><div class="report">${rows}</div>
+    ${uniq.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${uniq.map(it=>(it.letters?it.t:wordHTML(it.t,true))+` <small style="font-size:.6em;color:var(--gold2)">(${it.ref})</small>`).join(' ۞ ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
+    <div class="tip">💡 تَحَدِّي الخِتَام: اِفْتَحْ سُورَتَكَ، وَهَاتِ مِثَالًا لِكُلِّ دَرَجَةٍ فِي السُّلَّم (لَازِم، مُتَّصِل، عَارِض، مُنْفَصِل، بَدَل) — وَمُدَّهُ عَلَى المِقْيَاس! <span class="en blk">Closing challenge: one example of each rung from your surah — then stretch it on the meter.</span></div>
+    <button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div>`;
+  $('#againB').onclick=newGame;sfx.win();confetti(90);
+  document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+}
+
+setOptions();
+$('#modeSel').onchange=()=>{setOptions();newGame()};['#setSel','#teamSel'].forEach(s=>$(s).onchange=newGame);
+$('#newB').onclick=newGame;
+$('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'&&$('#nextB')){e.preventDefault();$('#nextB').click()}});
+newGame();
+</script>
+<script>
+(function(){
+// Pen tools + whiteboard, ported from the "عينك أمانة" deck to the scrolling lesson pages.
+// Ink lives inside each station (scrolls with the text); the whiteboard is a full-screen grid board.
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ hand:SV('<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V12M16 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L7 15"/>'),
+ pen:SV('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ hl:SV('<path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ erase:SV('<path d="M20 20H8l-5-5a2 2 0 0 1 0-2.8L12.2 3a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L13 20"/><path d="M6 11l7 7"/>'),
+ laser:SV('<circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'),
+ undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+ clear:SV('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'),
+ board:SV('<rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21l4-4 4 4"/>'),
+ close:SV('<path d="M6 6l12 12M18 6L6 18"/>')
+};
+const COLORS=['#C2453A','#14374A','#2E8B5A','#2F6FB3','#C9A35A','#FFFFFF'];
+const SIZES=[2.5,5,9];
+
+// toolbar
+const tb=document.createElement('div');tb.id='tools';tb.hidden=true;tb.setAttribute('role','toolbar');tb.setAttribute('aria-label','أدوات الكتابة');
+tb.innerHTML=`
+ <button data-t="none" title="تحكم في الدرس (V / Esc)" aria-label="تحكم في الدرس">${IC.hand}</button>
+ <button data-t="pen" title="قلم (P)" aria-label="قلم">${IC.pen}</button>
+ <button data-t="hl" title="هايلايتر لتظليل الكلمات (H)" aria-label="هايلايتر">${IC.hl}</button>
+ <button data-t="erase" title="ممحاة (E)" aria-label="ممحاة">${IC.erase}</button>
+ <button data-t="laser" title="مؤشر ليزر (L)" aria-label="مؤشر ليزر">${IC.laser}</button>
+ <div class="sep"></div>
+ ${COLORS.map(c=>`<button class="sw" data-c="${c}" title="لون" aria-label="لون ${c}"><i style="background:${c}"></i></button>`).join('')}
+ <div class="sep"></div>
+ ${SIZES.map((s,i)=>`<button class="sz" data-s="${i}" title="سُمك" aria-label="سمك ${i+1}"><i style="width:${6+i*6}px;height:${6+i*6}px"></i></button>`).join('')}
+ <div class="sep"></div>
+ <button data-a="undo" title="تراجع (Ctrl+Z)" aria-label="تراجع">${IC.undo}</button>
+ <button data-a="clear" title="امسح كتابة هذه المحطة" aria-label="مسح">${IC.clear}</button>
+ <button data-a="board" title="سبورة بيضاء (W)" aria-label="سبورة بيضاء">${IC.board}</button>
+ <button data-a="close" title="إغلاق أدوات الكتابة (D)" aria-label="إغلاق">${IC.close}</button>`;
+document.body.appendChild(tb);
+
+// whiteboard overlay + laser layer
+const board=document.createElement('div');board.id='wbBoard';board.hidden=true;board.innerHTML='<span class="bt">سبورة بيضاء · Whiteboard</span>';document.body.appendChild(board);
+const lz=document.createElement('canvas');lz.id='wbLaser';document.body.appendChild(lz);const lctx=lz.getContext('2d');
+
+let tool='none',color=COLORS[0],sizeI=1,stage=0;
+const store={},backup={};
+const key=()=>stage+(board.hidden?'':'-wb');
+const list=()=>store[key()]||(store[key()]=[]);
+
+function lw(s,pr){return s.t==='hl'?s.w*5:s.w*(0.45+1.1*(pr==null?.5:pr))}
+function seg(c,s,i){const p=s.pts,a=p[i-1],b=p[i];const m0=i===1?a:[(p[i-2][0]+a[0])/2,(p[i-2][1]+a[1])/2];const m1=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ c.lineWidth=lw(s,(a[2]+b[2])/2);c.beginPath();c.moveTo(m0[0],m0[1]);c.quadraticCurveTo(a[0],a[1],m1[0],m1[1]);c.stroke()}
+function drawStroke(c,s){const p=s.pts;if(!p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.c;c.fillStyle=s.c;
+ if(s.t==='hl'){c.globalAlpha=.35;c.lineWidth=lw(s);c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++){const m=[(p[i-1][0]+p[i][0])/2,(p[i-1][1]+p[i][1])/2];c.quadraticCurveTo(p[i-1][0],p[i-1][1],m[0],m[1])}c.lineTo(p[p.length-1][0],p[p.length-1][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]);c.stroke()}
+ else{if(p.length===1){c.beginPath();c.arc(p[0][0],p[0][1],lw(s,p[0][2])/2,0,7);c.fill()}else for(let i=1;i<p.length;i++)seg(c,s,i)}
+ c.restore()}
+
+// canvases: one per station + one on the board
+const cvs={};
+function makeCanvas(host,k){
+ const cv=document.createElement('canvas');cv.className='ink-cv';host.appendChild(cv);
+ const o={cv,ctx:cv.getContext('2d'),w:0,h:0,k};
+ o.fit=()=>{const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;o.w=r.width;o.h=r.height;cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));o.ctx.setTransform(d,0,0,d,0,0);o.redraw()};
+ o.redraw=extra=>{o.ctx.clearRect(0,0,o.w,o.h);(store[o.k()]||[]).forEach(s=>drawStroke(o.ctx,s));if(extra)drawStroke(o.ctx,extra)};
+ bind(o);return o;
+}
+function stageCanvas(i){
+ if(cvs[i])return cvs[i];const sec=document.getElementById('s'+i);if(!sec)return null;
+ const o=makeCanvas(sec,()=>String(i));new ResizeObserver(()=>o.fit()).observe(sec);return cvs[i]=o;
+}
+const bcv=makeCanvas(board,()=>stage+'-wb');
+const active=()=>board.hidden?stageCanvas(stage):bcv;
+function redraw(){const a=active();if(a)a.redraw()}
+
+let cur=null,erasing=false,trail=[];
+function bind(o){
+ const cv=o.cv;
+ const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?(e.pressure||.5):.5]};
+ const eraseAt=(x,y)=>{const L=store[o.k()]||[],r=14;let ch=false;for(let i=L.length-1;i>=0;i--){if(L[i].pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<r+lw(L[i],p[2])/2)){L.splice(i,1);ch=true}}if(ch)o.redraw()};
+ cv.addEventListener('pointerdown',e=>{if(tool==='none')return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=pos(e);
+  erasing=tool==='erase'||e.button===5||!!(e.buttons&32);
+  if(tool==='laser'){trail=[[e.clientX,e.clientY,performance.now()]];return}
+  if(erasing){eraseAt(p[0],p[1]);return}
+  cur={t:tool,c:color,w:SIZES[sizeI],pts:[p]};if(tool==='pen')drawStroke(o.ctx,cur)});
+ cv.addEventListener('pointermove',e=>{if(tool==='none')return;const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce.length?ce:[e];
+  if(tool==='laser'){trail.push([e.clientX,e.clientY,performance.now()]);return}
+  if(!e.buttons)return;
+  for(const ev of evs){const p=pos(ev);if(erasing){eraseAt(p[0],p[1]);continue}if(!cur)continue;const l=cur.pts[cur.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])<1.2)continue;cur.pts.push(p);
+   if(cur.t==='pen'){o.ctx.save();o.ctx.lineCap='round';o.ctx.strokeStyle=cur.c;seg(o.ctx,cur,cur.pts.length-1);o.ctx.restore()}}
+  if(cur&&cur.t==='hl')o.redraw(cur)});
+ const up=()=>{if(cur){(store[o.k()]||(store[o.k()]=[])).push(cur);cur=null;o.redraw()}erasing=false};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(tool==='laser')trail.push(null)});
+ cv.addEventListener('contextmenu',e=>{if(tool!=='none')e.preventDefault()});
+}
+
+function fitLaser(){const d=window.devicePixelRatio||1;lz.width=innerWidth*d;lz.height=innerHeight*d;lctx.setTransform(d,0,0,d,0,0)}
+fitLaser();
+(function loop(){const now=performance.now();lctx.clearRect(0,0,innerWidth,innerHeight);
+ if(tool==='laser'){trail=trail.filter(p=>p&&now-p[2]<450);for(let i=1;i<trail.length;i++){const a=trail[i-1],b=trail[i],k=1-(now-b[2])/450;lctx.strokeStyle=`rgba(255,40,40,${.7*k})`;lctx.lineWidth=8*k+2;lctx.lineCap='round';lctx.beginPath();lctx.moveTo(a[0],a[1]);lctx.lineTo(b[0],b[1]);lctx.stroke()}
+  const t=trail[trail.length-1];if(t){lctx.fillStyle='rgba(255,40,40,.25)';lctx.beginPath();lctx.arc(t[0],t[1],16,0,7);lctx.fill();lctx.fillStyle='#FF2A2A';lctx.beginPath();lctx.arc(t[0],t[1],7,0,7);lctx.fill()}}
+ requestAnimationFrame(loop)})();
+
+function markCurrent(){Object.entries(cvs).forEach(([i,o])=>o.cv.classList.toggle('cur',+i===stage))}
+function setTool(t){tool=t;if(t!=='laser')trail=[];
+ document.body.classList.toggle('ink-on',t!=='none');document.body.classList.toggle('ink-erase',t==='erase');document.body.classList.toggle('ink-laser',t==='laser');
+ if(t!=='none'){const a=stageCanvas(stage);if(a&&!a.w)a.fit()}markCurrent();
+ tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setColor(c){color=c;tb.querySelectorAll('.sw').forEach(b=>b.classList.toggle('on',b.dataset.c===c));if(tool==='none'||tool==='erase'||tool==='laser')setTool('pen')}
+function setSize(i){sizeI=i;tb.querySelectorAll('.sz').forEach(b=>b.classList.toggle('on',+b.dataset.s===i))}
+function openTools(open){tb.hidden=!open;if(open){if(tool==='none')setTool('pen')}else{setTool('none');if(!board.hidden)toggleBoard()}if(dbtn)dbtn.classList.toggle('on',open)}
+function toggleBoard(){board.hidden=!board.hidden;tb.querySelector('[data-a="board"]').classList.toggle('on',!board.hidden);if(!board.hidden){bcv.fit();if(tool==='none')setTool('pen')}redraw()}
+function undo(){const L=list();if(L.length)L.pop();else if(backup[key()]){store[key()]=backup[key()];delete backup[key()]}redraw()}
+function clearAll(){const L=list();if(!L.length)return;backup[key()]=L.slice();store[key()]=[];redraw()}
+tb.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)setTool(b.dataset.t);else if(b.dataset.c)setColor(b.dataset.c);else if(b.dataset.s)setSize(+b.dataset.s);
+ else if(b.dataset.a==='undo')undo();else if(b.dataset.a==='clear')clearAll();else if(b.dataset.a==='board')toggleBoard();else if(b.dataset.a==='close')openTools(false)});
+
+let dbtn=null;
+document.addEventListener('lesson:stage',e=>{
+ if(!dbtn){const row=document.querySelector('.top-row');if(row){dbtn=document.createElement('button');dbtn.id='drawB';dbtn.className='tbtn';dbtn.innerHTML='✏️ قلم / سبورة';dbtn.title='أدوات الكتابة (D)';
+  dbtn.onclick=()=>openTools(tb.hidden);row.appendChild(dbtn)}}
+ stage=e.detail;
+ if(!board.hidden){board.hidden=true;tb.querySelector('[data-a="board"]').classList.remove('on')}
+ if(store[String(stage)]||tool!=='none'){const o=stageCanvas(stage);if(o)requestAnimationFrame(()=>o.fit())}
+ markCurrent();
+});
+window.addEventListener('resize',()=>{fitLaser();if(!board.hidden)bcv.fit()});
+setColor(COLORS[0]);setTool('none');setSize(1);
+
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();
+ if((e.ctrlKey||e.metaKey)&&k==='z'){if(!tb.hidden){e.preventDefault();undo()}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(k==='d'){openTools(tb.hidden);return}
+ if(tb.hidden&&!['p','h','w','l'].includes(k))return;
+ if(k==='p'){openTools(true);setTool('pen')}else if(k==='h'){openTools(true);setTool('hl')}else if(k==='e'&&!tb.hidden)setTool('erase')
+ else if(k==='l'){openTools(true);setTool('laser')}else if(k==='v'||k==='escape')setTool('none');else if(k==='w'){openTools(true);toggleBoard()}});
+})();
+
+document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+
+</script>
+
+<!--tq-home--><a href="../" id="tqHome" title="كل الألعاب" aria-label="كل الألعاب" style="position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:75;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0B1E2D;border:2px solid #E2B85C;font-size:20px;text-decoration:none;opacity:.75;box-shadow:0 4px 12px rgba(0,0,0,.3)">🏠</a>
+</body></html>

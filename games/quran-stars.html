@@ -1,0 +1,521 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="ar"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>نجوم القرآن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+/* Kids "night sky" theme (one theme on purpose: screen-share + touch). Stars = words of the āyah. */
+:root{
+  color-scheme:light;
+  --bg:#FFF8EC; --card:#FFFFFF; --ink:#2A2140; --muted:#6F6585; --line:#F1DDB8;
+  --gold:#F2B705; --gold2:#B07F00; --good:#22A45D; --bad:#E63946; --blue:#3A86FF;
+  --teamA:#3A86FF; --teamB:#EF476F;
+  --sky1:#1B1F4B; --sky2:#3B2C7A; --star:#FFD84D; --star2:#FFF3B0;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;
+  --f-ar:"Amiri","Traditional Arabic","Noto Naskh Arabic",serif;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg) radial-gradient(circle at 90% 0,#FFE3B3 0,transparent 40%) no-repeat;color:var(--ink);font-family:var(--f-ui);direction:rtl;font-size:18px;line-height:1.5}
+.wrap{max-width:1150px;margin:0 auto;padding-inline:16px;padding-block:10px 28px;display:flex;flex-direction:column;gap:12px}
+.top-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.brand{flex:1 1 260px;margin:0;font-size:1.6rem;font-weight:800;line-height:1.2;color:var(--sky2)}
+.brand small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+.tbtn{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;min-height:40px}
+.tbtn[aria-pressed="true"],.tbtn.on{background:var(--gold);border-color:var(--gold);color:#2A2140}
+.en{display:none;direction:ltr;unicode-bidi:isolate;font-family:system-ui,sans-serif;font-size:.8em;opacity:.8;font-weight:500}
+body.show-en .en{display:inline}
+body.show-en .en.blk{display:block}
+button:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border-radius:18px;padding:8px 12px;border:2px solid var(--line)}
+.bar label{font-weight:700;font-size:.95rem}
+.bar select{font:inherit;font-size:.95rem;border:2px solid var(--line);border-radius:12px;padding:2px 8px;background:var(--bg);color:var(--ink);min-height:40px;max-width:100%}
+.bar .grow{flex:1}
+.modes{display:flex;gap:8px;flex-wrap:wrap}
+.mode{font:inherit;font-weight:800;font-size:1rem;border:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:18px;padding:4px 14px;cursor:pointer;min-height:48px;flex:1 1 200px}
+.mode[aria-pressed="true"]{border-color:var(--sky2);background:#ECE6FF}
+.teams{display:flex;gap:10px;flex-wrap:wrap}
+.team{flex:1 1 200px;display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--line);border-radius:20px;padding:6px 14px;transition:transform .2s,border-color .2s}
+.team .nm{font-weight:800;font-size:1.1rem;color:var(--tc)}
+.team .pts{margin-inline-start:auto;font-weight:800;font-size:1.7rem;color:var(--gold2);font-variant-numeric:tabular-nums}
+.team .turn{font-size:.8rem;font-weight:700;background:var(--tc);color:#fff;border-radius:999px;padding:0 10px;visibility:hidden}
+.team.now{border-color:var(--tc);transform:scale(1.02)}
+.team.now .turn{visibility:visible}
+
+/* the sky (station) */
+#s0{position:relative;overflow:hidden;border:3px solid #2C2766;border-radius:26px;padding:14px;min-height:480px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;color:#fff;
+  background:radial-gradient(1.5px 1.5px at 12% 18%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 72% 12%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 40% 70%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 88% 55%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 25% 88%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 60% 40%,#fffbe0 50%,transparent 51%),linear-gradient(170deg,var(--sky1),var(--sky2) 70%,#5B3A8F)}
+#s0 > *:not(.ink-cv){position:relative;z-index:2}
+#s0 .en{color:#E8E2FF}
+.prog{font-weight:700;color:#CFC6FF;font-size:.95rem;align-self:stretch;display:flex;justify-content:space-between;gap:8px}
+.q{font-weight:800;font-size:1.2rem}
+.tip{font-size:.95rem;color:#E8E2FF;max-width:70ch}
+.book{font-size:.82rem;color:var(--muted);text-align:center}
+
+/* intro: meet the Quran's names */
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-self:stretch}
+.bdg{font:inherit;color:var(--ink);background:#fff;border:4px solid var(--bc);border-radius:20px;padding:6px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;box-shadow:0 5px 0 var(--bc)}
+.bdg .emo{font-size:2.6rem;line-height:1.1}
+.bdg .nm{font-family:var(--f-ar);font-weight:700;font-size:1.6rem;color:var(--bc);line-height:1.3}
+.bdg .mv{font-size:.82rem}
+.bdg.got{animation:jump .5s}
+.card{align-self:stretch;text-align:start;background:#fff;color:var(--ink);border-inline-start:8px solid var(--hc,var(--gold));border-radius:16px;padding:8px 14px;animation:pop .35s}
+.card .t{font-weight:800}
+.card .bq{font-family:var(--f-ar);font-size:1.25rem;line-height:1.8}
+.card .hd{font-family:var(--f-ar);font-size:1.45rem;line-height:1.8;color:#5B3A8F;font-weight:700}
+.card small{display:block;color:var(--gold2);font-weight:700}
+.card .en{color:var(--muted)}
+details.card summary{cursor:pointer;font-weight:800}
+
+/* āyah strip (the "constellation line") */
+.meaning{font-size:1.05rem;background:rgba(255,255,255,.12);border-radius:14px;padding:2px 14px}
+.meaning .p{font-size:2rem;vertical-align:middle}
+.strip{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;direction:rtl;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.35);border-radius:22px;padding:10px;align-self:stretch;min-height:96px}
+.slot,.wd{font-family:var(--f-ar);font-weight:700;font-size:clamp(1.8rem,5.5vw,3rem);line-height:1.5;border-radius:16px;padding:0 12px;min-width:64px}
+.slot{border:2px dashed rgba(255,255,255,.45);color:transparent;min-height:1.6em}
+.slot.f{border:2px solid var(--star);color:var(--star2);background:rgba(255,216,77,.12);animation:pop .35s;text-shadow:0 0 14px rgba(255,216,77,.7)}
+.slot.next{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.ref{font-size:.9rem;color:#CFC6FF}
+/* floating word-stars */
+.sky{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-self:stretch;padding:8px 0 4px}
+.st{font:inherit;font-family:var(--f-ar);font-weight:700;font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.4;color:#3A2A00;cursor:pointer;border:0;padding:8px 22px 10px;min-height:68px;border-radius:999px;
+  background:radial-gradient(circle at 30% 25%,#FFFBE0,var(--star) 60%,#F2A900);box-shadow:0 0 18px rgba(255,216,77,.75),0 5px 0 #C98A00;animation:bob 3s ease-in-out infinite;animation-delay:var(--d,0s)}
+.st::before{content:"⭐";font-size:.6em;margin-inline-end:6px;vertical-align:middle}
+.st:active{transform:translateY(3px)}
+.st.bad{animation:shake .4s;filter:saturate(.3)}
+.st.gone{visibility:hidden}
+/* hide mode */
+.wd{color:var(--star2);text-shadow:0 0 12px rgba(255,216,77,.6);background:transparent;border:2px solid transparent;font:inherit;font-family:var(--f-ar);font-weight:700;cursor:default}
+.wd.hid{color:transparent;text-shadow:none;background:radial-gradient(circle,#6F63C9,#4A3E9E);border-color:#8F84E6;cursor:pointer;position:relative}
+.wd.hid::after{content:"☁️";color:#fff;position:absolute;inset:0;display:grid;place-items:center;font-size:.8em}
+.wd.peek{color:#fff;background:#6F63C9}
+.wd.peek::after{content:none}
+.wd.vanish{animation:vanish .6s}
+.counter{display:flex;gap:6px;justify-content:center;font-size:2rem}
+.counter span{opacity:.25;transition:opacity .3s,transform .3s}
+.counter span.on{opacity:1;transform:scale(1.2)}
+/* badge reveal + TPR */
+.reveal{align-self:stretch;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;background:#fff;color:var(--ink);border:4px solid var(--bc,var(--gold));border-radius:22px;padding:8px 14px;animation:pop .4s}
+.reveal .emo{font-size:3.4rem;line-height:1;animation:jump .6s 2}
+.reveal .nm{font-family:var(--f-ar);font-weight:700;font-size:2rem;color:var(--bc)}
+.reveal .mv{font-weight:700}
+.reveal .en{color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.big-btn{font:inherit;font-weight:800;font-size:1.1rem;border:0;border-radius:16px;padding:6px 22px;min-height:52px;cursor:pointer;color:#fff;background:var(--blue);box-shadow:0 5px 0 #1F5FC4}
+.big-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1F5FC4}
+.big-btn.green{background:var(--good);box-shadow:0 5px 0 #157A42}
+.big-btn.gold{background:var(--gold);color:#2A2140;box-shadow:0 5px 0 #B07F00}
+.big-btn.ghost{background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.4);box-shadow:none}
+.big-btn .en{color:inherit;opacity:.85}
+.big-btn:disabled{opacity:.45;cursor:default}
+.crown{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.crown span{background:#fff;color:var(--ink);border:3px solid var(--bc);border-radius:999px;padding:0 12px;font-family:var(--f-ar);font-weight:700;font-size:1.3rem}
+.endmsg{display:flex;flex-direction:column;gap:10px;align-items:center;align-self:stretch}
+.endmsg .trophy{font-size:4.5rem;line-height:1}
+.endmsg h2{margin:0;font-size:1.9rem;color:var(--star)}
+.miss{font-family:var(--f-ar);font-size:1.5rem;line-height:1.7}
+
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+@keyframes shake{25%{transform:translateX(7px)}75%{transform:translateX(-7px)}}
+@keyframes jump{50%{transform:translateY(-14px) scale(1.1)}}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-2deg)}}
+@keyframes vanish{0%{transform:scale(1)}40%{transform:scale(1.25);filter:brightness(2)}100%{transform:scale(1)}}
+.cf{position:fixed;top:-20px;width:11px;height:15px;border-radius:3px;pointer-events:none;z-index:80;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.starpop{position:fixed;top:22%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:1.8rem;background:var(--card);color:var(--ink);border:4px solid var(--gold);border-radius:999px;padding:4px 24px;z-index:81;pointer-events:none;white-space:nowrap;animation:sp 1.2s ease forwards}
+@keyframes sp{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}25%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-90%)}}
+
+/* pen tools (from lesson-engine/engine.css) */
+.ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45!important;pointer-events:none;touch-action:none}
+body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
+body.ink-erase .ink-cv{cursor:cell!important}
+body.ink-laser .ink-cv{cursor:none!important}
+#wbLaser{position:fixed;inset:0;width:100%;height:100%;z-index:66;pointer-events:none}
+#wbBoard{position:fixed;inset:0;z-index:60;background-color:#FDFCF8;background-image:linear-gradient(#E6ECEF 1px,transparent 1px),linear-gradient(90deg,#E6ECEF 1px,transparent 1px);background-size:40px 40px}
+#wbBoard[hidden]{display:none!important}
+#wbBoard .bt{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font:700 18px/1 var(--f-ui);color:#86662A;background:#FBF3E1;border:1px solid #EBDDBB;border-radius:20px;padding:8px 16px;z-index:2;pointer-events:none;white-space:nowrap}
+#tools{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:5px;background:rgba(7,23,33,.95);border:1px solid #C9A35A;border-radius:16px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#tools button{width:42px;height:42px;border-radius:10px;border:1px solid #24485A;background:#12303F;color:#E8F1F5;display:grid;place-items:center;padding:0;cursor:pointer}
+#tools button svg{width:22px;height:22px}
+#tools button.on{background:#C9A35A;color:#0B2431;border-color:#C9A35A}
+#tools .sw i{width:22px;height:22px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.6)}
+#tools .sw.on{background:#24485A;border-color:#C9A35A}
+#tools .sz i{display:block;border-radius:50%;background:#E8F1F5}
+#tools .sep{height:1px;background:#2A5266;margin:2px 0}
+#tools[hidden]{display:none!important}
+@media (max-height:980px){#tools{gap:4px;padding:6px}#tools button{width:34px;height:34px}#tools button svg{width:18px;height:18px}#tools .sw i{width:18px;height:18px}}
+@media (max-height:800px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+#drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:640px){#s0{padding:10px}.brand{font-size:1.3rem}.st{padding:6px 14px 8px;min-height:56px}.sky{gap:10px}.slot,.wd{padding:0 8px;min-width:44px}.badges{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head><body>
+<div class="wrap">
+  <header class="top-row">
+    <h1 class="brand">⭐ نُجُومُ القُرْآن <span class="en">Quran Stars</span><small>ترتيل القرآن · Tarteel Al-Quran — من كتاب «كيف تحفظ القرآن الكريم»</small></h1>
+    <button class="tbtn" id="enB" aria-pressed="false">English</button>
+    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+  </header>
+  <div class="modes" role="group" aria-label="اللعبة">
+    <button class="mode" data-m="build" aria-pressed="true">🌟 رَتِّبِ النُّجُوم <span class="en">Build the āyah</span></button>
+    <button class="mode" data-m="hide" aria-pressed="false">☁️ النُّجُومُ تَخْتَفِي <span class="en">Vanishing stars</span></button>
+  </div>
+  <div class="bar">
+    <label for="setSel">الدرس:</label>
+    <select id="setSel"></select>
+    <label for="teamSel">اللاعبون:</label>
+    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <span class="grow"></span>
+    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+  </div>
+  <div class="teams" id="teams"></div>
+  <section id="s0" aria-live="polite"></section>
+  <div class="book" id="bookLine"></div>
+</div>
+<script>
+/* ============================================================
+   ✏️ المحتوى — عدّل هنا فقط  (EDIT CONTENT HERE)
+   SETS (الصيغة الموحّدة + «آية بالكلمات»):
+     { key:{ ar, en, seq?:1, items:[ {ar:'نَصُّ الآيةِ بِمَسَافَاتٍ بَيْنَ الكَلِمَات', en:'المعنى', pic:'إيموجي', ref:'السورة: الآية', badge?:'مفتاح من BADGES'} ] } }
+     • كل كلمة = نجمة. لتجعل كلمتين نجمةً واحدة (للصغار جدًّا) اكتب بينهما + بدل المسافة: 'قُلْ+هُوَ'.
+     • seq:1 = الآيات بالترتيب (لسورة يحفظها الطالب) + «التحدي الكبير» في الآخر: السورة كلها غيبًا.
+     • لتضيف سورة الطالب: انسخ مجموعة ikhlas وغيّر الآيات.
+   BADGES: «أوصاف القرآن» — اسم + إيموجي + حركة جسم (TPR) + نص الكتاب.
+   REPEAT: كم مرة يقرأ الطالب الآية بعد ترتيبها. HIDE_ORDER: 'end' (تختفي من الآخر) أو 'random'.
+   ============================================================ */
+const BOOK = {ar:'كيف تحفظ القرآن الكريم — د. عبد الرب نواب الدين', ref:'المقدمة + التمهيد «نبذة من فضائل القرآن الكريم»، ص ٢٠–٢٥ (ترقيم الطبعة المطبوعة)'};
+const BADGES = {
+  majid:{ar:'مَجِيد',en:'Glorious',emo:'👑',c:'#E0A100',move:'ضَعْ يَدَيْكَ فَوْقَ رَأْسِكَ مِثْلَ التَّاج 👑',moveEn:'Put your hands on your head like a crown',
+    bq:'ولقد وصف كتابه بأوصاف الجلال والكمال',pg:'٢٠'},
+  hakim:{ar:'حَكِيم',en:'Wise',emo:'🦉',c:'#2F6FD6',move:'أَشِرْ إِلَى رَأْسِكَ بِإِصْبَعِك: «أُفَكِّر!» 🤔',moveEn:'Point to your head: "I think!"',
+    bq:'ولقد وصف كتابه بأوصاف الجلال والكمال',pg:'٢٠'},
+  karim:{ar:'كَرِيم',en:'Noble & generous',emo:'🎁',c:'#EF476F',move:'افْتَحْ يَدَيْكَ كَأَنَّكَ تُعْطِي هَدِيَّة 🤲',moveEn:'Open your hands as if giving a gift',
+    bq:'ولقد وصف كتابه بأوصاف الجلال والكمال',pg:'٢٠–٢١'},
+  mubin:{ar:'مُبِين',en:'Clear',emo:'💡',c:'#22A45D',move:'افْتَحْ يَدَيْكَ مِثْلَ كِتَابٍ مَفْتُوح وَقُلْ: «وَاضِح!» 📖',moveEn:'Open your hands like a book and say "clear!"',
+    bq:'ولقد وصف كتابه بأوصاف الجلال والكمال',pg:'٢٠–٢١'},
+  ajab:{ar:'عَجَب',en:'Wonderful',emo:'🤩',c:'#8E5CF7',move:'ضَعْ يَدَيْكَ عَلَى خَدَّيْك: «وَاااو!» 😮',moveEn:'Hands on your cheeks: "Wow!"',
+    bq:'وقال حكاية عن الجن ﴿إِنَّا سَمِعْنَا قُرْآنًا عَجَبًا﴾',pg:'٢١'},
+  yusr:{ar:'مُيَسَّر',en:'Made easy to remember',emo:'👍',c:'#E36414',move:'ارْفَعْ إِبْهَامَيْك: «سَهْل! أَقْدِرُ أَحْفَظُه!» 👍👍',moveEn:'Two thumbs up: "Easy! I can memorise it!"',
+    bq:'ومن خصائص القرآن الكريم أنه ميسر في تلاوته وحفظه وتدبره',pg:'٢٥'},
+  mahfuz:{ar:'مَحْفُوظ',en:'Protected by Allah',emo:'🛡️',c:'#14374A',move:'ضُمَّ يَدَيْكَ عَلَى صَدْرِكَ مِثْلَ كَنْزٍ غَالٍ 💎',moveEn:'Hug your chest like a precious treasure',
+    bq:'تكفل الله ـ سبحانه ـ بحفظه من التحريف والتبديل دون سائر الكتب السماوية',pg:'٢٠'},
+};
+const SETS = {
+  sifat:{ar:'① أَوْصَافُ القُرْآن — آيَاتٌ مِنَ الكِتَاب (٤–٨ سنين)',en:'What the Quran is like — āyāt from the book (age 4–8)',items:[
+    {ar:'ق وَالْقُرْآنِ الْمَجِيدِ',en:'Qāf. By the Glorious Quran.',pic:'👑',ref:'ق: ١',badge:'majid'},
+    {ar:'يس وَالْقُرْآنِ الْحَكِيمِ',en:'Yā-Sīn. By the Wise Quran.',pic:'🦉',ref:'يس: ١–٢',badge:'hakim'},
+    {ar:'إِنَّهُ لَقُرْآنٌ كَرِيمٌ',en:'It is surely a noble Quran.',pic:'🎁',ref:'الواقعة: ٧٧',badge:'karim'},
+    {ar:'إِنْ هُوَ إِلَّا ذِكْرٌ وَقُرْآنٌ مُبِينٌ',en:'It is only a reminder and a clear Quran.',pic:'💡',ref:'يس: ٦٩ — مِنَ الآيَة',badge:'mubin'},
+    {ar:'إِنَّا سَمِعْنَا قُرْآنًا عَجَبًا',en:'"We have heard a wonderful Quran!"',pic:'🤩',ref:'الجن: ١ — مِنَ الآيَة',badge:'ajab'},
+    {ar:'وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ فَهَلْ مِنْ مُدَّكِرٍ',en:'We have made the Quran easy to remember. Is there anyone who will remember?',pic:'👍',ref:'القمر: ١٧، ٢٢، ٣٢، ٤٠',badge:'yusr'},
+    {ar:'إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ',en:'It is We who sent down the Reminder, and We will surely protect it.',pic:'🛡️',ref:'الحجر: ٩',badge:'mahfuz'},
+  ]},
+  ikhlas:{ar:'② سُورَةُ الإِخْلَاص (بِالتَّرْتِيب)',en:'Sūrat al-Ikhlāṣ (in order)',seq:1,items:[
+    {ar:'قُلْ هُوَ اللَّهُ أَحَدٌ',en:'Say: He is Allah, the One.',pic:'☝️',ref:'الإخلاص: ١'},
+    {ar:'اللَّهُ الصَّمَدُ',en:'Allah, the Eternal Refuge.',pic:'💎',ref:'الإخلاص: ٢'},
+    {ar:'لَمْ يَلِدْ وَلَمْ يُولَدْ',en:'He has no child, and He was not born.',pic:'🚫',ref:'الإخلاص: ٣'},
+    {ar:'وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ',en:'And there is none like Him.',pic:'🌟',ref:'الإخلاص: ٤'},
+  ]},
+  kawthar:{ar:'③ سُورَةُ الكَوْثَر (بِالتَّرْتِيب)',en:'Sūrat al-Kawthar (in order)',seq:1,items:[
+    {ar:'إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ',en:'We have given you al-Kawthar (abundant good).',pic:'🏞️',ref:'الكوثر: ١'},
+    {ar:'فَصَلِّ لِرَبِّكَ وَانْحَرْ',en:'So pray to your Lord and sacrifice.',pic:'🕌',ref:'الكوثر: ٢'},
+    {ar:'إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ',en:'Indeed, your enemy is the one cut off.',pic:'✂️',ref:'الكوثر: ٣'},
+  ]},
+};
+/* بطاقات خاصة من الكتاب */
+const SPECIALS = {
+  tikrar:{t:'🔁 سِرُّ الحِفْظ',bq:'إن حفظ القرآن الكريم يقوم عمليا على مبدأ التلاوة الكثيرة، وعلى تكرار المحفوظ آناء الليل وآناء النهار، مدى الحياة',pg:'٢٣',
+    kid:'كُلَّمَا كَرَّرْتَ الآيَة، صَارَتْ نَجْمَةً فِي قَلْبِكَ ⭐❤️',kidEn:'Every time you repeat the āyah, it becomes a star in your heart.'},
+  yusr:{t:'👍 القُرْآنُ سَهْلُ الحِفْظ',bq:'هو محفوظ في الصدور، ميسر على الألسنة، مهيمن على القلوب',pg:'٢٥',who:'قول ابن كثير كما نقله المؤلف (والعزو في الحاشية: تفسير ابن كثير ٣/٤١٧)'},
+  hadith:{t:'🤝 القُرْآنُ صَدِيقُكَ يَوْمَ القِيَامَة',hd:'«اقْرَءُوا الْقُرْآنَ فَإِنَّهُ يَأْتِي يَوْمَ الْقِيَامَةِ شَفِيعًا لِأَصْحَابِهِ»',
+    src:'رواه مسلم (٨٠٤) عن أبي أمامة الباهلي رضي الله عنه — أورده المؤلف ص ٢٤ (والتخريج في حاشية الكتاب)',en:'"Read the Quran, for it will come on the Day of Resurrection as an intercessor for its companions." (Muslim 804)'},
+  story:{t:'☁️ قِصَّةُ السَّحَابَة (السَّكِينَة)',
+    kid:'رَجُلٌ قَرَأَ سُورَةَ الكَهْف، وَحِصَانُهُ مَرْبُوطٌ بِجَانِبِه 🐴. جَاءَتْ سَحَابَةٌ ☁️ وَاقْتَرَبَتْ… وَاقْتَرَبَتْ… وَالحِصَانُ يَتَحَرَّك! فِي الصَّبَاح سَأَلَ النَّبِيَّ ﷺ فَقَالَ: «تِلْكَ السَّكِينَةُ تَنَزَّلَتْ بِالْقُرْآنِ» ✨',
+    kidEn:'A man read Sūrat al-Kahf with his horse beside him. A cloud came closer and closer, and the horse got restless. The Prophet ﷺ said: "That was tranquillity (sakīnah) that came down because of the Quran."',
+    bq:'قرأ رجل سورة الكهف وإلى جانبه حصان مربوط بشطنين "أي: حبلين" فتغشته سحابة "أحاطت به" فجعلت تدنو وتدنو، وجعل فرسه ينفر فلما أصبح أتى النبي ﷺ، فذكر ذلك له، فقال: تلك السكينة تنزلت بالقرآن',
+    pg:'٢٣',src:'متفق عليه عن البراء بن عازب رضي الله عنه (البخاري ومسلم، والتخريج في حاشية الكتاب)'},
+};
+const REPEAT = 3;            // اقرأ الآية ٣ مرات بعد ترتيبها
+const HIDE_ORDER = 'end';    // 'end' = تختفي الكلمات من آخر الآية · 'random' = عشوائيًّا
+const PEEK_MS = 1600;        // مدة «النظرة» عند الضغط على سحابة
+const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَكَ اللهُ فِيك!','مُمْتَاز!'], PRAISE_EN=['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'];
+/* ============================================================ */
+
+const $=s=>document.querySelector(s);
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const words=t=>t.trim().split(/\s+/).map(w=>w.replace(/\+/g,' '));
+const plain=t=>t.replace(/\+/g,' ');
+
+/* ---------- sound (Web Audio, starts after a tap) ---------- */
+let AC=null,soundOn=true;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
+const PENT=[523,587,659,784,880,1047,1175,1319,1568,1760];
+const sfx={
+  twinkle:i=>{const f=PENT[i%PENT.length];tone(f,.3,'sine',.16);tone(f*2,.2,'triangle',.05,.05)},
+  bad:()=>tone(196,.22,'sawtooth',.08),
+  vanish:()=>tone(1200,.45,'sine',.1,0,300),
+  peek:()=>tone(990,.12,'sine',.1),
+  badge:()=>[784,988,1175,1568].forEach((f,i)=>tone(f,.35,'triangle',.16,i*.08)),
+  rep:i=>tone(PENT[2+i*2],.25,'triangle',.18),
+  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13)),
+  good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09))};
+function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#FFD84D','#FFF3B0','#3A86FF','#22A45D','#8E5CF7','#EF476F'];
+  for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+
+/* ---------- state ---------- */
+const S0=$('#s0');
+let mode='build',teams=[],turn=0,missed=[],gotBadges=[],setK='sifat';
+function teamDefs(){const v=$('#teamSel').value;
+  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
+  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
+function nextTurn(){turn=(turn+1)%teams.length;renderTeams()}
+function stage(){document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}))}
+function cite(pg){return `${BOOK.ar}، ص ${pg}`}
+function bookCard(t,bq,pg,kid,kidEn,hc,who){return `<div class="card" style="--hc:${hc||'var(--gold)'}"><div class="t">${t}</div>${kid?`<div>${kid}${kidEn?`<span class="en blk">${kidEn}</span>`:''}</div>`:''}<div class="bq">«${bq}»</div><small>${who?who+' — ':''}${cite(pg)}</small></div>`}
+function hadithCard(){const h=SPECIALS.hadith;return `<div class="card" style="--hc:#8E5CF7"><div class="t">${h.t}</div><div class="hd">${h.hd}</div><span class="en blk">${h.en}</span><small>${h.src}</small></div>`}
+function storyCard(open){const s=SPECIALS.story;return `<details class="card" style="--hc:#3A86FF" ${open?'open':''}><summary>${s.t} <span class="en">Story</span></summary><div>${s.kid}<span class="en blk">${s.kidEn}</span></div><div class="bq">«${s.bq}»</div><small>${s.src} — ${cite(s.pg)}</small></details>`}
+
+$('#setSel').innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}">${g.ar}</option>`).join('');
+$('#bookLine').textContent=`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الآيات من القرآن الكريم (رواية حفص) بمواضعها، وآيات «أوصاف القرآن» كلها من أمثلة الكتاب نفسه.`;
+
+function newGame(){teams=teamDefs().map(t=>({...t,pts:0}));turn=0;missed=[];gotBadges=[];setK=$('#setSel').value;renderTeams();intro()}
+
+/* ================= intro: meet the Quran ================= */
+function intro(){const g=SETS[setK];const hasB=g.items.some(i=>i.badge);
+  S0.innerHTML=`<div class="q">🌙 القُرْآنُ مِثْلُ سَمَاءٍ مَلِيئَةٍ بِالنُّجُوم، وَكُلُّ كَلِمَةٍ نَجْمَة ⭐ <span class="en blk">The Quran is like a sky full of stars: every word is a star!</span></div>
+    ${hasB?`<div class="tip">🎵 قَابِلْ أَوْصَافَ القُرْآن! اضْغَطْ عَلَى كُلِّ وَصْف، وَاعْمَلْ حَرَكَتَهُ مَعَ المُعَلِّم <span class="en blk">Meet what the Quran is like: tap each one and do its move.</span></div>
+    <div class="badges">${Object.entries(BADGES).map(([k,b])=>`<button class="bdg" data-b="${k}" style="--bc:${b.c}"><span class="emo">${b.emo}</span><span class="nm">${b.ar}</span><span class="en">${b.en}</span><span class="mv">${b.move}</span></button>`).join('')}</div>`:''}
+    ${bookCard(SPECIALS.tikrar.t,SPECIALS.tikrar.bq,SPECIALS.tikrar.pg,SPECIALS.tikrar.kid,SPECIALS.tikrar.kidEn,'#E36414')}
+    ${mode==='build'?`<div class="tip">🌟 <b>رَتِّبِ النُّجُوم:</b> اسْمَعِ الآيَةَ مِنَ المُعَلِّم ← اضْغَطِ النُّجُومَ بِالتَّرْتِيب ← اقْرَأْهَا ${ar(REPEAT)} مَرَّات ← اعْمَلْ حَرَكَةَ الوَصْف <span class="en blk">Listen → tap the stars in order → read it ${REPEAT} times → do the move</span></div>`
+     :`<div class="tip">☁️ <b>النُّجُومُ تَخْتَفِي:</b> اقْرَأِ الآيَة ← تَخْتَفِي نَجْمَة خَلْفَ سَحَابَة ← اقْرَأْهَا مَرَّةً أُخْرَى… حَتَّى تَقْرَأَهَا كُلَّهَا غَيْبًا! (اضْغَطْ عَلَى السَّحَابَةِ لِتَنْظُرَ قَلِيلًا 👀) <span class="en blk">Read it → one star hides behind a cloud → read again… until you say it all from memory! Tap a cloud to peek.</span></div>`}
+    <div class="row"><button class="big-btn green" id="goB">ابْدَأْ: ${g.ar.split(' (')[0].split(' — ')[0]} ▶ <span class="en">Start</span></button></div>
+    ${storyCard(false)}`;
+  S0.querySelectorAll('.bdg').forEach(b=>b.onclick=()=>{ac();sfx.badge();b.classList.remove('got');void b.offsetWidth;b.classList.add('got')});
+  $('#goB').onclick=()=>{ac();queue=g.seq?g.items.slice():shuffle(g.items);done=0;goal=queue.length;mode==='build'?buildShow():hideShow()};
+  stage()}
+
+/* ================= ① رتّب النجوم ================= */
+let queue=[],done=0,goal=0;
+function head(it){return `<div class="prog"><span>الآيَة ${ar(done+1)} مِنْ ${ar(goal)}</span><span>${teams[turn].nm}</span></div>
+  <div class="meaning"><span class="p">${it.pic||'⭐'}</span> ${it.en?`<span class="en">${it.en}</span>`:''} <span class="ref">(${it.ref})</span></div>`}
+function buildShow(){if(!queue.length){end();return}
+  const it=queue.shift(),ws=words(it.ar);let next=0,errs=0;
+  S0.innerHTML=`${head(it)}
+    <div class="tip">👂 المُعَلِّمُ يَقْرَأُ الآيَةَ مَرَّة، ثُمَّ اضْغَطِ النُّجُومَ بِالتَّرْتِيب ← (مِنَ اليَمِين) <span class="en blk">The teacher reads it once; then tap the stars in order (right to left).</span></div>
+    <div class="strip" id="strip">${ws.map((w,i)=>`<span class="slot ${i===0?'next':''}" data-i="${i}">${w}</span>`).join('')}</div>
+    <div class="sky">${shuffle(ws.map((w,i)=>({w,i}))).map((o,k)=>`<button class="st" data-w="${o.w}" style="--d:${(k*.37)%2}s">${o.w}</button>`).join('')}</div>
+    <div class="row"><button class="big-btn ghost" id="hintB">💡 أَوَّلُ كَلِمَةٍ نَاقِصَة <span class="en">Hint</span></button></div>
+    <div id="after"></div>`;
+  const slots=[...S0.querySelectorAll('.slot')];
+  S0.querySelectorAll('.st').forEach(b=>b.onclick=()=>{ac();if(next>=ws.length)return;
+    if(b.dataset.w===ws[next]){b.classList.add('gone');slots[next].classList.remove('next');slots[next].classList.add('f');sfx.twinkle(next);next++;
+      if(next<ws.length)slots[next].classList.add('next');else complete()}
+    else{errs++;b.classList.remove('bad');void b.offsetWidth;b.classList.add('bad');sfx.bad()}});
+  $('#hintB').onclick=()=>{ac();const b=[...S0.querySelectorAll('.st:not(.gone)')].find(x=>x.dataset.w===ws[next]);if(b){errs++;b.style.outline='5px solid #fff';sfx.peek();setTimeout(()=>b.style.outline='',900)}};
+  function complete(){$('#hintB').disabled=true;if(errs)missed.push(it.ref);
+    setTimeout(()=>award(errs?1:2),300);
+    $('#after').innerHTML=`<div class="tip">🔁 الآنَ اقْرَأِ الآيَةَ ${ar(REPEAT)} مَرَّات — المُعَلِّمُ يَضْغَطُ نَجْمَةً بَعْدَ كُلِّ قِرَاءَة <span class="en blk">Now read it ${REPEAT} times; the teacher taps a star after each one.</span></div>
+      <div class="counter" id="cnt">${Array.from({length:REPEAT},()=>'<span>⭐</span>').join('')}</div>
+      <div class="row"><button class="big-btn gold" id="repB">✓ قَرَأَهَا (١)</button></div><div id="after2"></div>`;
+    let r=0;$('#repB').onclick=()=>{ac();const c=$('#cnt').children;c[r].classList.add('on');sfx.rep(r);r++;
+      if(r<REPEAT){$('#repB').textContent=`✓ قَرَأَهَا (${ar(r+1)})`;return}
+      $('#repB').remove();afterAyah(it,$('#after2'))};
+    $('#after').scrollIntoView({behavior:'smooth',block:'nearest'})}
+  stage()}
+
+function afterAyah(it,host,hideMode){const b=it.badge&&BADGES[it.badge];
+  if(b&&!gotBadges.includes(it.badge))gotBadges.push(it.badge);
+  if(b)sfx.badge();
+  host.innerHTML=`${b?`<div class="reveal" style="--bc:${b.c}"><span class="emo">${b.emo}</span><div><div class="nm">القُرْآنُ ${b.ar}!</div><span class="en">The Quran is ${b.en}!</span><div class="mv">🤸 ${b.move}<span class="en blk">${b.moveEn}</span></div></div>
+      <button class="big-btn green" id="bonusB">✓ عَمِلَ الحَرَكَة (+١)</button></div>
+      ${bookCard('📚 مِنَ الكِتَاب',b.bq,b.pg,null,null,b.c,it.badge==='yusr'?null:null)}${it.badge==='yusr'?bookCard(SPECIALS.yusr.t,SPECIALS.yusr.bq,SPECIALS.yusr.pg,null,null,'#E36414',SPECIALS.yusr.who):''}`:''}
+    <div class="row">${hideMode?'':`<button class="big-btn ghost" id="hideNow">☁️ الآنَ غَيْبًا! <span class="en">Now from memory</span></button>`}<button class="big-btn" id="nextB">${queue.length?'الآيَةُ التَّالِيَة ←':'🏆 النِّهَايَة'} <span class="en">Next</span></button></div>`;
+  const bb=$('#bonusB');if(bb)bb.onclick=()=>{bb.remove();award(1)};
+  const hn=$('#hideNow');if(hn)hn.onclick=()=>{queue.unshift(it);done=done;mode='hide';document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m==='hide'));hideShow()};
+  $('#nextB').onclick=()=>{done++;nextTurn();mode==='build'?buildShow():hideShow()};$('#nextB').focus({preventScroll:true});
+  host.scrollIntoView({behavior:'smooth',block:'nearest'})}
+
+/* ================= ② النجوم تختفي (vanishing cues) ================= */
+function hideOrder(n){const idx=[...Array(n).keys()];return HIDE_ORDER==='random'?shuffle(idx):idx.reverse()}
+function hideShow(){if(!queue.length){end();return}
+  const it=queue.shift(),ws=words(it.ar),order=hideOrder(ws.length);let h=0,peeks=0;
+  S0.innerHTML=`${head(it)}
+    <div class="tip">🗣️ اقْرَأِ الآيَةَ بِصَوْتٍ عَالٍ، ثُمَّ يَضْغَطُ المُعَلِّمُ «✓ قَرَأَهَا» فَتَخْتَفِي نَجْمَة ☁️ <span class="en blk">Read it aloud; then the teacher taps ✓ and one star hides.</span></div>
+    <div class="strip">${ws.map((w,i)=>`<button class="wd" data-i="${i}" tabindex="-1">${w}</button>`).join('')}</div>
+    <div class="counter" id="cnt">${ws.map(()=>'<span>☁️</span>').join('')}</div>
+    <div class="row"><button class="big-btn gold" id="okB">✓ قَرَأَهَا ← أَخْفِ نَجْمَة <span class="en">Read it → hide one</span></button>
+      <button class="big-btn ghost" id="backB">↩️ أَرْجِعْ نَجْمَة <span class="en">Bring one back</span></button></div>
+    <div id="after"></div>`;
+  const els=[...S0.querySelectorAll('.wd')];
+  els.forEach(e=>e.onclick=()=>{if(!e.classList.contains('hid')||e.classList.contains('peek'))return;ac();peeks++;sfx.peek();e.classList.add('peek');setTimeout(()=>e.classList.remove('peek'),PEEK_MS)});
+  function paint(){const c=$('#cnt').children;[...c].forEach((s,i)=>s.classList.toggle('on',i<h));
+    $('#okB').innerHTML=h<ws.length?'✓ قَرَأَهَا ← أَخْفِ نَجْمَة <span class="en">Read it → hide one</span>':'🏆 قَرَأَهَا كُلَّهَا غَيْبًا! <span class="en">Said it all from memory!</span>';
+    $('#backB').disabled=h===0}
+  $('#okB').onclick=()=>{ac();
+    if(h<ws.length){const e=els[order[h]];e.classList.add('hid','vanish');e.tabIndex=0;setTimeout(()=>e.classList.remove('vanish'),650);sfx.vanish();h++;paint();return}
+    $('#okB').remove();$('#backB').remove();els.forEach((e,i)=>setTimeout(()=>{e.classList.remove('hid');e.classList.add('vanish');sfx.twinkle(i)},i*160));
+    if(peeks>2)missed.push(it.ref);
+    setTimeout(()=>{award(peeks?1:2);afterAyah(it,$('#after'),true)},ws.length*160+200)};
+  $('#backB').onclick=()=>{if(!h)return;h--;const e=els[order[h]];e.classList.remove('hid');e.tabIndex=-1;sfx.peek();paint()};
+  paint();stage()}
+
+/* ---------- end ---------- */
+function end(){const g=SETS[setK],max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
+  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const ms=[...new Set(missed)];
+  S0.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
+    ${gotBadges.length?`<div>👑 تَاجُ القُرْآن: القُرْآنُ… <span class="en">The Quran is…</span></div><div class="crown">${gotBadges.map(k=>`<span style="--bc:${BADGES[k].c}">${BADGES[k].emo} ${BADGES[k].ar}</span>`).join('')}</div>`:''}
+    ${ms.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${ms.join(' · ')}</div>`:'<div>مَا شَاءَ الله! كُلُّ النُّجُومِ فِي مَكَانِهَا 🌟</div>'}
+    ${g.seq?`<div class="card" style="--hc:var(--gold)"><div class="t">🌌 التَّحَدِّي الكَبِير <span class="en">Big challenge</span></div>اقْرَأِ السُّورَةَ كُلَّهَا غَيْبًا، آيَةً بَعْدَ آيَة! <span class="en blk">Recite the whole sūrah from memory!</span><div class="row" style="margin-top:6px"><button class="big-btn green" id="bigB">✓ قَرَأَهَا كُلَّهَا (+٣)</button></div></div>`:''}
+    ${hadithCard()}
+    <div class="card" style="--hc:var(--good)"><div class="t">🏠 تَحَدِّي البَيْت <span class="en">Home challenge</span></div>
+      اقْرَأْ آيَةَ اليَوْمِ ${ar(REPEAT)} مَرَّاتٍ لِأَهْلِكَ قَبْلَ النَّوْم 🌙، وَاعْمَلْ حَرَكَةَ الوَصْفِ مَعَهُم! وَفِي الحِصَّةِ القَادِمَةِ نَبْدَأُ بِهَا: «النُّجُومُ تَخْتَفِي».
+      <span class="en blk">Read today's āyah ${REPEAT} times to your family before sleeping and teach them its move. Next class we start with "Vanishing stars".</span></div>
+    ${storyCard(false)}
+    <div class="row"><button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div></div>`;
+  const bg=$('#bigB');if(bg)bg.onclick=()=>{bg.remove();award(3)};
+  $('#againB').onclick=newGame;sfx.win();confetti(90);stage()}
+
+/* ---------- controls ---------- */
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',x===b));newGame()});
+$('#setSel').onchange=newGame;$('#teamSel').onchange=newGame;$('#newB').onclick=newGame;
+$('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;
+  if(e.key==='Enter'){const b=$('#nextB')||$('#okB')||$('#repB');if(b&&e.target!==b){e.preventDefault();b.click()}}});
+window.__t={SETS,BADGES,words};
+newGame();
+</script>
+<script>
+(function(){
+// Pen tools + whiteboard (claude/lesson-engine/wb.js)
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ hand:SV('<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V12M16 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L7 15"/>'),
+ pen:SV('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ hl:SV('<path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ erase:SV('<path d="M20 20H8l-5-5a2 2 0 0 1 0-2.8L12.2 3a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L13 20"/><path d="M6 11l7 7"/>'),
+ laser:SV('<circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'),
+ undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+ clear:SV('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'),
+ board:SV('<rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21l4-4 4 4"/>'),
+ close:SV('<path d="M6 6l12 12M18 6L6 18"/>')
+};
+const COLORS=['#C2453A','#14374A','#2E8B5A','#2F6FB3','#C9A35A','#FFFFFF'];
+const SIZES=[2.5,5,9];
+const tb=document.createElement('div');tb.id='tools';tb.hidden=true;tb.setAttribute('role','toolbar');tb.setAttribute('aria-label','أدوات الكتابة');
+tb.innerHTML=`
+ <button data-t="none" title="تحكم في الدرس (V / Esc)" aria-label="تحكم في الدرس">${IC.hand}</button>
+ <button data-t="pen" title="قلم (P)" aria-label="قلم">${IC.pen}</button>
+ <button data-t="hl" title="هايلايتر لتظليل الكلمات (H)" aria-label="هايلايتر">${IC.hl}</button>
+ <button data-t="erase" title="ممحاة (E)" aria-label="ممحاة">${IC.erase}</button>
+ <button data-t="laser" title="مؤشر ليزر (L)" aria-label="مؤشر ليزر">${IC.laser}</button>
+ <div class="sep"></div>
+ ${COLORS.map(c=>`<button class="sw" data-c="${c}" title="لون" aria-label="لون ${c}"><i style="background:${c}"></i></button>`).join('')}
+ <div class="sep"></div>
+ ${SIZES.map((s,i)=>`<button class="sz" data-s="${i}" title="سُمك" aria-label="سمك ${i+1}"><i style="width:${6+i*6}px;height:${6+i*6}px"></i></button>`).join('')}
+ <div class="sep"></div>
+ <button data-a="undo" title="تراجع (Ctrl+Z)" aria-label="تراجع">${IC.undo}</button>
+ <button data-a="clear" title="امسح كتابة هذه المحطة" aria-label="مسح">${IC.clear}</button>
+ <button data-a="board" title="سبورة بيضاء (W)" aria-label="سبورة بيضاء">${IC.board}</button>
+ <button data-a="close" title="إغلاق أدوات الكتابة (D)" aria-label="إغلاق">${IC.close}</button>`;
+document.body.appendChild(tb);
+const board=document.createElement('div');board.id='wbBoard';board.hidden=true;board.innerHTML='<span class="bt">سبورة بيضاء · Whiteboard</span>';document.body.appendChild(board);
+const lz=document.createElement('canvas');lz.id='wbLaser';document.body.appendChild(lz);const lctx=lz.getContext('2d');
+let tool='none',color=COLORS[0],sizeI=1,stage=0;
+const store={},backup={};
+const key=()=>stage+(board.hidden?'':'-wb');
+const list=()=>store[key()]||(store[key()]=[]);
+function lw(s,pr){return s.t==='hl'?s.w*5:s.w*(0.45+1.1*(pr==null?.5:pr))}
+function seg(c,s,i){const p=s.pts,a=p[i-1],b=p[i];const m0=i===1?a:[(p[i-2][0]+a[0])/2,(p[i-2][1]+a[1])/2];const m1=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ c.lineWidth=lw(s,(a[2]+b[2])/2);c.beginPath();c.moveTo(m0[0],m0[1]);c.quadraticCurveTo(a[0],a[1],m1[0],m1[1]);c.stroke()}
+function drawStroke(c,s){const p=s.pts;if(!p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.c;c.fillStyle=s.c;
+ if(s.t==='hl'){c.globalAlpha=.35;c.lineWidth=lw(s);c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++){const m=[(p[i-1][0]+p[i][0])/2,(p[i-1][1]+p[i][1])/2];c.quadraticCurveTo(p[i-1][0],p[i-1][1],m[0],m[1])}c.lineTo(p[p.length-1][0],p[p.length-1][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]);c.stroke()}
+ else{if(p.length===1){c.beginPath();c.arc(p[0][0],p[0][1],lw(s,p[0][2])/2,0,7);c.fill()}else for(let i=1;i<p.length;i++)seg(c,s,i)}
+ c.restore()}
+const cvs={};
+function makeCanvas(host,k){
+ const cv=document.createElement('canvas');cv.className='ink-cv';host.appendChild(cv);
+ const o={cv,ctx:cv.getContext('2d'),w:0,h:0,k};
+ o.fit=()=>{const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;o.w=r.width;o.h=r.height;cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));o.ctx.setTransform(d,0,0,d,0,0);o.redraw()};
+ o.redraw=extra=>{o.ctx.clearRect(0,0,o.w,o.h);(store[o.k()]||[]).forEach(s=>drawStroke(o.ctx,s));if(extra)drawStroke(o.ctx,extra)};
+ bind(o);return o;
+}
+function stageCanvas(i){
+ if(cvs[i])return cvs[i];const sec=document.getElementById('s'+i);if(!sec)return null;
+ const o=makeCanvas(sec,()=>String(i));new ResizeObserver(()=>o.fit()).observe(sec);return cvs[i]=o;
+}
+const bcv=makeCanvas(board,()=>stage+'-wb');
+const active=()=>board.hidden?stageCanvas(stage):bcv;
+function redraw(){const a=active();if(a)a.redraw()}
+let cur=null,erasing=false,trail=[];
+function bind(o){
+ const cv=o.cv;
+ const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?(e.pressure||.5):.5]};
+ const eraseAt=(x,y)=>{const L=store[o.k()]||[],r=14;let ch=false;for(let i=L.length-1;i>=0;i--){if(L[i].pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<r+lw(L[i],p[2])/2)){L.splice(i,1);ch=true}}if(ch)o.redraw()};
+ cv.addEventListener('pointerdown',e=>{if(tool==='none')return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=pos(e);
+  erasing=tool==='erase'||e.button===5||!!(e.buttons&32);
+  if(tool==='laser'){trail=[[e.clientX,e.clientY,performance.now()]];return}
+  if(erasing){eraseAt(p[0],p[1]);return}
+  cur={t:tool,c:color,w:SIZES[sizeI],pts:[p]};if(tool==='pen')drawStroke(o.ctx,cur)});
+ cv.addEventListener('pointermove',e=>{if(tool==='none')return;const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce.length?ce:[e];
+  if(tool==='laser'){trail.push([e.clientX,e.clientY,performance.now()]);return}
+  if(!e.buttons)return;
+  for(const ev of evs){const p=pos(ev);if(erasing){eraseAt(p[0],p[1]);continue}if(!cur)continue;const l=cur.pts[cur.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])<1.2)continue;cur.pts.push(p);
+   if(cur.t==='pen'){o.ctx.save();o.ctx.lineCap='round';o.ctx.strokeStyle=cur.c;seg(o.ctx,cur,cur.pts.length-1);o.ctx.restore()}}
+  if(cur&&cur.t==='hl')o.redraw(cur)});
+ const up=()=>{if(cur){(store[o.k()]||(store[o.k()]=[])).push(cur);cur=null;o.redraw()}erasing=false};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(tool==='laser')trail.push(null)});
+ cv.addEventListener('contextmenu',e=>{if(tool!=='none')e.preventDefault()});
+}
+function fitLaser(){const d=window.devicePixelRatio||1;lz.width=innerWidth*d;lz.height=innerHeight*d;lctx.setTransform(d,0,0,d,0,0)}
+fitLaser();
+(function loop(){const now=performance.now();lctx.clearRect(0,0,innerWidth,innerHeight);
+ if(tool==='laser'){trail=trail.filter(p=>p&&now-p[2]<450);for(let i=1;i<trail.length;i++){const a=trail[i-1],b=trail[i],k=1-(now-b[2])/450;lctx.strokeStyle=`rgba(255,40,40,${.7*k})`;lctx.lineWidth=8*k+2;lctx.lineCap='round';lctx.beginPath();lctx.moveTo(a[0],a[1]);lctx.lineTo(b[0],b[1]);lctx.stroke()}
+  const t=trail[trail.length-1];if(t){lctx.fillStyle='rgba(255,40,40,.25)';lctx.beginPath();lctx.arc(t[0],t[1],16,0,7);lctx.fill();lctx.fillStyle='#FF2A2A';lctx.beginPath();lctx.arc(t[0],t[1],7,0,7);lctx.fill()}}
+ requestAnimationFrame(loop)})();
+function markCurrent(){Object.entries(cvs).forEach(([i,o])=>o.cv.classList.toggle('cur',+i===stage))}
+function setTool(t){tool=t;if(t!=='laser')trail=[];
+ document.body.classList.toggle('ink-on',t!=='none');document.body.classList.toggle('ink-erase',t==='erase');document.body.classList.toggle('ink-laser',t==='laser');
+ if(t!=='none'){const a=stageCanvas(stage);if(a&&!a.w)a.fit()}markCurrent();
+ tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setColor(c){color=c;tb.querySelectorAll('.sw').forEach(b=>b.classList.toggle('on',b.dataset.c===c));if(tool==='none'||tool==='erase'||tool==='laser')setTool('pen')}
+function setSize(i){sizeI=i;tb.querySelectorAll('.sz').forEach(b=>b.classList.toggle('on',+b.dataset.s===i))}
+function openTools(open){tb.hidden=!open;if(open){if(tool==='none')setTool('pen')}else{setTool('none');if(!board.hidden)toggleBoard()}if(dbtn)dbtn.classList.toggle('on',open)}
+function toggleBoard(){board.hidden=!board.hidden;tb.querySelector('[data-a="board"]').classList.toggle('on',!board.hidden);if(!board.hidden){bcv.fit();if(tool==='none')setTool('pen')}redraw()}
+function undo(){const L=list();if(L.length)L.pop();else if(backup[key()]){store[key()]=backup[key()];delete backup[key()]}redraw()}
+function clearAll(){const L=list();if(!L.length)return;backup[key()]=L.slice();store[key()]=[];redraw()}
+tb.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)setTool(b.dataset.t);else if(b.dataset.c)setColor(b.dataset.c);else if(b.dataset.s)setSize(+b.dataset.s);
+ else if(b.dataset.a==='undo')undo();else if(b.dataset.a==='clear')clearAll();else if(b.dataset.a==='board')toggleBoard();else if(b.dataset.a==='close')openTools(false)});
+let dbtn=null;
+document.addEventListener('lesson:stage',e=>{
+ if(!dbtn){const row=document.querySelector('.top-row');if(row){dbtn=document.createElement('button');dbtn.id='drawB';dbtn.className='tbtn';dbtn.innerHTML='✏️ قلم / سبورة';dbtn.title='أدوات الكتابة (D)';
+  dbtn.onclick=()=>openTools(tb.hidden);row.appendChild(dbtn)}}
+ stage=e.detail;
+ if(!board.hidden){board.hidden=true;tb.querySelector('[data-a="board"]').classList.remove('on')}
+ if(store[String(stage)]||tool!=='none'){const o=stageCanvas(stage);if(o)requestAnimationFrame(()=>o.fit())}
+ markCurrent();
+});
+window.addEventListener('resize',()=>{fitLaser();if(!board.hidden)bcv.fit()});
+setColor(COLORS[0]);setTool('none');setSize(1);
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();
+ if((e.ctrlKey||e.metaKey)&&k==='z'){if(!tb.hidden){e.preventDefault();undo()}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(k==='d'){openTools(tb.hidden);return}
+ if(tb.hidden&&!['p','h','w','l'].includes(k))return;
+ if(k==='p'){openTools(true);setTool('pen')}else if(k==='h'){openTools(true);setTool('hl')}else if(k==='e'&&!tb.hidden)setTool('erase')
+ else if(k==='l'){openTools(true);setTool('laser')}else if(k==='v'||k==='escape')setTool('none');else if(k==='w'){openTools(true);toggleBoard()}});
+})();
+document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
+</script>
+</body></html>
+
+<!--tq-home--><a href="../" id="tqHome" title="كل الألعاب" aria-label="كل الألعاب" style="position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:75;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0B1E2D;border:2px solid #E2B85C;font-size:20px;text-decoration:none;opacity:.75;box-shadow:0 4px 12px rgba(0,0,0,.3)">🏠</a>
+</body></html>

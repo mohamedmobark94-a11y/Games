@@ -1,0 +1,554 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>غض البصر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout: one-column "journey" in the course's navy & gold — sticky progress header, one station at a time, fixed bottom nav. */
+:root{
+  --bg:#F4F5F8; --surface:#FFFFFF; --ink:#141C33; --muted:#59617A; --line:#D8DCE6;
+  --accent:#1B2A55; --accent-ink:#1B2A55; --accent-soft:#9AA6C8; --accent-wash:#EBEEF6; --on-accent:#F6E7B8;
+  --star:#C9A227; --star-ink:#8C6D0E; --note-bg:#FAF3DE;
+  --good:#2E8B57; --good-bg:#E4F4EA; --good-ink:#1E6B41; --bad:#C2413A; --bad-bg:#FBE7E5; --bad-ink:#9A2C26;
+  --f-display:"Reem Kufi",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic",ui-sans-serif,system-ui,sans-serif;
+  --f-quran:"Amiri Quran","Amiri",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1022; --surface:#131A33; --ink:#E7EAF3; --muted:#A2A9C0; --line:#28304D;
+  --accent:#D4AF37; --accent-ink:#E9C964; --accent-soft:#6B5A22; --accent-wash:#1D2441; --on-accent:#141C33;
+  --star:#E2BC48; --star-ink:#F0D074; --note-bg:#2A2412;
+  --good:#4CC384; --good-bg:#14301F; --good-ink:#8BE0B1; --bad:#E5685F; --bad-bg:#3A1A18; --bad-ink:#F4A39C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1022; --surface:#131A33; --ink:#E7EAF3; --muted:#A2A9C0; --line:#28304D;
+  --accent:#D4AF37; --accent-ink:#E9C964; --accent-soft:#6B5A22; --accent-wash:#1D2441; --on-accent:#141C33;
+  --star:#E2BC48; --star-ink:#F0D074; --note-bg:#2A2412;
+  --good:#4CC384; --good-bg:#14301F; --good-ink:#8BE0B1; --bad:#E5685F; --bad-bg:#3A1A18; --bad-ink:#F4A39C; color-scheme:dark}
+.hero-eye{display:block;margin:6px auto 14px;width:min(260px,70%);height:auto}
+.words{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.gloss p{font-size:.95rem}
+.word-line{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:.95rem;color:var(--muted);margin-top:-6px}
+.word-line b{font-family:var(--f-quran);font-size:1.25rem;color:var(--accent-ink);font-weight:400}
+.weapon{display:flex;gap:12px;align-items:flex-start}
+.weapon .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-family:var(--f-display)}
+.weapon div{min-width:0}
+.scene{font-size:1.05rem}
+.scene .tag{display:inline-block;font-size:.78rem;background:var(--accent-wash);color:var(--accent-ink);border-radius:999px;padding:0 10px;margin-bottom:6px}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.8;direction:rtl}
+.app{max-width:880px;margin:0 auto;padding-inline:16px;padding-block:0 96px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 10px;border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-size:1.15rem;color:var(--accent-ink);margin:0;flex:1 1 200px;min-width:0;line-height:1.4}
+.brand small{display:block;font-family:var(--f-body);font-size:.78rem;color:var(--muted);font-weight:400}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:.85rem;color:var(--muted);background:var(--surface);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip.stars{color:var(--star-ink);border-color:var(--star);font-weight:700}
+.tbtn{font:inherit;font-size:.82rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:2px 12px;cursor:pointer}
+.tbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.progress{display:flex;gap:4px;margin-top:10px}
+.progress button{flex:1;height:8px;border:0;border-radius:4px;background:var(--line);cursor:pointer;padding:0}
+.progress button.done{background:var(--accent-soft)}
+.progress button.on{background:var(--accent)}
+.stage{padding-block:24px 8px;animation:in .35s ease}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stage-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.stage-head .n{font-family:var(--f-display);color:var(--accent);font-size:.95rem}
+.stage-head h2{font-family:var(--f-display);font-size:clamp(1.5rem,4.5vw,2.1rem);line-height:1.35;margin:0;text-wrap:balance;flex:1 1 260px}
+.guide{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-block:8px 18px}
+.guide svg{flex:0 0 44px;width:44px;height:44px}
+.guide p{margin:0;min-width:0}
+.guide b{color:var(--accent-ink)}
+.tnote{display:none;border-inline-start:4px solid var(--star);background:var(--note-bg);padding:10px 14px;border-radius:8px;font-size:.92rem;margin-block:10px}
+body.teacher .tnote{display:block}
+.tnote::before{content:"ملاحظة للمعلم: ";font-weight:700;color:var(--star-ink)}
+.en{display:none;font-family:system-ui,sans-serif;direction:ltr;unicode-bidi:isolate;font-size:.8em;color:var(--muted)}
+body.show-en .en{display:inline}
+body.show-en .en.blk{display:block}
+h3{font-family:var(--f-display);font-size:1.25rem;margin:22px 0 8px;color:var(--accent-ink);line-height:1.4}
+p{margin:0 0 12px;max-width:65ch}
+.big{font-size:1.25rem}
+.quran{font-family:var(--f-quran);font-size:clamp(1.6rem,5vw,2.2rem);line-height:2.2;text-align:center;padding:18px 12px;margin:14px 0;border-block:1px solid var(--line);color:var(--ink)}
+.quran .ref,.hadith .ref{display:block;font-family:var(--f-body);font-size:.85rem;color:var(--muted);line-height:1.6}
+.hadith{font-family:var(--f-quran);font-size:1.45rem;line-height:2;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-block:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.card h4{margin:0 0 4px;font-family:var(--f-display);font-size:1.1rem;color:var(--accent-ink)}
+.card p{margin:0}
+.flip{cursor:pointer;min-height:130px;display:flex;flex-direction:column;justify-content:center;text-align:center;user-select:none;transition:background .2s}
+.flip .back{display:none}
+.flip.open{background:var(--accent-wash)}
+.flip.open .front{display:none}
+.flip.open .back{display:block}
+.flip .front{font-family:var(--f-quran);font-size:1.9rem}
+.flip .hint{font-size:.78rem;color:var(--muted)}
+.widget{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-block:16px}
+.widget .q{font-weight:700;margin-bottom:10px}
+.widget .q .ar{font-family:var(--f-quran);font-size:1.5rem;font-weight:400}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button,.pool button,.order-pool button,.go{font:inherit;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:8px 16px;cursor:pointer;min-height:44px;transition:transform .1s,background .2s,border-color .2s}
+.opts button:hover,.pool button:hover,.order-pool button:hover{border-color:var(--accent)}
+.opts button:focus-visible,.pool button:focus-visible,.tbtn:focus-visible,.nav button:focus-visible,.progress button:focus-visible,.bin:focus-visible,.go:focus-visible{outline:3px solid var(--star);outline-offset:2px}
+.opts .letter{font-family:var(--f-quran);font-size:1.8rem;min-width:64px;padding:2px 14px}
+.opts button.right{background:var(--good-bg);border-color:var(--good);color:var(--good-ink)}
+.opts button.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad-ink)}
+.why{display:none;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--accent-wash);font-size:.95rem}
+.widget.answered .why{display:block}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(5px)}75%{transform:translateX(-5px)}}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px}
+.bin{border:2px dashed var(--line);border-radius:12px;padding:8px;min-height:90px;cursor:pointer;background:var(--bg);display:flex;flex-direction:column;gap:6px}
+.bin>b{font-family:var(--f-display);font-size:.95rem;color:var(--bin-c,var(--accent-ink))}
+.bin.armed{border-color:var(--accent);background:var(--accent-wash)}
+.bin .placed{font-family:var(--f-quran);font-size:1.15rem;line-height:1.7}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.pool button{font-family:var(--f-quran);font-size:1.3rem;padding:4px 14px}
+.pool button.sel{border-color:var(--accent);background:var(--accent-wash);transform:translateY(-2px)}
+.order-slots{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.order-slots span{border:1.5px dashed var(--line);border-radius:10px;padding:6px 12px;min-width:70px;text-align:center;color:var(--muted)}
+.order-slots span.f{border-style:solid;border-color:var(--good);color:var(--good-ink);background:var(--good-bg)}
+.order-slots i{font-style:normal;color:var(--muted)}
+.done-msg{display:none;margin-top:10px;font-weight:700;color:var(--good-ink)}
+.widget.complete .done-msg{display:block}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:6;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.nav-in{max-width:880px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nav button{font:inherit;font-weight:700;border-radius:12px;padding:10px 20px;cursor:pointer;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);min-height:46px}
+.nav .next{background:var(--accent);color:var(--on-accent);border-color:var(--accent);margin-inline-start:auto}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav .where{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.starpop{position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);font-family:var(--f-display);font-size:2rem;color:var(--star-ink);background:var(--surface);border:2px solid var(--star);border-radius:999px;padding:6px 22px;pointer-events:none;animation:pop 1s ease forwards;z-index:9}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}25%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-80%)}}
+.result{text-align:center;padding:20px;border:2px solid var(--star);border-radius:20px;background:var(--surface);margin-block:12px}
+.result .score{font-family:var(--f-display);font-size:3rem;color:var(--star-ink);font-variant-numeric:tabular-nums;line-height:1.3}
+table.sum{width:100%;border-collapse:collapse;font-size:.95rem}
+table.sum th,table.sum td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:start;vertical-align:top}
+table.sum th{font-family:var(--f-display);color:var(--accent-ink);font-weight:400}
+.tw{overflow-x:auto}
+ul.clean{padding-inline-start:20px;margin:0 0 12px}
+ul.clean li{margin-bottom:4px}
+.check label{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:520px){body{font-size:16px}.nav button{padding:10px 14px}.nav .where{display:none}}
+/* Pen tools & whiteboard (same design as the "عينك أمانة" deck) */
+.stage{position:relative}
+.ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45;pointer-events:none;touch-action:none}
+body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
+body.ink-erase .ink-cv{cursor:cell!important}
+body.ink-laser .ink-cv{cursor:none!important}
+#wbLaser{position:fixed;inset:0;width:100%;height:100%;z-index:66;pointer-events:none}
+#wbBoard{position:fixed;inset:0;z-index:60;background-color:#FDFCF8;background-image:linear-gradient(#E6ECEF 1px,transparent 1px),linear-gradient(90deg,#E6ECEF 1px,transparent 1px);background-size:40px 40px}
+#wbBoard[hidden]{display:none!important}
+#wbBoard .bt{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font:700 18px/1 var(--f-body);color:#86662A;background:#FBF3E1;border:1px solid #EBDDBB;border-radius:20px;padding:8px 16px;z-index:2;pointer-events:none;white-space:nowrap}
+#tools{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:5px;background:rgba(7,23,33,.95);border:1px solid #C9A35A;border-radius:16px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#tools button{width:42px;height:42px;border-radius:10px;border:1px solid #24485A;background:#12303F;color:#E8F1F5;display:grid;place-items:center;padding:0;cursor:pointer}
+#tools button svg{width:22px;height:22px}
+#tools button.on{background:#C9A35A;color:#0B2431;border-color:#C9A35A}
+#tools button:focus-visible{outline:3px solid #C9A35A;outline-offset:2px}
+#tools .sw i{width:22px;height:22px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.6)}
+#tools .sw.on{background:#24485A;border-color:#C9A35A}
+#tools .sz i{display:block;border-radius:50%;background:#E8F1F5}
+#tools .sep{height:1px;background:#2A5266;margin:2px 0}
+#tools[hidden]{display:none!important}
+@media (max-height:980px){#tools{gap:4px;padding:6px}#tools button{width:34px;height:34px}#tools button svg{width:18px;height:18px}#tools .sw i{width:18px;height:18px}}
+@media (max-height:800px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+#drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
+
+</style>
+<div class="app" id="app" dir="rtl" lang="ar"></div>
+<script>
+(function(){
+const mcq=(key,q,opts,a,why)=>`<div class="widget w-mcq" data-key="${key}" data-a="${a}"><div class="q">${q}</div><div class="opts">${opts.map(o=>`<button>${o}</button>`).join('')}</div><div class="why">${why}</div></div>`;
+const en=t=>` <span class="en">${t}</span>`;
+const scene=(key,tag,txt,opts,a,why)=>mcq(key,`<div class="scene"><span class="tag">${tag}</span><br>${txt}</div>`,opts,a,why);
+const eye=`<svg class="hero-eye" viewBox="0 0 260 170" aria-hidden="true">
+ <path d="M20 60 Q130 -10 240 60 Q130 130 20 60Z" fill="var(--surface)" stroke="var(--accent)" stroke-width="4"/>
+ <circle cx="130" cy="60" r="26" fill="var(--accent)"/><circle cx="130" cy="60" r="10" fill="var(--star)"/>
+ <path d="M130 100 V128" stroke="var(--star)" stroke-width="3" stroke-dasharray="5 6"/>
+ <path d="M130 166 C100 146 92 134 102 124 C110 116 122 120 130 130 C138 120 150 116 158 124 C168 134 160 146 130 166Z" fill="var(--star)"/>
+</svg>`;
+
+window.LESSON={
+title:'غضّ البصر',
+sub:'فقه الشباب في سؤال وجواب · ترتيل القرآن | Tarteel Al-Quran',
+guideSvg:'<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="var(--accent)"/><path d="M30 12 A13 13 0 1 0 30 36 A10 10 0 1 1 30 12Z" fill="var(--star)"/><path d="M33 19 l1.5 3.2 3.5.4-2.6 2.4.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.6-2.4 3.5-.4Z" fill="var(--star)"/></svg>',
+stages:[
+{title:'مرحبًا يا بطل', min:2,
+ guide:'اليوم نتكلم عن <b>العين</b>: نعمة كبيرة من الله، وكيف نحفظها.'+en('Today: the eye, a big blessing from Allah, and how to protect it.'),
+ note:'الطالب في سن ١٤ وعربيته ضعيفة: اقرأ كل جملة ببطء، واستعمل زر English عند الحاجة فقط.',
+ html:`${eye}
+ <h3>في نهاية الدرس سأعرف:</h3>
+ <ul class="clean">
+  <li>ما معنى غض البصر؟${en('What lowering the gaze means')}</li>
+  <li>الدليل من القرآن والسنة${en('The proof from Quran and Sunnah')}</li>
+  <li>لماذا أمرنا الله به؟${en('Why Allah commanded it')}</li>
+  <li>ماذا أفعل إذا رأيت شيئًا حرامًا؟${en('What to do if I see something haram')}</li>
+  <li>كيف أحفظ عيني مع الهاتف والإنترنت؟${en('How to protect my eyes online')}</li>
+ </ul>`},
+
+{title:'سؤال للبداية', min:3,
+ guide:'سؤال سريع، لا توجد إجابة خطأ هنا. قل الحقيقة!'+en('Quick question. No wrong answer here.'),
+ note:'استمع للطالب بدون لوم. الهدف أن يرى بنفسه كم صورة تمر أمام عينه كل يوم.',
+ html:`
+ <div class="widget w-poll"><div class="q">كم ساعة تستخدم الهاتف أو الشاشة كل يوم؟${en('How many hours a day on screens?')}</div>
+  <div class="opts"><button>أقل من ساعة</button><button>١–٣ ساعات</button><button>٣–٥ ساعات</button><button>أكثر من ٥</button></div>
+  <div class="why">في كل ساعة تمر أمام عينك <b>مئات الصور</b>. بعضها جميل، وبعضها لا يرضي الله. والعين هي <b>باب القلب</b>: ما يدخل منها يبقى في القلب.${en('Every hour, hundreds of images pass before your eyes. The eye is the door to the heart.')}</div></div>
+ ${mcq('g1','ما يدخل من العين يصل إلى…؟'+en('What enters the eye reaches…?'),['اليد','القلب','القدم'],1,'القلب. لذلك نحفظ الباب حتى نحفظ البيت.')}`},
+
+{title:'كلمات الدرس', min:3,
+ guide:'اضغط على كل بطاقة لترى معناها.'+en('Tap each card to see the meaning.'),
+ note:'اطلب من الطالب أن يكرر كل كلمة بعدك مرتين.',
+ html:`<div class="words">
+  <div class="card flip"><div class="front">غَضُّ<div class="hint">اضغط</div></div><div class="back gloss"><p>أن تُنزِل عينك وتُبعدها.</p><span class="en blk">to lower</span></div></div>
+  <div class="card flip"><div class="front">البَصَر<div class="hint">اضغط</div></div><div class="back gloss"><p>النظر بالعين.</p><span class="en blk">sight, gaze</span></div></div>
+  <div class="card flip"><div class="front">أَزْكَى<div class="hint">اضغط</div></div><div class="back gloss"><p>أطهر وأنظف للقلب.</p><span class="en blk">purer</span></div></div>
+  <div class="card flip"><div class="front">الفُجَاءَة<div class="hint">اضغط</div></div><div class="back gloss"><p>شيء يأتي فجأة، بدون قصد.</p><span class="en blk">sudden, by accident</span></div></div>
+  <div class="card flip"><div class="front">الحَرَام<div class="hint">اضغط</div></div><div class="back gloss"><p>ما نهى الله عنه.</p><span class="en blk">forbidden</span></div></div>
+  <div class="card flip"><div class="front">مَسْئُول<div class="hint">اضغط</div></div><div class="back gloss"><p>سيسألك الله عنه يوم القيامة.</p><span class="en blk">will be asked about</span></div></div>
+ </div>
+ <div class="card" style="margin-top:14px"><h4>غضّ البصر</h4><p>أن تُبعد عينك عن <b>كل ما حرّم الله النظر إليه</b>.${en('Lowering the gaze = turning your eyes away from what Allah made haram to look at.')}</p></div>`},
+
+{title:'الآية: أمرٌ من الله', min:5,
+ guide:'هذا كلام الله. اقرأه مع المعلم ببطء.'+en('This is the word of Allah. Read it slowly with your teacher.'),
+ note:'ركّز على الكلمات الثلاث: يغضوا، أبصارهم، أزكى. لا تشرح «حفظ الفرج» تفصيلًا في هذا الدرس، يكفي: «يحفظون أنفسهم من الحرام».',
+ html:`
+ <div class="quran">قُل لِّلْمُؤْمِنِينَ يَغُضُّوا مِنْ أَبْصَارِهِمْ وَيَحْفَظُوا فُرُوجَهُمْ ۚ ذَٰلِكَ أَزْكَىٰ لَهُمْ ۗ إِنَّ اللَّهَ خَبِيرٌ بِمَا يَصْنَعُونَ<span class="ref">سورة النور: ٣٠</span></div>
+ <div class="word-line"><span><b>قُلْ</b> = يا محمد ﷺ، قل</span><span><b>يَغُضُّوا</b> = يُنزلوا</span><span><b>أَبْصَارِهِمْ</b> = عيونهم</span><span><b>أَزْكَىٰ</b> = أطهر</span><span><b>خَبِيرٌ</b> = يعرف كل شيء</span></div>
+ <h3>المعنى ببساطة</h3>
+ <ul class="clean">
+  <li>الله يأمر <b>المؤمنين</b> أن يُبعدوا عيونهم عن الحرام.${en('Allah commands the believers to turn their eyes from haram.')}</li>
+  <li>ويحفظوا أنفسهم من الحرام.</li>
+  <li>هذا <b>أطهر</b> لقلوبهم.${en('This is purer for their hearts.')}</li>
+  <li>الله <b>يعرف</b> كل ما نفعل، حتى لو لم يرنا أحد.${en('Allah knows everything we do.')}</li>
+ </ul>
+ <p>وفي الآية التي بعدها (النور: ٣١) أمر الله <b>المؤمنات</b> أيضًا بغض البصر. فهو أمر للجميع.</p>
+ ${mcq('g2','من الذي أمرنا بغض البصر؟'+en('Who commanded us?'),['أصدقائي','الله سبحانه وتعالى','المدرسة'],1,'الله بنفسه أمرنا في سورة النور.')}
+ ${mcq('g3','ماذا يحصل لقلبي عندما أغض بصري؟',['يصبح أطهر','يصبح حزينًا','لا شيء'],0,'﴿ذَٰلِكَ أَزْكَىٰ لَهُمْ﴾: أطهر لقلوبهم.')}`},
+
+{title:'لماذا أمرنا الله؟', min:4,
+ guide:'الحرام الكبير يبدأ بخطوة صغيرة: <b>نظرة</b>. رتّب الخطوات بالترتيب الصحيح.'+en('Big sins start with a small step: a look. Put the steps in order.'),
+ note:'بعد اللعبة اسأل: «أين أسهل مكان لنوقف الطريق؟» الجواب: عند الخطوة الأولى.',
+ html:`
+ <div class="widget w-order" data-key="g4"><div class="q">رتّب: كيف يبدأ الطريق إلى الحرام؟</div>
+  <div class="order-slots"></div>
+  <div class="order-pool opts"><button data-i="0">نظرة</button><button data-i="1">فكرة</button><button data-i="2">رغبة</button><button data-i="3">فعل</button></div>
+  <div class="done-msg">صحيح! وأسهل مكان لإيقاف الطريق هو الخطوة الأولى: النظرة.</div></div>
+ <h3>عينك أمانة</h3>
+ <div class="quran">إِنَّ السَّمْعَ وَالْبَصَرَ وَالْفُؤَادَ كُلُّ أُولَٰئِكَ كَانَ عَنْهُ مَسْئُولًا<span class="ref">سورة الإسراء: ٣٦</span></div>
+ <p>الله أعطاك العين، وسيسألك يوم القيامة: <b>ماذا نظرت بها؟</b>${en('Allah will ask you: what did you look at?')}</p>
+ <div class="quran">يَعْلَمُ خَائِنَةَ الْأَعْيُنِ وَمَا تُخْفِي الصُّدُورُ<span class="ref">سورة غافر: ١٩ — الله يعرف النظرة الخفية</span></div>`},
+
+{title:'النظرة الأولى', min:4,
+ guide:'إذا رأيت شيئًا حرامًا <b>بدون قصد</b>، ليس عليك ذنب. لكن لا تنظر <b>مرة ثانية</b>.'+en('An accidental first look is not a sin. But do not look again.'),
+ note:'هذه أهم قاعدة عملية في الدرس. اجعل الطالب يقولها بلسانه: «الأولى لي، والثانية عليّ».',
+ html:`
+ <div class="hadith">قال رسول الله ﷺ لعليّ رضي الله عنه: «يَا عَلِيُّ، لَا تُتْبِعِ النَّظْرَةَ النَّظْرَةَ، فَإِنَّ لَكَ الْأُولَى وَلَيْسَتْ لَكَ الْآخِرَةُ»<span class="ref">رواه أبو داود (٢١٤٩) والترمذي (٢٧٧٧)، وحسّنه الألباني</span></div>
+ <p><b>المعنى:</b> النظرة الأولى بدون قصد مسموحة. النظرة الثانية أنت اخترتها، فعليك ذنبها.${en('The first look is forgiven; the second one is your choice.')}</p>
+ <div class="hadith">عن جرير بن عبد الله رضي الله عنه قال: سَأَلْتُ رَسُولَ اللَّهِ ﷺ عَنْ نَظَرِ الْفُجَاءَةِ، فَأَمَرَنِي أَنْ أَصْرِفَ بَصَرِي<span class="ref">رواه مسلم (٢١٥٩)</span></div>
+ <p><b>المعنى:</b> إذا رأيت شيئًا فجأة، <b>اصرف عينك فورًا</b>.${en('If you see something suddenly, turn your eyes away immediately.')}</p>
+ ${mcq('g5','صح أم خطأ؟ النظرة الأولى بدون قصد عليّ فيها ذنب.',['صح','خطأ'],1,'خطأ. «لك الأولى»: لا ذنب فيها، لكن اصرف عينك فورًا.')}
+ ${mcq('g6','صح أم خطأ؟ إذا رأيت صورة حرامًا بالخطأ، يجوز أن أستمر في النظر لأنها جاءت بالخطأ.',['صح','خطأ'],1,'خطأ. الاستمرار نظرة ثانية، و«ليست لك الآخرة».')}`},
+
+{title:'ماذا تفعل؟', min:5,
+ guide:'مواقف من الحياة الحقيقية. اختر أفضل تصرف.'+en('Real-life situations. Choose the best action.'),
+ note:'ناقش كل موقف دقيقة. لا تجعل الطالب يشعر أنه متهم؛ الحديث عن «شاب» وليس عنه.',
+ html:`
+ ${scene('g7','في الشارع','تمشي في السوق، وفجأة ترى إعلانًا كبيرًا فيه صورة غير محترمة.',['أنظر قليلًا ثم أمشي','أصرف عيني فورًا وأكمل طريقي','أصوّره لأريه لأصدقائي'],1,'هذا هو أمر النبي ﷺ: «أن أصرف بصري».')}
+ ${scene('g8','في اللعبة','تلعب لعبة على الهاتف، وظهر إعلان فيه صورة غير مناسبة.',['أغلقه فورًا ولا أفتحه','أشاهده حتى ينتهي','أضغط عليه لأرى أكثر'],0,'أغلق الإعلان فورًا. وإذا تكرر كثيرًا، اطلب من والدك أن يغيّر الإعدادات أو يحذف اللعبة.')}
+ ${scene('g9','رسالة من صديق','صديقك أرسل رابطًا وقال: «شاهد هذا الفيديو!» وأنت تشك أنه سيئ.',['أفتحه لأعرف فقط','لا أفتحه، وأنصحه بكلمة طيبة','أرسله لصديق آخر'],1,'لا تفتح ما تشك فيه. والنصيحة اللطيفة لصديقك من حقه عليك.')}
+ ${scene('g10','بعد الخطأ','نظرت إلى شيء حرام، والآن قلبك حزين.',['أقول: انتهى الأمر، أنا شخص سيئ','أستغفر الله، وأتوب، ولا أكرر','لا يهم، الكل يفعل هذا'],1,'الله يحب التوابين. باب التوبة مفتوح دائمًا، والحزن على الذنب علامة إيمان.')}`},
+
+{title:'أسلحتك لحفظ عينك', min:2,
+ guide:'ستة أسلحة تساعدك كل يوم.'+en('Six tools to help you every day.'),
+ note:'اسأل الطالب: أي سلاح ستستخدمه هذا الأسبوع؟ واكتبه في ملاحظاته.',
+ html:`<div class="grid">
+  <div class="card weapon"><span class="num">١</span><div><h4>تذكّر أن الله يراك</h4><p class="ex" style="font-family:var(--f-quran);font-size:1.25rem">﴿أَلَمْ يَعْلَم بِأَنَّ اللَّهَ يَرَىٰ﴾</p><p style="font-size:.85rem;color:var(--muted)">العلق: ١٤</p></div></div>
+  <div class="card weapon"><span class="num">٢</span><div><h4>اصرف عينك فورًا</h4><p>لا تنتظر ثانية واحدة.</p></div></div>
+  <div class="card weapon"><span class="num">٣</span><div><h4>الهاتف في مكان عام</h4><p>استخدمه في غرفة فيها أهلك، لا وحدك في الليل.</p></div></div>
+  <div class="card weapon"><span class="num">٤</span><div><h4>املأ وقتك</h4><p>رياضة، قرآن، أصدقاء صالحون.</p></div></div>
+  <div class="card weapon"><span class="num">٥</span><div><h4>غض البصر من حق الطريق</h4><p>قال ﷺ عن حق الطريق: «غَضُّ الْبَصَرِ…» <span style="font-size:.85rem;color:var(--muted)">(البخاري ٢٤٦٥، مسلم ٢١٢١)</span></p></div></div>
+  <div class="card weapon"><span class="num">٦</span><div><h4>الدعاء</h4><p class="ex" style="font-family:var(--f-quran);font-size:1.2rem">«اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى»</p><p style="font-size:.85rem;color:var(--muted)">رواه مسلم (٢٧٢١)</p></div></div>
+ </div>
+ <div class="hadith">ومن السبعة الذين يظلهم الله في ظله يوم لا ظل إلا ظله: «وَشَابٌّ نَشَأَ فِي عِبَادَةِ اللَّهِ»<span class="ref">رواه البخاري (٦٦٠) ومسلم (١٠٣١)</span></div>`},
+
+{title:'الاختبار السريع', min:2,
+ guide:'أربعة أسئلة. نجمة لكل إجابة صحيحة من أول مرة!'+en('Four questions. A star for each first-try answer.'),
+ note:'',
+ html:`
+ ${mcq('q1','١. الآية الأساسية في غض البصر في سورة:',['البقرة','النور','الفاتحة'],1,'سورة النور، الآية ٣٠.')}
+ ${mcq('q2','٢. ماذا أفعل عند نظرة الفجأة؟',['أصرف بصري فورًا','أنظر مرة ثانية','أغمض عيني يومًا كاملًا'],0,'«فأمرني أن أصرف بصري» — رواه مسلم.')}
+ ${mcq('q3','٣. غض البصر أمر:',['للرجال فقط','للنساء فقط','للرجال والنساء'],2,'النور ٣٠ للمؤمنين، والنور ٣١ للمؤمنات.')}
+ ${mcq('q4','٤. أول خطوة في طريق الحرام:',['الفعل','النظرة','الرغبة'],1,'النظرة، لذلك نحفظ العين أولًا.')}`},
+
+{title:'نتيجتك وتحدي الأسبوع', min:0,
+ html:`
+ <div class="result"><div>نجومك</div><div class="score" id="res"></div><p id="resMsg" style="margin-inline:auto"></p></div>
+ <h3>تحدي ٧ أيام</h3>
+ <p>كل يوم تحفظ فيه عينك، ضع علامة. الله يرى تعبك.${en('Tick each day you protect your eyes.')}</p>
+ <div class="card check" id="chk">${['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'].map((d,i)=>`<label><input type="checkbox" id="d${i}"> ${d}</label>`).join('')}</div>
+ <h3>الواجب</h3>
+ <ul class="clean">
+  <li>احفظ آية <b>النور: ٣٠</b>.${en('Memorize An-Nur 30.')}</li>
+  <li>احفظ دعاء: «اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى».</li>
+  <li>اكتب ثلاثة أشياء ستفعلها لتحفظ عينك على الهاتف.${en('Write 3 things you will do to protect your eyes online.')}</li>
+ </ul>`,
+ onEnter:({earned,total,ar,$})=>{
+  $('#res').textContent=ar(earned)+' / '+ar(total);
+  const r=earned/total;
+  $('#resMsg').textContent=r>=.85?'ما شاء الله! بارك الله فيك يا بطل.':r>=.6?'أحسنت! راجع النقاط التي أخطأت فيها.':'بداية طيبة. نراجع معًا في الحصة القادمة إن شاء الله.';
+ }}
+],
+init:({$$})=>{
+  $$('.w-poll').forEach(w=>{const bs=$$('button',w);bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.classList.remove('right'));b.classList.add('right');w.classList.add('answered')})});
+  let saved={};try{saved=JSON.parse(localStorage.getItem('gaze-challenge')||'{}')}catch(e){}
+  $$('#chk input').forEach(c=>{c.checked=!!saved[c.id];c.onchange=()=>{saved[c.id]=c.checked;try{localStorage.setItem('gaze-challenge',JSON.stringify(saved))}catch(e){}}});
+}
+};
+})();
+
+</script>
+<script>
+(function(){
+// Pen tools + whiteboard, ported from the "عينك أمانة" deck to the scrolling lesson pages.
+// Ink lives inside each station (scrolls with the text); the whiteboard is a full-screen grid board.
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ hand:SV('<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V12M16 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L7 15"/>'),
+ pen:SV('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ hl:SV('<path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ erase:SV('<path d="M20 20H8l-5-5a2 2 0 0 1 0-2.8L12.2 3a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L13 20"/><path d="M6 11l7 7"/>'),
+ laser:SV('<circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'),
+ undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+ clear:SV('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'),
+ board:SV('<rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21l4-4 4 4"/>'),
+ close:SV('<path d="M6 6l12 12M18 6L6 18"/>')
+};
+const COLORS=['#C2453A','#14374A','#2E8B5A','#2F6FB3','#C9A35A','#FFFFFF'];
+const SIZES=[2.5,5,9];
+
+// toolbar
+const tb=document.createElement('div');tb.id='tools';tb.hidden=true;tb.setAttribute('role','toolbar');tb.setAttribute('aria-label','أدوات الكتابة');
+tb.innerHTML=`
+ <button data-t="none" title="تحكم في الدرس (V / Esc)" aria-label="تحكم في الدرس">${IC.hand}</button>
+ <button data-t="pen" title="قلم (P)" aria-label="قلم">${IC.pen}</button>
+ <button data-t="hl" title="هايلايتر لتظليل الكلمات (H)" aria-label="هايلايتر">${IC.hl}</button>
+ <button data-t="erase" title="ممحاة (E)" aria-label="ممحاة">${IC.erase}</button>
+ <button data-t="laser" title="مؤشر ليزر (L)" aria-label="مؤشر ليزر">${IC.laser}</button>
+ <div class="sep"></div>
+ ${COLORS.map(c=>`<button class="sw" data-c="${c}" title="لون" aria-label="لون ${c}"><i style="background:${c}"></i></button>`).join('')}
+ <div class="sep"></div>
+ ${SIZES.map((s,i)=>`<button class="sz" data-s="${i}" title="سُمك" aria-label="سمك ${i+1}"><i style="width:${6+i*6}px;height:${6+i*6}px"></i></button>`).join('')}
+ <div class="sep"></div>
+ <button data-a="undo" title="تراجع (Ctrl+Z)" aria-label="تراجع">${IC.undo}</button>
+ <button data-a="clear" title="امسح كتابة هذه المحطة" aria-label="مسح">${IC.clear}</button>
+ <button data-a="board" title="سبورة بيضاء (W)" aria-label="سبورة بيضاء">${IC.board}</button>
+ <button data-a="close" title="إغلاق أدوات الكتابة (D)" aria-label="إغلاق">${IC.close}</button>`;
+document.body.appendChild(tb);
+
+// whiteboard overlay + laser layer
+const board=document.createElement('div');board.id='wbBoard';board.hidden=true;board.innerHTML='<span class="bt">سبورة بيضاء · Whiteboard</span>';document.body.appendChild(board);
+const lz=document.createElement('canvas');lz.id='wbLaser';document.body.appendChild(lz);const lctx=lz.getContext('2d');
+
+let tool='none',color=COLORS[0],sizeI=1,stage=0;
+const store={},backup={};
+const key=()=>stage+(board.hidden?'':'-wb');
+const list=()=>store[key()]||(store[key()]=[]);
+
+function lw(s,pr){return s.t==='hl'?s.w*5:s.w*(0.45+1.1*(pr==null?.5:pr))}
+function seg(c,s,i){const p=s.pts,a=p[i-1],b=p[i];const m0=i===1?a:[(p[i-2][0]+a[0])/2,(p[i-2][1]+a[1])/2];const m1=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ c.lineWidth=lw(s,(a[2]+b[2])/2);c.beginPath();c.moveTo(m0[0],m0[1]);c.quadraticCurveTo(a[0],a[1],m1[0],m1[1]);c.stroke()}
+function drawStroke(c,s){const p=s.pts;if(!p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.c;c.fillStyle=s.c;
+ if(s.t==='hl'){c.globalAlpha=.35;c.lineWidth=lw(s);c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++){const m=[(p[i-1][0]+p[i][0])/2,(p[i-1][1]+p[i][1])/2];c.quadraticCurveTo(p[i-1][0],p[i-1][1],m[0],m[1])}c.lineTo(p[p.length-1][0],p[p.length-1][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]);c.stroke()}
+ else{if(p.length===1){c.beginPath();c.arc(p[0][0],p[0][1],lw(s,p[0][2])/2,0,7);c.fill()}else for(let i=1;i<p.length;i++)seg(c,s,i)}
+ c.restore()}
+
+// canvases: one per station + one on the board
+const cvs={};
+function makeCanvas(host,k){
+ const cv=document.createElement('canvas');cv.className='ink-cv';host.appendChild(cv);
+ const o={cv,ctx:cv.getContext('2d'),w:0,h:0,k};
+ o.fit=()=>{const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;o.w=r.width;o.h=r.height;cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));o.ctx.setTransform(d,0,0,d,0,0);o.redraw()};
+ o.redraw=extra=>{o.ctx.clearRect(0,0,o.w,o.h);(store[o.k()]||[]).forEach(s=>drawStroke(o.ctx,s));if(extra)drawStroke(o.ctx,extra)};
+ bind(o);return o;
+}
+function stageCanvas(i){
+ if(cvs[i])return cvs[i];const sec=document.getElementById('s'+i);if(!sec)return null;
+ const o=makeCanvas(sec,()=>String(i));new ResizeObserver(()=>o.fit()).observe(sec);return cvs[i]=o;
+}
+const bcv=makeCanvas(board,()=>stage+'-wb');
+const active=()=>board.hidden?stageCanvas(stage):bcv;
+function redraw(){const a=active();if(a)a.redraw()}
+
+let cur=null,erasing=false,trail=[];
+function bind(o){
+ const cv=o.cv;
+ const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?(e.pressure||.5):.5]};
+ const eraseAt=(x,y)=>{const L=store[o.k()]||[],r=14;let ch=false;for(let i=L.length-1;i>=0;i--){if(L[i].pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<r+lw(L[i],p[2])/2)){L.splice(i,1);ch=true}}if(ch)o.redraw()};
+ cv.addEventListener('pointerdown',e=>{if(tool==='none')return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=pos(e);
+  erasing=tool==='erase'||e.button===5||!!(e.buttons&32);
+  if(tool==='laser'){trail=[[e.clientX,e.clientY,performance.now()]];return}
+  if(erasing){eraseAt(p[0],p[1]);return}
+  cur={t:tool,c:color,w:SIZES[sizeI],pts:[p]};if(tool==='pen')drawStroke(o.ctx,cur)});
+ cv.addEventListener('pointermove',e=>{if(tool==='none')return;const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce.length?ce:[e];
+  if(tool==='laser'){trail.push([e.clientX,e.clientY,performance.now()]);return}
+  if(!e.buttons)return;
+  for(const ev of evs){const p=pos(ev);if(erasing){eraseAt(p[0],p[1]);continue}if(!cur)continue;const l=cur.pts[cur.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])<1.2)continue;cur.pts.push(p);
+   if(cur.t==='pen'){o.ctx.save();o.ctx.lineCap='round';o.ctx.strokeStyle=cur.c;seg(o.ctx,cur,cur.pts.length-1);o.ctx.restore()}}
+  if(cur&&cur.t==='hl')o.redraw(cur)});
+ const up=()=>{if(cur){(store[o.k()]||(store[o.k()]=[])).push(cur);cur=null;o.redraw()}erasing=false};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(tool==='laser')trail.push(null)});
+ cv.addEventListener('contextmenu',e=>{if(tool!=='none')e.preventDefault()});
+}
+
+function fitLaser(){const d=window.devicePixelRatio||1;lz.width=innerWidth*d;lz.height=innerHeight*d;lctx.setTransform(d,0,0,d,0,0)}
+fitLaser();
+(function loop(){const now=performance.now();lctx.clearRect(0,0,innerWidth,innerHeight);
+ if(tool==='laser'){trail=trail.filter(p=>p&&now-p[2]<450);for(let i=1;i<trail.length;i++){const a=trail[i-1],b=trail[i],k=1-(now-b[2])/450;lctx.strokeStyle=`rgba(255,40,40,${.7*k})`;lctx.lineWidth=8*k+2;lctx.lineCap='round';lctx.beginPath();lctx.moveTo(a[0],a[1]);lctx.lineTo(b[0],b[1]);lctx.stroke()}
+  const t=trail[trail.length-1];if(t){lctx.fillStyle='rgba(255,40,40,.25)';lctx.beginPath();lctx.arc(t[0],t[1],16,0,7);lctx.fill();lctx.fillStyle='#FF2A2A';lctx.beginPath();lctx.arc(t[0],t[1],7,0,7);lctx.fill()}}
+ requestAnimationFrame(loop)})();
+
+function markCurrent(){Object.entries(cvs).forEach(([i,o])=>o.cv.classList.toggle('cur',+i===stage))}
+function setTool(t){tool=t;if(t!=='laser')trail=[];
+ document.body.classList.toggle('ink-on',t!=='none');document.body.classList.toggle('ink-erase',t==='erase');document.body.classList.toggle('ink-laser',t==='laser');
+ if(t!=='none'){const a=stageCanvas(stage);if(a&&!a.w)a.fit()}markCurrent();
+ tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setColor(c){color=c;tb.querySelectorAll('.sw').forEach(b=>b.classList.toggle('on',b.dataset.c===c));if(tool==='none'||tool==='erase'||tool==='laser')setTool('pen')}
+function setSize(i){sizeI=i;tb.querySelectorAll('.sz').forEach(b=>b.classList.toggle('on',+b.dataset.s===i))}
+function openTools(open){tb.hidden=!open;if(open){if(tool==='none')setTool('pen')}else{setTool('none');if(!board.hidden)toggleBoard()}if(dbtn)dbtn.classList.toggle('on',open)}
+function toggleBoard(){board.hidden=!board.hidden;tb.querySelector('[data-a="board"]').classList.toggle('on',!board.hidden);if(!board.hidden){bcv.fit();if(tool==='none')setTool('pen')}redraw()}
+function undo(){const L=list();if(L.length)L.pop();else if(backup[key()]){store[key()]=backup[key()];delete backup[key()]}redraw()}
+function clearAll(){const L=list();if(!L.length)return;backup[key()]=L.slice();store[key()]=[];redraw()}
+tb.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)setTool(b.dataset.t);else if(b.dataset.c)setColor(b.dataset.c);else if(b.dataset.s)setSize(+b.dataset.s);
+ else if(b.dataset.a==='undo')undo();else if(b.dataset.a==='clear')clearAll();else if(b.dataset.a==='board')toggleBoard();else if(b.dataset.a==='close')openTools(false)});
+
+let dbtn=null;
+document.addEventListener('lesson:stage',e=>{
+ if(!dbtn){const row=document.querySelector('.top-row');if(row){dbtn=document.createElement('button');dbtn.id='drawB';dbtn.className='tbtn';dbtn.innerHTML='✏️ قلم / سبورة';dbtn.title='أدوات الكتابة (D)';
+  dbtn.onclick=()=>openTools(tb.hidden);row.appendChild(dbtn)}}
+ stage=e.detail;
+ if(!board.hidden){board.hidden=true;tb.querySelector('[data-a="board"]').classList.remove('on')}
+ if(store[String(stage)]||tool!=='none'){const o=stageCanvas(stage);if(o)requestAnimationFrame(()=>o.fit())}
+ markCurrent();
+});
+window.addEventListener('resize',()=>{fitLaser();if(!board.hidden)bcv.fit()});
+setColor(COLORS[0]);setTool('none');setSize(1);
+
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();
+ if((e.ctrlKey||e.metaKey)&&k==='z'){if(!tb.hidden){e.preventDefault();undo()}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(k==='d'){openTools(tb.hidden);return}
+ if(tb.hidden&&!['p','h','w','l'].includes(k))return;
+ if(k==='p'){openTools(true);setTool('pen')}else if(k==='h'){openTools(true);setTool('hl')}else if(k==='e'&&!tb.hidden)setTool('erase')
+ else if(k==='l'){openTools(true);setTool('laser')}else if(k==='v'||k==='escape')setTool('none');else if(k==='w'){openTools(true);toggleBoard()}});
+})();
+
+</script>
+<script>
+(function(){
+const L=window.LESSON, S=L.stages;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const hot=window.claude&&window.claude.hot;
+let cur=0, earned=new Set();
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+const app=$('#app');
+app.innerHTML=`
+<header class="top"><div class="top-row">
+  <h1 class="brand">${L.title}<small>${L.sub}</small></h1>
+  <span class="chip stars" aria-live="polite">★ <span id="sc">٠</span> / <span id="st">٠</span></span>
+  <span class="chip" id="mins"></span>
+  <button class="tbtn" id="enT" aria-pressed="false">English</button>
+  <button class="tbtn" id="tT" aria-pressed="false">ملاحظات المعلم</button>
+</div><div class="progress" id="prog"></div></header>
+<main id="stages"></main>`;
+const nav=document.createElement('nav');nav.className='nav';
+nav.innerHTML=`<div class="nav-in"><button class="prev" id="prev">→ السابق</button><span class="where" id="where"></span><button class="next" id="next">التالي ←</button></div>`;
+document.body.appendChild(nav);
+
+const main=$('#stages'), prog=$('#prog');
+const total=S.reduce((a,s)=>a+(s.min||0),0);
+S.forEach((s,i)=>{
+  const sec=document.createElement('section');sec.className='stage';sec.hidden=true;sec.id='s'+i;
+  sec.innerHTML=`<div class="stage-head"><span class="n">المحطة ${ar(i+1)}</span><h2>${s.title}</h2>${s.min?`<span class="chip">${ar(s.min)} د</span>`:''}</div>
+  ${s.guide?`<div class="guide">${L.guideSvg}<p>${s.guide}</p></div>`:''}
+  ${s.note?`<div class="tnote">${s.note}</div>`:''}
+  <div class="body">${s.html}</div>`;
+  main.appendChild(sec);
+  const b=document.createElement('button');b.title=s.title;b.setAttribute('aria-label','المحطة '+(i+1)+': '+s.title);b.onclick=()=>go(i);prog.appendChild(b);
+});
+
+function star(key){
+  if(!key||earned.has(key))return; earned.add(key); $('#sc').textContent=ar(earned.size);
+  const p=document.createElement('div');p.className='starpop';p.textContent='★ +١';document.body.appendChild(p);setTimeout(()=>p.remove(),1000);
+}
+function wrongFx(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
+
+// MCQ / true-false / letter pick
+$$('.w-mcq').forEach(w=>{
+  const a=+w.dataset.a, btns=$$('.opts button',w); let tries=0;
+  btns.forEach((b,i)=>b.onclick=()=>{
+    if(w.classList.contains('answered'))return;
+    tries++;
+    if(i===a){b.classList.add('right');w.classList.add('answered');if(tries===1)star(w.dataset.key);}
+    else{b.classList.add('wrong');wrongFx(b);if(tries>=2){btns[a].classList.add('right');w.classList.add('answered');}}
+  });
+});
+// sort into bins
+$$('.w-sort').forEach(w=>{
+  const pool=$('.pool',w), items=shuffle($$('button',pool)); items.forEach(b=>pool.appendChild(b));
+  let sel=null;
+  items.forEach(b=>b.onclick=()=>{items.forEach(x=>x.classList.remove('sel'));sel=b;b.classList.add('sel');$$('.bin',w).forEach(x=>x.classList.add('armed'))});
+  $$('.bin',w).forEach(bin=>{
+    bin.tabIndex=0;
+    const drop=()=>{
+      if(!sel)return;
+      if(sel.dataset.bin===bin.dataset.bin){const d=document.createElement('div');d.className='placed';d.innerHTML=sel.innerHTML;bin.appendChild(d);sel.remove();sel=null;$$('.bin',w).forEach(x=>x.classList.remove('armed'));
+        if(!$$('button',pool).length){w.classList.add('complete');star(w.dataset.key)}}
+      else{wrongFx(sel)}
+    };
+    bin.onclick=drop;bin.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();drop()}};
+  });
+});
+// order sequence
+$$('.w-order').forEach(w=>{
+  const pool=$('.order-pool',w), slots=$('.order-slots',w), items=$$('button',pool), n=items.length; let next=0;
+  slots.innerHTML=items.map((_,i)=>`<span>${ar(i+1)}</span>`).join('<i>←</i>');
+  shuffle(items).forEach(b=>pool.appendChild(b));
+  items.forEach(b=>b.onclick=()=>{
+    if(+b.dataset.i===next){const s=$$('span',slots)[next];s.textContent=b.textContent;s.classList.add('f');b.remove();next++;if(next===n){w.classList.add('complete');star(w.dataset.key)}}
+    else wrongFx(b);
+  });
+});
+// flip cards
+$$('.flip').forEach(c=>{c.tabIndex=0;c.setAttribute('role','button');const t=()=>c.classList.toggle('open');c.onclick=t;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}}});
+
+$('#st').textContent=ar($$('[data-key]').length);
+if(L.init)L.init({star,ar,$,$$});
+
+function go(i){
+  i=Math.max(0,Math.min(S.length-1,i)); cur=i;
+  $$('.stage').forEach((s,k)=>s.hidden=k!==i);
+  $$('#prog button').forEach((b,k)=>{b.className=k===i?'on':k<i?'done':''});
+  $('#prev').disabled=i===0; $('#next').disabled=i===S.length-1;
+  $('#where').textContent=`${ar(i+1)} من ${ar(S.length)}`;
+  const spent=S.slice(0,i).reduce((a,s)=>a+(s.min||0),0);
+  $('#mins').textContent=`الوقت: ${ar(spent)}–${ar(spent+(S[i].min||0))} من ${ar(total)} د`;
+  document.dispatchEvent(new CustomEvent('lesson:stage',{detail:i}));
+  if(S[i].onEnter)S[i].onEnter({earned:earned.size,total:$$('[data-key]').length,ar,$,$$});
+  window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
+}
+$('#prev').onclick=()=>go(cur-1); $('#next').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;if(e.key==='ArrowLeft')go(cur+1);if(e.key==='ArrowRight')go(cur-1)});
+const tog=(btn,cls)=>{btn.onclick=()=>{const on=document.body.classList.toggle(cls);btn.setAttribute('aria-pressed',on)}};
+tog($('#enT'),'show-en'); tog($('#tT'),'teacher');
+if(hot&&hot.snapshot)hot.snapshot(()=>({cur}));
+const start=d=>go((d&&d.cur)||0);
+hot&&hot.ready?hot.ready(start):start(hot&&hot.data||{});
+})();
+
+</script>
+
+<!--tq-home--><a href="../" id="tqHome" title="كل الألعاب" aria-label="كل الألعاب" style="position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:75;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0B1E2D;border:2px solid #E2B85C;font-size:20px;text-decoration:none;opacity:.75;box-shadow:0 4px 12px rgba(0,0,0,.3)">🏠</a>
+</body></html>
