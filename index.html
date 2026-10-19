@@ -29,7 +29,7 @@ body[data-age=adults]{--accent:var(--adults);--r:10px;--ico:1.7rem;--base:16.5px
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(1000px 520px at 80% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:var(--base);line-height:1.7;transition:font-size .2s}
+body{margin:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23E2B85C' stroke-opacity='.07' stroke-width='1'%3E%3Cpath d='M40 6l8.5 20.5L69 20l-6.5 20.5L74 40l-11.500 0 6.500 20.500L48.500 53.500 40 74l-8.500-20.500L11 60l6.500-20.500L6 40h11.500L11 19.500l20.500 6.500z'/%3E%3C/g%3E%3C/svg%3E"),radial-gradient(1000px 520px at 80% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:var(--base);line-height:1.7;transition:font-size .2s}
 html[lang=en] body{font-family:var(--f-en);line-height:1.6}
 html[lang=en] .logo,html[lang=en] h1,html[lang=en] h2,html[lang=en] h3{font-family:var(--f-en)}
 html[lang=ar] .en,html[lang=en] .ar{display:none!important}
@@ -51,7 +51,12 @@ html[lang=en] .brand{font-family:var(--f-en);font-size:1.2rem;font-weight:800}
 .btn.sm{min-height:40px;padding:4px 16px;font-size:.95rem}
 
 /* hero */
-.hero{display:grid;gap:14px;justify-items:center;text-align:center;padding-top:34px}
+.hero{position:relative;display:grid;gap:14px;justify-items:center;text-align:center;padding-top:34px;isolation:isolate}
+.hero::before{content:"";position:absolute;z-index:-1;top:-30px;left:50%;width:min(520px,90vw);aspect-ratio:1;transform:translateX(-50%);background:radial-gradient(circle,color-mix(in srgb,var(--accent) 22%,transparent) 0,transparent 62%);opacity:.8;pointer-events:none}
+.hero .orn{width:46px;height:46px;color:var(--accent);filter:drop-shadow(0 0 10px color-mix(in srgb,var(--accent) 55%,transparent))}
+.fade{animation:fadeup .6s both}.fade.d1{animation-delay:.08s}.fade.d2{animation-delay:.16s}.fade.d3{animation-delay:.24s}
+@keyframes fadeup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.sec-orn{display:flex;align-items:center;gap:12px;color:var(--accent)}.sec-orn::before,.sec-orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent)}
 .eyebrow{display:inline-block;background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);border:1px solid var(--accent);font-weight:800;font-size:.85rem;border-radius:999px;padding:0 14px}
 .hero h1{margin:0;font-size:clamp(1.9rem,5.6vw,3.2rem);line-height:1.3;max-width:20ch;text-wrap:balance}
 .hero h1 em{font-style:normal;color:var(--accent)}
@@ -68,7 +73,7 @@ p.sub{margin:0 0 14px;color:var(--muted)}
 .path{font:inherit;color:inherit;text-align:start;cursor:pointer;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:6px;transition:transform .15s,border-color .15s}
 .path:hover{transform:translateY(-3px);border-color:var(--c)}
 .path[aria-pressed=true]{border-color:var(--c);background:linear-gradient(160deg,color-mix(in srgb,var(--c) 22%,var(--card)),var(--card))}
-.path .ico{font-size:2.4rem;line-height:1}
+.path .ico{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;font-size:2.2rem;line-height:1;background:radial-gradient(circle at 30% 25%,color-mix(in srgb,var(--c) 45%,transparent),color-mix(in srgb,var(--c) 12%,transparent) 70%);box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 40%,transparent)}
 .path b{font-size:1.25rem}
 .path .age{color:var(--c);font-weight:800;font-size:.9rem}
 .path p{margin:0;color:var(--muted);font-size:.95rem}
@@ -100,11 +105,11 @@ p.sub{margin:0 0 14px;color:var(--muted)}
 
 /* cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-.card{position:relative;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:transform .15s,border-color .15s,box-shadow .15s}
+.card{--sc:var(--accent);position:relative;overflow:hidden;background:linear-gradient(180deg,color-mix(in srgb,var(--sc) 9%,var(--card)),var(--card) 55%);border:2px solid var(--line);border-top:5px solid var(--sc);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:transform .15s,border-color .15s,box-shadow .15s}
 .card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 24px rgb(0 0 0/.25)}
 .card.new{border-color:var(--gold)}
 .badge{position:absolute;top:12px;inset-inline-end:12px;background:var(--gold);color:var(--btn-ink);font-weight:800;font-size:.75rem;border-radius:999px;padding:0 10px}
-.card .ico{font-size:var(--ico);line-height:1}
+.card .ico{display:grid;place-items:center;width:calc(var(--ico) + 22px);height:calc(var(--ico) + 22px);border-radius:50%;font-size:var(--ico);line-height:1;background:radial-gradient(circle at 30% 25%,color-mix(in srgb,var(--sc) 38%,#fff 0%),color-mix(in srgb,var(--sc) 14%,transparent) 70%);box-shadow:0 0 0 2px color-mix(in srgb,var(--sc) 35%,transparent),0 6px 16px color-mix(in srgb,var(--sc) 25%,transparent)}
 .card h3{margin:0;font-family:var(--f-ar);font-size:1.5rem;line-height:1.3}
 .card h3 small{display:block;font-family:var(--f-en);font-size:.78rem;font-weight:600;color:var(--muted);direction:ltr;text-align:start}
 html[lang=en] .card h3{font-family:var(--f-en);font-size:1.2rem;font-weight:800}
@@ -131,7 +136,7 @@ footer a{color:var(--gold)}
 .fab svg{width:30px;height:30px}
 .toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:var(--btn-ink);font-weight:800;border-radius:999px;padding:6px 18px;z-index:40}
 @media (max-width:760px){.top2{grid-template-columns:1fr}.hero{padding-top:22px}.bar .btn .long{display:none}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.card:hover,.path:hover,.btn:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.card:hover,.path:hover,.btn:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -143,9 +148,10 @@ footer a{color:var(--gold)}
 
 <div class="wrap">
   <header class="hero">
-    <span class="eyebrow"><span class="ar">للناطقين بغير العربية · أطفال ومراهقون وكبار</span><span class="en">For non-Arabic speakers · kids, teens & adults</span></span>
-    <h1><span class="ar">تعلّم <em>القرآن</em> والعربية بالطريقة التي تناسب عمرك</span><span class="en">Learn <em>Qur'an</em> and Arabic in the way that suits your age</span></h1>
-    <p class="lead"><span class="ar">ألعاب تفاعلية مجانية، وحصص أونلاين فردية مع معلّم يتابع تقدّمك خطوة بخطوة.</span><span class="en">Free interactive games, plus one-to-one online classes with a teacher who follows your progress step by step.</span></p>
+    <svg class="orn fade" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M24 2l5.2 12.6L42 10l-4.600 12.800L46 24l-8.600 1.200L42 38l-12.800-4.600L24 46l-5.200-12.600L6 38l4.600-12.800L2 24l8.600-1.200L6 10l12.800 4.600z" opacity=".9"/><circle cx="24" cy="24" r="6" fill="var(--bg)"/></svg>
+    <span class="eyebrow fade d1"><span class="ar">للناطقين بغير العربية · أطفال ومراهقون وكبار</span><span class="en">For non-Arabic speakers · kids, teens & adults</span></span>
+    <h1 class="fade d2"><span class="ar">تعلّم <em>القرآن</em> والعربية بالطريقة التي تناسب عمرك</span><span class="en">Learn <em>Qur'an</em> and Arabic in the way that suits your age</span></h1>
+    <p class="lead fade d3"><span class="ar">ألعاب تفاعلية مجانية، وحصص أونلاين فردية مع معلّم يتابع تقدّمك خطوة بخطوة.</span><span class="en">Free interactive games, plus one-to-one online classes with a teacher who follows your progress step by step.</span></p>
     <div class="cta-row">
       <a class="btn wa" href="about.html#book">🎁 <span class="ar">احجز حصتك التجريبية المجانية</span><span class="en">Book your free trial class</span></a>
       <a class="btn ghost" href="#paths"><span class="ar">جرّب الألعاب مجانًا ↓</span><span class="en">Try the games free ↓</span></a>
@@ -262,7 +268,7 @@ function render(){
   $('count').textContent=list.length===src.length?'':t(`${num(list.length)} من ${num(src.length)}`,`${list.length} of ${src.length}`);
   $('grid').innerHTML=list.length?list.map(g=>{
     const nw=g.file&&isNew(g.date),s=SUBJ[g.subj];
-    return `<article class="card ${nw?'new':''}">${nw?`<span class="badge">${t('جديد','New')}</span>`:''}
+    return `<article class="card ${nw?'new':''}" style="--sc:${s?s.c:'var(--accent)'}">${nw?`<span class="badge">${t('جديد','New')}</span>`:''}
     <div class="ico" aria-hidden="true">${g.ico}</div>
     <h3>${L.lang==='ar'?g.ar:esc(g.en)}<small>${L.lang==='ar'?esc(g.en):g.ar}</small></h3>
     <div class="tags">${(g.age||[]).map(k=>AGE[k]?`<span class="tag" style="--c:${AGE[k].c}">${AGE[k].ico} ${t(AGE[k].ar,AGE[k].en)}</span>`:'').join('')}${s?`<span class="tag" style="--c:${s.c}">${s.ico} ${t(s.ar,s.en)}</span>`:''}</div>

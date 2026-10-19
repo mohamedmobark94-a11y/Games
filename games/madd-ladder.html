@@ -1,5 +1,6 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>سلم المدود</title>
+<link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
 <style>
@@ -106,10 +107,15 @@ body.show-en .ob .en{display:block}
 .meter h3{margin:0;font-size:1rem}
 .mbar{position:relative;height:42px;background:var(--card);border:2px solid var(--line);border-radius:12px;overflow:hidden;direction:rtl}
 .mbar .zone{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--ok) 22%,transparent);border-inline:2px dashed var(--ok)}
-.mbar .fill{position:absolute;top:6px;bottom:6px;right:0;width:0;border-radius:8px;background:var(--mc,var(--arid));opacity:.85}
+.mbar .fill{position:absolute;top:6px;bottom:6px;inset-inline-start:0;width:0;border-radius:8px;background:var(--mc,var(--arid));opacity:.85}
 .mbar .tick{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
 .mnums{position:relative;height:1.3em;font-size:.8rem;font-weight:800;color:var(--muted);direction:rtl}
 .mnums span{position:absolute;transform:translateX(50%)}
+body.show-en .mbar,body.show-en .mnums{direction:ltr}body.show-en .mnums span{transform:translateX(-50%)}
+body.show-en .brand small,body.show-en .info .bq{text-align:start}
+body.show-en .ob .en{font-size:1em;font-weight:700;color:inherit;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+body.show-en .ob small{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+body.show-en .info .bq{font-size:1.05rem;line-height:1.7}
 .mctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
 .hold{font:inherit;font-weight:800;font-size:1.05rem;border:0;border-radius:999px;min-height:56px;padding:4px 22px;background:var(--lazim);color:#fff;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 5px 0 #4A1010}
 .hold.on{transform:translateY(3px);box-shadow:0 2px 0 #4A1010;background:var(--muttasil)}
@@ -161,43 +167,43 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">سُلَّمُ <b>المُدُود</b> 🪜 <span class="en">The Madd Ladder</span><small>ترتيل القرآن · Tarteel Al-Quran — باب المد والقصر من «الوجيز في علم التجويد»</small></h1>
+    <h1 class="brand">سُلَّمُ <b>المُدُود</b> 🪜 <span class="en">The Madd Ladder</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — باب المد والقصر من «الوجيز في علم التجويد»</span><span class="ui-en">Tarteel Al-Quran — the chapter on madd and qasr (lengthening and shortening) from <i>Al-Wajiz fi 'Ilm at-Tajwid</i></span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
   <div class="bar">
-    <label for="modeSel">اللعبة:</label>
+    <label for="modeSel"><span class="ui-ar">اللعبة:</span><span class="ui-en">Game:</span></label>
     <select id="modeSel">
-      <option value="detect">🔎 مُحَقِّقُ المَدّ (ما نوعه؟ كم يُمَدّ؟)</option>
-      <option value="duel">⚔️ مُبَارَزَةُ السَّبَبَيْن (السلم + الفخاخ)</option>
-      <option value="fawatih">🔤 فَوَاتِحُ السُّوَر (الم، كهيعص…)</option>
+      <option value="detect" data-en="🔎 Madd Detective (which type? how long?)">🔎 مُحَقِّقُ المَدّ (ما نوعه؟ كم يُمَدّ؟)</option>
+      <option value="duel" data-en="⚔️ Duel of Two Causes (ladder + traps)">⚔️ مُبَارَزَةُ السَّبَبَيْن (السلم + الفخاخ)</option>
+      <option value="fawatih" data-en="🔤 Surah Openings (Alif-Lam-Mim, Kaf-Ha-Ya-Ayn-Sad…)">🔤 فَوَاتِحُ السُّوَر (الم، كهيعص…)</option>
     </select>
-    <label for="setSel">الأمثلة:</label>
+    <label for="setSel"><span class="ui-ar">الأمثلة:</span><span class="ui-en">Examples:</span></label>
     <select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams">فريقان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0">
     <div class="panel card" id="qa" aria-live="polite"></div>
     <div class="panel side">
-      <h2>🪜 مَرَاتِبُ المُدُود: مِنَ الأَقْوَى إِلَى الأَضْعَف <span class="en blk">Ranks of the madd: strongest at the top</span></h2>
+      <h2><span class="ui-ar">🪜 مَرَاتِبُ المُدُود: مِنَ الأَقْوَى إِلَى الأَضْعَف</span><span class="ui-en">🪜 Ranks of the madd: strongest at the top</span></h2>
       <div class="ladder" id="ladder"></div>
-      <div class="poem">أقوى المدود لازمٌ فما اتصل ۞ فعارضٌ فذو انفصالٍ فبدل<small>«لآلئ البيان» كما نقله المؤلف، ص ٣٤</small></div>
+      <div class="poem">أقوى المدود لازمٌ فما اتصل ۞ فعارضٌ فذو انفصالٍ فبدل<small><span class="ui-ar">«لآلئ البيان» كما نقله المؤلف، ص ٣٤</span><span class="ui-en">“Laʼāliʼ al-Bayān”, as quoted by the author, p. 34</span></small><span class="tr">“The strongest madd is lāzim, then muttaṣil, then ʿāriḍ, then munfaṣil, then badal.”</span></div>
       <div class="meter" id="meter">
-        <h3>⏱️ مِقْيَاسُ المَدّ: اِضْغَطْ وَاسْتَمِرَّ طُولَ المَدّ <span class="en blk">Stretch meter: hold while you stretch the sound</span></h3>
+        <h3><span class="ui-ar">⏱️ مِقْيَاسُ المَدّ: اِضْغَطْ وَاسْتَمِرَّ طُولَ المَدّ</span><span class="ui-en">⏱️ Stretch meter: press and hold for the length of the madd</span></h3>
         <div class="mbar" id="mbar"><div class="fill" id="mfill"></div></div>
         <div class="mnums" id="mnums"></div>
         <div class="mctl">
-          <button class="hold" id="holdB">✋ اِضْغَطْ وَمُدّ <span class="en" style="color:#fff">Hold &amp; stretch</span></button>
+          <button class="hold" id="holdB"><span class="ui-ar">✋ اِضْغَطْ وَمُدّ</span><span class="ui-en">✋ Press &amp; stretch</span></button>
           <span class="hand" id="hand" aria-hidden="true">✋</span>
-          <button class="tbtn" id="demoB">▶️ اِسْمَعِ الطُّول</button>
-          <label for="tempoSel" style="font-weight:700;font-size:.85rem">السُّرْعَة:</label>
-          <select id="tempoSel"><option value="650">تَرْتِيل (بطيء)</option><option value="500" selected>تَدْوِير (متوسط)</option><option value="380">حَدْر (سريع)</option></select>
+          <button class="tbtn" id="demoB"><span class="ui-ar">▶️ اِسْمَعِ الطُّول</span><span class="ui-en">▶️ Hear the length</span></button>
+          <label for="tempoSel" style="font-weight:700;font-size:.85rem"><span class="ui-ar">السُّرْعَة:</span><span class="ui-en">Speed:</span></label>
+          <select id="tempoSel"><option value="650" data-en="Tartīl (slow)">تَرْتِيل (بطيء)</option><option value="500" selected data-en="Tadwīr (medium)">تَدْوِير (متوسط)</option><option value="380" data-en="Ḥadr (fast)">حَدْر (سريع)</option></select>
         </div>
-        <div class="mres" id="mres">👋 حَرِّكْ يَدَكَ أُفُقِيًّا طُولَ المَدّ، وَعُدَّ بِقَبْضِ الأَصَابِع. <span class="en blk">Sweep your hand sideways while stretching; count by closing fingers.</span></div>
+        <div class="mres" id="mres"></div>
       </div>
       <div class="book" id="bookRef"></div>
     </div>
@@ -214,39 +220,48 @@ body.ink-laser .ink-cv{cursor:none!important}
    DUELS  = «مبارزة السببين» والفخاخ: {t, ref, causes:[نوعان], win} أو {t, ref, kind:'drop'|'change', counts}
    FAWATIH= فواتح السور: {t, ref, letters:[ {l, say, n} ]}   n = 0 / 2 / 46 (العين: ٤ أو ٦) / 6
    ============================================================ */
-const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب المد والقصر، ص ٢٨–٣٤ (بترقيم الشاملة آليًّا)'};
+const {U,R:RF,tr}=TQI;
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب المد والقصر، ص ٢٨–٣٤ (بترقيم الشاملة آليًّا)',
+  en:"Al-Wajiz fi 'Ilm at-Tajwid — Mahmud Sibawayh al-Badawi (d. 1415 AH)", refEn:'chapter on madd and qasr, pp. 28–34 (page numbers as auto-assigned by Shamela, not the printed edition)'};
+const BOOKU=()=>U(BOOK.ar+'، '+BOOK.ref,BOOK.en+', '+BOOK.refEn);
 const TYPES = {
   lazim:{ar:'مَدٌّ لَازِم',en:'Necessary madd',c:'var(--lazim)',counts:[6],cTxt:'٦',hukm:'اللُّزُوم',rank:1,
+    bqEn:'“A madd letter followed by a sukūn that is permanent both when continuing and when stopping… its length is six counts according to all reciters” (p. 31). It is either word-based and heavy (al-ḥāqqah), word-based and light (āl-ān), or letter-based in the surah openings (p. 32).',hukmEn:'Required (luzūm)',cEn:'6',whyFull:'Why 6? “Because all reciters keep it at six counts, to separate the two sākin letters” (p. 31).',
     bq:'«حرف مد أتى بعده سكون لازم وصلا ووقفا… ومقدار مده: ست حركات عند الجميع» (ص ٣١)، وهو كلمي مثقل (الْحَاقَّةُ) ومخفف (آلآن) وحرفي في فواتح السور (ص ٣٢).',
     why:'لِمَاذَا ٦؟ «لالتزام جميع القراء مده ست حركات للفصل بين الساكنين» (ص ٣١).',whyEn:'Why 6? To separate two sākin sounds.'},
   muttasil:{ar:'مَدٌّ مُتَّصِل',en:'Joined madd',c:'var(--muttasil)',counts:[4,5],cTxt:'٤ أَوْ ٥',hukm:'الوُجُوب',rank:2,
+    bqEn:'“A madd letter followed by a hamza joined to it in the same word… its length for Ḥafṣ is four counts, or five” (p. 29). When stopping on a final hamza (as in istiḥyā’), a third option is allowed: six counts (p. 29).',hukmEn:'Obligatory (wujūb)',cEn:'4 or 5',whyFull:'Why longer? “Because the madd letter is weak and the hamza is strong, so the madd is lengthened to support the weak letter beside the strong one” (p. 29).',
     bq:'«حرف مد أتى بعده همز متصل به في كلمة واحدة… مقدار مده عند حفص: أربع حركات، أو خمس» (ص ٢٩)، وإذا وُقف على همزة متطرفة (اسْتِحْيَاءٍ) جاز وجه ثالث: ست حركات (ص ٢٩).',
     why:'لِمَاذَا نَزِيدُه؟ «أن حرف المد ضعيف، والهمز قوي، فزيد في المد تقوية للضعيف عند مجاورة القوي» (ص ٢٩).',whyEn:'Why longer? The weak madd letter is strengthened next to the strong hamza.'},
   arid:{ar:'مَدٌّ عَارِضٌ لِلسُّكُون',en:'Madd at a stop',c:'var(--arid)',counts:[2,4,6],cTxt:'٢ أَوْ ٤ أَوْ ٦',hukm:'الجَوَاز',rank:3,
+    bqEn:'“A madd letter followed by a temporary sukūn that exists only because of stopping… Shortening: two counts. Medium: four counts. Full length: six” (p. 30). “The soft letter (līn) joins the temporary-sukūn madd when stopping… though lengthening is rarer for līn” (p. 31).',hukmEn:'Permissible (jawāz)',cEn:'2, 4 or 6',whyFull:'Why three options? “Whoever shortens does not count the sukūn, because it is temporary; whoever lengthens counts it and compares it to the necessary madd; whoever takes the middle counts it while keeping in mind that it is temporary” (p. 30).',
     bq:'«حرف مد أتى بعده سكون عارض لأجل الوقف… القصر: ومقداره حركتان. والتوسط: ومقداره أربع حركات. والمد: ومقداره ست» (ص ٣٠)، «ويلحق اللين وقفا بالعارض للسكون… إلا أن الطول في اللين قليل» (ص ٣١).',
     why:'لِمَاذَا ٣ أَوْجُه؟ «فمن قصره لم يعتد بالسكون لعروضه. ومن مده اعتد بالسكون وقاسه على اللازم. ومن وسطه اعتد بالسكون، ولاحظ عروضه» (ص ٣٠).',whyEn:'Why 3 options? Scholars differ on whether a temporary sukūn counts.'},
   munfasil:{ar:'مَدٌّ مُنْفَصِل',en:'Separated madd',c:'var(--munfasil)',counts:[4,5],cTxt:'٤ أَوْ ٥',hukm:'الجَوَاز',rank:4,
+    bqEn:'“A madd letter followed by a hamza separated from it, in another word… its length for Ḥafṣ is four or five counts via al-Shāṭibiyyah. The ruling of the separated madd: permissible” (p. 29).',hukmEn:'Permissible (jawāz)',cEn:'4 or 5',whyFull:'Why “permissible”? “Because reciters may either lengthen or shorten it, and Ḥafṣ is among those who lengthen it via al-Shāṭibiyyah” (p. 29).',
     bq:'«حرف مد أتى بعده همز منفصل عنه في كلمة أخرى… ومقدار مده عند حفص: أربع حركات أو خمس من طريق الشاطبية. وحكم المنفصل: الجواز» (ص ٢٩).',
     why:'لِمَاذَا «جَائِز»؟ «لجواز مده وقصره عند القراء… وحفص من الذين يمدونه من طريق الشاطبية» (ص ٢٩).',whyEn:'"Permissible": some reciters shorten it; Ḥafṣ (Shāṭibiyyah) lengthens it.'},
   badal:{ar:'مَدُّ بَدَل',en:'Substitute madd',c:'var(--badal)',counts:[2],cTxt:'٢',hukm:'الجَوَاز',rank:5,
+    bqEn:'“A madd letter preceded by a hamza… It is called ‘substitute’ because the madd letter replaces a hamza; the original forms of the words above are a’manū, i’mān and u’tiya… its length: two counts… and Ḥafṣ is among those who keep it short” (p. 30).',hukmEn:'Permissible (jawāz)',cEn:'2',whyFull:'Why “substitute”? The original was two hamzas (a’manū), and the second one was replaced by a madd letter (p. 30).',
     bq:'«حرف مد تقدم عليه همز… وسمي بدلا؛ لإبدال حرف المد من الهمز، فأصل الكلمات السابقة أأمنوا، وإئمان، وأؤتي… ومقدار مده: حركتان… وحفص من الذين يقصرونه» (ص ٣٠).',
     why:'لِمَاذَا «بَدَل»؟ الأَصْلُ هَمْزَتَان (أَأْمَنُوا) فَأُبْدِلَتِ الثَّانِيَةُ حَرْفَ مَدّ (ص ٣٠).',whyEn:'Why "substitute"? The original second hamza became a madd letter.'},
   tabii:{ar:'مَدٌّ طَبِيعِيّ',en:'Natural madd',c:'var(--tabii)',counts:[2],cTxt:'٢',hukm:'أَصْلِيّ',rank:6,
+    bqEn:'“It is the madd without which the letter itself cannot stand, and it does not depend on either cause of madd, namely hamza or sukūn… It is also called natural madd because a person with a sound nature neither shortens it nor lengthens it. Its length: two counts” (p. 28).',hukmEn:'The original (aṣlī)',cEn:'2',whyFull:'No cause, so no extra length: it is the “origin” on which every secondary madd is built (p. 28).',
     bq:'«هو الذي لا تقوم ذات الحرف إلا به، ولا يتوقف على سبب من سببي المد، وهما الهمز أو السكون… ويسمى أيضا مدا طبيعيا؛ لأن صاحب الطبيعة السليمة لا ينقصه عن مقداره، ولا يزيد عليه. ومقدار مده: حركتان» (ص ٢٨).',
     why:'لَا سَبَب ← لَا زِيَادَة: هُوَ «الأَصْل» الَّذِي يُبْنَى عَلَيْهِ كُلُّ مَدٍّ فَرْعِيّ (ص ٢٨).',whyEn:'No cause → no extra length. It is the base of all other madds.'},
 };
 const SETS = {
-  book:{ar:'📖 أمثلة الكتاب (الوجيز)',en:'Book examples',items:[
+  book:{ar:'📖 أمثلة الكتاب (الوجيز)',en:'📖 Examples from the book (Al-Wajiz)',items:[
     {t:'مَ[ا]لِكِ',ref:'الفاتحة: ٤',k:'tabii'},{t:'كَثِ[ي]رَةً',ref:'البقرة: ٢٤٥',k:'tabii'},{t:'مَرْفُ[و]عَةٍ',ref:'الواقعة: ٣٤',k:'tabii'},
     {t:'السَّمَ[ا]{ءِ}',ref:'البقرة: ١٩',k:'muttasil'},{t:'النَّسِ[ي]{ءُ}',ref:'التوبة: ٣٧',k:'muttasil'},{t:'قُرُ[و]{ءٍ}',ref:'البقرة: ٢٢٨',k:'muttasil'},{t:'الْأَرَ[ا]{ئِ}كِ',ref:'الكهف: ٣١',k:'muttasil'},
     {t:'بِمَ[ا] {أُ}نْزِلَ',ref:'البقرة: ٤',k:'munfasil'},{t:'قَالُ[و]ا {آ}مَنَّا',ref:'البقرة: ١٤',k:'munfasil'},{t:'ارْجِعِ[ي] {إِ}لَى رَبِّكِ',ref:'الفجر: ٢٨',k:'munfasil'},
-    {t:'[آ]مَنُوا',ref:'البقرة: ٩',k:'badal',note:'الهمزة وحرف المد في حرف واحد: آ = أَا (أصلها أَأْمَنُوا)'},{t:'{إِ}[ي]مَانًا',ref:'آل عمران: ١٧٣',k:'badal'},{t:'{أُ}[و]تِيَ',ref:'البقرة: ١٣٦',k:'badal'},
+    {t:'[آ]مَنُوا',ref:'البقرة: ٩',k:'badal',note:'الهمزة وحرف المد في حرف واحد: آ = أَا (أصلها أَأْمَنُوا)',noteEn:'The hamza and the madd letter are written as one letter: آ = أَا (the original is أَأْمَنُوا)'},{t:'{إِ}[ي]مَانًا',ref:'آل عمران: ١٧٣',k:'badal'},{t:'{أُ}[و]تِيَ',ref:'البقرة: ١٣٦',k:'badal'},
     {t:'الْبَيَ[ا]{نْ}',ref:'الرحمن: ٤',k:'arid',stop:1},{t:'نَسْتَعِ[ي]{نْ}',ref:'الفاتحة: ٥',k:'arid',stop:1},{t:'الْمُفْلِحُ[و]{نْ}',ref:'البقرة: ٥',k:'arid',stop:1},
     {t:'خَ[وْ]{فْ}',ref:'البقرة: ٣٨',k:'arid',stop:1,lin:1},{t:'الْبَ[يْ]{تْ}',ref:'البقرة: ١٢٥',k:'arid',stop:1,lin:1},
     {t:'الصَّ[ا]{خَّ}ةُ',ref:'عبس: ٣٣',k:'lazim'},{t:'الْحَ[ا]{قَّ}ةُ',ref:'الحاقة: ١',k:'lazim'},{t:'الضَّ[ا]{لِّ}ينَ',ref:'الفاتحة: ٧',k:'lazim'},{t:'أَتُحَ[ا]{جُّ}ونِّي',ref:'الأنعام: ٨٠',k:'lazim'},
-    {t:'ءَ[ا]{لْ}آنَ',ref:'يونس: ٥١',k:'lazim',note:'لَازِمٌ كَلِمِيٌّ مُخَفَّف — في موضعي يونس فقط (ص ٣٢)'},
+    {t:'ءَ[ا]{لْ}آنَ',ref:'يونس: ٥١',k:'lazim',note:'لَازِمٌ كَلِمِيٌّ مُخَفَّف — في موضعي يونس فقط (ص ٣٢)',noteEn:'Light word-based lāzim: it occurs only in the two places in Sūrat Yūnus (p. 32)'},
   ]},
-  juz:{ar:'🌙 من قصار السور',en:'Short surahs',items:[
+  juz:{ar:'🌙 من قصار السور',en:'🌙 From the short surahs',items:[
     {t:'الرَّحِ[ي]{مْ}',ref:'الفاتحة: ٣',k:'arid',stop:1},{t:'إِذَا جَ[ا]{ءَ}',ref:'النصر: ١',k:'muttasil'},{t:'وَالسَّمَ[ا]{ءِ}',ref:'الشمس: ٥',k:'muttasil'},
     {t:'إِنَّ[ا] {أَ}عْطَيْنَاكَ',ref:'الكوثر: ١',k:'munfasil'},{t:'يَ[ا] {أَ}يُّهَا',ref:'الكافرون: ١',k:'munfasil'},{t:'فِ[ي] {أَ}حْسَنِ تَقْوِيمٍ',ref:'التين: ٤',k:'munfasil'},
     {t:'لِ{إِ}[ي]لَافِ قُرَيْشٍ',ref:'قريش: ١',k:'badal'},{t:'{أُ}[و]تِيَ كِتَابَهُ',ref:'الحاقة: ١٩',k:'badal'},
@@ -255,16 +270,16 @@ const SETS = {
     {t:'نَ[ا]رٌ حَامِيَةٌ',ref:'القارعة: ١١',k:'tabii'},{t:'فِي جِ[ي]دِهَا',ref:'المسد: ٥',k:'tabii'},
   ]},
 };
-SETS.mix={ar:'🔀 الكل مخلوط',en:'All mixed',items:[...SETS.book.items,...SETS.juz.items]};
+SETS.mix={ar:'🔀 الكل مخلوط',en:'🔀 Everything mixed',items:[...SETS.book.items,...SETS.juz.items]};
 const DUELS = [
-  {t:'وَلَا [آ]{مِّ}ينَ الْبَيْتَ',ref:'المائدة: ٢',causes:['badal','lazim'],win:'lazim',bq:'«فيمد ست حركات إعمالا للمد اللازم لقوته، ويلغى البدل لضعفه» (ص ٣٤).'},
-  {t:'وَجَا{ءُ}[و]ا {أَ}بَاهُمْ',ref:'يوسف: ١٦',causes:['badal','munfasil'],win:'munfasil',bq:'«فيعمل بالمنفصل لقوته، فيمد أربع حركات أو خمس، ويلغى البدل لضعفه» (ص ٣٤).'},
-  {t:'بُرَ[آ]{ءُ}',ref:'الممتحنة: ٤',causes:['badal','muttasil'],win:'muttasil',bq:'قاعدة الكتاب: «إذا اجتمع سببان من أسباب المد أحدهما قوي والآخر ضعيف عمل بالقوي، وألغي الضعيف» (ص ٣٤) — والمتصل أقوى من البدل.'},
-  {t:'حُسْنُ الْمَ[آ]{بْ}',ref:'آل عمران: ١٤',causes:['badal','arid'],win:'arid',stop:1,bq:'قاعدة الكتاب: «عمل بالقوي، وألغي الضعيف» (ص ٣٤) — والعارض أقوى من البدل، فيجوز ٢ أو ٤ أو ٦ عند الوقف.'},
-  {t:'وَقَالُ[و]ا اتَّخَذَ',ref:'البقرة: ١١٦',kind:'drop',counts:[0],bq:'«إذا كان حرف المد في كلمة، والحرف الساكن في كلمة أخرى حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَقَالُتَّخَذَ.'},
-  {t:'وَالْمُقِيمِ[ي] الصَّلَاةِ',ref:'الحج: ٣٥',kind:'drop',counts:[0],bq:'«حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَالْمُقِيمِصَّلَاةِ.'},
-  {t:'وَقَالَ[ا] الْحَمْدُ لِلَّهِ',ref:'النمل: ١٥',kind:'drop',counts:[0],bq:'«حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَقَالَلْحَمْدُ لِلَّهِ.'},
-  {t:'الٓمٓ ۝ اللَّهُ لَا إِلَهَ إِلَّا هُوَ',ref:'آل عمران: ١–٢',kind:'change',counts:[2,6],bq:'«إذا تغير سبب المد جاز المد والقصر… فمن أشبع نظر إلى الأصل -وهو سكون الميم-… ومن قصر نظر إلى الحركة العارضة… أما إذا وقفت على \"آلم\" فلا بد من الإشباع» (ص ٣٣). (الميم تُقرأ مفتوحة في الوصل: مِيمَ اللَّهُ)'},
+  {t:'وَلَا [آ]{مِّ}ينَ الْبَيْتَ',ref:'المائدة: ٢',causes:['badal','lazim'],win:'lazim',bq:'«فيمد ست حركات إعمالا للمد اللازم لقوته، ويلغى البدل لضعفه» (ص ٣٤).',bqEn:'“It is stretched six counts, applying the necessary madd because of its strength, and the substitute is cancelled because of its weakness” (p. 34).'},
+  {t:'وَجَا{ءُ}[و]ا {أَ}بَاهُمْ',ref:'يوسف: ١٦',causes:['badal','munfasil'],win:'munfasil',bq:'«فيعمل بالمنفصل لقوته، فيمد أربع حركات أو خمس، ويلغى البدل لضعفه» (ص ٣٤).',bqEn:'“The separated madd is applied because of its strength, so it is stretched four or five counts, and the substitute is cancelled because of its weakness” (p. 34).'},
+  {t:'بُرَ[آ]{ءُ}',ref:'الممتحنة: ٤',causes:['badal','muttasil'],win:'muttasil',bq:'قاعدة الكتاب: «إذا اجتمع سببان من أسباب المد أحدهما قوي والآخر ضعيف عمل بالقوي، وألغي الضعيف» (ص ٣٤) — والمتصل أقوى من البدل.',bqEn:'The book’s rule: “When two causes of madd meet, one strong and one weak, the strong one is applied and the weak one is cancelled” (p. 34). The joined madd is stronger than the substitute.'},
+  {t:'حُسْنُ الْمَ[آ]{بْ}',ref:'آل عمران: ١٤',causes:['badal','arid'],win:'arid',stop:1,bq:'قاعدة الكتاب: «عمل بالقوي، وألغي الضعيف» (ص ٣٤) — والعارض أقوى من البدل، فيجوز ٢ أو ٤ أو ٦ عند الوقف.',bqEn:'The book’s rule: “The strong one is applied and the weak one is cancelled” (p. 34). The temporary-sukūn madd is stronger than the substitute, so 2, 4 or 6 counts are allowed when stopping.'},
+  {t:'وَقَالُ[و]ا اتَّخَذَ',ref:'البقرة: ١١٦',kind:'drop',counts:[0],bq:'«إذا كان حرف المد في كلمة، والحرف الساكن في كلمة أخرى حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَقَالُتَّخَذَ.',bqEn:'“When the madd letter is in one word and the sākin letter in another, the madd letter is dropped when joining” (p. 33). It is read: wa-qāluttakhadha.'},
+  {t:'وَالْمُقِيمِ[ي] الصَّلَاةِ',ref:'الحج: ٣٥',kind:'drop',counts:[0],bq:'«حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَالْمُقِيمِصَّلَاةِ.',bqEn:'“The madd letter is dropped when joining” (p. 33). It is read: wal-muqīmiṣ-ṣalāh.'},
+  {t:'وَقَالَ[ا] الْحَمْدُ لِلَّهِ',ref:'النمل: ١٥',kind:'drop',counts:[0],bq:'«حذف حرف المد في الوصل» (ص ٣٣) — تُقرأ: وَقَالَلْحَمْدُ لِلَّهِ.',bqEn:'“The madd letter is dropped when joining” (p. 33). It is read: wa-qālal-ḥamdu lillāh.'},
+  {t:'الٓمٓ ۝ اللَّهُ لَا إِلَهَ إِلَّا هُوَ',ref:'آل عمران: ١–٢',kind:'change',counts:[2,6],bq:'«إذا تغير سبب المد جاز المد والقصر… فمن أشبع نظر إلى الأصل -وهو سكون الميم-… ومن قصر نظر إلى الحركة العارضة… أما إذا وقفت على \"آلم\" فلا بد من الإشباع» (ص ٣٣). (الميم تُقرأ مفتوحة في الوصل: مِيمَ اللَّهُ)',bqEn:'“When the cause of the madd changes, both lengthening and shortening are allowed… whoever lengthens looks at the origin, which is the sukūn of the mīm… whoever shortens looks at the temporary vowel… but when stopping on ‘Alif-Lām-Mīm’, full length is required” (p. 33). (The mīm takes a fatḥah when joining: mīma Allāh.)'},
 ];
 const FAWATIH = [
   {t:'الٓمٓ',ref:'البقرة: ١',letters:[{l:'ا',say:'أَلِفْ',n:0},{l:'ل',say:'لَآمْ',n:6},{l:'م',say:'مِيمْ',n:6}]},
@@ -283,12 +298,12 @@ const FAWATIH = [
   {t:'نٓ',ref:'القلم: ١',letters:[{l:'ن',say:'نُونْ',n:6}]},
 ];
 const F_BINS = [
-  {n:0,ar:'لَا يُمَدّ (٠)',sub:'الأَلِف',c:'var(--none)',bq:'«ما لا يمد أصلا وهو \"ألف\" لكون هجائه ثلاثة أحرف ليس وسطها حرف مد» (ص ٣٣).'},
-  {n:2,ar:'طَبِيعِيّ (٢)',sub:'«حَيٌّ طَهُرَ»',c:'var(--tabii)',bq:'«وإنما مدت هذه الأحرف الخمسة مدا طبيعيا؛ لأنها حروف ثنائية… فليس بعد حرف المد فيها ساكن» (ص ٢٩).'},
-  {n:46,ar:'العَيْن: ٤ أَوْ ٦',sub:'حَرْفُ لِين',c:'var(--arid)',bq:'«وفيها للجميع وجهان: الطول: وهو الأفضل… والتوسط: لسكون الياء وانفتاح ما قبلها، فهي حرف لين لا حرف مد» (ص ٣٣).'},
-  {n:6,ar:'لَازِمٌ حَرْفِيّ (٦)',sub:'«سَنَقُصُّ عِلْمَكَ» إِلَّا العَيْن',c:'var(--lazim)',bq:'«مد أتى بعده سكون لازم في حرف هجاؤه ثلاثة أحرف وسطها حرف مد… مجموعة في قول بعضهم: \"سنقص علمك\" ما عدا العين» (ص ٣٢).'},
+  {n:0,ar:'لَا يُمَدّ (٠)',sub:'الأَلِف',en:'Not stretched (0)',subEn:'The letter alif',c:'var(--none)',bq:'«ما لا يمد أصلا وهو \"ألف\" لكون هجائه ثلاثة أحرف ليس وسطها حرف مد» (ص ٣٣).',bqEn:'“What is not stretched at all is ‘alif’, because its spelling is three letters with no madd letter in the middle” (p. 33).'},
+  {n:2,ar:'طَبِيعِيّ (٢)',sub:'«حَيٌّ طَهُرَ»',en:'Natural (2)',subEn:'mnemonic: ḥayyun ṭahura',c:'var(--tabii)',bq:'«وإنما مدت هذه الأحرف الخمسة مدا طبيعيا؛ لأنها حروف ثنائية… فليس بعد حرف المد فيها ساكن» (ص ٢٩).',bqEn:'“These five letters get only natural madd because their names have two letters… so no sākin letter follows the madd letter in them” (p. 29).'},
+  {n:46,ar:'العَيْن: ٤ أَوْ ٦',sub:'حَرْفُ لِين',en:'ʿAyn: 4 or 6',subEn:'a soft (līn) letter',c:'var(--arid)',bq:'«وفيها للجميع وجهان: الطول: وهو الأفضل… والتوسط: لسكون الياء وانفتاح ما قبلها، فهي حرف لين لا حرف مد» (ص ٣٣).',bqEn:'“For all reciters it has two options: full length, which is preferred… and medium, because the yā’ is sākin with a fatḥah before it, so it is a soft letter, not a madd letter” (p. 33).'},
+  {n:6,ar:'لَازِمٌ حَرْفِيّ (٦)',sub:'«سَنَقُصُّ عِلْمَكَ» إِلَّا العَيْن',en:'Letter-based lāzim (6)',subEn:'the letters of “sanaquṣṣu ʿilmaka”, except ʿayn',c:'var(--lazim)',bq:'«مد أتى بعده سكون لازم في حرف هجاؤه ثلاثة أحرف وسطها حرف مد… مجموعة في قول بعضهم: \"سنقص علمك\" ما عدا العين» (ص ٣٢).',bqEn:'“A madd followed by a permanent sukūn, in a letter whose spelling has three letters with a madd letter in the middle… gathered in the saying ‘sanaquṣṣu ʿilmaka’, except ʿayn” (p. 32).'},
 ];
-const COUNT_OPTS = [{v:[0],ar:'٠ — يُحْذَفُ وَصْلًا',en:'0 – dropped'},{v:[2],ar:'٢ حَرَكَتَان',en:'2 counts'},{v:[4,5],ar:'٤ أَوْ ٥',en:'4 or 5'},{v:[2,4,6],ar:'٢ أَوْ ٤ أَوْ ٦',en:'2, 4 or 6'},{v:[6],ar:'٦ حَرَكَات',en:'6 counts'},{v:[2,6],ar:'٢ أَوْ ٦',en:'2 or 6'}];
+const COUNT_OPTS = [{v:[0],ar:'٠ — يُحْذَفُ وَصْلًا',en:'0 – dropped when joining'},{v:[2],ar:'٢ حَرَكَتَان',en:'2 counts'},{v:[4,5],ar:'٤ أَوْ ٥',en:'4 or 5 counts'},{v:[2,4,6],ar:'٢ أَوْ ٤ أَوْ ٦',en:'2, 4 or 6 counts'},{v:[6],ar:'٦ حَرَكَات',en:'6 counts'},{v:[2,6],ar:'٢ أَوْ ٦',en:'2 or 6 counts'}];
 const ROUND = 10;     // عدد الكلمات في الجولة
 const RETRY_GAP = 3;  // الكلمة الخطأ ترجع بعد ٣ أسئلة
 const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَكَ اللهُ فِيك!','مُمْتَاز!'], PRAISE_EN=['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'];
@@ -299,6 +314,11 @@ const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const same=(a,b)=>a.length===b.length&&a.every((x,i)=>x===b[i]);
 const cTxt=v=>COUNT_OPTS.find(o=>same(o.v,v))?.ar||v.map(ar).join('/');
+const cEn=v=>COUNT_OPTS.find(o=>same(o.v,v))?.en||v.join('/');
+const REF=r=>{const e=TQI.ref(r);return U('﴿'+r+'﴾',e===r?'﴿'+r+'﴾':e)};
+const STOPB=U('✋ قِفْ عَلَيْهَا','✋ Stop on it');
+const SRC=()=>`<small>${BOOKU()}</small>`;
+const bqHtml=(a,e)=>`<div class="bq">${a}${tr(e)}</div>`;
 
 /* ---------- word HTML: [madd letter] {cause}; ZWJ keeps letters joined across coloured spans ---------- */
 const LET=/[ء-ي]/, NOJOIN='اأإآٱدذرزوؤةء';
@@ -331,22 +351,22 @@ const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i
   win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#C9A35A','#7B1E1E','#C0392B','#D35400','#2471A3','#138D75','#A67C00'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- ladder ---------- */
 const ORDER=['lazim','muttasil','arid','munfasil','badal'];
-function drawLadder(){$('#ladder').innerHTML=ORDER.map((k,i)=>`<div class="rung" data-k="${k}" style="--ac:${TYPES[k].c};--w:${92-i*9}%"><span>${ar(i+1)}. ${TYPES[k].ar}</span><span class="c">${TYPES[k].cTxt}</span></div>`).join('')+
-  `<div class="rung ground" data-k="tabii" style="--ac:${TYPES.tabii.c};--w:92%"><span>الأَصْل: ${TYPES.tabii.ar}</span><span class="c">${TYPES.tabii.cTxt}</span></div>`}
+function drawLadder(){$('#ladder').innerHTML=ORDER.map((k,i)=>`<div class="rung" data-k="${k}" style="--ac:${TYPES[k].c};--w:${92-i*9}%"><span>${U(ar(i+1)+'. '+TYPES[k].ar,(i+1)+'. '+TYPES[k].en)}</span><span class="c">${U(TYPES[k].cTxt,TYPES[k].cEn)}</span></div>`).join('')+
+  `<div class="rung ground" data-k="tabii" style="--ac:${TYPES.tabii.c};--w:92%"><span>${U('الأَصْل: '+TYPES.tabii.ar,'Base: '+TYPES.tabii.en)}</span><span class="c">${U(TYPES.tabii.cTxt,TYPES.tabii.cEn)}</span></div>`}
 function lightLadder(on=[],lose=[]){document.querySelectorAll('.rung').forEach(r=>{r.classList.toggle('on',on.includes(r.dataset.k));r.classList.toggle('lose',lose.includes(r.dataset.k))});if(on.length)sfx.climb()}
 
 /* ---------- stretch meter ---------- */
 const MAXB=8;let target=[2],beatMs=500,mc='var(--arid)';
 function drawMeter(){const bar=$('#mbar');bar.querySelectorAll('.zone,.tick').forEach(e=>e.remove());
-  for(let i=1;i<MAXB;i++){const d=document.createElement('i');d.className='tick';d.style.right=(i/MAXB*100)+'%';bar.appendChild(d)}
-  if(target.length&&!(target.length===1&&target[0]===0)){const lo=Math.min(...target)-.5,hi=Math.max(...target)+.5;const z=document.createElement('div');z.className='zone';z.style.right=(Math.max(0,lo)/MAXB*100)+'%';z.style.width=((hi-Math.max(0,lo))/MAXB*100)+'%';bar.insertBefore(z,bar.firstChild)}
-  $('#mnums').innerHTML=Array.from({length:MAXB+1},(_,i)=>`<span style="right:${i/MAXB*100}%">${ar(i)}</span>`).join('');
+  for(let i=1;i<MAXB;i++){const d=document.createElement('i');d.className='tick';d.style.insetInlineStart=(i/MAXB*100)+'%';bar.appendChild(d)}
+  if(target.length&&!(target.length===1&&target[0]===0)){const lo=Math.min(...target)-.5,hi=Math.max(...target)+.5;const z=document.createElement('div');z.className='zone';z.style.insetInlineStart=(Math.max(0,lo)/MAXB*100)+'%';z.style.width=((hi-Math.max(0,lo))/MAXB*100)+'%';bar.insertBefore(z,bar.firstChild)}
+  $('#mnums').innerHTML=Array.from({length:MAXB+1},(_,i)=>`<span style="inset-inline-start:${i/MAXB*100}%">${U(ar(i),i)}</span>`).join('');
   $('#mfill').style.width='0';$('#mbar').style.setProperty('--mc',mc)}
-function setTarget(v,c,label){target=v;mc=c;drawMeter();$('#mres').innerHTML=label||'👋 حَرِّكْ يَدَكَ أُفُقِيًّا طُولَ المَدّ، وَعُدَّ بِقَبْضِ الأَصَابِع. <span class="en blk">Sweep your hand sideways while stretching.</span>'}
+function setTarget(v,c,label){target=v;mc=c;drawMeter();$('#mres').innerHTML=label||U('👋 حَرِّكْ يَدَكَ أُفُقِيًّا طُولَ المَدّ، وَعُدَّ بِقَبْضِ الأَصَابِع.','👋 Sweep your hand sideways for the length of the madd, and count by closing your fingers.')}
 let hStart=0,hRaf=0,hTimer=0,holding=false,meterBonus=null;
 function startHold(){if(holding)return;ac();holding=true;hStart=performance.now();$('#holdB').classList.add('on');let b=0;tick(true);$('#hand').textContent='✋';
   hTimer=setInterval(()=>{b++;tick(false);$('#hand').textContent=b%2?'✊':'✋'},beatMs);
@@ -354,7 +374,7 @@ function startHold(){if(holding)return;ac();holding=true;hStart=performance.now(
 function stopHold(){if(!holding)return;holding=false;clearInterval(hTimer);cancelAnimationFrame(hRaf);$('#holdB').classList.remove('on');$('#hand').textContent='✋';
   const beats=(performance.now()-hStart)/beatMs,r=Math.round(beats*2)/2;
   const ok=target.some(t=>t>0&&Math.abs(beats-t)<=.6);
-  $('#mres').innerHTML=`مَدَدْتَ ≈ <b>${ar(r)}</b> حَرَكَات ${ok?'✅ فِي المَنْطِقَة الخَضْرَاء':`— المَطْلُوب: ${cTxt(target)}`}`;
+  $('#mres').innerHTML=U(`مَدَدْتَ ≈ <b>${ar(r)}</b> حَرَكَات ${ok?'✅ فِي المَنْطِقَة الخَضْرَاء':`— المَطْلُوب: ${cTxt(target)}`}`,`You stretched ≈ <b>${r}</b> counts ${ok?'✅ in the green zone':`— target: ${cEn(target)}`}`);
   if(ok){sfx.pop();if(meterBonus){const f=meterBonus;meterBonus=null;f()}}else tone(220,.15,'sine',.1)}
 function demo(){ac();const n=target.find(t=>t>0)||2;const d=n*beatMs/1000;hold(392,d,0,.1);for(let i=0;i<=n;i++)setTimeout(()=>{tick(i===0);$('#hand').textContent=i%2?'✊':'✋';$('#mfill').style.width=(i/MAXB*100)+'%'},i*beatMs);setTimeout(()=>$('#hand').textContent='✋',n*beatMs+200)}
 const hb=$('#holdB');
@@ -368,10 +388,10 @@ $('#demoB').onclick=demo;$('#tempoSel').onchange=()=>{beatMs=+$('#tempoSel').val
 /* ---------- state ---------- */
 let teams=[],turn=0,queue=[],idx=0,mode='detect',missed=[],stats={};
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ نُجُومِي','⭐ My stars'),c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}];
+  return [{nm:U('🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'),c:'var(--teamA)'},{nm:U('🔴 الفَرِيقُ الأَحْمَر','🔴 Red team'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 const qa=$('#qa');
 function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
 function stat(k,ok){const s=stats[k]||(stats[k]={ok:0,n:0});s.n++;if(ok)s.ok++}
@@ -380,25 +400,25 @@ function buildRound(items){const by={};items.forEach(it=>{(by[it.k]=by[it.k]||[]
   let pick=Object.keys(TYPES).filter(k=>by[k]).map(k=>shuffle(by[k])[0]);const rest=shuffle(items.filter(it=>!pick.includes(it)));
   return shuffle(pick.concat(rest).slice(0,Math.max(ROUND,pick.length))).map(it=>({it,retry:false}))}
 function setOptions(){mode=$('#modeSel').value;const sel=$('#setSel');
-  sel.disabled=mode!=='detect';sel.innerHTML=mode==='detect'?Object.entries(SETS).map(([k,s])=>`<option value="${k}">${s.ar}</option>`).join(''):'<option>—</option>'}
+  sel.disabled=mode!=='detect';sel.innerHTML=mode==='detect'?Object.entries(SETS).map(([k,s])=>`<option value="${k}" data-en="${s.en}">${s.ar}</option>`).join(''):'<option>—</option>';TQI.relabel()}
 function newGame(){
   mode=$('#modeSel').value;teams=teamDefs().map(t=>({...t,pts:0}));turn=0;idx=0;missed=[];stats={};meterBonus=null;
   if(mode==='detect')queue=buildRound(SETS[$('#setSel').value].items);
   else if(mode==='duel')queue=[{it:{ladder:1},retry:false},...shuffle(DUELS).map(it=>({it,retry:false}))];
   else queue=shuffle(FAWATIH).slice(0,8).map(it=>({it,retry:false}));
   drawLadder();lightLadder();setTarget([2],'var(--tabii)');renderTeams();
-  $('#bookRef').textContent='📚 المصدر: '+BOOK.ar+'، '+BOOK.ref+'. المقادير لحفص عن عاصم من طريق الشاطبية كما في الكتاب. أمثلة «قصار السور» أضفناها للتدريب.';
+  $('#bookRef').innerHTML=U('📚 المصدر: '+BOOK.ar+'، '+BOOK.ref+'. المقادير لحفص عن عاصم من طريق الشاطبية كما في الكتاب. أمثلة «قصار السور» أضفناها للتدريب.','📚 Source: '+BOOK.en+', '+BOOK.refEn+'. Lengths are for Ḥafṣ from ʿĀṣim via al-Shāṭibiyyah, as in the book. We added the “short surahs” examples for practice.');
   show();
 }
-function header(){return `<div class="prog"><span>${ar(idx+1)} مِنْ ${ar(queue.length)}${queue[idx].retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>`}
-function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en" style="color:#fff">Next</span></button></div>`}
+function header(){return `<div class="prog"><span>${U(`${ar(idx+1)} مِنْ ${ar(queue.length)}`,`${idx+1} of ${queue.length}`)}${queue[idx].retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>`}
+function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">${U('التَّالِي ←','Next →')}</button></div>`}
 function bindNext(){$('#nextB').onclick=()=>{idx++;turn=(turn+1)%teams.length;renderTeams();show()};$('#nextB').focus({preventScroll:true})}
 function show(){if(idx>=queue.length){end();return}
   lightLadder();meterBonus=null;const {it}=queue[idx];
   if(mode==='detect')showDetect(it);else if(mode==='duel')(it.ladder?showLadderSort():showDuel(it));else showFawatih(it);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
-function opts(list,id){return `<div class="opts" id="${id}">${list.map((o,i)=>`<button class="ob" data-i="${i}" style="--ac:${o.c||'var(--gold)'}">${o.ar}${o.sub?`<small>${o.sub}</small>`:''}<span class="en">${o.en||''}</span></button>`).join('')}</div>`}
+function opts(list,id){return `<div class="opts" id="${id}">${list.map((o,i)=>`<button class="ob" data-i="${i}" style="--ac:${o.c||'var(--gold)'}">${o.ar}${o.sub?`<small>${o.subEn?U(o.sub,o.subEn):o.sub}</small>`:''}<span class="en">${o.en||''}</span></button>`).join('')}</div>`}
 // ask one multiple-choice step; cb(ok)
 function ask(host,qHtml,list,correctI,cb,tries=1){
   const id='o'+Math.random().toString(36).slice(2,7);host.insertAdjacentHTML('beforeend',`<div class="step"><div class="q">${qHtml}</div>${opts(list,id)}</div>`);
@@ -411,114 +431,114 @@ function ask(host,qHtml,list,correctI,cb,tries=1){
 }
 
 /* ---------- mode 1: madd detective ---------- */
-const CAUSE=[{ar:'لَا شَيْء',sub:'لَا هَمْزَ وَلَا سُكُون',en:'Nothing',c:'var(--tabii)'},{ar:'هَمْزَة ء',sub:'قَبْلَهُ أَوْ بَعْدَه',en:'A hamza',c:'var(--hamza)'},{ar:'سُكُون (ـْـ) أَوْ شَدَّة (ـّـ)',sub:'بَعْدَه',en:'A sukūn / shaddah',c:'var(--sukun)'}];
-const H_POS=[{ar:'قَبْلَ حَرْفِ المَدّ',sub:'ءَا ← آ',en:'Before',c:'var(--badal)'},{ar:'بَعْدَهُ فِي نَفْسِ الكَلِمَة',en:'After, same word',c:'var(--muttasil)'},{ar:'بَعْدَهُ فِي كَلِمَةٍ ثَانِيَة',en:'After, next word',c:'var(--munfasil)'}];
-const S_KIND=[{ar:'ثَابِتٌ وَصْلًا وَوَقْفًا',sub:'سُكُونٌ لَازِم',en:'Always there',c:'var(--lazim)'},{ar:'بِسَبَبِ الوَقْفِ فَقَط',sub:'سُكُونٌ عَارِض',en:'Only when stopping',c:'var(--arid)'}];
+const CAUSE=[{ar:'لَا شَيْء',sub:'لَا هَمْزَ وَلَا سُكُون',subEn:'No hamza and no sukūn',en:'Nothing',c:'var(--tabii)'},{ar:'هَمْزَة ء',sub:'قَبْلَهُ أَوْ بَعْدَه',subEn:'before or after it',en:'A hamza',c:'var(--hamza)'},{ar:'سُكُون (ـْـ) أَوْ شَدَّة (ـّـ)',sub:'بَعْدَه',subEn:'right after it',en:'A sukūn or a shaddah',c:'var(--sukun)'}];
+const H_POS=[{ar:'قَبْلَ حَرْفِ المَدّ',sub:'ءَا ← آ',en:'Before the madd letter',c:'var(--badal)'},{ar:'بَعْدَهُ فِي نَفْسِ الكَلِمَة',en:'After it, in the same word',c:'var(--muttasil)'},{ar:'بَعْدَهُ فِي كَلِمَةٍ ثَانِيَة',en:'After it, in the next word',c:'var(--munfasil)'}];
+const S_KIND=[{ar:'ثَابِتٌ وَصْلًا وَوَقْفًا',sub:'سُكُونٌ لَازِم',subEn:'a permanent sukūn',en:'Present both when joining and when stopping',c:'var(--lazim)'},{ar:'بِسَبَبِ الوَقْفِ فَقَط',sub:'سُكُونٌ عَارِض',subEn:'a temporary sukūn',en:'Only because of stopping',c:'var(--arid)'}];
 function showDetect(it){const T=TYPES[it.k];
   qa.innerHTML=`${header()}<div class="phrase" id="ph">${wordHTML(it.t,false)}</div>
-    <div class="row"><span class="ref">﴿${it.ref}﴾</span>${it.stop?'<span class="stopb">✋ قِفْ عَلَيْهَا</span>':''}</div>
-    <div class="q">🎙️ اِقْرَأْهَا ← ثُمَّ اسْأَلْ مِثْلَ المُحَقِّق: <span class="en blk">Read it, then investigate like a detective:</span></div>
+    <div class="row"><span class="ref">${REF(it.ref)}</span>${it.stop?`<span class="stopb">${STOPB}</span>`:''}</div>
+    <div class="q">${U('🎙️ اِقْرَأْهَا ← ثُمَّ اسْأَلْ مِثْلَ المُحَقِّق:','🎙️ Read it aloud, then ask the questions of a detective:')}</div>
     <div class="trail" id="trail"></div><div id="steps" style="display:contents"></div>`;
   const steps=$('#steps');let clean=true;
   const ci=it.k==='tabii'?0:['muttasil','munfasil','badal'].includes(it.k)?1:2;
   const finish=()=>{
     $('#ph').classList.add('rev');lightLadder([it.k]);
     const cIdx=COUNT_OPTS.findIndex(o=>same(o.v,T.counts));
-    ask(steps,`⏱️ كَمْ حَرَكَةً لِحَفْص؟ <span class="en blk">How many counts for Ḥafṣ?</span>`,COUNT_OPTS.filter(o=>!same(o.v,[0])&&!same(o.v,[2,6])),COUNT_OPTS.filter(o=>!same(o.v,[0])&&!same(o.v,[2,6])).findIndex(o=>same(o.v,T.counts)),ok2=>{
+    ask(steps,U('⏱️ كَمْ حَرَكَةً لِحَفْص؟','⏱️ How many counts for Ḥafṣ?'),COUNT_OPTS.filter(o=>!same(o.v,[0])&&!same(o.v,[2,6])),COUNT_OPTS.filter(o=>!same(o.v,[0])&&!same(o.v,[2,6])).findIndex(o=>same(o.v,T.counts)),ok2=>{
       stat(it.k,clean&&ok2);if(clean&&ok2)setTimeout(()=>award(1),150);else{sfx.pop();miss(it)}
       reveal(it,T)});
   };
-  ask(steps,`① مَاذَا بِجِوَارِ حَرْفِ المَدِّ المُلَوَّن؟ <span class="en blk">What is next to the coloured madd letter?</span>`,CAUSE,ci,ok=>{
-    if(!ok)clean=false;$('#trail').innerHTML=`<span>${CAUSE[ci].ar}</span>`;
+  ask(steps,U('① مَاذَا بِجِوَارِ حَرْفِ المَدِّ المُلَوَّن؟','① What is next to the coloured madd letter?'),CAUSE,ci,ok=>{
+    if(!ok)clean=false;$('#trail').innerHTML=`<span>${U(CAUSE[ci].ar,CAUSE[ci].en)}</span>`;
     if(ci===0){finish();return}
     if(ci===1){const pi=it.k==='badal'?0:it.k==='muttasil'?1:2;
-      ask(steps,`② أَيْنَ الهَمْزَة؟ <span class="en blk">Where is the hamza?</span>`,H_POS,pi,ok=>{if(!ok)clean=false;$('#trail').innerHTML+=`<span>${H_POS[pi].ar}</span>`;finish()})}
+      ask(steps,U('② أَيْنَ الهَمْزَة؟','② Where is the hamza?'),H_POS,pi,ok=>{if(!ok)clean=false;$('#trail').innerHTML+=`<span>${U(H_POS[pi].ar,H_POS[pi].en)}</span>`;finish()})}
     else{const si=it.k==='lazim'?0:1;
-      ask(steps,`② هَذَا السُّكُون… <span class="en blk">This sukūn is…</span>`,S_KIND,si,ok=>{if(!ok)clean=false;$('#trail').innerHTML+=`<span>${S_KIND[si].ar}</span>`;finish()})}
+      ask(steps,U('② هَذَا السُّكُون…','② This sukūn is…'),S_KIND,si,ok=>{if(!ok)clean=false;$('#trail').innerHTML+=`<span>${U(S_KIND[si].ar,S_KIND[si].en)}</span>`;finish()})}
   });
 }
 function reveal(it,T){
-  setTarget(T.counts,T.c,`🎙️ الآنَ مُدَّهَا: المَطْلُوب <b>${T.cTxt}</b> — اِضْغَطْ وَاسْتَمِرّ (أَوْ Space). <span class="en blk">Now stretch it: hold the button (or Space).</span>`);
+  setTarget(T.counts,T.c,U(`🎙️ الآنَ مُدَّهَا: المَطْلُوب <b>${T.cTxt}</b> — اِضْغَطْ وَاسْتَمِرّ (أَوْ Space).`,`🎙️ Now stretch it: the target is <b>${T.cEn}</b> counts. Press and hold the button (or the Space bar).`));
   meterBonus=()=>award(1);
   const ex=document.createElement('div');ex.style.display='contents';
-  ex.innerHTML=`<div class="info" style="--ac:${T.c}"><div class="t">${T.ar} — ${T.cTxt} — حُكْمُهُ: ${T.hukm} <span class="en">${T.en}</span></div>
-    ${it.lin?'<div class="why">🔸 حَرْفُ لِين (سَاكِنٌ مَفْتُوحٌ مَا قَبْلَه): «يلحق اللين وقفا بالعارض… إلا أن الطول في اللين قليل» (ص ٣١).</div>':''}
-    ${it.note?`<div class="why">🔸 ${it.note}</div>`:''}
-    <div class="bq">${T.bq}</div><div class="why" style="color:${T.c}">${T.why} <span class="en blk">${T.whyEn}</span></div>
-    <small>${BOOK.ar}، ${BOOK.ref}</small></div>
-    <div class="tip">⏱️ مُدَّهَا عَلَى «مِقْيَاسِ المَدّ» (+١ إِذَا وَقَفْتَ فِي الأَخْضَر) <span class="en blk">Stretch it on the meter (+1 in the green zone)</span></div>${nextBtn()}`;
+  ex.innerHTML=`<div class="info" style="--ac:${T.c}"><div class="t">${U(`${T.ar} — ${T.cTxt} — حُكْمُهُ: ${T.hukm}`,`${T.en} (${T.ar}) — ${T.cEn} counts — ruling: ${T.hukmEn}`)}</div>
+    ${it.lin?`<div class="why">${U('🔸 حَرْفُ لِين (سَاكِنٌ مَفْتُوحٌ مَا قَبْلَه): «يلحق اللين وقفا بالعارض… إلا أن الطول في اللين قليل» (ص ٣١).','🔸 A soft letter (līn): sākin, with a fatḥah before it. “The soft letter joins the temporary-sukūn madd when stopping… though lengthening is rarer for līn” (p. 31).')}</div>`:''}
+    ${it.note?`<div class="why">🔸 ${U(it.note,it.noteEn||it.note)}</div>`:''}
+    ${bqHtml(T.bq,T.bqEn)}<div class="why" style="color:${T.c}">${U(T.why,T.whyFull)}</div>
+    ${SRC()}</div>
+    <div class="tip">${U('⏱️ مُدَّهَا عَلَى «مِقْيَاسِ المَدّ» (+١ إِذَا وَقَفْتَ فِي الأَخْضَر)','⏱️ Stretch it on the meter (+1 if you stop in the green zone)')}</div>${nextBtn()}`;
   qa.appendChild(ex);bindNext();
 }
 
 /* ---------- mode 2a: build the ladder ---------- */
 function showLadderSort(){document.querySelectorAll('.rung').forEach(r=>r.classList.add('lose'));
   const pool=shuffle(ORDER);let pos=0,errs=0;
-  qa.innerHTML=`${header()}<div class="q">🪜 اِبْنِ السُّلَّم! اِضْغَطْ عَلَى المُدُودِ مِنَ <b>الأَقْوَى</b> إِلَى <b>الأَضْعَف</b> <span class="en blk">Build the ladder: tap from strongest to weakest</span></div>
-   <div class="tip">«للمدود مراتب خمس: فأقواها المد اللازم، فالمتصل، فالعارض، فالمنفصل، فالبدل» (ص ٣٣) — جَرِّبْ قَبْلَ أَنْ تَنْظُر!</div>
-   <div class="sort" id="sort">${pool.map(k=>`<button class="ob" data-k="${k}" style="--ac:${TYPES[k].c}">${TYPES[k].ar}<small>${TYPES[k].cTxt}</small></button>`).join('')}</div><div id="after" style="display:contents"></div>`;
+  qa.innerHTML=`${header()}<div class="q">${U('🪜 اِبْنِ السُّلَّم! اِضْغَطْ عَلَى المُدُودِ مِنَ <b>الأَقْوَى</b> إِلَى <b>الأَضْعَف</b>','🪜 Build the ladder! Tap the madds from the <b>strongest</b> to the <b>weakest</b>.')}</div>
+   <div class="tip">${U('«للمدود مراتب خمس: فأقواها المد اللازم، فالمتصل، فالعارض، فالمنفصل، فالبدل» (ص ٣٣) — جَرِّبْ قَبْلَ أَنْ تَنْظُر!','“Madd has five ranks: the strongest is the necessary madd, then the joined, then the temporary-sukūn, then the separated, then the substitute” (p. 33). Try it before you look!')}</div>
+   <div class="sort" id="sort">${pool.map(k=>`<button class="ob" data-k="${k}" style="--ac:${TYPES[k].c}">${TYPES[k].ar}<small>${U(TYPES[k].cTxt,TYPES[k].cEn)}</small><span class="en">${TYPES[k].en}</span></button>`).join('')}</div><div id="after" style="display:contents"></div>`;
   document.querySelectorAll('#sort .ob').forEach(b=>b.onclick=()=>{ac();if(b.disabled)return;
     if(b.dataset.k===ORDER[pos]){b.classList.add('right');b.disabled=true;b.insertAdjacentHTML('afterbegin',`<small>${ar(pos+1)}</small>`);
       document.querySelector(`.rung[data-k="${b.dataset.k}"]`).classList.remove('lose');tone(392+pos*80,.12,'triangle',.18);pos++;
       if(pos===ORDER.length){const pts=errs===0?2:1;stat('ladder',errs===0);setTimeout(()=>award(pts),200);
-        $('#after').innerHTML=`<div class="info" style="--ac:var(--gold2)"><div class="t">لِمَاذَا هَذَا التَّرْتِيب؟</div><div class="bq">«فإذا اجتمع سببان من أسباب المد أحدهما قوي والآخر ضعيف عمل بالقوي، وألغي الضعيف» (ص ٣٤).</div><div class="why">الآنَ: مُبَارَزَاتٌ بَيْنَ سَبَبَيْن… مَنْ يَفُوز؟ ⚔️</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;bindNext()}}
+        $('#after').innerHTML=`<div class="info" style="--ac:var(--gold2)"><div class="t">${U('لِمَاذَا هَذَا التَّرْتِيب؟','Why this order?')}</div>${bqHtml('«فإذا اجتمع سببان من أسباب المد أحدهما قوي والآخر ضعيف عمل بالقوي، وألغي الضعيف» (ص ٣٤).','“When two causes of madd meet, one strong and one weak, the strong one is applied and the weak one is cancelled” (p. 34).')}<div class="why">${U('الآنَ: مُبَارَزَاتٌ بَيْنَ سَبَبَيْن… مَنْ يَفُوز؟ ⚔️','Next: duels between two causes… which one wins? ⚔️')}</div>${SRC()}</div>${nextBtn()}`;bindNext()}}
     else{errs++;b.classList.add('bad');sfx.bad();setTimeout(()=>b.classList.remove('bad'),400)}});
 }
 /* ---------- mode 2b: duel of two causes + traps ---------- */
 function showDuel(it){
-  const lbl=it.kind==='drop'?'🪤 فَخّ! اِقْرَأْهَا مَوْصُولَة':it.kind==='change'?'⭐ حَالَةٌ خَاصَّة: صِلْهَا':'⚔️ سَبَبَانِ عَلَى حَرْفِ مَدٍّ وَاحِد';
+  const lbl=it.kind==='drop'?U('🪤 فَخّ! اِقْرَأْهَا مَوْصُولَة','🪤 A trap! Read it joined to the next word'):it.kind==='change'?U('⭐ حَالَةٌ خَاصَّة: صِلْهَا','⭐ A special case: read it joined'):U('⚔️ سَبَبَانِ عَلَى حَرْفِ مَدٍّ وَاحِد','⚔️ Two causes on one madd letter');
   qa.innerHTML=`${header()}<div class="q">${lbl}</div><div class="phrase" id="ph">${wordHTML(it.t,false)}</div>
-    <div class="row"><span class="ref">﴿${it.ref}﴾</span>${it.stop?'<span class="stopb">✋ قِفْ عَلَيْهَا</span>':''}</div><div id="steps" style="display:contents"></div>`;
+    <div class="row"><span class="ref">${REF(it.ref)}</span>${it.stop?`<span class="stopb">${STOPB}</span>`:''}</div><div id="steps" style="display:contents"></div>`;
   const steps=$('#steps');
   const countStep=(clean)=>{const list=COUNT_OPTS;const ci=list.findIndex(o=>same(o.v,it.counts||TYPES[it.win].counts));
-    ask(steps,`⏱️ كَمْ تَمُدُّهُ ${it.stop?'وَقْفًا':'وَصْلًا'}؟ <span class="en blk">How many counts?</span>`,list,ci,ok=>{
+    ask(steps,U(`⏱️ كَمْ تَمُدُّهُ ${it.stop?'وَقْفًا':'وَصْلًا'}؟`,`⏱️ How many counts do you give it ${it.stop?'when stopping':'when joining'}?`),list,ci,ok=>{
       const good=clean&&ok;stat(it.kind||'duel',good);if(good)setTimeout(()=>award(it.kind?1:2),150);else{sfx.pop();miss(it)}
       $('#ph').classList.add('rev');
       const v=it.counts||TYPES[it.win].counts,c=it.win?TYPES[it.win].c:it.kind==='drop'?'var(--none)':'var(--lazim)';
-      setTarget(v,c,v[0]===0?'🪤 لَا مَدَّ هُنَا وَصْلًا: اِقْرَأْهَا قَصِيرَة! <span class="en blk">No madd here when joined.</span>':`🎙️ الآنَ مُدَّهَا: <b>${cTxt(v)}</b> <span class="en blk">Now stretch it</span>`);
+      setTarget(v,c,v[0]===0?U('🪤 لَا مَدَّ هُنَا وَصْلًا: اِقْرَأْهَا قَصِيرَة!','🪤 No madd here when joined: read it short!'):U(`🎙️ الآنَ مُدَّهَا: <b>${cTxt(v)}</b>`,`🎙️ Now stretch it: <b>${cEn(v)}</b>`));
       if(v[0]!==0)meterBonus=()=>award(1);
       if(it.win)lightLadder([it.win],it.causes.filter(k=>k!==it.win));
       const ex=document.createElement('div');ex.style.display='contents';
-      ex.innerHTML=`<div class="info" style="--ac:${c}"><div class="t">${it.win?`الفَائِز: ${TYPES[it.win].ar} 🏆 — ${TYPES[it.win].cTxt}`:it.kind==='drop'?'يُحْذَفُ حَرْفُ المَدِّ وَصْلًا (٠)':'المَدُّ (٦) أَوِ القَصْر (٢)'}</div><div class="bq">${it.bq}</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+      ex.innerHTML=`<div class="info" style="--ac:${c}"><div class="t">${it.win?U(`الفَائِز: ${TYPES[it.win].ar} 🏆 — ${TYPES[it.win].cTxt}`,`Winner: ${TYPES[it.win].en} 🏆 — ${TYPES[it.win].cEn} counts`):it.kind==='drop'?U('يُحْذَفُ حَرْفُ المَدِّ وَصْلًا (٠)','The madd letter is dropped when joining (0)'):U('المَدُّ (٦) أَوِ القَصْر (٢)','Lengthen (6) or shorten (2)')}</div>${bqHtml(it.bq,it.bqEn)}${SRC()}</div>${nextBtn()}`;
       steps.appendChild(ex);bindNext()})};
-  if(it.causes){const list=it.causes.map(k=>({ar:TYPES[k].ar,sub:`المَرْتَبَة ${ar(TYPES[k].rank)} · ${TYPES[k].cTxt}`,en:TYPES[k].en,c:TYPES[k].c}));
+  if(it.causes){const list=it.causes.map(k=>({ar:TYPES[k].ar,sub:`المَرْتَبَة ${ar(TYPES[k].rank)} · ${TYPES[k].cTxt}`,subEn:`Rank ${TYPES[k].rank} · ${TYPES[k].cEn} counts`,en:TYPES[k].en,c:TYPES[k].c}));
     lightLadder(it.causes);
-    ask(steps,`هُنَا سَبَبَان: <b style="color:${TYPES[it.causes[0]].c}">${TYPES[it.causes[0]].ar}</b> وَ<b style="color:${TYPES[it.causes[1]].c}">${TYPES[it.causes[1]].ar}</b> — أَيُّهُمَا يَفُوز؟ <span class="en blk">Two causes — which one wins?</span>`,list,it.causes.indexOf(it.win),ok=>countStep(ok),0)}
+    ask(steps,U(`هُنَا سَبَبَان: <b style="color:${TYPES[it.causes[0]].c}">${TYPES[it.causes[0]].ar}</b> وَ<b style="color:${TYPES[it.causes[1]].c}">${TYPES[it.causes[1]].ar}</b> — أَيُّهُمَا يَفُوز؟`,`There are two causes here: <b style="color:${TYPES[it.causes[0]].c}">${TYPES[it.causes[0]].en}</b> and <b style="color:${TYPES[it.causes[1]].c}">${TYPES[it.causes[1]].en}</b>. Which one wins?`),list,it.causes.indexOf(it.win),ok=>countStep(ok),0)}
   else countStep(true);
 }
 
 /* ---------- mode 3: openings of surahs ---------- */
 function showFawatih(it){let k=0,clean=true;
-  qa.innerHTML=`${header()}<div class="phrase" style="font-size:clamp(3rem,10vw,5rem)">${it.t}</div><div class="ref">﴿${it.ref}﴾</div>
-   <div class="q">🔤 اِقْرَأْ كُلَّ حَرْفٍ بِاسْمِه، ثُمَّ: كَمْ تَمُدُّه؟ <span class="en blk">Say each letter's name: how long is it?</span></div>
+  qa.innerHTML=`${header()}<div class="phrase" style="font-size:clamp(3rem,10vw,5rem)">${it.t}</div><div class="ref">${REF(it.ref)}</div>
+   <div class="q">${U('🔤 اِقْرَأْ كُلَّ حَرْفٍ بِاسْمِه، ثُمَّ: كَمْ تَمُدُّه؟','🔤 Say the name of each letter, then decide: how long is it stretched?')}</div>
    <div class="tiles" id="tiles">${it.letters.map((L,i)=>`<div class="tile" data-i="${i}">${L.l}<small></small></div>`).join('')}</div>
    <div id="steps" style="display:contents"></div>`;
   const steps=$('#steps');
   const next=()=>{document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('cur',+t.dataset.i===k));
     if(k>=it.letters.length){stat('fawatih',clean);if(clean)setTimeout(()=>award(2),150);else{sfx.pop();miss(it)}
-      const say=it.letters.map(L=>L.say).join(' ');setTarget([6],'var(--lazim)',`🎙️ اِقْرَأْهَا كُلَّهَا: <b style="font-family:var(--f-ar);font-size:1.3rem">${say}</b>`);meterBonus=null;
+      const say=it.letters.map(L=>L.say).join(' ');setTarget([6],'var(--lazim)',U(`🎙️ اِقْرَأْهَا كُلَّهَا: <b style="font-family:var(--f-ar);font-size:1.3rem">${say}</b>`,`🎙️ Now read them all together: <b class="qar" style="font-family:var(--f-ar);font-size:1.3rem">${say}</b>`));meterBonus=null;
       const ex=document.createElement('div');ex.style.display='contents';
-      ex.innerHTML=`<div class="info" style="--ac:var(--lazim)"><div class="t">الحروف الأربعة عشر في فواتح السور أربعة أقسام (ص ٣٣)</div><div class="bq">${F_BINS.map(b=>`<div style="color:${b.c}">● ${b.ar}: <span style="color:var(--ink)">${b.bq}</span></div>`).join('')}</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+      ex.innerHTML=`<div class="info" style="--ac:var(--lazim)"><div class="t">${U('الحروف الأربعة عشر في فواتح السور أربعة أقسام (ص ٣٣)','The fourteen letters in the surah openings fall into four groups (p. 33)')}</div><div class="bq">${F_BINS.map(b=>`<div style="color:${b.c}">● ${U(b.ar,b.en)}: <span style="color:var(--ink)">${b.bq}${tr(b.bqEn)}</span></div>`).join('')}</div>${SRC()}</div>${nextBtn()}`;
       steps.appendChild(ex);bindNext();return}
     const L=it.letters[k];steps.innerHTML='';
-    ask(steps,`الحَرْف: <b style="font-family:var(--f-ar);font-size:1.6rem">${L.l}</b> — اِسْمُهُ: <b style="font-family:var(--f-ar);font-size:1.4rem">${L.say}</b> … كَمْ يُمَدّ؟`,F_BINS.map(b=>({ar:b.ar,sub:b.sub,c:b.c})),F_BINS.findIndex(b=>b.n===L.n),ok=>{
-      if(!ok)clean=false;const B=F_BINS.find(b=>b.n===L.n);const t=document.querySelector(`.tile[data-i="${k}"]`);t.classList.add('done');t.style.setProperty('--tc',B.c);t.querySelector('small').textContent=B.n===46?'٤/٦':ar(B.n);
+    ask(steps,U(`الحَرْف: <b style="font-family:var(--f-ar);font-size:1.6rem">${L.l}</b> — اِسْمُهُ: <b style="font-family:var(--f-ar);font-size:1.4rem">${L.say}</b> … كَمْ يُمَدّ؟`,`The letter <b class="qar" style="font-size:1.6rem">${L.l}</b>, named <b class="qar" style="font-size:1.4rem">${L.say}</b>: how long is it stretched?`),F_BINS.map(b=>({ar:b.ar,sub:b.sub,subEn:b.subEn,en:b.en,c:b.c})),F_BINS.findIndex(b=>b.n===L.n),ok=>{
+      if(!ok)clean=false;const B=F_BINS.find(b=>b.n===L.n);const t=document.querySelector(`.tile[data-i="${k}"]`);t.classList.add('done');t.style.setProperty('--tc',B.c);t.querySelector('small').innerHTML=B.n===46?U('٤/٦','4/6'):U(ar(B.n),B.n);
       if(B.n===6||B.n===46)lightLadder(['lazim']);else lightLadder(B.n===2?['tabii']:[]);
       setTimeout(()=>{k++;next()},ok?650:1200)});
   };next();
 }
 
 /* ---------- end ---------- */
-const STAT_NAMES={...Object.fromEntries(Object.entries(TYPES).map(([k,T])=>[k,{ar:T.ar,c:T.c}])),ladder:{ar:'بِنَاءُ السُّلَّم',c:'var(--gold2)'},duel:{ar:'مُبَارَزَةُ السَّبَبَيْن',c:'var(--muttasil)'},drop:{ar:'فَخُّ الحَذْف',c:'var(--none)'},change:{ar:'تَغَيُّرُ السَّبَب',c:'var(--lazim)'},fawatih:{ar:'فَوَاتِحُ السُّوَر',c:'var(--lazim)'}};
+const STAT_NAMES={...Object.fromEntries(Object.entries(TYPES).map(([k,T])=>[k,{ar:T.ar,en:T.en,c:T.c}])),ladder:{ar:'بِنَاءُ السُّلَّم',en:'Building the ladder',c:'var(--gold2)'},duel:{ar:'مُبَارَزَةُ السَّبَبَيْن',en:'Duel of two causes',c:'var(--muttasil)'},drop:{ar:'فَخُّ الحَذْف',en:'The dropping trap',c:'var(--none)'},change:{ar:'تَغَيُّرُ السَّبَب',en:'Change of cause',c:'var(--lazim)'},fawatih:{ar:'فَوَاتِحُ السُّوَر',en:'Surah openings',c:'var(--lazim)'}};
 function end(){lightLadder();setTarget([2],'var(--tabii)');
   const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
-  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${STAT_NAMES[k].c}"><span>${STAT_NAMES[k].ar}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${ar(s.ok)}/${ar(s.n)}</span></div>`).join('');
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمْ','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
+  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${STAT_NAMES[k].c}"><span>${U(STAT_NAMES[k].ar,STAT_NAMES[k].en)}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${U(`${ar(s.ok)}/${ar(s.n)}`,`${s.ok}/${s.n}`)}</span></div>`).join('');
   const uniq=[...new Set(missed)];
   qa.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
-    <div class="q">📊 تَقْرِيرُ المُدُود (صَحّ بِلَا خَطَأ) <span class="en">Madd report</span></div><div class="report">${rows}</div>
-    ${uniq.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${uniq.map(it=>(it.letters?it.t:wordHTML(it.t,true))+` <small style="font-size:.6em;color:var(--gold2)">(${it.ref})</small>`).join(' ۞ ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
-    <div class="tip">💡 تَحَدِّي الخِتَام: اِفْتَحْ سُورَتَكَ، وَهَاتِ مِثَالًا لِكُلِّ دَرَجَةٍ فِي السُّلَّم (لَازِم، مُتَّصِل، عَارِض، مُنْفَصِل، بَدَل) — وَمُدَّهُ عَلَى المِقْيَاس! <span class="en blk">Closing challenge: one example of each rung from your surah — then stretch it on the meter.</span></div>
-    <button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div>`;
+    <div class="q">${U('📊 تَقْرِيرُ المُدُود (صَحّ بِلَا خَطَأ)','📊 Madd report (correct with no mistakes)')}</div><div class="report">${rows}</div>
+    ${uniq.length?`<div>${U('رَاجِعْ هَذِهِ أَوَّلًا:','Review these first:')}</div><div class="miss">${uniq.map(it=>(it.letters?it.t:wordHTML(it.t,true))+` <small style="font-size:.6em;color:var(--gold2)">(${it.ref})</small>`).join(' ۞ ')}</div>`:`<div>${U('لَا أَخْطَاء — مَا شَاءَ الله! 🌟','No mistakes — Masha Allah! 🌟')}</div>`}
+    <div class="tip">${U('💡 تَحَدِّي الخِتَام: اِفْتَحْ سُورَتَكَ، وَهَاتِ مِثَالًا لِكُلِّ دَرَجَةٍ فِي السُّلَّم (لَازِم، مُتَّصِل، عَارِض، مُنْفَصِل، بَدَل) — وَمُدَّهُ عَلَى المِقْيَاس!','💡 Closing challenge: open the surah you are learning and find one example for each rung of the ladder (lāzim, muttaṣil, ʿāriḍ, munfaṣil, badal), then stretch it on the meter!')}</div>
+    <button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
@@ -527,7 +547,7 @@ setOptions();
 $('#modeSel').onchange=()=>{setOptions();newGame()};['#setSel','#teamSel'].forEach(s=>$(s).onchange=newGame);
 $('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'&&$('#nextB')){e.preventDefault();$('#nextB').click()}});
 newGame();
 </script>
@@ -672,5 +692,5 @@ document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 
 </script>
 
-<!--tq-home--><a href="../" id="tqHome" title="كل الألعاب" aria-label="كل الألعاب" style="position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:75;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0B1E2D;border:2px solid #E2B85C;font-size:20px;text-decoration:none;opacity:.75;box-shadow:0 4px 12px rgba(0,0,0,.3)">🏠</a>
+<!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

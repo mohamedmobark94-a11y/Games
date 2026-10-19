@@ -1,0 +1,16 @@
+/* Shared bilingual helpers for games and lessons (load before the page's own <style>).
+   Arabic mode: only .ui-ar shows.  English mode (body.show-en): only .ui-en shows and the page flips to left-to-right.
+   Terms and Qur'anic words stay Arabic in both modes; instructions, questions and feedback use .ui-ar / .ui-en pairs. */
+.ui-en{display:none}
+body.show-en .ui-ar{display:none!important}
+body.show-en .ui-en{display:inline}
+body.show-en .ui-en.blk{display:block}
+/* only pages that have been fully translated opt in to the left-to-right English layout */
+body.show-en.tq-i18n{direction:ltr}
+/* the shared top bar (tq-nav.js) now owns language switching */
+#enB{display:none!important}
+/* Arabic content inside an English page keeps its own direction and a readable face */
+body.show-en .qar{direction:rtl;unicode-bidi:isolate;font-family:"Amiri","Traditional Arabic",serif}
+/* English translation line under an Arabic quotation */
+.tr{display:none;margin-top:4px;color:var(--muted,#76654F);font-size:.92em;font-weight:500;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;direction:ltr;text-align:start}
+body.show-en .tr{display:block}
