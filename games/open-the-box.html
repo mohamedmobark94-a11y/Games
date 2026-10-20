@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>افتح الصندوق</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -137,26 +137,26 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">افْتَحِ الصُّنْدُوق! <span class="en">Open the Box</span><small>ترتيل القرآن · Tarteel Al-Quran — اختر رقمًا… وافتح المفاجأة</small></h1>
+    <h1 class="brand">افْتَحِ الصُّنْدُوق! <span class="en">Open the Box</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — اختر رقمًا… وافتح المفاجأة</span><span class="ui-en">Tarteel Al-Quran — pick a number… and open the surprise</span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
 
   <div class="bar">
-    <label for="setSel">الدرس:</label><select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد ⭐</option><option value="2" selected>فريقان 🔵🔴</option><option value="tv">الطالب ضد المعلم</option></select>
-    <label for="nSel">الصناديق:</label>
+    <label for="setSel"><span class="ui-ar">الدرس:</span><span class="ui-en">Lesson:</span></label><select id="setSel"></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student ⭐">طالب واحد ⭐</option><option value="2" selected data-en="Two teams 🔵🔴">فريقان 🔵🔴</option><option value="tv" data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
+    <label for="nSel"><span class="ui-ar">الصناديق:</span><span class="ui-en">Boxes:</span></label>
     <select id="nSel"><option>6</option><option>9</option><option selected>12</option><option>16</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ لعبة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ لعبة جديدة</span><span class="ui-en">↻ New game</span></button>
   </div>
 
   <div class="teams" id="teams"></div>
   <section id="s0"><div class="shelf" id="shelf"></div></section>
 </div>
 
-<div id="cardWrap" hidden><div class="card" id="card" role="dialog" aria-modal="true" aria-label="بطاقة الصندوق"></div></div>
+<div id="cardWrap" hidden><div class="card" id="card" role="dialog" aria-modal="true" aria-label="Box card · بطاقة الصندوق"></div></div>
 
 <script>
 /* ============================================================
@@ -193,6 +193,7 @@ const BOX_COLORS = ['#2F7DE1','#F2557A','#FFB020','#1FAE6E','#8B5CF6','#FF8A3D']
 /* ============================================================ */
 
 const $=s=>document.querySelector(s);
+const {U}=TQI;
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -209,16 +210,16 @@ const sfx={open:()=>{tone(392,.1,'triangle',.18);tone(587,.12,'triangle',.18,.08
 
 function confetti(n=46){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=pick(BOX_COLORS);c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(pts){const k=Math.floor(Math.random()*PRAISE.length);const p=document.createElement('div');p.className='starpop';p.innerHTML=`★ +${ar(pts)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(p);setTimeout(()=>p.remove(),1150)}
+function praise(pts){const k=Math.floor(Math.random()*PRAISE.length);const p=document.createElement('div');p.className='starpop';p.innerHTML=`★ +${U(ar(pts),pts)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(p);setTimeout(()=>p.remove(),1150)}
 
 /* ---------- state ---------- */
 let teams=[], turn=0, boxes=[], openedCount=0, curBox=null, scored=false;
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--sun)'}];
-  if(v==='tv')return [{nm:'🧒 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
+  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'⭐ My stars',c:'var(--sun)'}];
+  if(v==='tv')return [{nm:'🧒 الطَّالِب',en:'🧒 Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'👨‍🏫 Teacher',c:'var(--teamB)'}];
+  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'🔵 Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'🔴 Red team',c:'var(--teamB)'}]}
 function renderTeams(){
-  $('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك <span class="en" style="color:#fff">your turn</span></span><span class="pts">${ar(t.pts)}</span></div>`).join('');
+  $('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك <span class="en" style="color:#fff">your turn</span></span><span class="pts">${U(ar(t.pts),t.pts)}</span></div>`).join('');
 }
 function makeCards(n){
   const set=SETS[$('#setSel').value], items=set.items;
@@ -234,7 +235,7 @@ function newGame(){
   teams=teamDefs().map(t=>({...t,pts:0}));turn=0;openedCount=0;
   const n=+$('#nSel').value;
   boxes=makeCards(n);
-  $('#shelf').innerHTML=boxes.map((b,i)=>`<button class="box" data-i="${i}" style="--bc:${BOX_COLORS[i%BOX_COLORS.length]}" aria-label="صندوق ${i+1}"><span class="body"></span><span class="rib"></span><span class="lid"></span><span class="bow" aria-hidden="true">🎀</span><span class="num">${ar(i+1)}</span></button>`).join('');
+  $('#shelf').innerHTML=boxes.map((b,i)=>`<button class="box" data-i="${i}" style="--bc:${BOX_COLORS[i%BOX_COLORS.length]}" aria-label="Box ${i+1} · صندوق ${i+1}"><span class="body"></span><span class="rib"></span><span class="lid"></span><span class="bow" aria-hidden="true">🎀</span><span class="num">${U(ar(i+1),i+1)}</span></button>`).join('');
   $('#shelf').querySelectorAll('.box').forEach(b=>b.onclick=()=>openBox(+b.dataset.i,b));
   renderTeams();
 }
@@ -252,12 +253,12 @@ function showCard(i){
   const b=boxes[i];curBox=i;scored=false;
   const [tg,tgEn,c]=TAGS[b.type];cardEl.style.setProperty('--cc',c);
   let h=`<span class="tag">${tg} <span class="en" style="color:#fff">${tgEn}</span></span>`;
-  const judge=`<div class="row" id="judge"><button class="big-btn green" id="okB">✓ صَحّ</button><button class="big-btn red" id="noB">✗ حاوِل لاحقًا</button></div>`;
+  const judge=`<div class="row" id="judge"><button class="big-btn green" id="okB">${U('✓ صَحّ','✓ Correct')}</button><button class="big-btn red" id="noB">${U('✗ حاوِل لاحقًا','✗ Try again later')}</button></div>`;
   const it=b.item;
   if(b.type==='say'){
     h+=`<div class="pic" aria-hidden="true">${it.pic}</div><div class="q">مَا هَذَا؟ <span class="en">What is this?</span></div>
       <div class="ar hid" id="ansW">${it.ar} <span class="en">${it.en}</span></div>
-      <div class="row"><button class="big-btn ghost" id="revB">👀 أَظْهِرِ الكَلِمَة</button></div>`+judge;
+      <div class="row"><button class="big-btn ghost" id="revB">${U('👀 أَظْهِرِ الكَلِمَة','👀 Show the word')}</button></div>`+judge;
   }else if(b.type==='pick'){
     const opts=shuffle([it,...shuffle(SETS[$('#setSel').value].items.filter(x=>x!==it)).slice(0,2)]);
     h+=`<div class="ar">${it.ar} <span class="en">${it.en}</span></div><div class="q">أَيْنَ الصُّورَة؟ <span class="en">Find the picture</span></div>
@@ -276,7 +277,7 @@ function showCard(i){
     h+=`<div class="pic" aria-hidden="true">${b.pic}</div><div class="q" style="font-family:var(--f-ar);font-size:1.8rem">${b.q} <span class="en">${b.qEn}</span></div>
       <div class="ar hid" id="ansW" style="font-size:clamp(2rem,7vw,3rem)">${b.a} <span class="en">${b.aEn}</span></div>
       ${b.hadith?`<div class="hadith hid" id="ansH">${b.hadith}<small>${b.ref}</small><small class="en blk">${b.refEn}</small></div>`:''}
-      <div class="row"><button class="big-btn ghost" id="revB">👀 أَظْهِرِ الجَوَاب</button></div>`+judge;
+      <div class="row"><button class="big-btn ghost" id="revB">${U('👀 أَظْهِرِ الجَوَاب','👀 Show the answer')}</button></div>`+judge;
   }
   h+=`<div class="row"><button class="big-btn" id="closeB">التَّالِي ← <span class="en" style="color:#fff">Next</span></button></div>`;
   cardEl.innerHTML=h;wrapEl.hidden=false;
@@ -291,7 +292,7 @@ function showCard(i){
     else{tries++;x.classList.add('bad');sfx.bad();if(tries>=2){cardEl.querySelector('.ch[data-ok="true"]').classList.add('right');rev();scored=true}}
   });
   cardEl.querySelector('#closeB').onclick=closeCard;
-  setTimeout(()=>cardEl.querySelector('#closeB').focus({preventScroll:true}),50);
+  setTimeout(()=>{const cb=cardEl.querySelector('#closeB');if(cb)cb.focus({preventScroll:true})},50);
 }
 function lockJudge(){scored=true;const j=cardEl.querySelector('#judge');if(j)j.remove()}
 function award(p){if(scored)return;scored=true;teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti();lockJudge()}
@@ -304,7 +305,7 @@ function endGame(){
   const max=Math.max(...teams.map(t=>t.pts));const win=teams.filter(t=>t.pts===max);
   const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! كُلُّكُمْ أَبْطَال':`فَازَ ${win[0].nm}!`;
   const msgEn=teams.length===1?`You collected ${max} stars!`:win.length>1?"It's a tie! You are all heroes":`${win[0].en} wins!`;
-  $('#shelf').insertAdjacentHTML('afterend',`<div class="endmsg" id="endM"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2><span class="en blk">${msgEn}</span><button class="big-btn green" id="againB">↻ العب مرة أخرى</button></div>`);
+  $('#shelf').insertAdjacentHTML('afterend',`<div class="endmsg" id="endM"><div class="trophy" aria-hidden="true">🏆</div><h2>${U(msg,msgEn)}</h2><button class="big-btn green" id="againB">${U('↻ العب مرة أخرى','↻ Play again')}</button></div>`);
   $('#againB').onclick=()=>{$('#endM').remove();newGame()};
   sfx.win();confetti(90);
 }
@@ -312,12 +313,13 @@ wrapEl.addEventListener('click',e=>{if(e.target===wrapEl)closeCard()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!wrapEl.hidden&&!document.body.classList.contains('ink-on'))closeCard()});
 
 /* ---------- setup ---------- */
-$('#setSel').innerHTML=Object.entries(SETS).map(([k,s])=>`<option value="${k}">${s.ar} — ${s.en}</option>`).join('');
+$('#setSel').innerHTML=Object.entries(SETS).map(([k,s])=>`<option value="${k}" data-en="${s.en}">${s.ar} — ${s.en}</option>`).join('');TQI.relabel();
 ['#setSel','#teamSel','#nSel'].forEach(s=>$(s).onchange=()=>{const m=$('#endM');if(m)m.remove();newGame()});
 $('#newB').onclick=()=>{const m=$('#endM');if(m)m.remove();newGame()};
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 newGame();
+TQI.auto('.hadith');
 </script>
 <script>
 (function(){

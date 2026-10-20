@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>بالونات الحروف</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,6 +86,7 @@ header.top{background:var(--card);border-bottom:3px solid var(--line);padding:8p
 .howto{text-align:start;font-size:.95rem;color:var(--ink);margin:6px 0 12px;padding-inline-start:20px;line-height:1.7}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 
+body.show-en #ask{display:none}
 .tnote{display:none;position:absolute;bottom:10px;right:16px;left:16px;z-index:12;background:#FFF6D6;border:2px solid var(--sun);border-radius:14px;padding:8px 12px;font-size:.88rem;line-height:1.6}
 body.teacher .tnote{display:block}
 kbd{font-family:system-ui,sans-serif;border:1px solid #D9C27A;border-radius:5px;padding:0 5px;background:#fff;font-size:.8rem}
@@ -122,10 +123,10 @@ body.ink-laser .ink-cv{cursor:none!important}
   <header class="top">
     <div class="top-row">
       <h1 class="brand">بَالُونَاتُ الحُرُوف <span class="en">Letter Balloons</span><small>ترتيل القرآن | Tarteel Al-Quran</small></h1>
-      <span class="stars" aria-live="polite">★ <span id="sc">٠</span></span>
-      <button class="tbtn" id="pauseB" aria-pressed="false" title="إيقاف مؤقت (Space)">⏸ إيقاف</button>
+      <span class="stars" aria-live="polite">★ <span id="sc"><span class="ui-ar">٠</span><span class="ui-en">0</span></span></span>
+      <button class="tbtn" id="pauseB" aria-pressed="false" title="إيقاف مؤقت (Space)" data-en-title="Pause (Space)"><span class="ui-ar">⏸ إيقاف</span><span class="ui-en">⏸ Pause</span></button>
       <button class="tbtn" id="enT" aria-pressed="false">English</button>
-      <button class="tbtn" id="tT" aria-pressed="false">للمعلم</button>
+      <button class="tbtn" id="tT" aria-pressed="false"><span class="ui-ar">للمعلم</span><span class="ui-en">Teacher notes</span></button>
     </div>
     <div class="ctrl">
       <label for="setSel">الدرس <span class="en">Set</span></label>
@@ -134,11 +135,11 @@ body.ink-laser .ink-cv{cursor:none!important}
       <div class="seg" id="spd">
         <button data-v="0" aria-pressed="true">🐢</button><button data-v="1" aria-pressed="false">🐇</button><button data-v="2" aria-pressed="false">🚀</button>
       </div>
-      <button class="tbtn" id="lisT" aria-pressed="false" title="اخفِ الحرف: الطالب يسمع فقط">👂 بالسمع فقط <span class="en">Listen only</span></button>
+      <button class="tbtn" id="lisT" aria-pressed="false" title="اخفِ الحرف: الطالب يسمع فقط" data-en-title="Hide the letter: the student only listens">👂 بالسمع فقط <span class="en">Listen only</span></button>
     </div>
   </header>
 
-  <section class="stage" id="s0" aria-label="ساحة اللعب">
+  <section class="stage" id="s0" aria-label="Play area · ساحة اللعب">
     <div class="cloud" style="width:120px;height:34px;top:28%;left:8%"></div>
     <div class="cloud" style="width:90px;height:26px;top:52%;right:10%"></div>
     <div class="cloud" style="width:150px;height:40px;top:72%;left:42%"></div>
@@ -150,9 +151,9 @@ body.ink-laser .ink-cv{cursor:none!important}
         <div class="en blk" id="askEn">Pop every “Baa”!</div>
         <div class="dots" id="dots"></div>
       </div>
-      <button class="say" id="sayB" title="اسمع (S)" aria-label="اسمع الحرف">🔊</button>
+      <button class="say" id="sayB" title="اسمع (S)" data-en-title="Listen (S)" aria-label="Listen to the letter · اسمع الحرف">🔊</button>
     </div>
-    <div class="tnote" id="tnote">ملاحظة للمعلم: قل اسم الحرف بصوتك ٣ مرات والطفل يفرقع البالونات. زر 👂 يخفي الحرف (تدريب السمع: ح/ه، ع/أ، س/ص). كل ٣ حروف تأتي «استراحة حركة»: قل الأمر بالعربي والطفل ينفذه. اختصارات: <kbd>Space</kbd> إيقاف · <kbd>N</kbd> الحرف التالي · <kbd>S</kbd> نطق · <kbd>D</kbd> القلم · <kbd>W</kbd> السبورة.</div>
+    <div class="tnote" id="tnote"><span class="ui-ar">ملاحظة للمعلم: قل اسم الحرف بصوتك ٣ مرات والطفل يفرقع البالونات. زر 👂 يخفي الحرف (تدريب السمع: ح/ه، ع/أ، س/ص). كل ٣ حروف تأتي «استراحة حركة»: قل الأمر بالعربي والطفل ينفذه. اختصارات: <kbd>Space</kbd> إيقاف · <kbd>N</kbd> الحرف التالي · <kbd>S</kbd> نطق · <kbd>D</kbd> القلم · <kbd>W</kbd> السبورة.</span><span class="ui-en">Teacher note: say the name of the letter aloud three times while the child pops the balloons. The 👂 button hides the letter (listening practice: ح/ه, ع/أ, س/ص). After every three letters comes a “move break”: say the command in Arabic and the child acts it out. Shortcuts: <kbd>Space</kbd> pause · <kbd>N</kbd> next letter · <kbd>S</kbd> pronounce · <kbd>D</kbd> pen · <kbd>W</kbd> whiteboard.</span></div>
 
     <div class="overlay" id="startOv">
       <div class="panel">
@@ -180,7 +181,7 @@ body.ink-laser .ink-cv{cursor:none!important}
       <div class="panel">
         <div class="emo">🏆</div>
         <h2>مَا شَاءَ اللهُ! أَحْسَنْت <span class="en blk">Well done!</span></h2>
-        <div class="final">★ <span id="finalSc">٠</span></div>
+        <div class="final">★ <span id="finalSc"><span class="ui-ar">٠</span><span class="ui-en">0</span></span></div>
         <p id="finalTxt"></p>
         <button class="bigbtn" id="againB">مَرَّةً أُخْرَى ↻ <span class="en">Again</span></button>
         <button class="bigbtn alt" id="nextSetB">الدَّرْسُ التَّالِي ← <span class="en">Next set</span></button>
@@ -242,6 +243,7 @@ const GAME = {
 (function(){
 const $=s=>document.querySelector(s);
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const {U}=TQI;
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const field=$('#s0');
@@ -279,7 +281,7 @@ function drawStar(x,y,r){fctx.beginPath();for(let i=0;i<10;i++){const a=i*Math.P
 
 /* ---------- UI setup ---------- */
 const sel=$('#setSel');
-GAME.sets.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=s.ar;sel.appendChild(o)});
+GAME.sets.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=s.ar;o.setAttribute('data-en',s.en);sel.appendChild(o)});TQI.relabel();
 sel.onchange=()=>{st.set=+sel.value;restart()};
 document.querySelectorAll('#spd button').forEach(b=>b.onclick=()=>{st.speed=+b.dataset.v;document.querySelectorAll('#spd button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
 const tog=(btn,fn)=>btn.onclick=()=>{const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',on);fn(on)};
@@ -293,8 +295,8 @@ $('#againB').onclick=()=>{$('#endOv').hidden=true;newGame()};
 $('#nextSetB').onclick=()=>{st.set=(st.set+1)%GAME.sets.length;sel.value=st.set;$('#endOv').hidden=true;newGame()};
 $('#tprB').onclick=()=>endTPR();
 
-function setPause(p){st.paused=p;$('#pauseB').setAttribute('aria-pressed',p);$('#pauseB').innerHTML=p?'▶ تشغيل':'⏸ إيقاف'}
-function setStars(n){st.stars=n;$('#sc').textContent=ar(n)}
+function setPause(p){st.paused=p;$('#pauseB').setAttribute('aria-pressed',p);$('#pauseB').innerHTML=p?U('▶ تشغيل','▶ Resume'):U('⏸ إيقاف','⏸ Pause')}
+function setStars(n){st.stars=n;$('#sc').innerHTML=U(ar(n),n)}
 
 /* ---------- game flow ---------- */
 function curSet(){return GAME.sets[st.set]}
@@ -325,7 +327,7 @@ function targetDone(){
 }
 function finish(){
   st.running=false;st.phase='end';clearBalloons();SND.win();rain();
-  $('#finalSc').textContent=ar(st.stars);
+  $('#finalSc').innerHTML=U(ar(st.stars),st.stars);
   $('#finalTxt').innerHTML=`طَيَّرْتَ ${ar(st.queue.length)} حُرُوف! <span class="en">You found ${st.queue.length} letters!</span>`;
   $('#endOv').hidden=false;
 }
@@ -414,6 +416,7 @@ $('#dots').innerHTML='<i></i>'.repeat(GAME.popsPerTarget);
 window.__game={st,GAME}; // for testing
 })();
 </script>
+<script>TQI.auto('#ask,#glyph,.cmd,#tprAr');</script>
 <script>
 (function(){
 // Pen tools + whiteboard, ported from the "عينك أمانة" deck to the scrolling lesson pages.

@@ -41,7 +41,7 @@
   /* keep the page's own English toggle (body.show-en, #enB) in step with the site language */
   function applyToPage(){
     var on=lang==='en',b=document.body;
-    if(on!==b.classList.contains('show-en')){var btn=document.getElementById('enB');if(btn)btn.click();else b.classList.toggle('show-en',on)}
+    if(on!==b.classList.contains('show-en')){var btn=document.getElementById('enB')||document.getElementById('enT');if(btn)btn.click();else b.classList.toggle('show-en',on)}
     b.dataset.lang=lang;document.documentElement.setAttribute('data-lang',lang);
     window.dispatchEvent(new CustomEvent('tq-lang',{detail:lang}));
   }

@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>قِفْ يا حَرْف</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -129,11 +129,11 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">قِفْ يا حَرْف! <span class="en">Letter Freeze</span><small>ترتيل القرآن · Tarteel Al-Quran — تحرّك… قِف… وانظر إلى النُّقَط</small></h1>
-    <span class="score" aria-live="polite">★ <b id="sc">٠</b></span>
-    <button class="tbtn" id="modeB" aria-pressed="false" title="بدّل بين: الطالب يتحرك أمام الكاميرا / الطالب يلمس الإجابة">🕺 وضع الحركة</button>
+    <h1 class="brand">قِفْ يا حَرْف! <span class="en">Letter Freeze</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — تحرّك… قِف… وانظر إلى النُّقَط</span><span class="ui-en">Tarteel Al-Quran — move… freeze… and look at the dots</span></small></h1>
+    <span class="score" aria-live="polite">★ <b id="sc"><span class="ui-ar">٠</span><span class="ui-en">0</span></b></span>
+    <button class="tbtn" id="modeB" aria-pressed="false" title="بدّل بين: الطالب يتحرك أمام الكاميرا / الطالب يلمس الإجابة" data-en-title="Switch between: the student moves on camera / the student taps the answer"><span class="ui-ar">🕺 وضع الحركة</span><span class="ui-en">🕺 Movement mode</span></button>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
 
   <section id="s0" aria-live="polite"><div class="view" id="view"></div></section>
@@ -141,9 +141,9 @@ body.ink-laser .ink-cv{cursor:none!important}
   <div class="rules" id="rules"></div>
 
   <details class="set">
-    <summary>⚙️ اختر الحروف للحصة <span class="en">Choose letters for this lesson</span></summary>
+    <summary><span class="ui-ar">⚙️ اختر الحروف للحصة</span><span class="ui-en">⚙️ Choose the letters for this lesson</span></summary>
     <div class="sets" id="sets"></div>
-    <div class="keys">لوحة المفاتيح: <kbd>Space</kbd> ابدأ / قِف · <kbd>Enter</kbd> أحسنت · <kbd>R</kbd> أظهر الجواب · <kbd>N</kbd> الجولة التالية · <kbd>D</kbd> القلم والسبورة</div>
+    <div class="keys"><span class="ui-ar">لوحة المفاتيح: <kbd>Space</kbd> ابدأ / قِف · <kbd>Enter</kbd> أحسنت · <kbd>R</kbd> أظهر الجواب · <kbd>N</kbd> الجولة التالية · <kbd>D</kbd> القلم والسبورة</span><span class="ui-en">Keyboard: <kbd>Space</kbd> start / freeze · <kbd>Enter</kbd> well done · <kbd>R</kbd> show the answer · <kbd>N</kbd> next round · <kbd>D</kbd> pen and whiteboard</span></div>
   </details>
 </div>
 
@@ -198,6 +198,7 @@ const PRAISE_EN = ['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'
 /* ============================================================ */
 
 const $=s=>document.querySelector(s);
+const {U}=TQI;
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const view=$('#view');
@@ -220,9 +221,9 @@ function stopTicks(){ clearInterval(tickT); tickT=null }
 
 /* ---------- celebration ---------- */
 function celebrate(){
-  score++; $('#sc').textContent=ar(score); sfx.good();
+  score++; $('#sc').innerHTML=U(ar(score),score); sfx.good();
   const k=Math.floor(Math.random()*PRAISE.length);
-  const p=document.createElement('div'); p.className='starpop'; p.innerHTML=`★ ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`; document.body.appendChild(p); setTimeout(()=>p.remove(),1150);
+  const p=document.createElement('div'); p.className='starpop'; p.innerHTML=`★ ${U(PRAISE[k],PRAISE_EN[k])}`; document.body.appendChild(p); setTimeout(()=>p.remove(),1150);
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const cols=['#FFC531','#FF5C7C','#2F7DE1','#22B574','#8B5CF6'];
   for(let i=0;i<46;i++){ const c=document.createElement('i'); c.className='cf'; c.style.left=Math.random()*100+'vw'; c.style.background=pick(cols); c.style.animationDuration=(1.4+Math.random()*1.4)+'s'; c.style.animationDelay=(Math.random()*.3)+'s'; document.body.appendChild(c); setTimeout(()=>c.remove(),3200) }
@@ -233,19 +234,18 @@ function setView(html){ view.innerHTML=html; }
 function home(){
   phase='home'; stopTicks(); clearTimeout(timer);
   setView(`<div class="movers" aria-hidden="true"><span>🧒</span><span>👧</span><span>🧒🏽</span></div>
-   <h2>تحرّك… وعند «قِفْ!» انظر إلى نُقَط الحرف</h2>
-   <span class="en blk">Move… when you hear "STOP!", look at the letter's dots and do the move.</span>
-   <p>${mode==='move'?'الطالب يتحرك أمام الكاميرا، والمعلم يعطي النجمة.':'الطالب يلمس الحركة الصحيحة على الشاشة.'}</p>
-   <div class="row"><button class="big-btn" id="goB">▶ بِسْمِ الله — هيّا نتحرّك</button></div>`);
+   <h2>${U('تحرّك… وعند «قِفْ!» انظر إلى نُقَط الحرف','Move… and when you hear “STOP!”, look at the dots of the letter and do the matching move.')}</h2>
+   <p>${mode==='move'?U('الطالب يتحرك أمام الكاميرا، والمعلم يعطي النجمة.','The student moves in front of the camera and the teacher awards the star.'):U('الطالب يلمس الحركة الصحيحة على الشاشة.','The student taps the correct movement on the screen.')}</p>
+   <div class="row"><button class="big-btn" id="goB">${U('▶ بِسْمِ الله — هيّا نتحرّك','▶ Bismillah — let’s move!')}</button></div>`);
   $('#goB').onclick=move;
 }
 function move(){
   ac(); phase='move'; clearTimeout(timer);
   const s=MOVE_SECONDS[0]+Math.random()*(MOVE_SECONDS[1]-MOVE_SECONDS[0]);
   setView(`<div class="movers" aria-hidden="true"><span>🏃</span><span>🕺</span><span>🏃‍♀️</span></div>
-   <h2>امْشِ في مكانك! <span class="en">March in place!</span></h2>
+   <h2>${U('امْشِ في مكانك!','March in place!')}</h2>
    <div class="countbar"><i id="cb"></i></div>
-   <div class="row"><button class="big-btn sun" id="stopB">✋ قِفْ الآن</button></div>`);
+   <div class="row"><button class="big-btn sun" id="stopB">${U('✋ قِفْ الآن','✋ Freeze now')}</button></div>`);
   const cb=$('#cb'); cb.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}],{duration:s*1000,fill:'forwards'});
   $('#stopB').onclick=freeze; startTicks();
   timer=setTimeout(freeze,s*1000);
@@ -260,27 +260,27 @@ function freeze(){
   clearTimeout(timer); stopTicks(); sfx.freeze(); phase='freeze';
   curL=nextLetter(); tries=0; tapPos=null; rewarded=false;
   const L=curL;
-  const head=`<div class="freeze-word">قِفْ! <span class="en">STOP!</span></div>
+  const head=`<div class="freeze-word">${U('قِفْ!','STOP!')}</div>
     <div class="letter" lang="ar">${L.ch}</div>
     <div class="word" lang="ar">${L.word}${L.pic?`<span class="pic" aria-hidden="true">${L.pic}</span>`:''} <span class="en">${L.en} · ${L.wEn}</span></div>`;
   if(mode==='move'){
-    setView(head+`<div class="ask">قُل اسم الحرف… وافعل الحركة! <span class="en">Say its name and do the move!</span></div>
+    setView(head+`<div class="ask">${U('قُل اسم الحرف… وافعل الحركة!','Say the name of the letter… and do the move!')}</div>
       <div id="ans"></div>
-      <div class="row"><button class="big-btn green" id="okB">✓ أحسنت</button><button class="big-btn ghost" id="revB">👀 أظهر الجواب</button><button class="big-btn" id="nxB">↻ الجولة التالية</button></div>`);
+      <div class="row"><button class="big-btn green" id="okB">${U('✓ أحسنت','✓ Well done')}</button><button class="big-btn ghost" id="revB">${U('👀 أظهر الجواب','👀 Show the answer')}</button><button class="big-btn" id="nxB">${U('↻ الجولة التالية','↻ Next round')}</button></div>`);
     $('#okB').onclick=()=>{ if(!rewarded){rewarded=true;celebrate();reveal()} };
     $('#revB').onclick=reveal; $('#nxB').onclick=move;
   } else {
-    setView(head+`<div class="ask">أين النُّقَط؟ <span class="en">Where are the dots?</span></div>
-      <div class="choices" id="ch">${['up','down','none'].map(k=>`<button class="choice ${k}" data-k="${k}"><span class="ic">${RULES[k].ic}</span>${RULES[k].tip}<span class="en">${RULES[k].tipEn}</span></button>`).join('')}</div>
+    setView(head+`<div class="ask">${U('أين النُّقَط؟','Where are the dots?')}</div>
+      <div class="choices" id="ch">${['up','down','none'].map(k=>`<button class="choice ${k}" data-k="${k}"><span class="ic">${RULES[k].ic}</span>${U(RULES[k].tip,RULES[k].tipEn)}</button>`).join('')}</div>
       <div id="ans"></div>
-      <div class="row"><button class="big-btn" id="nxB">↻ الجولة التالية</button></div>`);
+      <div class="row"><button class="big-btn" id="nxB">${U('↻ الجولة التالية','↻ Next round')}</button></div>`);
     view.querySelectorAll('.choice').forEach(b=>b.onclick=()=>pickPos(b));
     $('#nxB').onclick=move;
   }
 }
 function reveal(){
   const L=curL, R=RULES[L.pos];
-  $('#ans').innerHTML=`<div class="answer"><span class="ic">${R.ic}</span><span>${L.name}: ${R.ar}${L.dots?` — صفّق ${ar(L.dots)} ${'👏'.repeat(L.dots)}`:''}<span class="en blk">${L.en}: ${R.en}${L.dots?` — clap ${L.dots}`:''}</span></span></div>`;
+  $('#ans').innerHTML=`<div class="answer"><span class="ic">${R.ic}</span><span>${U(`${L.name}: ${R.ar}${L.dots?` — صفّق ${ar(L.dots)} ${'👏'.repeat(L.dots)}`:''}`,`${L.en}: ${R.en}${L.dots?` — clap ${L.dots} ${'👏'.repeat(L.dots)}`:''}`)}</span></div>`;
   sfx.pop();
 }
 function pickPos(b){
@@ -288,22 +288,22 @@ function pickPos(b){
   if(b.dataset.k!==L.pos){ tries++; b.classList.add('bad'); sfx.bad(); if(tries>=2){ reveal(); $('#ch').innerHTML=''; } return }
   sfx.pop();
   if(L.dots===0){ finishTap(); return }
-  $('#ch').innerHTML=[1,2,3].map(n=>`<button class="choice n" data-n="${n}"><span class="ic">${ar(n)}</span>${'•'.repeat(n)}</button>`).join('');
-  view.querySelector('.ask').innerHTML=`كم نقطة؟ صفّق بعددها 👏 <span class="en">How many dots? Clap them!</span>`;
+  $('#ch').innerHTML=[1,2,3].map(n=>`<button class="choice n" data-n="${n}"><span class="ic">${U(ar(n),n)}</span>${'•'.repeat(n)}</button>`).join('');
+  view.querySelector('.ask').innerHTML=U('كم نقطة؟ صفّق بعددها 👏','How many dots? Clap that many times! 👏');
   view.querySelectorAll('.choice.n').forEach(x=>x.onclick=()=>{ if(+x.dataset.n===L.dots) finishTap(); else { tries++; x.classList.add('bad'); sfx.bad(); if(tries>=2){ reveal(); $('#ch').innerHTML=''; } } });
 }
 function finishTap(){ $('#ch').innerHTML=''; if(tries===0)celebrate(); else sfx.good(); reveal() }
 
 /* ---------- rules strip + settings ---------- */
-$('#rules').innerHTML=Object.values(RULES).map(r=>`<div class="rule" style="--c:${r.c}"><span class="ic" aria-hidden="true">${r.ic}</span><div><b>${r.tip}: ${r.ar}</b><small>${r.tipEn}: ${r.en}</small></div><span class="demo" aria-hidden="true">${r.demo}</span></div>`).join('')
-  +`<div class="rule" style="--c:var(--sun)"><span class="ic" aria-hidden="true">👏</span><div><b>${CLAP.ar}</b><small>${CLAP.en}</small></div><span class="demo" aria-hidden="true">ث</span></div>`;
+$('#rules').innerHTML=Object.values(RULES).map(r=>`<div class="rule" style="--c:${r.c}"><span class="ic" aria-hidden="true">${r.ic}</span><div><b>${U(`${r.tip}: ${r.ar}`,`${r.tipEn}: ${r.en}`)}</b></div><span class="demo" aria-hidden="true">${r.demo}</span></div>`).join('')
+  +`<div class="rule" style="--c:var(--sun)"><span class="ic" aria-hidden="true">👏</span><div><b>${U(CLAP.ar,CLAP.en)}</b></div><span class="demo" aria-hidden="true">ث</span></div>`;
 $('#sets').innerHTML=Object.entries(GROUPS).map(([g,t])=>`<label><input type="checkbox" id="grp${g}" data-g="${g}" checked> <span lang="ar">${t}</span></label>`).join('');
 $('#sets').addEventListener('change',e=>{ const g=+e.target.dataset.g; e.target.checked?active.add(g):active.delete(g); if(!active.size){active.add(g);e.target.checked=true} });
 
 /* ---------- top buttons ---------- */
-$('#modeB').onclick=()=>{ mode=mode==='move'?'tap':'move'; $('#modeB').textContent=mode==='move'?'🕺 وضع الحركة':'👆 وضع اللمس'; $('#modeB').setAttribute('aria-pressed',mode==='tap'); home() };
+$('#modeB').onclick=()=>{ mode=mode==='move'?'tap':'move'; $('#modeB').innerHTML=mode==='move'?U('🕺 وضع الحركة','🕺 Movement mode'):U('👆 وضع اللمس','👆 Touch mode'); $('#modeB').setAttribute('aria-pressed',mode==='tap'); home() };
 $('#enB').onclick=()=>{ const on=document.body.classList.toggle('show-en'); $('#enB').setAttribute('aria-pressed',on) };
-$('#sndB').onclick=()=>{ soundOn=!soundOn; $('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت'; $('#sndB').setAttribute('aria-pressed',soundOn); if(!soundOn)stopTicks(); else if(phase==='move')startTicks() };
+$('#sndB').onclick=()=>{ soundOn=!soundOn; $('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off'); $('#sndB').setAttribute('aria-pressed',soundOn); if(!soundOn)stopTicks(); else if(phase==='move')startTicks() };
 
 document.addEventListener('keydown',e=>{
   if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;

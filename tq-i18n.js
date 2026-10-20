@@ -28,6 +28,10 @@
       if(!el.hasAttribute('data-ar'))el.setAttribute('data-ar',el.textContent);
       el.textContent=el.getAttribute(en?'data-en':'data-ar');
     });
+    document.querySelectorAll('[data-en-title]').forEach(function(el){
+      if(!el.hasAttribute('data-ar-title'))el.setAttribute('data-ar-title',el.getAttribute('title')||'');
+      el.setAttribute('title',el.getAttribute(en?'data-en-title':'data-ar-title'));
+    });
   }
   window.TQI.relabel=relabel;
 
@@ -60,12 +64,34 @@
       });
     });
   }
+  /* Auto-pairing: where a page already writes  Arabic <span class="en">English</span>, English mode hides the Arabic text node
+     and promotes the English span. Learning content (letters, words, verses…) is excluded via a selector. */
+  var AR_RE=/[\u0600-\u06FF]/;
+  var CONTENT='.phrase,.letter,.word,.glyph,.tile,[lang=ar],.ar,.qar,.bq,.poem,.miss,.ref,#tqBar,#tools,#wbBoard,option,select,script,style';
+  var autoSel=null;
+  function autoRoot(root,en){
+    if(!autoSel||!root)return;
+    var els=root.nodeType===1?[root].concat([].slice.call(root.querySelectorAll('*'))):[];
+    els.forEach(function(el){
+      var skip=false;try{skip=!!el.closest(autoSel)}catch(e){}
+      if(skip)return;
+      var kids=el.childNodes,hasEn=false,i;
+      for(i=0;i<kids.length;i++)if(kids[i].nodeType===1&&kids[i].classList.contains('en')){hasEn=true;break}
+      for(i=0;i<kids.length;i++){
+        var n=kids[i];if(n.nodeType!==3)continue;
+        if(en&&hasEn&&AR_RE.test(n.nodeValue)){if(n.__tqa===undefined)n.__tqa=n.nodeValue;n.nodeValue=''}
+        else if(!en&&n.__tqa!==undefined){n.nodeValue=n.__tqa;delete n.__tqa}
+      }
+      if(hasEn)for(i=0;i<kids.length;i++)if(kids[i].nodeType===1&&kids[i].classList.contains('en'))kids[i].classList.toggle('tq-pri',en);
+    });
+  }
+  window.TQI.auto=function(extra){autoSel=CONTENT+(extra?','+extra:'');autoRoot(document.body,document.body.classList.contains('show-en'))};
   window.TQI.dict=function(extra){for(var k in extra)DICT[k]=extra[k];dictRoot(document.body,document.body.classList.contains('show-en'))};
   function boot(){
     var en=function(){return document.body.classList.contains('show-en')};
-    relabel();dictRoot(document.body,en());
-    new MutationObserver(function(){relabel();dictRoot(document.body,en())}).observe(document.body,{attributes:true,attributeFilter:['class']});
-    new MutationObserver(function(ms){if(!en())return;ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1)dictRoot(n,true)})})}).observe(document.body,{childList:true,subtree:true});
+    relabel();dictRoot(document.body,en());autoRoot(document.body,en());
+    new MutationObserver(function(){relabel();dictRoot(document.body,en());autoRoot(document.body,en())}).observe(document.body,{attributes:true,attributeFilter:['class']});
+    new MutationObserver(function(ms){if(!en())return;ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1){dictRoot(n,true);autoRoot(n,true)}})})}).observe(document.body,{childList:true,subtree:true});
   }
   if(document.body)boot();else document.addEventListener('DOMContentLoaded',boot);
 })();

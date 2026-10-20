@@ -1,5 +1,6 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}body.show-en .house .mv,body.show-en .mc .mv{font-size:.9em}
+</style></head><body class="tq-i18n">
 <!doctype html><html lang="ar"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>بيوت الصفات</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -160,17 +161,17 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">بُيُوتُ <b>الصِّفَات</b> 🏠 <span class="en">Sifat Houses</span><small>ترتيل القرآن · Tarteel Al-Quran — صفات الحروف من «الوجيز في علم التجويد»</small></h1>
+    <h1 class="brand">بُيُوتُ <b>الصِّفَات</b> 🏠 <span class="en">Sifat Houses</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — صفات الحروف من «الوجيز في علم التجويد»</span><span class="ui-en">Tarteel Al-Quran — the attributes of the letters, from <i>Al-Wajiz fi ‘Ilm at-Tajwid</i></span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
   <div class="bar">
-    <label for="gameSel">اللعبة:</label>
+    <label for="gameSel"><span class="ui-ar">اللعبة:</span><span class="ui-en">Game:</span></label>
     <select id="gameSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams">فريقان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0" aria-live="polite"></section>
@@ -187,21 +188,22 @@ body.ink-laser .ink-cv{cursor:none!important}
    SIFAT = جدول الصفات للعبة «معركة القوة»: s = 'S' قوية، 'W' ضعيفة، 'N' لا قوية ولا ضعيفة (كما في الكتاب ص ١٥).
    لتستعمل اللعبة في درس آخر: أضف لعبة جديدة في HOUSE_SETS (مثلًا: حروف قمرية/شمسية، مفخم/مرقق) بنفس الشكل.
    ============================================================ */
-const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي', ref:'باب صفات الحروف اللازمة، ص ١٠–١٥ (بترقيم الشاملة آليًّا)'};
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي', ref:'باب صفات الحروف اللازمة، ص ١٠–١٥ (بترقيم الشاملة آليًّا)',
+  en:"Al-Wajiz fi 'Ilm at-Tajwid — Mahmud Sibawayh al-Badawi", refEn:'chapter on the inherent attributes of the letters, pp. 10–15 (page numbers as auto-assigned by Shamela)'};
 const ALL = 'ء ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي'.split(' ');
 
 const HOUSE_SETS = {
   chars:{ar:'① شَخْصِيَّاتُ الحُرُوف (٤–٨ سنين)', en:'Letter characters (age 4–8)', round:12, houses:[
     {k:'qalqala',emo:'🐸',ar:'القَلْقَلَة',en:'Bounce (Qalqalah)',letters:'ق ط ب ج د',key:'«قُطْبُ جَدٍ»',move:'اقْفِزْ قَفْزَةً صَغِيرَةً مِثْلَ الضِّفْدَع',moveEn:'Small frog hop: the sound bounces',snd:'boing',c:'#22A45D',
-      bq:'اضطراب المخرج عند النطق بالحرف ساكنا حتى يسمع له نبرة قوية، وحروفها خمسة مجموعة في قولهم: "قطب جد".',pg:'١٣'},
+      bq:'اضطراب المخرج عند النطق بالحرف ساكنا حتى يسمع له نبرة قوية، وحروفها خمسة مجموعة في قولهم: "قطب جد".',pg:'١٣',bqEn:'Disturbance of the point of articulation when the letter is pronounced with sukūn, until a strong beat is heard from it. It has five letters, gathered in their saying: “qutbu jadin”.'},
     {k:'safir',emo:'🐦',ar:'الصَّفِير',en:'Whistle (Ṣafīr)',letters:'ص س ز',key:'ص · س · ز',move:'رَفْرِفْ بِيَدَيْكَ مِثْلَ العُصْفُور',moveEn:'Flap like a bird: it whistles',snd:'whistle',c:'#3A86FF',
-      bq:'صوت زائد يخرج من بين الشفتين يصاحب أحرفه الثلاثة عند خروجها، وهي الصاد، والسين المهملتان، والزاي، وسميت بالصفير؛ لأن لها صوتا يشبه صفير الطائر.',pg:'١٣'},
+      bq:'صوت زائد يخرج من بين الشفتين يصاحب أحرفه الثلاثة عند خروجها، وهي الصاد، والسين المهملتان، والزاي، وسميت بالصفير؛ لأن لها صوتا يشبه صفير الطائر.',pg:'١٣',bqEn:'An extra sound that comes from between the lips and accompanies its three letters when they are pronounced: the ṣād, the sīn (both undotted) and the zāy. It is called ṣafīr because it has a sound like the whistle of a bird.'},
     {k:'ghunna',emo:'🐝',ar:'الغُنَّة',en:'Nasal hum (Ghunnah)',letters:'ن م',key:'ن · م',move:'ضَعْ إِصْبَعَكَ عَلَى أَنْفِكَ وَطِنَّ مِثْلَ النَّحْلَة',moveEn:'Finger on your nose: buzz like a bee',snd:'hum',c:'#F59E0B',
-      bq:'صوت لذيذ مركب في جسم النون والميم، فهي صفة ثابتة فيهما مطلقا، إلا أنها في المشدد أكمل منها في المدغم.',pg:'١٤'},
+      bq:'صوت لذيذ مركب في جسم النون والميم، فهي صفة ثابتة فيهما مطلقا، إلا أنها في المشدد أكمل منها في المدغم.',pg:'١٤',bqEn:'A pleasant sound that forms part of the body of nūn and mīm; it is a permanent attribute of both of them in all cases, although it is fuller in the doubled (mushaddad) letter than in the merged one.'},
     {k:'tafashi',emo:'🌬️',ar:'التَّفَشِّي',en:'Spreading air (Tafashshī)',letters:'ش',key:'ش',move:'افْتَحْ يَدَيْكَ وَانْشُرْهُمَا مِثْلَ الرِّيح',moveEn:'Spread your hands wide like the wind',snd:'shh',c:'#06A3B8',
-      bq:'انتشار الريح في الفم عند النطق بالشين، والتفشي صفة للشين وحدها عند أكثر العلماء ومنهم ابن الجزري.',pg:'١٤'},
+      bq:'انتشار الريح في الفم عند النطق بالشين، والتفشي صفة للشين وحدها عند أكثر العلماء ومنهم ابن الجزري.',pg:'١٤',bqEn:'The spreading of air in the mouth when the shīn is pronounced. Tafashshī is an attribute of the shīn alone according to most scholars, among them Ibn al-Jazarī.'},
     {k:'istitala',emo:'🦒',ar:'الاسْتِطَالَة',en:'Long sound (Istiṭālah)',letters:'ض',key:'ض',move:'مُدَّ رَقَبَتَكَ طَوِيلًا مِثْلَ الزَّرَافَة',moveEn:'Stretch tall like a giraffe: the sound is long',snd:'long',c:'#E76F51',
-      bq:'امتداد الصوت من أول حافة اللسان إلى آخرها، وهي صفة للضاد المعجمة.',pg:'١٤'},
+      bq:'امتداد الصوت من أول حافة اللسان إلى آخرها، وهي صفة للضاد المعجمة.',pg:'١٤',bqEn:'The extension of the sound from the beginning of the edge of the tongue to its end. It is an attribute of the dotted ḍād.'},
   ], items:[
     {l:'ق',say:'أَقْ',ex:'الفَلَقْ',ref:'الفلق: ١'},{l:'ط',say:'أَطْ',ex:'مُحِيطْ',ref:'البروج: ٢٠'},{l:'ب',say:'أَبْ',ex:'وَتَبّْ',ref:'المسد: ١'},
     {l:'ج',say:'أَجْ',ex:'البُرُوجْ',ref:'البروج: ١'},{l:'د',say:'أَدْ',ex:'أَحَدْ',ref:'الإخلاص: ١'},
@@ -211,23 +213,23 @@ const HOUSE_SETS = {
   ]},
   hams:{ar:'② هَمْسٌ أَمْ جَهْر؟ 🤫📢', en:'Whisper or loud?', round:10, houses:[
     {k:'hams',emo:'🤫',ar:'الهَمْس',en:'Whisper: breath flows (Hams)',letters:'ف ح ث ه ش خ ص س ك ت',key:'«فَحَثَّهُ شَخْصٌ سَكَتْ»',move:'يَدُكَ أَمَامَ فَمِك: تَشْعُرُ بِالهَوَاءِ يَخْرُج',moveEn:'Hand in front of your mouth: you feel air',snd:'breath',c:'#8E5CF7',
-      bq:'جريان النفس عند النطق بالحرف وحروفه عشرة يجمعها: "فحثه شخص سكت".',pg:'١١'},
+      bq:'جريان النفس عند النطق بالحرف وحروفه عشرة يجمعها: "فحثه شخص سكت".',pg:'١١',bqEn:'The flow of breath when the letter is pronounced. It has ten letters, gathered in: “faḥathahu shakhṣun sakat”.'},
     {k:'jahr',emo:'📢',ar:'الجَهْر',en:'Loud: breath held (Jahr)',restOf:'hams',key:'بَاقِي الحُرُوف',move:'يَدُكَ عَلَى حَلْقِك: صَوْتٌ قَوِيّ وَالنَّفَسُ مَحْبُوس',moveEn:'Hand on your throat: strong voice, breath held',snd:'loud',c:'#EF476F',
-      bq:'انحباس جري النفس عند النطق بالحرف لقوة الاعتماد على مخرجه، وحروفه ما عدا أحرف الهمس السابقة، وهي ثمانية عشر حرفاً.',pg:'١١'},
+      bq:'انحباس جري النفس عند النطق بالحرف لقوة الاعتماد على مخرجه، وحروفه ما عدا أحرف الهمس السابقة، وهي ثمانية عشر حرفاً.',pg:'١١',bqEn:'The blocking of the flow of breath when the letter is pronounced, because of the strength of its reliance on its point of articulation. Its letters are all the letters except the whisper letters above: eighteen letters.'},
   ], items:'auto'},
   istila:{ar:'③ فَوْقُ أَمْ تَحْت؟ 🎈⚓', en:'Up or down?', round:10, houses:[
     {k:'istila',emo:'🎈',ar:'الاسْتِعْلَاء',en:'Tongue up: heavy (Istiʿlāʾ)',letters:'خ ص ض غ ط ق ظ',key:'«خُصَّ ضَغْطٍ قِظْ»',move:'ارْفَعْ يَدَكَ إِلَى فَوْق: اللِّسَانُ يَرْتَفِع',moveEn:'Hand up: the tongue rises',snd:'rise',c:'#E63946',
-      bq:'ارتفاع اللسان إلى الحنك الأعلى عند النطق بالحرف، وحروفه سبعة مجموعة في قولك: "خص ضغط قظ".',pg:'١٢'},
+      bq:'ارتفاع اللسان إلى الحنك الأعلى عند النطق بالحرف، وحروفه سبعة مجموعة في قولك: "خص ضغط قظ".',pg:'١٢',bqEn:'The raising of the tongue to the upper palate when the letter is pronounced. It has seven letters, gathered in your saying: “khuṣṣa ḍaghṭin qiẓ”.'},
     {k:'istifal',emo:'⚓',ar:'الاسْتِفَال',en:'Tongue down: light (Istifāl)',restOf:'istila',key:'بَاقِي الحُرُوف',move:'اخْفِضْ يَدَكَ إِلَى تَحْت: اللِّسَانُ يَنْخَفِض',moveEn:'Hand down: the tongue stays low',snd:'fall',c:'#2EC4B6',
-      bq:'انخفاض اللسان أي: انحطاطه عن الحنك الأعلى إلى قاع الفم عند النطق بالحرف، وحروفه ما عدا حروف الاستعلاء.',pg:'١٢'},
+      bq:'انخفاض اللسان أي: انحطاطه عن الحنك الأعلى إلى قاع الفم عند النطق بالحرف، وحروفه ما عدا حروف الاستعلاء.',pg:'١٢',bqEn:'The lowering of the tongue, that is, its dropping from the upper palate to the floor of the mouth when the letter is pronounced. Its letters are all the letters except the raised letters.'},
   ], items:'auto'},
   shidda:{ar:'④ يَقِفُ أَمْ يَجْرِي؟ 🧱⚖️💧', en:'Stops or flows?', round:10, houses:[
     {k:'shidda',emo:'🧱',ar:'الشِّدَّة',en:'Sound stops (Shiddah)',letters:'ء ج د ق ط ب ك ت',key:'«أَجِدْ قَطٍ بَكَتْ»',move:'اقْبِضْ يَدَكَ بِقُوَّة: الصَّوْتُ يَقِف',moveEn:'Close your fist: the sound stops',snd:'thud',c:'#6D597A',
-      bq:'انحباس جري الصوت عند النطق بالحرف لكمال قوة الاعتماد على مخرجه، وحروفها ثمانية مجموعة في قولك: "أجد قط بكت".',pg:'١١'},
+      bq:'انحباس جري الصوت عند النطق بالحرف لكمال قوة الاعتماد على مخرجه، وحروفها ثمانية مجموعة في قولك: "أجد قط بكت".',pg:'١١',bqEn:'The blocking of the flow of the sound when the letter is pronounced, because of the full strength of its reliance on its point of articulation. It has eight letters, gathered in your saying: “ajidu qaṭin bakat”.'},
     {k:'tawassut',emo:'⚖️',ar:'التَّوَسُّط',en:'In between (Tawassuṭ)',letters:'ل ن ع م ر',key:'«لِنْ عُمَرْ»',move:'افْتَحْ يَدَكَ نِصْفَ فَتْحَة: بَيْنَ بَيْن',moveEn:'Half-open hand: in between',snd:'mid',c:'#F4A261',
-      bq:'اعتدال الصوت عند النطق بالحرف لعدم كمال انحباسه كما في الشدة، وعدم كمال جريانه كما في الرخاوة، وحروف التوسط خمسة مجموعة في قولك: "لن عمر".',pg:'١٢'},
+      bq:'اعتدال الصوت عند النطق بالحرف لعدم كمال انحباسه كما في الشدة، وعدم كمال جريانه كما في الرخاوة، وحروف التوسط خمسة مجموعة في قولك: "لن عمر".',pg:'١٢',bqEn:'The balance of the sound when the letter is pronounced, because its blocking is not complete as in shiddah, nor is its flow complete as in rakhāwah. The intermediate letters are five, gathered in your saying: “lin ʿumar”.'},
     {k:'rikhwa',emo:'💧',ar:'الرَّخَاوَة',en:'Sound flows (Rakhāwah)',restOf:['shidda','tawassut'],key:'بَاقِي الحُرُوف',move:'حَرِّكْ يَدَكَ مِثْلَ المَاء: الصَّوْتُ يَجْرِي',moveEn:'Move your hand like water: the sound flows',snd:'flow',c:'#219EBC',
-      bq:'جريان الصوت عند النطق بالحرف، وحروفها ما عدا حروف الشدة، وما عدا الحروف البينية.',pg:'١٢'},
+      bq:'جريان الصوت عند النطق بالحرف، وحروفها ما عدا حروف الشدة، وما عدا الحروف البينية.',pg:'١٢',bqEn:'The flow of the sound when the letter is pronounced. Its letters are all the letters except the shiddah letters and except the intermediate letters.'},
   ], items:'auto'},
 };
 
@@ -254,12 +256,17 @@ const SIFAT = [
   {k:'khafa',ar:'خَفَاء',en:'hidden',s:'W',letters:'ه',x:1},
 ];
 const RANKS = {5:{ar:'أَقْوَى',en:'Strongest',c:'#B07F00'},4:{ar:'قَوِيّ',en:'Strong',c:'#E76F51'},3:{ar:'مُتَوَسِّط',en:'Medium',c:'#3A86FF'},2:{ar:'ضَعِيف',en:'Weak',c:'#8E5CF7'},1:{ar:'أَضْعَف',en:'Weakest',c:'#6F6585'}};
+const STRENGTH_BQ_EN = 'Know that when a letter has more attributes of strength than of weakness it is strong, like the rā’… and when all its attributes are strong it is the strongest; the strongest of all the letters is the ṭā’ alone. When it has more attributes of weakness it is weak, like the zāy… and when its attributes of strength equal its attributes of weakness it is medium, like the lām.';
 const STRENGTH_BQ = 'واعلم أن الحرف إذا كانت صفات القوة فيه أكثر من صفات الضعف كان قويا كالراء… وإذا كانت صفاته كلها قوية كان أقوى، وأقوى الحروف كلها الطاء فقط. وإذا كانت صفات الضعف فيه أكثر كان ضعيفا كالزاي… وإذا كانت صفات القوة فيه متساوية مع صفات الضعف كان متوسطا، كاللام.';
 const BATTLE_ROUND = 10;
 const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَكَ اللهُ فِيك!','مُمْتَاز!'], PRAISE_EN=['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'];
 /* ============================================================ */
 
 const $=s=>document.querySelector(s);
+const {U,tr}=TQI;
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
+const west=s=>String(s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const bqH=(a,e)=>`<div class="bq">«${a}»${tr('“'+e+'”')}</div>`;
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const split=s=>s.trim().split(/\s+/);
@@ -300,25 +307,25 @@ const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i
   win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2B705','#E76F51','#3A86FF','#22A45D','#8E5CF7','#EF476F'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- state ---------- */
 const S0=$('#s0');
 let game='chars',teams=[],turn=0,queue=[],idx=0,missed=[];
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ نُجُومِي','⭐ My stars'),c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}];
+  return [{nm:U('🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'),c:'var(--teamA)'},{nm:U('🔴 الفَرِيقُ الأَحْمَر','🔴 Red team'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
 function stage(){document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}))}
-function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en">Next</span></button></div>`}
+function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">${U('التَّالِي ←','Next →')}</button></div>`}
 function bindNext(fn){$('#nextB').onclick=()=>{idx++;turn=(turn+1)%teams.length;renderTeams();fn()};$('#nextB').focus({preventScroll:true})}
-function cite(pg){return `${BOOK.ar}، ص ${pg} (بترقيم الشاملة آليًّا)`}
+function cite(pg){return U(`${BOOK.ar}، ص ${pg} (بترقيم الشاملة آليًّا)`,`${BOOK.en}, p. ${west(pg)} (page numbers as auto-assigned by Shamela)`)}
 
 /* game menu */
-$('#gameSel').innerHTML=Object.entries(HOUSE_SETS).map(([k,g])=>`<option value="${k}">${g.ar}</option>`).join('')+`<option value="battle">⑤ مَعْرَكَةُ القُوَّة 💪 (مراهقون وكبار)</option>`;
-$('#bookLine').textContent=`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الأمثلة من سور قصار (رواية حفص).`;
+$('#gameSel').innerHTML=Object.entries(HOUSE_SETS).map(([k,g])=>`<option value="${k}" data-en="${g.en}">${g.ar}</option>`).join('')+`<option value="battle" data-en="⑤ Strength Battle 💪 (teens and adults)">⑤ مَعْرَكَةُ القُوَّة 💪 (مراهقون وكبار)</option>`;TQI.relabel();
+$('#bookLine').innerHTML=U(`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الأمثلة من سور قصار (رواية حفص).`,`📚 Source: ${BOOK.en}, ${BOOK.refEn}. The examples come from short surahs (Ḥafṣ recitation).`);
 
 function newGame(){game=$('#gameSel').value;teams=teamDefs().map(t=>({...t,pts:0}));turn=0;idx=0;missed=[];renderTeams();
   if(game==='battle')battleIntro();else meet();}
@@ -326,10 +333,10 @@ function newGame(){game=$('#gameSel').value;teams=teamDefs().map(t=>({...t,pts:0
 /* ================= HOUSES ================= */
 function houseOf(g,l){return g.houses.find(h=>h.L.includes(l))}
 function meet(){const g=HOUSE_SETS[game];
-  S0.innerHTML=`<div class="q">👋 قَابِلِ الشَّخْصِيَّات! اضْغَطْ عَلَى كُلِّ شَخْصِيَّة: اسْمَعْ صَوْتَهَا وَاعْمَلْ حَرَكَتَهَا. <span class="en blk">Meet the characters: tap each one, hear it, copy its move.</span></div>
+  S0.innerHTML=`<div class="q">${U('👋 قَابِلِ الشَّخْصِيَّات! اضْغَطْ عَلَى كُلِّ شَخْصِيَّة: اسْمَعْ صَوْتَهَا وَاعْمَلْ حَرَكَتَهَا.','👋 Meet the characters! Tap each one, listen to its sound and copy its movement.')}</div>
    <div class="meet">${g.houses.map(h=>`<button class="mc" data-k="${h.k}" style="--hc:${h.c}"><span class="emo">${h.emo}</span><span class="nm">${h.ar}</span><span class="en">${h.en}</span>
-     <span class="ls">${h.L.length<=10?h.L.join(' '):h.key}</span>${h.L.length<=10&&h.key!==h.L.join(' · ')?`<span class="key">${h.key}</span>`:''}<span class="mv">🙌 ${h.move}<span class="en blk">${h.moveEn}</span></span></button>`).join('')}</div>
-   <div class="row"><button class="big-btn green" id="goB">ابْدَأِ اللُّعْبَة ▶ <span class="en">Start</span></button></div>`;
+     <span class="ls">${h.L.length<=10?h.L.join(' '):h.key}</span>${h.L.length<=10&&h.key!==h.L.join(' · ')?`<span class="key">${h.key}</span>`:''}<span class="mv">🙌 ${U(h.move,h.moveEn)}</span></button>`).join('')}</div>
+   <div class="row"><button class="big-btn green" id="goB">${U('ابْدَأِ اللُّعْبَة ▶','Start the game ▶')}</button></div>`;
   S0.querySelectorAll('.mc').forEach(b=>b.onclick=()=>{ac();const h=g.houses.find(x=>x.k===b.dataset.k);VOICES[h.snd]();b.querySelector('.emo').animate([{transform:'none'},{transform:'translateY(-14px) scale(1.15)'},{transform:'none'}],{duration:500})});
   $('#goB').onclick=()=>{ac();queue=shuffle(g.items).slice(0,g.round||10);idx=0;showHouse()};
   stage();
@@ -337,11 +344,11 @@ function meet(){const g=HOUSE_SETS[game];
 function showHouse(){
   if(idx>=queue.length){end();return}
   const g=HOUSE_SETS[game],it=queue[idx],ans=houseOf(g,it.l);let tries=0,over=false;
-  S0.innerHTML=`<div class="prog"><span>الحَرْف ${ar(idx+1)} مِنْ ${ar(queue.length)}</span><span>${teams[turn].nm}</span></div>
-    <div class="dragzone"><div class="lcard" id="card" role="img" aria-label="الحرف ${it.l}"><span class="hand" aria-hidden="true">👆</span><div class="L">${it.l}</div></div>
-    <div class="say">قُلْ: «${it.say}»</div>${it.ex?`<div class="ex">${it.ex} <small>(${it.ref})</small></div>`:''}</div>
-    <div class="tip">① قُلِ الحَرْف ② اعْمَلْ حَرَكَةَ شَخْصِيَّتِه ③ اسْحَبْهُ إِلَى بَيْتِهِ (أَوِ اضْغَطْ عَلَى البَيْت) <span class="en blk">① Say it ② Do the character's move ③ Drag it home (or tap the house)</span></div>
-    <div class="houses ${g.houses.length<=3?'few':''}" id="houses">${g.houses.map(h=>`<button class="house" data-k="${h.k}" style="--hc:${h.c}"><span class="roof"></span><span class="body"><span class="emo">${h.emo}</span><span class="nm">${h.ar}</span><span class="en">${h.en}</span><span class="key">${h.key}</span><span class="mv">${h.move}</span><span class="got" data-got></span></span></button>`).join('')}</div>
+  S0.innerHTML=`<div class="prog"><span>${U(`الحَرْف ${ar(idx+1)} مِنْ ${ar(queue.length)}`,`Letter ${idx+1} of ${queue.length}`)}</span><span>${teams[turn].nm}</span></div>
+    <div class="dragzone"><div class="lcard" id="card" role="img" aria-label="Letter ${it.l} · الحرف ${it.l}"><span class="hand" aria-hidden="true">👆</span><div class="L">${it.l}</div></div>
+    <div class="say">${U('قُلْ:','Say:')} «${it.say}»</div>${it.ex?`<div class="ex">${it.ex} <small>(${RF(it.ref)})</small></div>`:''}</div>
+    <div class="tip">${U('① قُلِ الحَرْف ② اعْمَلْ حَرَكَةَ شَخْصِيَّتِه ③ اسْحَبْهُ إِلَى بَيْتِهِ (أَوِ اضْغَطْ عَلَى البَيْت)','① Say the letter. ② Do the movement of its character. ③ Drag it to its house (or tap the house).')}</div>
+    <div class="houses ${g.houses.length<=3?'few':''}" id="houses">${g.houses.map(h=>`<button class="house" data-k="${h.k}" style="--hc:${h.c}"><span class="roof"></span><span class="body"><span class="emo">${h.emo}</span><span class="nm">${h.ar}</span><span class="en">${h.en}</span><span class="key">${h.key}</span><span class="mv">${U(h.move,h.moveEn)}</span><span class="got" data-got></span></span></button>`).join('')}</div>
     <div id="after"></div>`;
   const card=$('#card'),hs=[...S0.querySelectorAll('.house')];
   function pick(k){if(over)return;const b=hs.find(x=>x.dataset.k===k);if(!b||b.classList.contains('bad'))return;ac();
@@ -350,8 +357,8 @@ function showHouse(){
     else{tries++;b.classList.add('bad');sfx.bad();card.style.transform='';
       if(tries>=2||g.houses.length===2){over=true;missed.push(it.l);const r=hs.find(x=>x.dataset.k===ans.k);r.classList.add('right');r.querySelector('[data-got]').textContent=it.l;card.style.visibility='hidden';setTimeout(()=>VOICES[ans.snd](),300);finish()}}}
   function finish(){hs.forEach(x=>x.disabled=true);
-    $('#after').innerHTML=`<div class="info" style="--hc:${ans.c}"><div class="t">${ans.emo} ${it.l} ← ${ans.ar} ${ans.key} <span class="en blk">${ans.en}</span></div>
-      <div class="bq">«${ans.bq}»</div><small>${cite(ans.pg)}</small></div>`+nextBtn();bindNext(showHouse)}
+    $('#after').innerHTML=`<div class="info" style="--hc:${ans.c}"><div class="t">${ans.emo} ${it.l} ← ${U(`${ans.ar} ${ans.key}`,`${ans.en} ${ans.key}`)}</div>
+      ${bqH(ans.bq,ans.bqEn)}<small>${cite(ans.pg)}</small></div>`+nextBtn();bindNext(showHouse)}
   hs.forEach(b=>b.onclick=()=>pick(b.dataset.k));
   /* drag & drop with pointer events (mouse, touch, pen) */
   let sx=0,sy=0,sY=0,drag=false,moved=false,lastE=null,raf=0;
@@ -370,37 +377,37 @@ function showHouse(){
 /* ================= BATTLE (Top-Trumps style) ================= */
 function battleIntro(){
   const ex=['ط','ر','ل','ز','ه'];
-  S0.innerHTML=`<div class="q">💪 مَعْرَكَةُ القُوَّة: أَيُّ الحَرْفَيْنِ أَقْوَى؟ <span class="en blk">Strength battle: which letter is stronger?</span></div>
-   <div class="tip">كُلُّ حَرْفٍ لَهُ ٥ صِفَاتٍ مُتَضَادَّة (وَقَدْ يَزِيدُ صِفَةً أَوْ صِفَتَيْن). الصِّفَاتُ القَوِيَّة 💪 وَالضَّعِيفَة 🪶 تُحَدِّدُ قُوَّةَ الحَرْف. <span class="en blk">Every letter has 5 paired traits (+0–2 extra). Strong 💪 vs weak 🪶 traits decide its strength.</span></div>
-   <div class="legend2"><span class="chip S">💪 قَوِيَّة: جَهْر، شِدَّة، اسْتِعْلَاء، إِطْبَاق، صَفِير، قَلْقَلَة، انْحِرَاف، تَكْرِير، تَفَشِّي، اسْتِطَالَة، غُنَّة</span>
-   <span class="chip W">🪶 ضَعِيفَة: هَمْس، رَخَاوَة، اسْتِفَال، انْفِتَاح، لِين، خَفَاء</span><span class="chip N">⚪ لَا قَوِيَّة وَلَا ضَعِيفَة: بَيْنِيَّة، إِذْلَاق، إِصْمَات</span></div>
-   <div class="legend2">${Object.entries(RANKS).reverse().map(([r,k])=>`<span class="rank" style="--rc:${k.c}">${k.ar}</span>`).join('')}</div>
-   <div class="info"><div class="bq">«${STRENGTH_BQ}»</div><small>${cite('١٥')}</small></div>
-   <div class="tip">🎯 مِثَال: ${ex.map(l=>`<b style="font-family:var(--f-ar);font-size:1.4rem">${l}</b> ${RANKS[strength(l).r].ar}`).join(' · ')}</div>
-   <div class="row"><button class="big-btn green" id="goB">ابْدَأِ المَعْرَكَة ▶ <span class="en">Start</span></button></div>`;
+  S0.innerHTML=`<div class="q">${U('💪 مَعْرَكَةُ القُوَّة: أَيُّ الحَرْفَيْنِ أَقْوَى؟','💪 Strength Battle: which of the two letters is stronger?')}</div>
+   <div class="tip">${U('كُلُّ حَرْفٍ لَهُ ٥ صِفَاتٍ مُتَضَادَّة (وَقَدْ يَزِيدُ صِفَةً أَوْ صِفَتَيْن). الصِّفَاتُ القَوِيَّة 💪 وَالضَّعِيفَة 🪶 تُحَدِّدُ قُوَّةَ الحَرْف.','Every letter has 5 paired attributes (and sometimes 1–2 extra). Its strong 💪 and weak 🪶 attributes decide how strong the letter is.')}</div>
+   <div class="legend2"><span class="chip S">${U('💪 قَوِيَّة: جَهْر، شِدَّة، اسْتِعْلَاء، إِطْبَاق، صَفِير، قَلْقَلَة، انْحِرَاف، تَكْرِير، تَفَشِّي، اسْتِطَالَة، غُنَّة','💪 Strong: jahr (loud), shiddah (stop), istiʿlāʾ (raised), iṭbāq (closed), ṣafīr (whistle), qalqalah (bounce), inḥirāf (deviation), takrīr (repetition), tafashshī (spreading), istiṭālah (lengthening), ghunnah (nasal)')}</span>
+   <span class="chip W">${U('🪶 ضَعِيفَة: هَمْس، رَخَاوَة، اسْتِفَال، انْفِتَاح، لِين، خَفَاء','🪶 Weak: hams (whisper), rakhāwah (flow), istifāl (lowered), infitāḥ (open), līn (soft), khafāʾ (hidden)')}</span><span class="chip N">${U('⚪ لَا قَوِيَّة وَلَا ضَعِيفَة: بَيْنِيَّة، إِذْلَاق، إِصْمَات','⚪ Neither strong nor weak: bayniyyah (in between), idhlāq (fluent), iṣmāt (restrained)')}</span></div>
+   <div class="legend2">${Object.entries(RANKS).reverse().map(([r,k])=>`<span class="rank" style="--rc:${k.c}">${U(k.ar,k.en)}</span>`).join('')}</div>
+   <div class="info">${bqH(STRENGTH_BQ,STRENGTH_BQ_EN)}<small>${cite('١٥')}</small></div>
+   <div class="tip">${U('🎯 مِثَال:','🎯 Examples:')} ${ex.map(l=>`<b style="font-family:var(--f-ar);font-size:1.4rem">${l}</b> ${U(RANKS[strength(l).r].ar,RANKS[strength(l).r].en)}`).join(' · ')}</div>
+   <div class="row"><button class="big-btn green" id="goB">${U('ابْدَأِ المَعْرَكَة ▶','Start the battle ▶')}</button></div>`;
   $('#goB').onclick=()=>{ac();const d=shuffle(ALL);queue=[];for(let i=0;i+1<d.length&&queue.length<BATTLE_ROUND;i+=2)queue.push([d[i],d[i+1]]);idx=0;showBattle()};
   stage();
 }
-function cardBack(l,side){return `<button class="bcard" data-side="${side}"><div class="L">${l}</div><div class="say">«${sayOf(l)}»</div><div class="tip">🎤 قُلْ صِفَاتِهِ أَوَّلًا <span class="en">Say its traits first</span></div></button>`}
+function cardBack(l,side){return `<button class="bcard" data-side="${side}"><div class="L">${l}</div><div class="say">«${sayOf(l)}»</div><div class="tip">${U('🎤 قُلْ صِفَاتِهِ أَوَّلًا','🎤 Say its attributes first')}</div></button>`}
 function cardFace(l){const s=strength(l),R=RANKS[s.r];
-  return `<div class="L">${l}</div><div class="chips">${s.f.map(f=>`<span class="chip ${f.s} ${f.x?'x':''}">${f.s==='S'?'💪':f.s==='W'?'🪶':'⚪'} ${f.ar}<span class="en"> ${f.en}</span></span>`).join('')}</div>
-   <div class="score"><span class="pill">💪 ${ar(s.S)}</span> − <span class="pill">🪶 ${ar(s.W)}</span> = <span class="pill" dir="ltr">${s.S-s.W<0?'−':s.S-s.W>0?'+':''}${ar(Math.abs(s.S-s.W))}</span></div><div class="meter" style="--rc:${R.c}">${[1,2,3,4,5].map(i=>`<i class="${i<=s.r?'on':''}"></i>`).join('')}</div>
-   <span class="rank" style="--rc:${R.c}">${R.ar} <span class="en" style="color:#fff">${R.en}</span></span>${l==='و'||l==='ي'?'<div class="tip">+ اللِّين إِذَا سَكَنَتْ وَقَبْلَهَا فَتْح (خَوْفٌ، بَيْتٍ)</div>':''}`}
+  return `<div class="L">${l}</div><div class="chips">${s.f.map(f=>`<span class="chip ${f.s} ${f.x?'x':''}">${f.s==='S'?'💪':f.s==='W'?'🪶':'⚪'} ${U(f.ar,f.en)}</span>`).join('')}</div>
+   <div class="score"><span class="pill">💪 ${U(ar(s.S),s.S)}</span> − <span class="pill">🪶 ${U(ar(s.W),s.W)}</span> = <span class="pill" dir="ltr">${s.S-s.W<0?'−':s.S-s.W>0?'+':''}${U(ar(Math.abs(s.S-s.W)),Math.abs(s.S-s.W))}</span></div><div class="meter" style="--rc:${R.c}">${[1,2,3,4,5].map(i=>`<i class="${i<=s.r?'on':''}"></i>`).join('')}</div>
+   <span class="rank" style="--rc:${R.c}">${U(R.ar,R.en)}</span>${l==='و'||l==='ي'?`<div class="tip">${U('+ اللِّين إِذَا سَكَنَتْ وَقَبْلَهَا فَتْح (خَوْفٌ، بَيْتٍ)','+ the soft letter (līn) when it is sākin with a fatḥah before it (khawf, bayt)')}</div>`:''}`}
 function showBattle(){
   if(idx>=queue.length){end();return}
   const [a,b]=queue[idx],sa=strength(a),sb=strength(b),na=sa.S-sa.W,nb=sb.S-sb.W,ra=sa.r,rb=sb.r,ans=na>nb?'A':nb>na?'B':'T';let over=false;
-  S0.innerHTML=`<div class="prog"><span>الجَوْلَة ${ar(idx+1)} مِنْ ${ar(queue.length)}</span><span>${teams[turn].nm}</span></div>
-   <div class="q">أَيُّ الحَرْفَيْنِ أَقْوَى؟ (نِقَاطُ القُوَّة = 💪 − 🪶) اضْغَطْ عَلَى الأَقْوَى <span class="en blk">Which letter is stronger? Tap it.</span></div>
+  S0.innerHTML=`<div class="prog"><span>${U(`الجَوْلَة ${ar(idx+1)} مِنْ ${ar(queue.length)}`,`Round ${idx+1} of ${queue.length}`)}</span><span>${teams[turn].nm}</span></div>
+   <div class="q">${U('أَيُّ الحَرْفَيْنِ أَقْوَى؟ (نِقَاطُ القُوَّة = 💪 − 🪶) اضْغَطْ عَلَى الأَقْوَى','Which of the two letters is stronger? (strength points = 💪 − 🪶) Tap the stronger one.')}</div>
    <div class="duel">${cardBack(a,'A')}<div class="vs">⚔️</div>${cardBack(b,'B')}</div>
-   <div class="row" id="tieRow"><button class="big-btn ghost" id="tieB">⚖️ مُتَسَاوِيَان <span class="en">Equal</span></button></div><div id="after"></div>`;
+   <div class="row" id="tieRow"><button class="big-btn ghost" id="tieB">${U('⚖️ مُتَسَاوِيَان','⚖️ Equal')}</button></div><div id="after"></div>`;
   const cards=[...S0.querySelectorAll('.bcard')];
   function choose(c){if(over)return;over=true;ac();
     cards.forEach(x=>{x.disabled=true;x.innerHTML=cardFace(x.dataset.side==='A'?a:b);if(x.dataset.side===ans)x.classList.add('win');if(x.dataset.side===c)x.classList.add('pick')});
     $('#tieRow').remove();const ok=c===ans;
     if(ok)award(1);else{sfx.bad();missed.push(a+' / '+b)}
-    const R=RANKS,sg=n=>`<bdi dir="ltr">${n>0?'+':n<0?'−':''}${ar(Math.abs(n))}</bdi>`,msg=ans==='T'?`مُتَسَاوِيَان: ${a} (${sg(na)}) وَ${b} (${sg(nb)})`:`الأَقْوَى: ${ans==='A'?a:b} — نِقَاطُ القُوَّة ${sg(Math.max(na,nb))} مُقَابِل ${sg(Math.min(na,nb))}`;
-    $('#after').innerHTML=`<div class="info"><div class="t">${ok?'✅':'❌'} ${msg}</div><div class="tip">نِقَاطُ القُوَّة = 💪 − 🪶 <span class="en">Power = strong − weak</span><br>قَاعِدَةُ الكِتَاب: صِفَاتُ القُوَّةِ أَكْثَر ← قَوِيّ · أَقَلّ ← ضَعِيف · مُتَسَاوِيَة ← مُتَوَسِّط · كُلُّهَا قَوِيَّة ← أَقْوَى · كُلُّهَا ضَعِيفَة ← أَضْعَف</div><small>${cite('١٥')}</small></div>
-      <div class="row"><button class="big-btn green" id="bonusB">🎤 قَالَ صِفَاتِ الحَرْفَيْنِ كَامِلَة (+١) <span class="en">Named all traits</span></button></div>`+nextBtn();
+    const R=RANKS,sg=(n,e)=>`<bdi dir="ltr">${n>0?'+':n<0?'−':''}${e?Math.abs(n):ar(Math.abs(n))}</bdi>`,msg=ans==='T'?U(`مُتَسَاوِيَان: ${a} (${sg(na)}) وَ${b} (${sg(nb)})`,`Equal: ${a} (${sg(na,1)}) and ${b} (${sg(nb,1)})`):U(`الأَقْوَى: ${ans==='A'?a:b} — نِقَاطُ القُوَّة ${sg(Math.max(na,nb))} مُقَابِل ${sg(Math.min(na,nb))}`,`The stronger letter: ${ans==='A'?a:b} — strength points ${sg(Math.max(na,nb),1)} versus ${sg(Math.min(na,nb),1)}`);
+    $('#after').innerHTML=`<div class="info"><div class="t">${ok?'✅':'❌'} ${msg}</div><div class="tip">${U('نِقَاطُ القُوَّة = 💪 − 🪶<br>قَاعِدَةُ الكِتَاب: صِفَاتُ القُوَّةِ أَكْثَر ← قَوِيّ · أَقَلّ ← ضَعِيف · مُتَسَاوِيَة ← مُتَوَسِّط · كُلُّهَا قَوِيَّة ← أَقْوَى · كُلُّهَا ضَعِيفَة ← أَضْعَف','Strength points = 💪 − 🪶<br>The book’s rule: more strong attributes → strong · fewer → weak · equal → medium · all strong → strongest · all weak → weakest')}</div><small>${cite('١٥')}</small></div>
+      <div class="row"><button class="big-btn green" id="bonusB">${U('🎤 قَالَ صِفَاتِ الحَرْفَيْنِ كَامِلَة (+١)','🎤 Named all the attributes of both letters (+1)')}</button></div>`+nextBtn();
     $('#bonusB').onclick=()=>{$('#bonusB').remove();award(1)};bindNext(showBattle)}
   cards.forEach(x=>x.onclick=()=>choose(x.dataset.side));$('#tieB').onclick=()=>choose('T');
   stage();
@@ -409,17 +416,17 @@ function showBattle(){
 /* ================= END ================= */
 function end(){
   const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمْ','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
   S0.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
-    ${missed.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${missed.join(' · ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
-    <div class="tip">💡 اخْتِبَارُ المِنْدِيل: امْسِكْ مِنْدِيلًا وَرَقِيًّا أَمَامَ الفَم وَقُلْ «أَسْ» ثُمَّ «أَزْ»: مَعَ الهَمْسِ يَتَحَرَّكُ المِنْدِيل. <span class="en blk">Tissue test: hold a tissue in front of the mouth: it moves with whispered letters.</span></div>
-    <div class="row"><button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div></div>`;
+    ${missed.length?`<div>${U('رَاجِعْ هَذِهِ أَوَّلًا:','Review these first:')}</div><div class="miss">${missed.join(' · ')}</div>`:`<div>${U('لَا أَخْطَاء — مَا شَاءَ الله! 🌟','No mistakes — Masha Allah! 🌟')}</div>`}
+    <div class="tip">${U('💡 اخْتِبَارُ المِنْدِيل: امْسِكْ مِنْدِيلًا وَرَقِيًّا أَمَامَ الفَم وَقُلْ «أَسْ» ثُمَّ «أَزْ»: مَعَ الهَمْسِ يَتَحَرَّكُ المِنْدِيل.','💡 The tissue test: hold a paper tissue in front of your mouth and say “as”, then “az”: with the whispered letter the tissue moves.')}</div>
+    <div class="row"><button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);stage();
 }
 
 $('#gameSel').onchange=newGame;$('#teamSel').onchange=newGame;$('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'&&$('#nextB')&&e.target.id!=='nextB'){e.preventDefault();$('#nextB').click()}});
 window.__t={HOUSE_SETS,SIFAT,strength,ALL};
 newGame();

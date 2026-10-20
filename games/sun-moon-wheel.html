@@ -1,5 +1,7 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}body.show-en .ch .ds{display:none}
+body.show-en .ch .en{font-size:1em;color:inherit;font-weight:700}
+</style></head><body class="tq-i18n">
 <title>عجلة الشمس والقمر</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -160,17 +162,17 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">عَجَلَةُ <span class="s">الشَّمْسِ</span> وَ<span class="m">القَمَر</span> 🎡 <span class="en">Sun &amp; Moon Wheel</span><small>ترتيل القرآن · Tarteel Al-Quran — اللام الشمسية والقمرية واللامات السواكن من «الوجيز في علم التجويد»</small></h1>
+    <h1 class="brand">عَجَلَةُ <span class="s">الشَّمْسِ</span> وَ<span class="m">القَمَر</span> 🎡 <span class="en">Sun &amp; Moon Wheel</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — اللام الشمسية والقمرية واللامات السواكن من «الوجيز في علم التجويد»</span><span class="ui-en">Tarteel Al-Quran — the sun and moon lām, and the silent lāms, from <i>Al-Wajiz fi ‘Ilm at-Tajwid</i></span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
   <div class="bar">
-    <label for="setSel">الدرس:</label>
+    <label for="setSel"><span class="ui-ar">الدرس:</span><span class="ui-en">Lesson:</span></label>
     <select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams">فريقان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0" aria-live="polite"></section>
@@ -186,7 +188,8 @@ body.ink-laser .ink-cv{cursor:none!important}
      k:'moon' أو 'sun' لفرض الحكم يدويًا (مثل «بَلْ ۜ رَانَ»)، type نوع اللام (من LAM_TYPES)، note ملاحظة تظهر بعد الإجابة.
    لتستعمل اللعبة مع سورة الطالب: انسخ مجموعة kids وضع كلمات «ال» من سورته.
    ============================================================ */
-const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب اللامات السواكن، ص ٢٢–٢٤ (بترقيم الشاملة آليًّا)'};
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب اللامات السواكن، ص ٢٢–٢٤ (بترقيم الشاملة آليًّا)',
+  en:"Al-Wajiz fi 'Ilm at-Tajwid — Mahmud Sibawayh al-Badawi (d. 1415 AH)", refEn:'chapter on the silent lāms, pp. 22–24 (page numbers as auto-assigned by Shamela)'};
 const SETS = {
   kids:{ar:'① كَلِمَاتُ سُوَرِي القِصَار (٤–٨ سنين)', en:'Words from my short surahs (age 4–8)', rule:'al', round:10, items:[
     {ar:'الْفَلَقِ',en:'the daybreak',pic:'🌅',ref:'الفلق: ١'},
@@ -258,17 +261,17 @@ const LABELS = {
 };
 /* نص الكتاب (المتن) لكل حكم — بترقيم الشاملة آليًّا */
 const BQ = {
-  moon:{t:'لامٌ قَمَرِيَّة 🌙 — إِظْهَارٌ قَمَرِيّ',bq:'فيجب إظهارها إذا وقع بعدها حرف من الحروف الأربعة عشر المجموعة في: "ابغ حجك وخف عقيمه"… ويسمى هذا النوع من الإظهار إظهارا قمريا، وتسمى هذه اللام لاما قمرية.',pg:'٢٢–٢٣',c:'var(--moon)'},
-  sun:{t:'لامٌ شَمْسِيَّة ☀️ — إِدْغَامٌ شَمْسِيّ',bq:'ويجب إدغامها إذا وقع بعدها حرف من الحروف الأربعة عشر الباقية من حروف الهجاء… ويسمى هذا النوع من الإدغام إدغاما شمسيا، وتسمى هذه اللام لاما شمسية.',pg:'٢٣',c:'var(--sun)'},
+  moon:{t:'لامٌ قَمَرِيَّة 🌙 — إِظْهَارٌ قَمَرِيّ',bq:'فيجب إظهارها إذا وقع بعدها حرف من الحروف الأربعة عشر المجموعة في: "ابغ حجك وخف عقيمه"… ويسمى هذا النوع من الإظهار إظهارا قمريا، وتسمى هذه اللام لاما قمرية.',pg:'٢٢–٢٣',c:'var(--moon)',tEn:'Moon lām 🌙 — moon iẓhār (clear pronunciation)',bqEn:'It must be pronounced clearly when one of the fourteen letters gathered in “ibghi ḥajjaka wa-khaf ʿaqīmahu” comes after it… This type of clear pronunciation is called the moon iẓhār, and this lām is called the moon lām.'},
+  sun:{t:'لامٌ شَمْسِيَّة ☀️ — إِدْغَامٌ شَمْسِيّ',bq:'ويجب إدغامها إذا وقع بعدها حرف من الحروف الأربعة عشر الباقية من حروف الهجاء… ويسمى هذا النوع من الإدغام إدغاما شمسيا، وتسمى هذه اللام لاما شمسية.',pg:'٢٣',c:'var(--sun)',tEn:'Sun lām ☀️ — sun idghām (merging)',bqEn:'It must be merged when one of the remaining fourteen letters of the alphabet comes after it… This type of merging is called the sun idghām, and this lām is called the sun lām.'},
 };
 const LAM_TYPES = {
-  fiel:{ar:'لَامُ الفِعْل',en:'Lām of a verb',bq:'سواء أكان الفعل ماضيا… أم مضارعا… أم أمرا… وحكمها الإظهار إلا لام "قل" فإنها تدغم في حرفين: اللام… للتماثل. الراء… للتقارب.',pg:'٢٤'},
-  harf:{ar:'لَامُ الحَرْف (هَلْ · بَلْ)',en:'Lām of hal / bal',bq:'وحكمها الإظهار إلا إذا وقع بعدها لام أو راء؛ فإنها تدغم فيهما كاللام في "قل".',pg:'٢٤'},
-  ism:{ar:'لَامُ الاسْم',en:'Lām inside a noun',bq:'وحكمها الإظهار مطلقا.',pg:'٢٤'},
-  amr:{ar:'لَامُ الأَمْر',en:'Lām of command',bq:'وهي من أدوات جزم المضارع… وحكمها الإظهار مطلقا كلام الاسم.',pg:'٢٤'},
+  fiel:{ar:'لَامُ الفِعْل',en:'Lām of a verb',bq:'سواء أكان الفعل ماضيا… أم مضارعا… أم أمرا… وحكمها الإظهار إلا لام "قل" فإنها تدغم في حرفين: اللام… للتماثل. الراء… للتقارب.',pg:'٢٤',bqEn:'Whether the verb is past… or present… or imperative… its ruling is clear pronunciation, except the lām of “qul”, which merges into two letters: the lām… because of similarity, and the rā’… because of closeness.'},
+  harf:{ar:'لَامُ الحَرْف (هَلْ · بَلْ)',en:'Lām of hal / bal',bq:'وحكمها الإظهار إلا إذا وقع بعدها لام أو راء؛ فإنها تدغم فيهما كاللام في "قل".',pg:'٢٤',bqEn:'Its ruling is clear pronunciation, unless a lām or a rā’ comes after it; then it merges into them, like the lām in “qul”.'},
+  ism:{ar:'لَامُ الاسْم',en:'Lām inside a noun',bq:'وحكمها الإظهار مطلقا.',pg:'٢٤',bqEn:'Its ruling is clear pronunciation in all cases.'},
+  amr:{ar:'لَامُ الأَمْر',en:'Lām of command',bq:'وهي من أدوات جزم المضارع… وحكمها الإظهار مطلقا كلام الاسم.',pg:'٢٤',bqEn:'It is one of the particles that put a present-tense verb in the jussive… and its ruling is clear pronunciation in all cases, like the lām of a noun.'},
 };
 const NOTES = {
-  sakt:{ar:'⭐ حَالَةٌ خَاصَّة: «بَلْ ۜ رَانَ» تُظْهَرُ اللَّامُ لِحَفْصٍ لِأَجْلِ السَّكْت (سَكْتَةٌ يَسِيرَة بِلَا نَفَس).',bq:'كما يستثنى من قاعدة إدغام لام الحرف بَلْ رَانَ في المطففين آية ١٤؛ فإن حكمها الإظهار لحفص من طريق الشاطبية؛ لوجود السكت على اللام، والسكت مانع من الإدغام.',pg:'٢٤'},
+  sakt:{ar:'⭐ حَالَةٌ خَاصَّة: «بَلْ ۜ رَانَ» تُظْهَرُ اللَّامُ لِحَفْصٍ لِأَجْلِ السَّكْت (سَكْتَةٌ يَسِيرَة بِلَا نَفَس).',bq:'كما يستثنى من قاعدة إدغام لام الحرف بَلْ رَانَ في المطففين آية ١٤؛ فإن حكمها الإظهار لحفص من طريق الشاطبية؛ لوجود السكت على اللام، والسكت مانع من الإدغام.',pg:'٢٤',en:'⭐ A special case: in “bal rāna” the lām is pronounced clearly for Ḥafṣ because of the saktah (a brief pause without taking a breath).',bqEn:'It is also an exception to the rule of merging the lām of the particle in “bal rāna” in Sūrat al-Muṭaffifīn, verse 14: its ruling is clear pronunciation for Ḥafṣ via al-Shāṭibiyyah, because of the saktah on the lām, and the saktah prevents merging.'},
 };
 /* حركات الجسم (TPR) */
 const POSES = {
@@ -289,6 +292,10 @@ const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَك�
 
 const $=s=>document.querySelector(s);
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const {U,tr}=TQI;
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
+const west=s=>String(s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const bqH=(a,e)=>`<div class="bq">«${a}»${tr('“'+e+'”')}</div>`;
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const MARKS=/[ً-ْٰۜـ]/;
 const MOON=MOON_LETTERS.split(' ');
@@ -320,24 +327,24 @@ const sfx={
   pop:()=>tone(660,.08,'sine',.15)};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2B705','#E36414','#3A86FF','#22A45D','#4C3FA8','#EF476F'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- state ---------- */
 const S0=$('#s0');
 let setK='kids',teams=[],turn=0,pool=[],segs=[],rot=0,done=0,goal=10,missed=[],usedSpecial={},spinning=false;
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ نُجُومِي','⭐ My stars'),c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}];
+  return [{nm:U('🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'),c:'var(--teamA)'},{nm:U('🔴 الفَرِيقُ الأَحْمَر','🔴 Red team'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
 function stage(){document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}))}
-function cite(pg){return `${BOOK.ar}، ص ${pg} (بترقيم الشاملة آليًّا)`}
+function cite(pg){return U(`${BOOK.ar}، ص ${pg} (بترقيم الشاملة آليًّا)`,`${BOOK.en}, p. ${west(pg)} (page numbers as auto-assigned by Shamela)`)}
 function sky(c){S0.classList.remove('day','night');if(c)S0.classList.add(c)}
 const SKY=`<div class="skyart" aria-hidden="true"><span class="orb sunorb">☀️</span><span class="orb moonorb">🌙</span>${[[12,30],[22,70],[40,88],[62,12],[75,55],[30,48],[85,82],[55,35]].map(([t,l])=>`<span class="st" style="top:${t}%;left:${l}%">✦</span>`).join('')}</div>`;
 
-$('#setSel').innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}">${g.ar}</option>`).join('');
-$('#bookLine').textContent=`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الكلمات من القرآن الكريم (رواية حفص) بمواضعها؛ أمثلة الدرس ② و③ من الكتاب نفسه.`;
+$('#setSel').innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}" data-en="${g.en}">${g.ar}</option>`).join('');TQI.relabel();
+$('#bookLine').innerHTML=U(`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الكلمات من القرآن الكريم (رواية حفص) بمواضعها؛ أمثلة الدرس ② و③ من الكتاب نفسه.`,`📚 Source: ${BOOK.en}, ${BOOK.refEn}. The words are from the Qur’an (Ḥafṣ recitation) in their places; the examples in lessons ② and ③ come from the book itself.`);
 
 function newGame(){setK=$('#setSel').value;const g=SETS[setK];teams=teamDefs().map(t=>({...t,pts:0}));turn=0;done=0;missed=[];usedSpecial={};
   goal=Math.min(g.round||10,g.items.length);pool=shuffle(g.items).slice(0,goal);
@@ -348,20 +355,18 @@ function newGame(){setK=$('#setSel').value;const g=SETS[setK];teams=teamDefs().m
 /* ---------- intro: the story ---------- */
 function intro(){const g=SETS[setK];sky('');
   const lr=g.rule==='lr';
-  S0.innerHTML=SKY+`<div class="q">${lr?'🔎 اللَّامُ السَّاكِنَة: تَظْهَرُ أَمْ تُدْغَم؟':'☀️🌙 اللَّامُ فِي «ال»: تَظْهَرُ مِثْلَ القَمَر أَمْ تَخْتَفِي فِي نُورِ الشَّمْس؟'}
-     <span class="en blk">${lr?'A silent Lām: clear or merged?':'The Lām of "al": does it shine like the moon, or hide in the sunlight?'}</span></div>
+  S0.innerHTML=SKY+`<div class="q">${U(lr?'🔎 اللَّامُ السَّاكِنَة: تَظْهَرُ أَمْ تُدْغَم؟':'☀️🌙 اللَّامُ فِي «ال»: تَظْهَرُ مِثْلَ القَمَر أَمْ تَخْتَفِي فِي نُورِ الشَّمْس؟',lr?'🔎 A silent lām: is it pronounced clearly or merged?':'☀️🌙 The lām of “al”: is it pronounced clearly like the moon, or does it hide in the sunlight?')}</div>
    <div class="posters">
-    <div class="poster moon"><div class="h">🌙 ${lr?'إِظْهَار':'الحُرُوفُ القَمَرِيَّة'} <span class="en">${lr?'Clear Lām':'Moon letters'}</span></div>
-      ${lr?'<div class="key">لَامُ الاسْم · لَامُ الأَمْر · وَ«قُلْ/بَلْ/هَلْ» قَبْلَ غَيْرِ ل وَر</div>':`<div class="ls">${MOON_LETTERS.split(' ').filter(l=>!'اأإ'.includes(l)).join(' ')}</div><div class="key">«ابْغِ حَجَّكَ وَخَفْ عَقِيمَهُ»</div>`}
-      <div class="pose">${pose('moon',g.rule).emo} ${pose('moon',g.rule).ar}<span class="en blk">${pose('moon',g.rule).en}</span></div></div>
-    <div class="poster sun"><div class="h">☀️ ${lr?'إِدْغَام':'الحُرُوفُ الشَّمْسِيَّة'} <span class="en">${lr?'Merged Lām':'Sun letters'}</span></div>
-      ${lr?'<div class="key">«قُلْ» وَ«بَلْ» وَ«هَلْ» قَبْلَ <b>ل</b> أَوْ <b>ر</b> فَقَطْ</div>':`<div class="ls">${SUN_LETTERS}</div><div class="key">«طِبْ ثُمَّ صِلْ رَحْمًا تَفُزْ ضِفْ ذَا نِعَمْ ** دَعْ سُوءَ ظَنٍّ زُرْ شَرِيفًا لِلْكَرَمْ»</div>`}
-      <div class="pose">${POSES.sun.emo} ${POSES.sun.ar}<span class="en blk">${POSES.sun.en}</span></div></div>
+    <div class="poster moon"><div class="h">${U('🌙 '+(lr?'إِظْهَار':'الحُرُوفُ القَمَرِيَّة'),'🌙 '+(lr?'Clear lām (iẓhār)':'Moon letters'))}</div>
+      ${lr?`<div class="key">${U('لَامُ الاسْم · لَامُ الأَمْر · وَ«قُلْ/بَلْ/هَلْ» قَبْلَ غَيْرِ ل وَر','Lām of a noun · lām of a command · and “qul / bal / hal” before any letter except lām and rā’')}</div>`:`<div class="ls">${MOON_LETTERS.split(' ').filter(l=>!'اأإ'.includes(l)).join(' ')}</div><div class="key">«ابْغِ حَجَّكَ وَخَفْ عَقِيمَهُ»</div>`}
+      <div class="pose">${pose('moon',g.rule).emo} ${U(pose('moon',g.rule).ar,pose('moon',g.rule).en)}</div></div>
+    <div class="poster sun"><div class="h">${U('☀️ '+(lr?'إِدْغَام':'الحُرُوفُ الشَّمْسِيَّة'),'☀️ '+(lr?'Merged lām (idghām)':'Sun letters'))}</div>
+      ${lr?`<div class="key">${U('«قُلْ» وَ«بَلْ» وَ«هَلْ» قَبْلَ <b>ل</b> أَوْ <b>ر</b> فَقَطْ','“qul”, “bal” and “hal” only before <b>ل</b> or <b>ر</b>')}</div>`:`<div class="ls">${SUN_LETTERS}</div><div class="key">«طِبْ ثُمَّ صِلْ رَحْمًا تَفُزْ ضِفْ ذَا نِعَمْ ** دَعْ سُوءَ ظَنٍّ زُرْ شَرِيفًا لِلْكَرَمْ»</div>`}
+      <div class="pose">${POSES.sun.emo} ${U(POSES.sun.ar,POSES.sun.en)}</div></div>
    </div>
-   <div class="tip">🎯 سِرُّ القِرَاءَة: انْظُرْ إِلَى الكَلِمَة — ${lr?'هَلْ عَلَى اللَّامِ سُكُون ( ْ )؟ أَمْ عَلَى الحَرْفِ بَعْدَهَا شَدَّة ( ّ )؟':'سُكُونٌ عَلَى اللَّام ( لْ ) ← قَمَرِيَّة 🌙 · شَدَّةٌ عَلَى الحَرْفِ بَعْدَهَا ( ّ ) ← شَمْسِيَّة ☀️'}
-     <span class="en blk">Reading secret: a sukūn on the Lām = clear (moon); a shaddah on the next letter = the Lām hides (sun).</span></div>
-   <div class="row"><button class="big-btn ghost" id="tryM">🌙 جَرِّبِ الحَرَكَة</button><button class="big-btn ghost" id="tryS">☀️ جَرِّبِ الحَرَكَة</button>
-     <button class="big-btn green" id="goB">ابْدَأْ — لِفَّ العَجَلَة 🎡 <span class="en">Start</span></button></div>`;
+   <div class="tip">${U('🎯 سِرُّ القِرَاءَة: انْظُرْ إِلَى الكَلِمَة — '+(lr?'هَلْ عَلَى اللَّامِ سُكُون ( ْ )؟ أَمْ عَلَى الحَرْفِ بَعْدَهَا شَدَّة ( ّ )؟':'سُكُونٌ عَلَى اللَّام ( لْ ) ← قَمَرِيَّة 🌙 · شَدَّةٌ عَلَى الحَرْفِ بَعْدَهَا ( ّ ) ← شَمْسِيَّة ☀️'),'🎯 The reading secret: look at the word. A sukūn on the lām ( ْ ) = clear, like the moon 🌙. A shaddah on the letter after it ( ّ ) = the lām hides, like the sun ☀️.')}</div>
+   <div class="row"><button class="big-btn ghost" id="tryM">${U('🌙 جَرِّبِ الحَرَكَة','🌙 Try the pose')}</button><button class="big-btn ghost" id="tryS">${U('☀️ جَرِّبِ الحَرَكَة','☀️ Try the pose')}</button>
+     <button class="big-btn green" id="goB">${U('ابْدَأْ — لِفَّ العَجَلَة 🎡','Start — spin the wheel 🎡')}</button></div>`;
   $('#tryM').onclick=()=>{ac();sky('night');sfx.moon()};$('#tryS').onclick=()=>{ac();sky('day');sfx.sun()};
   $('#goB').onclick=()=>{ac();showWheel()};
   stage();
@@ -374,15 +379,15 @@ function wheelSVG(){const n=segs.length,R=200,cx=210,cy=210,a=360/n;let out='';
     out+=n===1?`<circle cx="${cx}" cy="${cy}" r="${R}" fill="${c}" stroke="#fff" stroke-width="4"/>`:`<path d="M${cx},${cy} L${x0},${y0} A${R},${R} 0 ${large} 1 ${x1},${y1} Z" fill="${c}" stroke="#fff" stroke-width="4"/>`;
     const [tx,ty]=P(a0+a/2,R*.68),[nx,ny]=P(a0+a/2,R*.88);
     out+=`<text class="segt" x="${tx}" y="${ty}" transform="rotate(${a0+a/2} ${tx} ${ty})">${s.type==='sp'?s.sp.pic:s.item.pic}</text>`;
-    if(s.type==='word')out+=`<text class="segn" x="${nx}" y="${ny}" transform="rotate(${a0+a/2} ${nx} ${ny})">${ar(i+1)}</text>`});
-  return `<svg viewBox="0 0 420 420" role="img" aria-label="عجلة دوارة"><circle cx="210" cy="210" r="208" fill="#2A2140"/><g id="wheel" style="transform:rotate(${rot}deg)">${out}</g></svg>`}
+    if(s.type==='word')out+=`<text class="segn" x="${nx}" y="${ny}" transform="rotate(${a0+a/2} ${nx} ${ny})">${document.body.classList.contains('show-en')?i+1:ar(i+1)}</text>`});
+  return `<svg viewBox="0 0 420 420" role="img" aria-label="Spinning wheel · عجلة دوارة"><circle cx="210" cy="210" r="208" fill="#2A2140"/><g id="wheel" style="transform:rotate(${rot}deg)">${out}</g></svg>`}
 function showWheel(){
   if(done>=goal||!segs.some(s=>s.type==='word')){end();return}
   sky('');spinning=false;
-  S0.innerHTML=SKY+`<div class="prog"><span>الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}</span><span>${teams[turn].nm}</span></div>
-    <div class="q">🎡 لِفَّ العَجَلَة! <span class="en">Spin the wheel!</span></div>
-    <div class="wheelbox"><div class="pointer"></div>${wheelSVG()}<button class="hub" id="spinB" aria-label="لف العجلة">لِفّ!<br>SPIN</button></div>
-    <div class="tip">اضْغَطْ «لِفّ!» أَوْ زِرَّ المَسَافَة (Space) <span class="en blk">Tap SPIN or press Space</span></div>`;
+  S0.innerHTML=SKY+`<div class="prog"><span>${U(`الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}`,`Word ${done+1} of ${goal}`)}</span><span>${teams[turn].nm}</span></div>
+    <div class="q">${U('🎡 لِفَّ العَجَلَة!','🎡 Spin the wheel!')}</div>
+    <div class="wheelbox"><div class="pointer"></div>${wheelSVG()}<button class="hub" id="spinB" aria-label="Spin the wheel · لف العجلة">${U('لِفّ!','SPIN')}</button></div>
+    <div class="tip">${U('اضْغَطْ «لِفّ!» أَوْ زِرَّ المَسَافَة (Space)','Tap SPIN or press the Space bar')}</div>`;
   $('#spinB').onclick=spin;stage();
 }
 function spin(){if(spinning)return;spinning=true;ac();$('#spinB').disabled=true;
@@ -394,7 +399,7 @@ function spin(){if(spinning)return;spinning=true;ac();$('#spinB').disabled=true;
 }
 function land(i){const s=segs[i];
   if(s.type==='sp'){segs.splice(i,1);if(pool.length)segs.splice(i,0,{type:'word',item:pool.shift()});
-    if(s.sp.k==='gift'){sfx.win();award(s.sp.pts);S0.querySelector('.q').innerHTML=`🎁 ${s.sp.ar} <span class="en">${s.sp.en}</span>`;setTimeout(()=>{turn=(turn+1)%teams.length;renderTeams();showWheel()},1600)}
+    if(s.sp.k==='gift'){sfx.win();award(s.sp.pts);S0.querySelector('.q').innerHTML=`🎁 ${U(s.sp.ar,s.sp.en)}`;setTimeout(()=>{turn=(turn+1)%teams.length;renderTeams();showWheel()},1600)}
     else poseGame();return}
   segs.splice(i,1);if(pool.length)segs.splice(i,0,{type:'word',item:pool.shift()});
   showWord(s.item);
@@ -410,10 +415,10 @@ function wordHTML(p,state){
   return `${p.pre}${a1}<span class="${lamCls}">${a1}${p.lam}${a2}</span>${p.gap}<span class="${nxCls}">${a2}${p.nx}${a3}</span>${a3}${p.after}${state==='sun'?'<span class="zzz">😴</span>':''}`}
 function showWord(it){
   const g=SETS[setK],p=parse(it,g.rule),L=LABELS[g.rule];let tries=0,over=false;
-  S0.innerHTML=SKY+`<div class="prog"><span>الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}</span><span>${teams[turn].nm}</span></div>
+  S0.innerHTML=SKY+`<div class="prog"><span>${U(`الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}`,`Word ${done+1} of ${goal}`)}</span><span>${teams[turn].nm}</span></div>
     <div class="wcard"><div class="w ${it.ar.length>12?'long':''}" id="wd">${wordHTML(p,'q')}</div>
-      <div class="meta">${it.pic} ${it.ref?`(${it.ref})`:''} <span class="en">— ${it.en}</span></div></div>
-    <div class="look">① اقْرَأِ الكَلِمَةَ بِصَوْتٍ عَالٍ ② انْظُرْ: سُكُونٌ عَلَى اللَّام؟ أَمْ شَدَّةٌ بَعْدَهَا؟ ③ اخْتَرْ <span class="en blk">① Read it aloud ② Look: sukūn on the Lām, or shaddah after it? ③ Choose</span></div>
+      <div class="meta">${it.pic} ${it.ref?`(${RF(it.ref)})`:''} <span class="en">— ${it.en}</span></div></div>
+    <div class="look">${U('① اقْرَأِ الكَلِمَةَ بِصَوْتٍ عَالٍ ② انْظُرْ: سُكُونٌ عَلَى اللَّام؟ أَمْ شَدَّةٌ بَعْدَهَا؟ ③ اخْتَرْ','① Read the word aloud. ② Look: is there a sukūn on the lām, or a shaddah after it? ③ Choose.')}</div>
     <div class="choices">
       <button class="ch moon" data-k="moon"><span class="emo">🌙</span><span class="nm">${L.moon.ar}</span><span class="ds">${L.moon.ds}</span><span class="en">${L.moon.en}</span></button>
       <button class="ch sun" data-k="sun"><span class="emo">☀️</span><span class="nm">${L.sun.ar}</span><span class="ds">${L.sun.ds}</span><span class="en">${L.sun.en}</span></button>
@@ -425,13 +430,13 @@ function showWord(it){
   function reveal(){bs.forEach(x=>x.disabled=true);sky(p.k==='moon'?'night':'day');(p.k==='moon'?sfx.moon:sfx.sun)();
     $('#wd').innerHTML=wordHTML(p,p.k);
     const base=g.rule==='al'?BQ[p.k]:null,T=it.type&&LAM_TYPES[it.type],N=it.note&&NOTES[it.note],P=pose(p.k,g.rule);
-    const head=g.rule==='al'?`${base.t}: بَعْدَ اللَّامِ حَرْفُ «${p.letter}»`:`${T?T.ar:''} ← ${p.k==='moon'?'إِظْهَار 🌙':'إِدْغَام ☀️'}${p.k==='sun'?` فِي «${p.letter}» (${p.letter==='ل'?'لِلتَّمَاثُل':'لِلتَّقَارُب'})`:''}`;
-    const bq=N?N.bq:base?base.bq:T.bq,pg=N?N.pg:base?base.pg:T.pg;
-    $('#after').innerHTML=`<div class="tpr" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><span class="emo">${P.emo}</span><span>${P.ar}<span class="en blk">${P.en}</span></span>
-        <button class="big-btn green" id="bonusB">✓ عَمِلَ الحَرَكَة وَقَرَأَ صَحِيحًا (+١)</button></div>
-      <div class="info" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><div class="t">${head}</div>${N?`<div>${N.ar}</div>`:''}
-        <div class="bq">«${bq}»</div><small>${cite(pg)}</small></div>
-      <div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en">Next</span></button></div>`;
+    const head=g.rule==='al'?U(`${base.t}: بَعْدَ اللَّامِ حَرْفُ «${p.letter}»`,`${base.tEn}: the letter “${p.letter}” comes after the lām`):U(`${T?T.ar:''} ← ${p.k==='moon'?'إِظْهَار 🌙':'إِدْغَام ☀️'}${p.k==='sun'?` فِي «${p.letter}» (${p.letter==='ل'?'لِلتَّمَاثُل':'لِلتَّقَارُب'})`:''}`,`${T?T.en:''} → ${p.k==='moon'?'iẓhār 🌙 (clear)':'idghām ☀️ (merged)'}${p.k==='sun'?` into “${p.letter}” (${p.letter==='ل'?'similarity':'closeness'})`:''}`);
+    const bq=N?N.bq:base?base.bq:T.bq,bqE=N?N.bqEn:base?base.bqEn:T.bqEn,pg=N?N.pg:base?base.pg:T.pg;
+    $('#after').innerHTML=`<div class="tpr" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><span class="emo">${P.emo}</span><span>${U(P.ar,P.en)}</span>
+        <button class="big-btn green" id="bonusB">${U('✓ عَمِلَ الحَرَكَة وَقَرَأَ صَحِيحًا (+١)','✓ Did the pose and read it correctly (+1)')}</button></div>
+      <div class="info" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><div class="t">${head}</div>${N?`<div>${U(N.ar,N.en)}</div>`:''}
+        ${bqH(bq,bqE)}<small>${cite(pg)}</small></div>
+      <div class="row"><button class="big-btn" id="nextB">${U('التَّالِي ←','Next →')}</button></div>`;
     $('#bonusB').onclick=()=>{$('#bonusB').remove();award(1)};
     $('#nextB').onclick=()=>{done++;turn=(turn+1)%teams.length;renderTeams();showWheel()};$('#nextB').focus({preventScroll:true})}
   bs.forEach(b=>b.onclick=()=>pick(b.dataset.k));
@@ -442,13 +447,13 @@ function showWord(it){
 function poseGame(){const g=SETS[setK],words=shuffle(g.items).slice(0,4);let i=0,pts=0;
   function one(){if(i>=words.length){if(pts)award(pts);setTimeout(()=>{turn=(turn+1)%teams.length;renderTeams();showWheel()},900);return}
     const it=words[i],p=parse(it,g.rule);sky('');
-    S0.innerHTML=SKY+`<div class="q">🤸 الشَّمْسُ تَقُول! — بِلَا أَزْرَار: اقْرَأْ وَاعْمَلِ الحَرَكَة 🌕 أَوْ ☀️ <span class="en blk">Sun says! No buttons: read it and do the moon or sun pose</span></div>
-      <div class="prog"><span>${ar(i+1)} / ${ar(words.length)}</span><span>${teams[turn].nm}</span></div>
+    S0.innerHTML=SKY+`<div class="q">${U('🤸 الشَّمْسُ تَقُول! — بِلَا أَزْرَار: اقْرَأْ وَاعْمَلِ الحَرَكَة 🌕 أَوْ ☀️','🤸 The Sun says! No buttons this time: read the word and do the moon 🌕 or sun ☀️ pose.')}</div>
+      <div class="prog"><span>${U(`${ar(i+1)} / ${ar(words.length)}`,`${i+1} / ${words.length}`)}</span><span>${teams[turn].nm}</span></div>
       <div class="wcard"><div class="w ${it.ar.length>12?'long':''}" id="wd">${wordHTML(p,'q')}</div></div>
-      <div class="row"><button class="big-btn ghost" id="revB">👀 أَظْهِرِ الجَوَاب <span class="en">Reveal</span></button></div><div id="after"></div>`;
+      <div class="row"><button class="big-btn ghost" id="revB">${U('👀 أَظْهِرِ الجَوَاب','👀 Reveal the answer')}</button></div><div id="after"></div>`;
     $('#revB').onclick=()=>{ac();$('#revB').remove();sky(p.k==='moon'?'night':'day');(p.k==='moon'?sfx.moon:sfx.sun)();$('#wd').innerHTML=wordHTML(p,p.k);
-      $('#after').innerHTML=`<div class="tpr" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><span class="emo">${pose(p.k,g.rule).emo}</span><span>${pose(p.k,g.rule).ar}</span></div>
-        <div class="row"><button class="big-btn green" id="okB">✓ صَحّ (+١)</button><button class="big-btn red" id="noB">✗ لَيْسَ بَعْد</button></div>`;
+      $('#after').innerHTML=`<div class="tpr" style="--hc:${p.k==='moon'?'var(--moon)':'var(--sun)'}"><span class="emo">${pose(p.k,g.rule).emo}</span><span>${U(pose(p.k,g.rule).ar,pose(p.k,g.rule).en)}</span></div>
+        <div class="row"><button class="big-btn green" id="okB">${U('✓ صَحّ (+١)','✓ Correct (+1)')}</button><button class="big-btn red" id="noB">${U('✗ لَيْسَ بَعْد','✗ Not yet')}</button></div>`;
       $('#okB').onclick=()=>{pts++;sfx.pop();i++;one()};$('#noB').onclick=()=>{missed.push(it.ar.replace(/[\[\]]/g,''));i++;one()}};
     stage()}
   one();
@@ -457,20 +462,19 @@ function poseGame(){const g=SETS[setK],words=shuffle(g.items).slice(0,4);let i=0
 /* ---------- end ---------- */
 function end(){sky('night');
   const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمْ','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
   const ms=[...new Set(missed)];
   S0.innerHTML=SKY+`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2 style="color:#FFE08A">${msg}</h2>
-    ${ms.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${ms.join(' · ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
-    <div class="info"><div class="t">🏠 تَحَدِّي البَيْت <span class="en">Home challenge</span></div>
-      افْتَحْ سُورَتَكَ وَابْحَثْ عَنْ ٣ كَلِمَاتٍ قَمَرِيَّة 🌙 وَ٣ شَمْسِيَّة ☀️ — نُضِيفُهَا لِلْعَجَلَةِ فِي الحِصَّةِ القَادِمَة!
-      <span class="en blk">Find 3 moon words and 3 sun words in your surah: we'll add them to the wheel next class!</span></div>
-    <div class="row"><button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div></div>`;
+    ${ms.length?`<div>${U('رَاجِعْ هَذِهِ أَوَّلًا:','Review these first:')}</div><div class="miss">${ms.join(' · ')}</div>`:`<div>${U('لَا أَخْطَاء — مَا شَاءَ الله! 🌟','No mistakes — Masha Allah! 🌟')}</div>`}
+    <div class="info"><div class="t">${U('🏠 تَحَدِّي البَيْت','🏠 Home challenge')}</div>
+      ${U('افْتَحْ سُورَتَكَ وَابْحَثْ عَنْ ٣ كَلِمَاتٍ قَمَرِيَّة 🌙 وَ٣ شَمْسِيَّة ☀️ — نُضِيفُهَا لِلْعَجَلَةِ فِي الحِصَّةِ القَادِمَة!','Open the surah you are learning and find 3 moon words 🌙 and 3 sun words ☀️. We will add them to the wheel next class!')}</div>
+    <div class="row"><button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);stage();
 }
 
 $('#setSel').onchange=newGame;$('#teamSel').onchange=newGame;$('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;
   if(e.key==='Enter'&&$('#nextB')&&e.target.id!=='nextB'){e.preventDefault();$('#nextB').click()}
   else if(e.key===' '&&$('#spinB')&&!spinning){e.preventDefault();spin()}});

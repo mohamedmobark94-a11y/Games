@@ -8,9 +8,12 @@ body.show-en .ui-en.blk{display:block}
 /* only pages that have been fully translated opt in to the left-to-right English layout */
 body.show-en.tq-i18n{direction:ltr}
 /* the shared top bar (tq-nav.js) now owns language switching */
-#enB{display:none!important}
+#enB,#enT{display:none!important}
 /* Arabic content inside an English page keeps its own direction and a readable face */
 body.show-en .qar{direction:rtl;unicode-bidi:isolate;font-family:"Amiri","Traditional Arabic",serif}
 /* English translation line under an Arabic quotation */
 .tr{display:none;margin-top:4px;color:var(--muted,#76654F);font-size:.92em;font-weight:500;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;direction:ltr;text-align:start}
 body.show-en .tr{display:block}
+
+/* English promoted by TQI.auto(): same size and colour as the surrounding text */
+body.show-en .tq-pri{font-size:1em!important;color:inherit!important;font-weight:inherit!important;font-style:normal}
