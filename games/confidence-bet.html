@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>رهان الثقة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -119,6 +119,11 @@ table.cal th{background:var(--bg2);color:var(--muted)}
 .starpop{position:fixed;top:22%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:1.8rem;background:var(--card);color:var(--gold);border:4px solid var(--gold);border-radius:999px;padding:4px 24px;z-index:81;pointer-events:none;white-space:nowrap;animation:sp 1.2s ease forwards}
 @keyframes sp{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}25%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-90%)}}
 
+/* English mode: Latin face for English text, Arabic content keeps its own face */
+body.show-en .q,body.show-en .opt .t,body.show-en .hint,body.show-en .talk{font-family:var(--f-ui)}
+body.show-en .opt:hover:not(:disabled){transform:translateX(4px)}
+body.show-en .proof .qar{display:block}
+body.show-en .proof .tr{font-size:.62em;color:var(--ink);opacity:.85}
 /* pen tools (from lesson-engine/engine.css) */
 .ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45;pointer-events:none;touch-action:none}
 body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
@@ -146,19 +151,19 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">رِهَانُ <b>الثِّقَة</b> 🪙 <span class="en">Confidence Bet</span><small>ترتيل القرآن · Tarteel Al-Quran — اختر الجواب… ثم راهن على ثقتك</small></h1>
+    <h1 class="brand"><span class="ui-ar">رِهَانُ <b>الثِّقَة</b></span><span class="ui-en">Confidence <b>Bet</b></span> 🪙<small><span class="ui-ar">ترتيل القرآن — اختر الجواب… ثم راهن على ثقتك</span><span class="ui-en">Tarteel Al-Quran — pick an answer… then bet on how sure you are</span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
 
   <div class="bar">
-    <label for="setSel">الدرس:</label><select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2" selected>فريقان</option><option value="tv">الطالب ضد المعلم</option></select>
-    <label for="nSel">الأسئلة:</label>
+    <label for="setSel" data-en="Lesson:">الدرس:</label><select id="setSel"></select>
+    <label for="teamSel" data-en="Players:">اللاعبون:</label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" selected data-en="Two teams">فريقان</option><option value="tv" data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
+    <label for="nSel" data-en="Questions:">الأسئلة:</label>
     <select id="nSel"><option>6</option><option selected>8</option><option>10</option><option>12</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ لعبة جديدة</button>
+    <button class="tbtn" id="newB" data-en="↻ New game">↻ لعبة جديدة</button>
   </div>
 
   <div class="teams" id="teams"></div>
@@ -270,7 +275,11 @@ const PRAISE_EN = ['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'
 const $=s=>document.querySelector(s);
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const KEYS=['أ','ب','ج','د'];
+const KEYS=['أ','ب','ج','د'],KEYS_EN=['A','B','C','D'];
+const {U,tr}=TQI, nb=n=>U(ar(n),String(n));
+/* reference line: 'سورة الإسراء: ٢٣' → Al-Isra 17:23 ; 'صحيح مسلم (١٠١)' → Sahih Muslim 101 */
+const refE=r=>/^سورة /.test(r)?TQI.ref(r.replace(/^سورة /,'')):r.replace('صحيح البخاري','Sahih al-Bukhari').replace('صحيح مسلم','Sahih Muslim').replace('سنن الترمذي','Sunan at-Tirmidhi').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace('،',',').replace(/\s*\(([\d]+)\)/g,' $1');
+const noRef=e=>String(e||'').replace(/\s*\([^()]*\)\s*$/,'');
 
 /* ---------- sound ---------- */
 let AC=null, soundOn=true;
@@ -285,31 +294,31 @@ function pop(html){const p=document.createElement('div');p.className='starpop';p
 
 /* ---------- question builders (one content → several game types) ---------- */
 function situationQs(set){return set.items.map((it,i)=>({id:'s'+i,kind:'sit',pic:it.pic,q:it.q,qEn:it.qEn,
-  opts:it.opts.map((t,k)=>({t,en:(it.optsEn||[])[k]||'',ok:k===it.a})),proof:it.proof,ref:it.ref,proofEn:it.proofEn,talk:it.talk,talkEn:it.talkEn,hint:it.topic,hintEn:it.topicEn}))}
+  opts:it.opts.map((t,k)=>({t,en:(it.optsEn||[])[k]||'',ok:k===it.a})),proof:it.proof,ref:it.ref,refEn:refE(it.ref),proofEn:it.proofEn,talk:it.talk,talkEn:it.talkEn,hint:it.topic,hintEn:it.topicEn}))}
 function proofQs(set){const its=set.items;return its.map((it,i)=>{const others=shuffle(its.filter(x=>x!==it)).slice(0,2);
-  return {id:'p'+i,kind:'proof',pic:'📜',q:`${it.proof}<br><small style="font-size:.6em">هَذَا الدَّلِيلُ عَنْ أَيِّ مَوْضُوع؟</small>`,qEn:'This proof is about which topic?',
-    opts:[it,...others].map(x=>({t:x.topic,en:x.topicEn||'',ok:x===it})),proof:it.proof,ref:it.ref,proofEn:it.proofEn,talk:it.talk,talkEn:it.talkEn,hint:it.ref,hintEn:''}})}
+  return {id:'p'+i,kind:'proof',pic:'📜',q:`<span class="qar">${it.proof}</span><small style="display:block;font-size:.6em">هَذَا الدَّلِيلُ عَنْ أَيِّ مَوْضُوع؟</small>`,qEn:`<span class="qar">${it.proof}</span>${tr(noRef(it.proofEn))}<small style="display:block;font-size:.6em">Which topic does this proof belong to?</small>`,
+    opts:[it,...others].map(x=>({t:x.topic,en:x.topicEn||'',ok:x===it})),proof:it.proof,ref:it.ref,refEn:refE(it.ref),proofEn:it.proofEn,talk:it.talk,talkEn:it.talkEn,hint:it.ref,hintEn:refE(it.ref)}})}
 function wordQs(set){const its=set.items;return its.map((it,i)=>{const others=shuffle(its.filter(x=>x!==it)).slice(0,2);const rev=i%2===1;
   return rev
     ? {id:'w'+i,kind:'word',pic:it.pic,q:`أَيُّ كَلِمَةٍ مَعْنَاهَا: <span dir="ltr">“${it.en}”</span>؟`,qEn:`Which word means “${it.en}”?`,opts:[it,...others].map(x=>({t:x.ar,en:'',ok:x===it})),
-       proof:`${it.ar} = <span dir="ltr">${it.en}</span>`,ref:set.ar,proofEn:'',talk:'اسْتَعْمِلِ الكَلِمَةَ فِي جُمْلَةٍ قَصِيرَة.',talkEn:'Use the word in a short sentence.',hint:it.pic,hintEn:''}
-    : {id:'w'+i,kind:'word',pic:it.pic,q:`مَا مَعْنَى «${it.ar}»؟`,qEn:`What does “${it.ar}” mean?`,opts:[it,...others].map(x=>({t:`<span dir="ltr">${x.en}</span>`,en:'',ok:x===it})),
-       proof:`${it.ar} = <span dir="ltr">${it.en}</span>`,ref:set.ar,proofEn:'',talk:'اسْتَعْمِلِ الكَلِمَةَ فِي جُمْلَةٍ قَصِيرَة.',talkEn:'Use the word in a short sentence.',hint:it.pic,hintEn:''}})}
+       proof:`${it.ar} = <span dir="ltr">${it.en}</span>`,ref:set.ar,refEn:set.en,proofEn:'',talk:'اسْتَعْمِلِ الكَلِمَةَ فِي جُمْلَةٍ قَصِيرَة.',talkEn:'Use the word in a short sentence.',hint:it.pic,hintEn:''}
+    : {id:'w'+i,kind:'word',pic:it.pic,q:`مَا مَعْنَى «${it.ar}»؟`,qEn:`What does “<span class="qar">${it.ar}</span>” mean?`,opts:[it,...others].map(x=>({t:`<span dir="ltr">${x.en}</span>`,en:'',ok:x===it})),
+       proof:`${it.ar} = <span dir="ltr">${it.en}</span>`,ref:set.ar,refEn:set.en,proofEn:'',talk:'اسْتَعْمِلِ الكَلِمَةَ فِي جُمْلَةٍ قَصِيرَة.',talkEn:'Use the word in a short sentence.',hint:it.pic,hintEn:''}})}
 const MODES=[];
-Object.entries(QUIZ).forEach(([k,s])=>{MODES.push({k:'sit-'+k,ar:`${s.ar} — المَوْقِف`,en:s.en,build:()=>situationQs(s)});MODES.push({k:'proof-'+k,ar:`${s.ar} — أَيْنَ الدَّلِيل؟`,en:s.en+' — find the proof',build:()=>proofQs(s)})});
-Object.entries(SETS).forEach(([k,s])=>MODES.push({k:'word-'+k,ar:`${s.ar} — مَعَانِي`,en:s.en,build:()=>wordQs(s)}));
+Object.entries(QUIZ).forEach(([k,s])=>{MODES.push({k:'sit-'+k,ar:`${s.ar} — المَوْقِف`,en:s.en+' — Situations',build:()=>situationQs(s)});MODES.push({k:'proof-'+k,ar:`${s.ar} — أَيْنَ الدَّلِيل؟`,en:s.en+' — find the proof',build:()=>proofQs(s)})});
+Object.entries(SETS).forEach(([k,s])=>MODES.push({k:'word-'+k,ar:`${s.ar} — مَعَانِي`,en:s.en+' — Word meanings',build:()=>wordQs(s)}));
 
 /* ---------- state ---------- */
 let teams=[],turn=0,queue=[],asked=0,total=8,cur=null,sel=-1,bet=0,used={},locked=false,hintShown=false;
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'🪙 رَصِيدِي',en:'My coins',c:'var(--gold)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🟠 الفَرِيقُ البُرْتُقَالِيّ',en:'Orange team',c:'var(--teamB)'}]}
+  if(v==='1')return [{nm:'🪙 رَصِيدِي',en:'🪙 My coins',c:'var(--gold)'}];
+  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'🧑‍🎓 Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'👨‍🏫 Teacher',c:'var(--teamB)'}];
+  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'🔵 Blue team',c:'var(--teamA)'},{nm:'🟠 الفَرِيقُ البُرْتُقَالِيّ',en:'🟠 Orange team',c:'var(--teamB)'}]}
 function renderTeams(bumpI){
-  $('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="coins ${i===bumpI?'bump':''}">🪙 ${ar(t.coins)}</span></div>`).join('');
+  $('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${U(t.nm,t.en)}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="coins ${i===bumpI?'bump':''}">🪙 ${nb(t.coins)}</span></div>`).join('');
 }
-function renderProg(){$('#progT').textContent=`السُّؤَال ${ar(Math.min(asked+1,total))} مِنْ ${ar(total)}`;$('#progI').style.width=(asked/total*100)+'%';
-  const r=queue.filter(q=>q.again).length;$('#queueT').textContent=r?`🔁 ${ar(r)} سُؤَال سَيَرْجِع`:''}
+function renderProg(){$('#progT').innerHTML=U(`السُّؤَال ${ar(Math.min(asked+1,total))} مِنْ ${ar(total)}`,`Question ${Math.min(asked+1,total)} of ${total}`);$('#progI').style.width=(asked/total*100)+'%';
+  const r=queue.filter(q=>q.again).length;$('#queueT').innerHTML=r?U(`🔁 ${ar(r)} سُؤَال سَيَرْجِع`,`🔁 ${r} to come back`):''}
 function newGame(){
   const mode=MODES.find(m=>m.k===$('#setSel').value)||MODES[0];
   const all=shuffle(mode.build());
@@ -326,17 +335,17 @@ function showQ(){
   cur=queue.shift();sel=-1;bet=0;used={};locked=false;hintShown=false;renderProg();
   const t=teams[turn];
   stage.innerHTML=`
-   <div class="qhead"><span class="tag" style="--tg:${t.c}">${t.nm}</span>${cur.again?'<span class="tag again">🔁 سُؤَالٌ رَاجِع — فُرْصَةٌ ثَانِيَة</span>':''}</div>
-   <h2 class="q"><span class="pic" aria-hidden="true">${cur.pic}</span>${cur.q}<span class="en">${cur.qEn}</span></h2>
-   <div class="opts" id="opts">${cur.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${KEYS[i]}</span><span class="t">${o.t}${o.en?`<span class="en">${o.en}</span>`:''}</span></button>`).join('')}</div>
+   <div class="qhead"><span class="tag" style="--tg:${t.c}">${U(t.nm,t.en)}</span>${cur.again?'<span class="tag again">'+U('🔁 سُؤَالٌ رَاجِع — فُرْصَةٌ ثَانِيَة','🔁 Second chance — this question is back')+'</span>':''}</div>
+   <h2 class="q"><span class="pic" aria-hidden="true">${cur.pic}</span>${U(cur.q,cur.qEn)}</h2>
+   <div class="opts" id="opts">${cur.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${U(KEYS[i],KEYS_EN[i])}</span><span class="t">${o.en?U(o.t,o.en):o.t}</span></button>`).join('')}</div>
    <div id="hintBox"></div>
    <div class="panel" id="panel">
-     <div class="box"><h3>⚡ أَدَوَات (تُشْتَرَى بِالعُمْلَات) <span class="en">Power-ups</span></h3>
-       ${POWERUPS.map(p=>`<button class="pu" data-p="${p.id}">${p.icon} ${p.ar} <small>🪙${ar(p.cost)}</small><span class="en">${p.en}</span></button>`).join('')}</div>
-     <div class="box"><h3>🎯 كَمْ أَنْتَ وَاثِق؟ رَاهِنْ <span class="en">How sure are you? Bet</span></h3>
-       ${BETS.map(b=>`<button class="bet" data-b="${b.n}"><span class="c">🪙 ${ar(b.n)}</span>${b.ar}<span class="en">${b.en}</span></button>`).join('')}</div>
+     <div class="box"><h3>${U('⚡ أَدَوَات (تُشْتَرَى بِالعُمْلَات)','⚡ Power-ups (bought with coins)')}</h3>
+       ${POWERUPS.map(p=>`<button class="pu" data-p="${p.id}">${p.icon} ${U(p.ar,p.en)} <small>🪙${nb(p.cost)}</small></button>`).join('')}</div>
+     <div class="box"><h3>${U('🎯 كَمْ أَنْتَ وَاثِق؟ رَاهِنْ','🎯 How sure are you? Place your bet')}</h3>
+       ${BETS.map(b=>`<button class="bet" data-b="${b.n}"><span class="c">🪙 ${nb(b.n)}</span>${U(b.ar,b.en)}</button>`).join('')}</div>
    </div>
-   <div class="row"><button class="big-btn" id="lockB" disabled>🔒 ثَبِّتِ الإِجَابَة <span class="en" style="color:#0E1F2E">Lock in</span></button></div>`;
+   <div class="row"><button class="big-btn" id="lockB" disabled>${U('🔒 ثَبِّتِ الإِجَابَة','🔒 Lock in my answer')}</button></div>`;
   stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(locked)return;ac();sel=+b.dataset.i;stage.querySelectorAll('.opt').forEach(x=>x.classList.toggle('sel',x===b));sfx.pop();upd()});
   stage.querySelectorAll('.bet').forEach(b=>b.onclick=()=>{if(locked)return;ac();bet=+b.dataset.b;stage.querySelectorAll('.bet').forEach(x=>x.classList.toggle('sel',x===b));sfx.coin();upd()});
   stage.querySelectorAll('.pu').forEach(b=>b.onclick=()=>buy(b.dataset.p,b));
@@ -356,8 +365,8 @@ function buy(id,btn){
   t.coins-=p.cost;used[id]=true;sfx.coin();renderTeams(turn);
   if(id==='cut'){const wrong=cur.opts.map((o,i)=>i).filter(i=>!cur.opts[i].ok);const k=wrong[Math.floor(Math.random()*wrong.length)];
     const el=stage.querySelector(`.opt[data-i="${k}"]`);el.classList.add('gone');el.classList.remove('sel');if(sel===k)sel=-1}
-  if(id==='hint'){$('#hintBox').innerHTML=`<div class="hint">💡 ${cur.hint}${cur.hintEn?` <span class="en">${cur.hintEn}</span>`:''}</div>`}
-  if(id==='x2'){pop('✖️٢ الرِّبْحُ مُضَاعَف!')}
+  if(id==='hint'){$('#hintBox').innerHTML=`<div class="hint">💡 ${cur.hintEn?U(cur.hint,cur.hintEn):cur.hint}</div>`}
+  if(id==='x2'){pop('✖️'+U('٢ الرِّبْحُ مُضَاعَف!','2 — your winnings are doubled!'))}
   upd();
 }
 function lockIn(){
@@ -368,15 +377,14 @@ function lockIn(){
   if(!ok&&!cur.again){const back={...cur,again:true,opts:shuffle(cur.opts)};queue.splice(Math.min(RETRY_GAP-1,queue.length),0,back);total=Math.min(total+1,asked+queue.length)}
   upd();
   setTimeout(()=>{
-    if(ok){sfx.good();confetti();const k=Math.floor(Math.random()*PRAISE.length);pop(`🪙 +${ar(gain)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`)}else{sfx.bad();pop(`🪙 −${ar(bet)}`)}
+    if(ok){sfx.good();confetti();const k=Math.floor(Math.random()*PRAISE.length);pop(`🪙 +${nb(gain)} ${U(PRAISE[k],PRAISE_EN[k])}`)}else{sfx.bad();pop(`🪙 −${nb(bet)}`)}
     renderTeams(turn);renderProg();
     $('#panel').remove();$('#lockB').parentElement.remove();$('#hintBox').innerHTML='';
     stage.insertAdjacentHTML('beforeend',`<div class="result">
-      <div class="verdict ${ok?'good':'bad'}">${ok?`✓ صَحِيح! رَبِحْتَ ${ar(gain)} 🪙`:`✗ لَيْسَتْ هَذِهِ — خَسِرْتَ ${ar(bet)} 🪙 ${cur.again?'':'(سَيَرْجِعُ السُّؤَالُ لَاحِقًا 🔁)'}`}
-        <span class="en blk">${ok?`Correct! +${gain} coins`:`Not this one — −${bet} coins${cur.again?'':' (this question will come back later)'}`}</span></div>
-      <div class="proof">📖 ${cur.proof}<small>${cur.ref}</small>${cur.proofEn?`<span class="en blk">${cur.proofEn}</span>`:''}</div>
-      <div class="talk"><b>💬 نِقَاش:</b> ${cur.talk} <span class="en blk">${cur.talkEn}</span></div>
-      <div class="row"><button class="big-btn teal" id="nextB">التَّالِي ← <span class="en" style="color:#0E1F2E">Next</span></button></div></div>`);
+      <div class="verdict ${ok?'good':'bad'}">${ok?U(`✓ صَحِيح! رَبِحْتَ ${ar(gain)} 🪙`,`✓ Correct! You won ${gain} 🪙`):U(`✗ لَيْسَتْ هَذِهِ — خَسِرْتَ ${ar(bet)} 🪙 ${cur.again?'':'(سَيَرْجِعُ السُّؤَالُ لَاحِقًا 🔁)'}`,`✗ Not this one — you lost ${bet} 🪙${cur.again?'':' (this question will come back later 🔁)'}`)}</div>
+      <div class="proof">📖 <span class="qar">${cur.proof}</span>${cur.proofEn?tr(noRef(cur.proofEn)):''}<small>${U(cur.ref,cur.refEn||cur.ref)}</small></div>
+      <div class="talk"><b>${U('💬 نِقَاش:','💬 Discuss:')}</b> ${U(cur.talk,cur.talkEn)}</div>
+      <div class="row"><button class="big-btn teal" id="nextB">${U('التَّالِي ←','Next →')}</button></div></div>`);
     $('#nextB').onclick=()=>{turn=(turn+1)%teams.length;renderTeams();showQ()};
     $('#nextB').focus({preventScroll:true});
   },550);
@@ -384,26 +392,27 @@ function lockIn(){
 
 /* ---------- end + confidence report ---------- */
 function endGame(){
-  renderProg();$('#progI').style.width='100%';$('#progT').textContent='انْتَهَتِ الجَوْلَة!';
+  renderProg();$('#progI').style.width='100%';$('#progT').innerHTML=U('انْتَهَتِ الجَوْلَة!','Round complete!');
   const max=Math.max(...teams.map(t=>t.coins)),win=teams.filter(t=>t.coins===max);
   const msg=teams.length===1?`رَصِيدُكَ النِّهَائِيّ: ${ar(max)} 🪙`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ جَمِيعًا':`فَازَ ${win[0].nm}!`;
-  const msgEn=teams.length===1?`Final balance: ${max} coins`:win.length>1?"It's a tie! Well done everyone":`${win[0].en} wins!`;
-  const rows=BETS.map(b=>`<tr><td>🪙 ${ar(b.n)} — ${b.ar}</td>${teams.map(t=>{const L=t.log.filter(x=>x.bet===b.n),r=L.filter(x=>x.ok).length;return `<td>${L.length?`${ar(r)} / ${ar(L.length)}`:'—'}</td>`}).join('')}</tr>`).join('');
-  stage.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2><span class="en blk">${msgEn}</span>
-    <h3 style="margin:6px 0 0">🎯 تَقْرِيرُ الثِّقَة: هَلْ كُنْتَ وَاثِقًا فِي المَكَانِ الصَّحِيح؟ <span class="en blk">Confidence report: right answers / bets at each level</span></h3>
-    <table class="cal"><tr><th>الرَّهَان</th>${teams.map(t=>`<th>${t.nm}</th>`).join('')}</tr>${rows}</table>
-    <p style="color:var(--muted);max-width:52ch;margin:0">إِذَا أَخْطَأْتَ وَأَنْتَ «مُتَأَكِّدٌ ١٠٠٪» فَهَذَا أَهَمُّ شَيْءٍ نُرَاجِعُهُ الحِصَّةَ القَادِمَة. <span class="en blk">Wrong answers you were "100% sure" about are the most important to review next class.</span></p>
-    <button class="big-btn teal" id="againB">↻ العَبْ مَرَّةً أُخْرَى</button></div>`;
+  const msgEn=teams.length===1?`Final balance: ${max} 🪙`:win.length>1?"It's a tie! Well done, everyone":`${win[0].en} wins!`;
+  const rows=BETS.map(b=>`<tr><td>🪙 ${nb(b.n)} — ${U(b.ar,b.en)}</td>${teams.map(t=>{const L=t.log.filter(x=>x.bet===b.n),r=L.filter(x=>x.ok).length;return `<td>${L.length?U(`${ar(r)} / ${ar(L.length)}`,`${r} / ${L.length}`):'—'}</td>`}).join('')}</tr>`).join('');
+  stage.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${U(msg,msgEn)}</h2>
+    <h3 style="margin:6px 0 0">${U('🎯 تَقْرِيرُ الثِّقَة: هَلْ كُنْتَ وَاثِقًا فِي المَكَانِ الصَّحِيح؟','🎯 Confidence report: were you sure about the right answers? (correct / bets at each level)')}</h3>
+    <table class="cal"><tr><th>${U('الرَّهَان','Bet')}</th>${teams.map(t=>`<th>${U(t.nm,t.en)}</th>`).join('')}</tr>${rows}</table>
+    <p style="color:var(--muted);max-width:52ch;margin:0">${U('إِذَا أَخْطَأْتَ وَأَنْتَ «مُتَأَكِّدٌ ١٠٠٪» فَهَذَا أَهَمُّ شَيْءٍ نُرَاجِعُهُ الحِصَّةَ القَادِمَة.','Wrong answers you were “100% sure” about are the most important thing to review in the next lesson.')}</p>
+    <button class="big-btn teal" id="againB">${U('↻ العَبْ مَرَّةً أُخْرَى','↻ Play again')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
 
 /* ---------- setup ---------- */
-$('#setSel').innerHTML=MODES.map(m=>`<option value="${m.k}">${m.ar}</option>`).join('');
+$('#setSel').innerHTML=MODES.map(m=>`<option value="${m.k}" data-ar="${m.ar}" data-en="${m.en}">${m.ar}</option>`).join('');TQI.relabel();
 ['#setSel','#teamSel','#nSel'].forEach(s=>$(s).onchange=newGame);
 $('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+TQI.auto();
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Muted');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;
   if(e.key==='Enter'){const n=$('#nextB')||(!$('#lockB')?.disabled&&$('#lockB'));if(n){e.preventDefault();n.click()}}});
 newGame();
