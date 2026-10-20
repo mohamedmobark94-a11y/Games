@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>المصحف الواضح · المصحح</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="mushaf.css">
+</head><body>
+<header class="hd0"><b>📖 مصحف الواضح في التجويد</b><span>المصحح · محمد مبارك</span></header>
+<div id="page-mushaf" class="page on"><div class="mz" dir="rtl">
+  <div class="mz-bar">
+    <div class="mz-grp">
+      <button class="mz-b" data-mz="next" title="الصفحة التالية (←)">‹</button>
+      <input id="mzPage" class="mz-in" type="number" min="1" max="640" value="7" title="رقم الصفحة">
+      <span class="mz-of">/ <span id="mzTotal">640</span></span>
+      <button class="mz-b" data-mz="prev" title="الصفحة السابقة (→)">›</button>
+      <select id="mzSurah" class="mz-sel" title="روح لسورة"></select>
+    </div>
+    <div class="mz-grp">
+      <button class="mz-b" data-mz="zout" title="تصغير">−</button>
+      <span id="mzZoom" class="mz-of">100%</span>
+      <button class="mz-b" data-mz="zin" title="تكبير">+</button>
+      <button class="mz-b wide" data-mz="fitw" title="ملء العرض">↔</button>
+      <button class="mz-b wide" data-mz="fitp" title="الصفحة كاملة">⤢</button>
+    </div>
+    <div class="mz-grp" id="mzTools">
+      <button class="mz-t on" data-tool="hand" title="تحريك">✋</button>
+      <button class="mz-t" data-tool="pen" title="قلم">✏️</button>
+      <button class="mz-t" data-tool="hl" title="هايلايت">🖍️</button>
+      <button class="mz-t" data-tool="erase" title="ممحاة">🧽</button>
+      <span class="mz-cols"><i data-col="#d62828" style="background:#d62828" class="on"></i><i data-col="#1d4ed8" style="background:#1d4ed8"></i><i data-col="#15803d" style="background:#15803d"></i><i data-col="#111" style="background:#111"></i></span>
+      <button class="mz-b wide" data-mz="clear" title="امسح الكتابة من الصفحة">🗑</button>
+    </div>
+    <div class="mz-grp">
+      <button class="mz-t mark" data-tool="mark" title="تصحيح (F8)">🎯 تصحيح <kbd>F8</kbd></button>
+    </div>
+  </div>
+  <div class="mz-body">
+    <div class="mz-stage" id="mzStage">
+      <div class="mz-paper" id="mzPaper">
+        <img id="mzImg" alt="" draggable="false" crossorigin="anonymous">
+        <canvas id="mzInk"></canvas>
+        <div id="mzMarks"></div>
+        <div id="mzRect" hidden></div>
+      </div>
+      <div class="mz-msg" id="mzMsg" hidden></div>
+    </div>
+    <aside class="mz-side">
+      <div class="mz-card">
+        <label class="mz-lb">الطالب</label>
+        <input id="mzStudent" class="mz-in full" placeholder="اسم الطالب">
+      </div>
+      <div class="mz-card">
+        <div class="mz-h"><b>أخطاء الحصة</b><span id="mzCount" class="mz-pill">0</span></div>
+        <div id="mzList" class="mz-list"><div class="mz-empty">دوس 🎯 تصحيح (أو F8) وحدّد الكلمة اللي غلط فيها على الصفحة.</div></div>
+        <div class="mz-keys"><kbd>F8</kbd> تصحيح · <kbd>Ctrl</kbd>+<kbd>F8</kbd> تراجع · <kbd>F9</kbd> إنهاء · <kbd>D</kbd> رسم/إيقاف · <kbd>E</kbd> ممحاة · <kbd>P</kbd> قلم</div>
+        <button class="mz-go" id="mzFinish">📤 إنهاء وتقرير الطالب <kbd>F9</kbd></button>
+        <div class="mz-row2">
+          <button class="mz-sec" id="mzToReport">➕ للتقرير</button>
+          <button class="mz-sec" id="mzWa">واتساب</button>
+        </div>
+        <div id="mzNote" class="mz-note"></div>
+        <label class="mz-sec" id="mzFromPc" style="display:block;text-align:center;margin-top:8px;cursor:pointer">📥 هات تصحيح من نسخة الجهاز<input type="file" id="mzPcFile" accept=".html,text/html" multiple hidden></label>
+      </div>
+      <div class="mz-card" id="mzImport" hidden>
+        <b>استيراد المصحف — مرة واحدة</b>
+        <p class="mz-small">اختار <b>كل الصور</b> اللي في فولدر <code>Downloads\mushaf_pages</code> (page-001 لـ page-640). بتترفع بجودتها الأصلية، ولو اتقطعت كمّل من مكان ما وقفت.</p>
+        <label class="mz-go alt">📁 اختار الصفحات<input type="file" id="mzFiles" accept="image/jpeg,image/png,image/webp" multiple hidden></label>
+        <div class="mz-prog" hidden><i id="mzBar"></i></div>
+        <div id="mzImpNote" class="mz-small"></div>
+      </div>
+    </aside>
+  </div>
+  <div class="mz-pop" id="mzPop" hidden>
+    <div class="mz-popin">
+      <b>نوع الخطأ</b>
+      <div class="mz-cats">
+        <button data-cat="clear">جلي <small>Clear</small></button>
+        <button data-cat="hidden">خفي <small>Hidden</small></button>
+        <button data-cat="pron">نطق <small>Pronunciation</small></button>
+        <button data-cat="general">عام <small>General</small></button>
+      </div>
+      <div class="mz-rec">
+        <button id="mzRecBtn" class="mz-recb">🎙️ سجّل التصحيح بصوتك</button>
+        <label class="mz-recb" id="mzUpBtn" style="background:#fff;color:#0e4d3c;border:1.5px solid #0e4d3c;cursor:pointer;display:inline-flex;align-items:center;gap:6px">📎 ارفع تسجيل صوتي<input type="file" id="mzAudioFile" accept="audio/*,.m4a,.mp3,.wav,.ogg,.webm,.aac" capture hidden></label>
+        <span id="mzRecT" class="mz-small"></span>
+        <audio id="mzRecPlay" controls hidden></audio>
+      </div>
+      <textarea id="mzMemo" placeholder="ملاحظة (اختياري) — مثلاً: مدّ ٤ حركات مش ٢"></textarea>
+      <div class="mz-row2">
+        <button class="mz-go" id="mzSave">حفظ الخطأ</button>
+        <button class="mz-sec" id="mzCancel">إلغاء</button>
+      </div>
+    </div>
+  </div>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../config.js"></script>
+<script src="../gen-shim.js"></script>
+<script src="shim.js"></script>
+<script src="web.js"></script>
+<script src="mushaf.js"></script>
+<script src="boot.js"></script>
+</body></html>

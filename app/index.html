@@ -48,6 +48,8 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
 .link{direction:ltr;unicode-bidi:isolate;font-size:.85rem;word-break:break-all;color:var(--muted)}
 .full .wrap{max-width:none;padding:0}
 #genFrame{display:block;width:100%;height:calc(100vh - 58px);border:0;background:#fff}
+.md h2,.md h3,.md h4,.md h5{margin:14px 0 6px;color:var(--gold)}.md p{margin:4px 0}.md .mdq{border-inline-start:3px solid var(--gold);padding:2px 10px;color:var(--muted);margin:6px 0}
+.mdt{margin:8px 0;font-size:.9rem;background:var(--card2);border-radius:10px;overflow:hidden}.mdt th{color:var(--gold)}.md code{background:var(--card2);padding:0 4px;border-radius:4px}
 .flash{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#10263A;font-weight:800;border-radius:99px;padding:8px 18px;z-index:99}
 </style>
 </head>
@@ -58,8 +60,12 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     <button class="tab" data-v="report">📝 تقرير الحصة</button>
     <button class="tab on" data-v="inbox">📥 التسليمات<span class="badge" id="nNew" hidden></span></button>
     <button class="tab" data-v="new">✏️ واجب جديد</button>
-    <button class="tab" data-v="list">📚 الواجبات</button>
+    <button class="tab" data-v="list">📋 الواجبات</button>
     <button class="tab" data-v="students">👥 الطلاب</button>
+    <button class="tab" data-v="lessons">📚 الدروس</button>
+    <button class="tab" data-v="plans">🗂️ الخطط</button>
+    <button class="tab" data-v="mushaf">📖 المصحف</button>
+    <button class="tab" data-v="games">🎮 الألعاب</button>
     <button class="tab" id="out">خروج</button>
   </div>
 </div></div>
@@ -114,8 +120,8 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   document.querySelectorAll('.tab[data-v]').forEach(b => b.onclick = () => go(b.dataset.v));
   function go(v){
     view = v; document.querySelectorAll('.tab[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
-    document.body.classList.toggle('full', v === 'report');
-    ({inbox, new: newView, list: listView, students: studentsView, report: reportView})[v]();
+    document.body.classList.toggle('full', v === 'report' || v === 'mushaf');
+    ({inbox, new: newView, list: listView, students: studentsView, report: reportView, lessons: lessonsView, plans: plansView, games: gamesView, mushaf: mushafView})[v]();
   }
 
   /* ---------- 📝 the report generator (kept private: it carries student names) ---------- */
@@ -253,10 +259,16 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         h += '<div class="card"><h2>سجل ' + esc(s.name_ar) + '</h2><p class="muted">' + rows.length + ' واجب · ' + rows.filter(t => (t.submissions || []).length).length + ' اتسلّم' + (avg != null ? ' · متوسط الدرجات ' + avg + '%' : '') + '</p><table>' +
           rows.map(t => { const subs = (t.submissions || []).sort((x, y) => y.submitted_at.localeCompare(x.submitted_at)), last = subs[0];
             return '<tr><td>' + esc(t.assignments.title) + '<div class="small muted">' + day(t.assignments.created_at) + '</div></td><td>' + (last ? (last.max_score ? last.score + '/' + last.max_score + ' ' : '') + '<span class="st ' + last.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[last.status] + '</span>' : '<span class="muted">لسه</span>') + '</td><td><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">📋</button></td></tr>'; }).join('') + '</table></div>';
+        const portal = PORTAL + '?k=' + s.portal_token;
+        const pmsg = 'السلام عليكم 🌱\nصفحة ' + s.name_ar + ': الدروس والواجبات والتقارير في مكان واحد\n' + portal + '\n\nAssalamu alaikum, this is ' + (s.name_en || '') + '’s page: lessons, homework and reports in one place:\n' + portal;
+        h = h.replace('<div class="card"><h2>سجل ', '<div class="card"><h2>🔗 صفحة ' + esc(s.name_ar) + ' (للطالب وولي الأمر)</h2><p class="small muted">لينك ثابت: كل دروسه وواجباته ودرجاته وآخر تقرير. من غير تسجيل دخول، ومن غير الخطة أو ملاحظاتك.</p><div class="link">' + esc(portal) + '</div><div class="row" style="margin-top:8px"><button class="btn ghost sm" data-copy="' + esc(portal) + '">📋 نسخ</button><a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(pmsg) + '">واتساب</a><a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(portal) + '">👁️ افتحها</a><button class="btn ghost sm" data-golessons="' + s.id + '">📚 دروسه</button><button class="btn ghost sm" data-goplan="' + esc(s.slug) + '">🗂️ خطته</button></div></div><div class="card"><h2>سجل ');
+        h += await lessonsHtml(s.keys || [s.slug], 12);
       }
     }
     app.innerHTML = h;
     app.querySelectorAll('[data-st]').forEach(b => b.onclick = () => studentsView(b.dataset.st));
+    app.querySelectorAll('[data-golessons]').forEach(b => b.onclick = () => { lessonFilter = b.dataset.golessons; go('lessons'); });
+    app.querySelectorAll('[data-goplan]').forEach(b => b.onclick = () => { planSel = b.dataset.goplan; go('plans'); });
     bindLinks();
     if($('s_save')) $('s_save').onclick = async () => {
       const row = {name_ar: $('s_ar').value.trim(), name_en: $('s_en').value.trim() || null, age: +$('s_age').value || null, lang: $('s_lang').value, notes: $('s_notes').value || null, active: $('s_act').checked};
@@ -269,6 +281,106 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       flash('اتحفظ ✓'); studentsView(r.data.id);
     };
   }
+
+  /* ---------- 📚 lessons library (from the generator's «lessons» records) ---------- */
+  const PORTAL = new URL('app/student.html', TQ.site).href;
+  let lessonFilter = 'all', planSel = null, allLessons = null;
+  const keyOf = id => String(id).slice(11);
+  const studentOfKey = k => students.find(s => (s.keys || [s.slug]).includes(k));
+  async function loadLessons(force){
+    if(allLessons && !force) return allLessons;
+    const r = await db.from('docs').select('id,data').eq('collection', 'lessons').order('id', {ascending: false}).limit(2000);
+    allLessons = (r.data || []).map(x => Object.assign({id: x.id, key: keyOf(x.id)}, x.data));
+    return allLessons;
+  }
+  function lessonCard(l, showName){
+    const A = v => Array.isArray(v) ? v : (v ? [String(v)] : []); const s = studentOfKey(l.key), lines = A(l.summary).length ? A(l.summary) : A(l.headlines);
+    return '<div class="card"><div class="row"><b style="font-size:1.1rem">' + esc(l.title || '') + '</b>' + (showName ? '<span class="chip on" style="min-height:28px;padding:0 10px">' + esc(s ? s.name_ar : (l.student || l.key)) + '</span>' : '') +
+      '<span class="muted small" style="margin-inline-start:auto">' + esc(l.date || '') + (l.subject ? ' · ' + esc(l.subject) : '') + '</span></div>' +
+      (lines.length ? '<ul class="small" style="margin:6px 0">' + lines.slice(0, 5).map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul>' : '') +
+      (l.homework ? '<div class="small muted" dir="auto">📝 ' + esc(l.homework) + '</div>' : '') +
+      '<div class="row" style="margin-top:8px">' + (l.url ? '<a class="btn sm" target="_blank" rel="noopener" href="' + esc(l.url) + '">🎓 الدرس</a>' : '') + (l.hw ? '<a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(l.hw) + '">📝 الواجب</a><button class="btn ghost sm" data-copy="' + esc(l.hw) + '">📋 لينك الواجب</button>' : '') + '</div></div>';
+  }
+  async function lessonsHtml(keys, max){
+    const L = (await loadLessons()).filter(l => keys.includes(l.key)).slice(0, max || 999);
+    return '<div class="card"><h2>📚 آخر الدروس</h2>' + (L.length ? '' : '<p class="muted">مفيش دروس متسجلة لسه.</p>') + '</div>' + L.map(l => lessonCard(l, false)).join('');
+  }
+  async function lessonsView(){
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    const L = await loadLessons(true);
+    const withL = students.filter(s => L.some(l => (s.keys || [s.slug]).includes(l.key)));
+    const sel = students.find(s => s.id === lessonFilter);
+    const shown = sel ? L.filter(l => (sel.keys || [sel.slug]).includes(l.key)) : L;
+    app.innerHTML = '<h2>📚 مكتبة الدروس <span class="muted small">(' + L.length + ' درس)</span></h2>' +
+      '<div class="row" style="margin-bottom:10px"><button class="chip' + (sel ? '' : ' on') + '" data-lf="all">الكل</button>' + withL.map(s => '<button class="chip' + (sel && sel.id === s.id ? ' on' : '') + '" data-lf="' + s.id + '">' + esc(s.name_ar) + '</button>').join('') + '</div>' +
+      '<input id="lq" placeholder="🔎 دوّر في الدروس (سورة، قاعدة، كتاب…)" style="margin-bottom:12px"><div id="ll"></div>';
+    const draw = () => { const q = $('lq').value.trim().toLowerCase(); const f = q ? shown.filter(l => JSON.stringify(l).toLowerCase().includes(q)) : shown;
+      $('ll').innerHTML = f.map(l => lessonCard(l, !sel)).join('') || '<div class="card muted">مفيش نتايج.</div>'; bindLinks(); };
+    $('lq').oninput = draw; draw();
+    app.querySelectorAll('[data-lf]').forEach(b => b.onclick = () => { lessonFilter = b.dataset.lf; lessonsView(); });
+  }
+
+  /* ---------- 🗂️ plans & logs (copied from OneDrive\تدريس\طلابي) ---------- */
+  function md(src){
+    const inl = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/(https?:\/\/[^\s)<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    const out = []; const lines = String(src || '').split(/\r?\n/); let i = 0;
+    while(i < lines.length){
+      const l = lines[i];
+      if(/^\|/.test(l)){ const rows = []; while(i < lines.length && /^\|/.test(lines[i])){ if(!/^\|[\s:|-]+\|?\s*$/.test(lines[i])) rows.push(lines[i].replace(/^\||\|\s*$/g, '').split('|')); i++; }
+        out.push('<table class="mdt">' + rows.map((r, k) => '<tr>' + r.map(c => k ? '<td>' + inl(c.trim()) + '</td>' : '<th>' + inl(c.trim()) + '</th>').join('') + '</tr>').join('') + '</table>'); continue; }
+      let m;
+      if((m = l.match(/^(#{1,4})\s+(.*)/))) out.push('<h' + (m[1].length + 1) + '>' + inl(m[2]) + '</h' + (m[1].length + 1) + '>');
+      else if((m = l.match(/^(\s*)[-*]\s+(.*)/))) out.push('<div class="mdli" style="padding-inline-start:' + (12 + m[1].length * 8) + 'px">• ' + inl(m[2]) + '</div>');
+      else if((m = l.match(/^>\s?(.*)/))) out.push('<div class="mdq">' + inl(m[1]) + '</div>');
+      else if(l.trim()) out.push('<p>' + inl(l) + '</p>');
+      i++;
+    }
+    return out.join('');
+  }
+  async function plansView(){
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    const r = await db.from('docs').select('id,data,updated_at').eq('collection', 'plans');
+    const P = (r.data || []).sort((a, b) => a.data.folder.localeCompare(b.data.folder, 'ar'));
+    if(!P.length){ app.innerHTML = '<div class="card muted">مفيش خطط لسه.</div>'; return; }
+    const cur = P.find(p => p.id === planSel) || P[0]; planSel = cur.id;
+    let mode = plansView.mode || 'plan';
+    const d = cur.data, txt = mode === 'plan' ? d.plan : d.log;
+    app.innerHTML = '<h2>🗂️ خطط الطلاب وسجل الدروس</h2><div class="row" style="margin-bottom:10px">' + P.map(p => '<button class="chip' + (p.id === cur.id ? ' on' : '') + '" data-p="' + esc(p.id) + '">' + esc(p.data.folder) + '</button>').join('') + '</div>' +
+      '<div class="card"><div class="row"><button class="chip' + (mode === 'plan' ? ' on' : '') + '" data-m="plan">📋 الخطة</button><button class="chip' + (mode === 'log' ? ' on' : '') + '" data-m="log">🕘 سجل الدروس</button><button class="btn ghost sm" id="pedit" style="margin-inline-start:auto">✏️ تعديل</button></div>' +
+      '<p class="small muted">' + (d.editedOnSite ? '✏️ اتعدّلت هنا ' + day(d.siteEditedAt) + ' — هتتنسخ لـ OneDrive في المزامنة الجاية. ' : '') + 'آخر نسخ من OneDrive: ' + day(d.syncedAt) + (d.lessonFolders && d.lessonFolders.length ? ' · ' + d.lessonFolders.length + ' فولدر درس' : '') + '</p>' +
+      '<div id="pbody" class="md">' + md(txt) + '</div></div>';
+    app.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { planSel = b.dataset.p; plansView(); });
+    app.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { plansView.mode = b.dataset.m; plansView(); });
+    $('pedit').onclick = () => {
+      $('pbody').innerHTML = '<textarea id="ptxt" style="min-height:60vh;direction:rtl;font-size:.95rem">' + esc(txt || '') + '</textarea><div class="row" style="margin-top:8px"><button class="btn" id="psave">💾 احفظ</button><button class="btn ghost" id="pcancel">إلغاء</button></div>';
+      $('pcancel').onclick = plansView;
+      $('psave').onclick = async () => {
+        const nd = Object.assign({}, d, {[mode]: $('ptxt').value, editedOnSite: true, siteEditedAt: Date.now()});
+        const w = await db.from('docs').update({data: nd}).eq('collection', 'plans').eq('id', cur.id);
+        if(w.error) return alert(w.error.message); flash('اتحفظ ✓'); plansView();
+      };
+    };
+  }
+
+  /* ---------- 🎮 games & public lessons (the public site's list) ---------- */
+  let gamesLoaded = null;
+  function gamesView(){
+    const draw = () => {
+      const card = (g, dir) => '<div class="card" style="margin:0"><div style="font-size:2rem">' + esc(g.ico || '🎮') + '</div><b>' + esc(g.ar) + '</b><div class="small muted" dir="ltr">' + esc(g.en || '') + '</div><div class="small" style="margin:6px 0">' + esc(g.desc || '') + '</div>' +
+        (g.file ? '<div class="row"><a class="btn sm" target="_blank" rel="noopener" href="' + TQ.site + dir + esc(g.file) + '">▶ افتح</a><button class="btn ghost sm" data-copy="' + TQ.site + dir + esc(g.file) + '">📋 للطالب</button></div>' : '<span class="muted small">قريبًا</span>') + '</div>';
+      const grid = a => '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:18px">' + a + '</div>';
+      app.innerHTML = '<h2>🎮 الألعاب <span class="muted small">(' + (window.GAMES || []).length + ')</span> <a class="small" href="' + TQ.site + '" target="_blank" rel="noopener">الموقع العام ↗</a></h2>' + grid((window.GAMES || []).map(g => card(g, 'games/')).join('')) +
+        '<h2>📘 الدروس العامة <span class="muted small">(' + (window.LESSONS || []).length + ')</span></h2>' + grid((window.LESSONS || []).map(g => card(g, 'lessons/')).join(''));
+      bindLinks();
+    };
+    if(window.GAMES) return draw();
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    if(!gamesLoaded){ gamesLoaded = document.createElement('script'); gamesLoaded.src = TQ.site + 'games.js?v=' + Date.now(); document.head.appendChild(gamesLoaded); }
+    gamesLoaded.addEventListener('load', () => { if(view === 'games') draw(); });
+  }
+
+  /* ---------- 📖 Mushaf + recitation corrector ---------- */
+  function mushafView(){ app.innerHTML = '<iframe id="genFrame" src="mushaf/" title="المصحف" allow="microphone; clipboard-write; fullscreen"></iframe>'; }
 
   db.auth.onAuthStateChange((ev) => { if(ev === 'SIGNED_OUT') loginView(); });
   start();
