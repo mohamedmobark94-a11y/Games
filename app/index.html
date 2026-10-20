@@ -46,6 +46,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
 audio{width:100%;margin-top:6px}
 table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:start;vertical-align:top}
 .link{direction:ltr;unicode-bidi:isolate;font-size:.85rem;word-break:break-all;color:var(--muted)}
+.full .wrap{max-width:none;padding:0}
+#genFrame{display:block;width:100%;height:calc(100vh - 58px);border:0;background:#fff}
 .flash{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#10263A;font-weight:800;border-radius:99px;padding:8px 18px;z-index:99}
 </style>
 </head>
@@ -53,6 +55,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
 <div class="top"><div class="in">
   <div class="brand">📖 لوحة المعلم · ترتيل</div>
   <div class="tabs" id="tabs" hidden>
+    <button class="tab" data-v="report">📝 تقرير الحصة</button>
     <button class="tab on" data-v="inbox">📥 التسليمات<span class="badge" id="nNew" hidden></span></button>
     <button class="tab" data-v="new">✏️ واجب جديد</button>
     <button class="tab" data-v="list">📚 الواجبات</button>
@@ -111,7 +114,19 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   document.querySelectorAll('.tab[data-v]').forEach(b => b.onclick = () => go(b.dataset.v));
   function go(v){
     view = v; document.querySelectorAll('.tab[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
-    ({inbox, new: newView, list: listView, students: studentsView})[v]();
+    document.body.classList.toggle('full', v === 'report');
+    ({inbox, new: newView, list: listView, students: studentsView, report: reportView})[v]();
+  }
+
+  /* ---------- 📝 the report generator (kept private: it carries student names) ---------- */
+  let genUrl = null;
+  async function reportView(){
+    if(genUrl){ app.innerHTML = '<iframe id="genFrame" src="' + genUrl + '" title="تقرير الحصة"></iframe>'; return; }
+    app.innerHTML = '<div class="card muted" style="margin:16px">بيفتح المولّد…</div>';
+    const r = await db.storage.from('private').download('generator.html');
+    if(r.error){ app.innerHTML = '<div class="card" style="margin:16px">معرفتش أفتح المولّد: ' + esc(r.error.message) + '</div>'; return; }
+    genUrl = URL.createObjectURL(new Blob([await r.data.arrayBuffer()], {type: 'text/html;charset=utf-8'}));
+    if(view === 'report') reportView();
   }
 
   /* ---------- 📥 submissions ---------- */
