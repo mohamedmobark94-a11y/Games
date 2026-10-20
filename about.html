@@ -92,6 +92,29 @@ input,select{font:inherit;font-size:1rem;border:2px solid var(--line);background
 footer{text-align:center;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);padding-top:16px}
 footer a{color:var(--gold)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.btn:hover{transform:none}}
+
+/* ===== night-sky hero (same look as the home page) ===== */
+body{overflow-x:clip}
+.hero{position:relative;isolation:isolate;width:100vw;margin-inline:calc(50% - 50vw);padding:56px max(16px,env(safe-area-inset-left,0px)) 130px;background:linear-gradient(180deg,#071522 0%,#0E2A44 55%,#1A4468 100%);border-bottom:3px solid var(--gold);overflow:hidden}
+.hero>*:not(.sky):not(.skyline):not(.moon){position:relative;z-index:3}
+.sky{position:absolute;inset:0;z-index:0;pointer-events:none}
+.sky .star{fill:#fff;animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}
+.moon{position:absolute;z-index:1;top:30px;inset-inline-end:max(18px,8vw);width:clamp(64px,11vw,110px);color:#F6E3A8;filter:drop-shadow(0 0 22px rgba(246,227,168,.55));animation:sway 7s ease-in-out infinite;transform-origin:50% 0}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.skyline{position:absolute;z-index:2;left:0;right:0;bottom:-1px;width:100%;height:auto;pointer-events:none;display:block}
+.skyline .l1{fill:#16324B}.skyline .l2{fill:#081826}
+.hero h1{font-family:var(--f-ar);font-size:clamp(2rem,5.8vw,3.4rem);text-shadow:0 3px 24px rgba(0,0,0,.55)}
+html[lang=en] .hero h1{font-family:var(--f-en);font-weight:800}
+.hero h1 em{background:linear-gradient(90deg,var(--gold),#fff 55%,var(--gold));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
+@keyframes shine{to{background-position:-200% 0}}
+.hero .stats{margin-bottom:-90px}
+h2{display:flex;align-items:center;gap:14px}
+h2::before{content:"";flex:none;width:12px;height:32px;border-radius:6px;background:linear-gradient(var(--gold),rgba(226,184,92,.35))}
+h2::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(--line),transparent);margin-inline-start:6px}
+[dir=rtl] h2::after{background:linear-gradient(270deg,var(--line),transparent)}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.moon,.sky .star,.hero h1 em{animation:none!important}}
 </style>
 </head>
 <body>
@@ -103,6 +126,8 @@ footer a{color:var(--gold)}
 
 <div class="wrap">
   <header class="hero">
+    <svg class="sky" id="sky" aria-hidden="true" preserveAspectRatio="none"></svg>
+    <svg class="moon" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M62 8a42 42 0 1 0 30 70A36 36 0 0 1 62 8z"/><path fill="currentColor" d="M80 20l2.4 5.6L88 28l-5.6 2.4L80 36l-2.4-5.6L72 28l5.6-2.4z"/></svg>
     <span class="free">🎁 <span class="ar">الحصة الأولى تجريبية ومجانية</span><span class="en">Your first class is a free trial</span></span>
     <h1><span class="ar">حصص أونلاين في <em>القرآن</em> والتجويد والعربية والإسلاميات</span><span class="en">Online classes in <em>Qur'an</em>, Tajweed, Arabic and Islamic studies</span></h1>
     <p><span class="ar">مع الأستاذ محمد مبارك، لغير الناطقين بالعربية: أطفال ومراهقون وكبار. كل طالب له خطة وأسلوب يناسبان عمره ومستواه.</span><span class="en">With Ustadh Mohamed Mobark, for non-Arabic speakers: kids, teens and adults. Every student gets a plan and a style that fit their age and level.</span></p>
@@ -115,6 +140,10 @@ footer a{color:var(--gold)}
       <div class="stat"><b>4+</b><span class="ar">من سن ٤ سنوات</span><span class="en">From age 4</span></div>
       <div class="stat"><b>AR · EN</b><span class="ar">شرح بلغتك</span><span class="en">Explained in your language</span></div>
     </div>
+  <svg class="skyline" viewBox="0 0 1200 150" preserveAspectRatio="none" aria-hidden="true">
+      <path class="l1" d="M0 150V96h60V78h14V60l8-14 8 14v18h14v18h60V70c0-20 20-34 40-34s40 14 40 34v26h50V90h20V50l6-24 6 24v40h20v6h40v-38h14V40l6-18 6 18v18h14v38h70V66c0-28 28-48 60-48s60 20 60 48v30h40V84h16V54l6-22 6 22v30h16v12h60V74h12V60l6-12 6 12v14h12v22h80V80c0-18 16-30 34-30s34 12 34 30v16h46V70h14V46l7-26 7 26v24h14v26h40v-10h30V84h12V66l5-10 5 10v18h16v12h56V150z"/>
+      <path class="l2" d="M0 150v-30h80v-14c0-14 12-24 24-24s24 10 24 24v14h90v-22h12V70l5-14 5 14v28h12v22h110v-18c0-22 18-38 40-38s40 16 40 38v18h120v-26h10V80l5-12 5 12v14h10v26h100v-16c0-20 16-34 34-34s34 14 34 34v16h130v-24h12V76l5-12 5 12v20h12v24h110v-14c0-16 12-26 26-26s26 10 26 26v14h110z"/>
+    </svg>
   </header>
 
   <section aria-labelledby="h-what">
@@ -209,6 +238,10 @@ function setLang(){
 ['fName','fAge','fSubj','fCountry','fTime','fLang'].forEach(k=>$(k).addEventListener('input',update));
 $('lang').onclick=()=>{lang=lang==='ar'?'en':'ar';store.set('tq-lang',lang);setLang()};
 setLang();update();
+
+(function(){const sky=document.getElementById('sky');if(sky){sky.setAttribute('viewBox','0 0 100 100');let h='';for(let i=0;i<40;i++)h+=`<circle class="star" cx="${(Math.random()*100).toFixed(1)}" cy="${(Math.random()*70).toFixed(1)}" r="${(.12+Math.random()*.28).toFixed(2)}" style="animation-delay:${(Math.random()*3).toFixed(1)}s"/>`;sky.innerHTML=h}
+ const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08}):null;
+ document.querySelectorAll('.wrap>section').forEach(el=>{el.classList.add('reveal');io?io.observe(el):el.classList.add('in')})})();
 </script>
 </body>
 </html>
