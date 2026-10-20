@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>غض البصر</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap">
 <style>
@@ -451,33 +451,33 @@ const L=window.LESSON, S=L.stages;
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const hot=window.claude&&window.claude.hot;
 let cur=0, earned=new Set();
-const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const EN=()=>document.body.classList.contains('show-en');
+const T=(a,e)=>EN()?e:a;
+const ar=n=>EN()?String(n):String(n).replace(/\d/g,d=>'\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669'[d]);
+const fld=(s,k)=>EN()&&s.en&&s.en[k]!=null?s.en[k]:s[k];
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 const app=$('#app');
 app.innerHTML=`
 <header class="top"><div class="top-row">
-  <h1 class="brand">${L.title}<small>${L.sub}</small></h1>
-  <span class="chip stars" aria-live="polite">★ <span id="sc">٠</span> / <span id="st">٠</span></span>
+  <h1 class="brand" id="brandH"></h1>
+  <span class="chip stars" aria-live="polite">\u2605 <span id="sc">0</span> / <span id="st">0</span></span>
   <span class="chip" id="mins"></span>
   <button class="tbtn" id="enT" aria-pressed="false">English</button>
-  <button class="tbtn" id="tT" aria-pressed="false">ملاحظات المعلم</button>
+  <button class="tbtn" id="tT" aria-pressed="false"></button>
 </div><div class="progress" id="prog"></div></header>
 <main id="stages"></main>`;
 const nav=document.createElement('nav');nav.className='nav';
-nav.innerHTML=`<div class="nav-in"><button class="prev" id="prev">→ السابق</button><span class="where" id="where"></span><button class="next" id="next">التالي ←</button></div>`;
+nav.innerHTML=`<div class="nav-in"><button class="prev" id="prev"></button><span class="where" id="where"></span><button class="next" id="next"></button></div>`;
 document.body.appendChild(nav);
 
 const main=$('#stages'), prog=$('#prog');
 const total=S.reduce((a,s)=>a+(s.min||0),0);
 S.forEach((s,i)=>{
   const sec=document.createElement('section');sec.className='stage';sec.hidden=true;sec.id='s'+i;
-  sec.innerHTML=`<div class="stage-head"><span class="n">المحطة ${ar(i+1)}</span><h2>${s.title}</h2>${s.min?`<span class="chip">${ar(s.min)} د</span>`:''}</div>
-  ${s.guide?`<div class="guide">${L.guideSvg}<p>${s.guide}</p></div>`:''}
-  ${s.note?`<div class="tnote">${s.note}</div>`:''}
-  <div class="body">${s.html}</div>`;
+  sec.innerHTML='<div class="sc"></div>';
   main.appendChild(sec);
-  const b=document.createElement('button');b.title=s.title;b.setAttribute('aria-label','المحطة '+(i+1)+': '+s.title);b.onclick=()=>go(i);prog.appendChild(b);
+  const b=document.createElement('button');b.onclick=()=>go(i);prog.appendChild(b);
 });
 
 function star(key){
@@ -486,6 +486,25 @@ function star(key){
 }
 function wrongFx(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
 
+
+/* (re)draw every station in the current language, then re-bind the widgets */
+function fill(){
+  app.dir=EN()?'ltr':'rtl';app.lang=EN()?'en':'ar';
+  $('#brandH').innerHTML=EN()&&L.titleEn?`${L.titleEn}<small>${L.subEn||L.sub}</small>`:`${L.title}<small>${L.sub}</small>`;
+  $('#tT').textContent=T('ملاحظات المعلم','Teacher notes');
+  $('#prev').textContent=T('\u2192 السابق','\u2190 Previous');$('#next').textContent=T('التالي \u2190','Next \u2192');
+  S.forEach((s,i)=>{
+    const c=$('.sc',$('#s'+i)),title=fld(s,'title'),guide=fld(s,'guide'),note=fld(s,'note');
+    c.innerHTML=`<div class="stage-head"><span class="n">${T('المحطة '+ar(i+1),'Station '+(i+1))}</span><h2>${title}</h2>${s.min?`<span class="chip">${T(ar(s.min)+' د',s.min+' min')}</span>`:''}</div>
+    ${guide?`<div class="guide">${L.guideSvg}<p>${guide}</p></div>`:''}
+    ${note?`<div class="tnote">${note}</div>`:''}
+    <div class="body">${fld(s,'html')}</div>`;
+    const b=prog.children[i];b.title=title.replace(/<[^>]+>/g,'');b.setAttribute('aria-label',T('المحطة ','Station ')+(i+1)+': '+b.title);
+  });
+  $('#sc').textContent=ar(earned.size);
+  bindAll();
+}
+function bindAll(){
 // MCQ / true-false / letter pick
 $$('.w-mcq').forEach(w=>{
   const a=+w.dataset.a, btns=$$('.opts button',w); let tries=0;
@@ -527,23 +546,28 @@ $$('.flip').forEach(c=>{c.tabIndex=0;c.setAttribute('role','button');const t=()=
 
 $('#st').textContent=ar($$('[data-key]').length);
 if(L.init)L.init({star,ar,$,$$});
+}
 
-function go(i){
+function go(i,keepScroll){
   i=Math.max(0,Math.min(S.length-1,i)); cur=i;
   $$('.stage').forEach((s,k)=>s.hidden=k!==i);
   $$('#prog button').forEach((b,k)=>{b.className=k===i?'on':k<i?'done':''});
   $('#prev').disabled=i===0; $('#next').disabled=i===S.length-1;
-  $('#where').textContent=`${ar(i+1)} من ${ar(S.length)}`;
+  $('#where').textContent=T(`${ar(i+1)} من ${ar(S.length)}`,`${i+1} of ${S.length}`);
   const spent=S.slice(0,i).reduce((a,s)=>a+(s.min||0),0);
-  $('#mins').textContent=`الوقت: ${ar(spent)}–${ar(spent+(S[i].min||0))} من ${ar(total)} د`;
+  $('#mins').textContent=T(`الوقت: ${ar(spent)}\u2013${ar(spent+(S[i].min||0))} من ${ar(total)} د`,`Time: ${spent}\u2013${spent+(S[i].min||0)} of ${total} min`);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:i}));
-  if(S[i].onEnter)S[i].onEnter({earned:earned.size,total:$$('[data-key]').length,ar,$,$$});
-  window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
+  const oe=(EN()&&S[i].en&&S[i].en.onEnter)||S[i].onEnter;
+  if(oe)oe({earned:earned.size,total:$$('[data-key]').length,ar,$,$$});
+  if(!keepScroll)window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
 }
 $('#prev').onclick=()=>go(cur-1); $('#next').onclick=()=>go(cur+1);
-document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;if(e.key==='ArrowLeft')go(cur+1);if(e.key==='ArrowRight')go(cur-1)});
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;const f=EN()?1:-1;if(e.key==='ArrowLeft')go(cur-f);if(e.key==='ArrowRight')go(cur+f)});
 const tog=(btn,cls)=>{btn.onclick=()=>{const on=document.body.classList.toggle(cls);btn.setAttribute('aria-pressed',on)}};
 tog($('#enT'),'show-en'); tog($('#tT'),'teacher');
+/* the shared top bar switches language: redraw the stations in the new language, staying on the same one */
+window.addEventListener('tq-lang',()=>{fill();go(cur,true)});
+fill();
 if(hot&&hot.snapshot)hot.snapshot(()=>({cur}));
 const start=d=>go((d&&d.cur)||0);
 hot&&hot.ready?hot.ready(start):start(hot&&hot.data||{});
