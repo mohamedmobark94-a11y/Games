@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>اختبار فقه الشباب</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -184,11 +184,18 @@ textarea.copybox{width:100%;min-height:150px;margin-top:10px;border:2px solid va
 *{-webkit-tap-highlight-color:transparent}
 button,select,.flip,.chip,.opt,.mopt,.qopt{touch-action:manipulation}
 html,body{overscroll-behavior:none}
+/* English mode: left-to-right, Latin typeface for English, arrows and spacing mirrored */
+body.show-en{--f-h:var(--f-ui)}
+body.show-en .opt,body.show-en .chipq{text-align:start}
+body.show-en .map{direction:ltr}
+body.show-en .legend i{margin-left:0;margin-right:5px}
+body.show-en .rules{padding:0 0 0 20px}
+body.show-en .qtext{font-family:var(--f-ui)}
 </style>
 
 <header><div class="wrap">
   <div class="brand"><div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5c3-1.5 7-1.5 10 1 3-2.5 7-2.5 10-1v14c-3-1.5-7-1.5-10 1-3-2.5-7-2.5-10-1z"/><path d="M12 6v14"/></svg></div>
-   <div><b>اخْتِبَارُ فِقْهِ الشَّبَابِ</b><small>فقه الشباب في سؤال وجواب · مراتب الدين</small></div></div>
+   <div><b><span class="ui-ar">اخْتِبَارُ فِقْهِ الشَّبَابِ</span><span class="ui-en">Youth Fiqh Exam</span></b><small><span class="ui-ar">فقه الشباب في سؤال وجواب · مراتب الدين</span><span class="ui-en">Questions and answers on the fiqh of young Muslims · Levels of the religion</span></small></div></div>
   <div class="timer" id="timer" hidden><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg><span id="tleft">30:00</span></div>
   <div class="hprog" id="hprog" hidden><i></i></div>
 </div></header>
@@ -197,6 +204,8 @@ html,body{overscroll-behavior:none}
 
 <script>
 (function(){
+const E=()=>document.body.classList.contains('show-en');
+const T=(a,e)=>E()?e:a;
 const MIN=30;          // مدة الاختبار بالدقائق
 const PER=2.5;         // درجة كل سؤال (40 × 2.5 = 100)
 const KEY='fiqh-exam-v1';
@@ -281,8 +290,57 @@ const Q=[
  {s:7,t:'mcq',q:'السَّرِقَةُ وَاللِّوَاطُ (عَمَلُ قَوْمِ لُوطٍ) مِنْ:',o:['كَبَائِرِ الذُّنُوبِ','صَغَائِرِ الذُّنُوبِ','الأُمُورِ المُبَاحَةِ','المَكْرُوهَاتِ الخَفِيفَةِ'],a:0,ev:'﴿وَالسَّارِقُ وَالسَّارِقَةُ فَاقْطَعُوا أَيْدِيَهُمَا﴾ [المائدة: 38]، وَقَدْ أَهْلَكَ اللهُ قَوْمَ لُوطٍ بِأَشَدِّ العَذَابِ.'}
 ];
 
-const TYPE={mcq:'اخْتِيَارٌ مِنْ مُتَعَدِّدٍ',tf:'صَحٌّ أَمْ خَطَأٌ',match:'تَوْصِيلٌ',order:'تَرْتِيبٌ'};
-const LET=['أ','ب','ج','د'];
+const TYPE_AR={mcq:'اخْتِيَارٌ مِنْ مُتَعَدِّدٍ',tf:'صَحٌّ أَمْ خَطَأٌ',match:'تَوْصِيلٌ',order:'تَرْتِيبٌ'};
+const TYPE_EN={mcq:'Multiple choice',tf:'True or false',match:'Matching',order:'Ordering'};
+const SEC_EN=['Levels of the Religion','Puberty and Its Signs','Lowering the Gaze and Guarding Chastity','Appearance and Adornment','Prayer and the Ruling on Abandoning It','Entertainment: Lawful and Unlawful','Etiquette of Brotherhood','Major Sins to Beware Of'];
+const secName=i=>E()?SEC_EN[i]:SECS[i][0];
+const LET_AR=['أ','ب','ج','د'],LET_EN=['A','B','C','D'];
+/* English version of every question, in the same order as Q (answers, indexes and grading come from Q) */
+const EN_=[
+ {q:'Who was the “strange guest” who came to ask the Prophet ﷺ about the religion?',o:['Jibril (Gabriel), peace be upon him','Umar ibn al-Khattab','A man from Yemen','Abu Bakr as-Siddiq'],ev:'The Prophet ﷺ said: “That was Jibril; he came to teach you your religion.” (Muslim)'},
+ {q:'Arrange the levels of the religion from the widest (first) to the highest:',items:['Islam','Iman (faith)','Ihsan (excellence)'],ev:'Islam is the first level, then Iman, then Ihsan — the highest level of the religion.'},
+ {q:'Which of these is NOT one of the five pillars of Islam?',o:['The two testimonies of faith (Shahadatayn)','Establishing the prayer','Belief in the angels','Fasting in Ramadan'],ev:'Belief in the angels is one of the six pillars of Iman. The pillars of Islam are: the two testimonies, prayer, zakat, fasting and Hajj.'},
+ {q:'Match each level with what fits it:',pairs:[['Islam','Outward actions of the body (5 pillars)'],['Iman','Inner beliefs of the heart (6 pillars)'],['Ihsan','To worship Allah as if you see Him (one pillar)']],ev:'Islam concerns the limbs, Iman concerns the heart, and Ihsan is “to worship Allah as though you see Him; and if you do not see Him, then truly He sees you.”'},
+ {q:'How many pillars does Iman have?',o:['Five','Six','Three','Seven'],ev:'To believe in Allah, His angels, His books, His messengers, the Last Day, and the divine decree (qadar), both its good and its bad.'},
+ {q:'Every Muslim has reached the level of Ihsan.',ev:'Every muhsin (person of ihsan) is a believer and a Muslim, but not every Muslim has reached ihsan. Islam is the widest circle and Ihsan the narrowest.'},
+ {q:'Which signs of puberty are shared by males and females?',o:['Wet dream (ihtilam)','Growth of pubic hair','Reaching 15 lunar years','All of the above'],ev:'There are three shared signs: ihtilam, the growth of pubic hair, and reaching the age of fifteen.'},
+ {q:'The Prophet ﷺ allowed Ibn Umar (may Allah be pleased with them) to join the fighting on the day of the Trench, when he was:',o:['12 years old','14 years old','15 years old','18 years old'],ev:'“He presented me on the day of Uhud when I was fourteen and did not permit me; and he presented me on the day of the Trench when I was fifteen and permitted me.” (Agreed upon: Bukhari and Muslim)'},
+ {q:'Match each discharge with its ruling:',pairs:[['Mani (semen)','Requires a full ghusl (bath)'],['Madhy (pre-seminal fluid)','Requires wudu and washing the private part'],['Wady (thick discharge)','Same as urine: requires wudu']],ev:'Mani is emitted in spurts with desire and requires ghusl; madhy is thin and clear; wady is white and thick, and comes after urination.'},
+ {q:'If a young man has a wet dream in his sleep but finds no fluid, he does not need ghusl.',ev:'What matters is the emission of fluid: if he finds none, no ghusl is required.'},
+ {q:'Arrange the steps of the complete ghusl after janabah:',items:['The intention and saying Bismillah','Wash the hands three times, then the private parts','Perform wudu as for prayer','Pour water over the head three times','Pour water over the body, right side first, then the left'],ev:'This is the complete method; then he washes his feet. The minimum valid method is the intention and washing the whole body with water.'},
+ {q:'The verse “Tell the believing men to lower their gaze” is in Surah:',o:['An-Nur','Al-Baqarah','Yusuf','Al-Kahf'],ev:'“Tell the believing men to lower their gaze and guard their private parts; that is purer for them.” (An-Nur 24:30)'},
+ {q:'The first glance that comes suddenly, without intention:',o:['It is no sin, but you must turn your gaze away','It is a major sin','You may repeat it','It invalidates the prayer'],ev:'“O Ali, do not follow one glance with another; the first is for you, but the second is not.” (Abu Dawud and at-Tirmidhi)'},
+ {q:'Match each person with the ruling on looking at them:',pairs:[['A wife','Permissible to look at her in any case'],['Mahrams (mother, sister…)','Permissible to look at the face and extremities'],['A non-mahram woman','Not permitted except in case of necessity']],ev:'Cases of necessity, such as a medical examination, are excepted for a non-mahram woman.'},
+ {q:'The ruling on masturbation according to the majority of scholars:',o:['Forbidden','Permissible','Recommended','Obligatory'],ev:'Because of Allah’s words: “But whoever seeks beyond that, they are the transgressors.” (Al-Mu’minun 23:7)'},
+ {q:'In the hadith “O young men…”: whoever cannot afford to marry should…',o:['Fast','Sleep','Travel','Only exercise'],ev:'“And whoever cannot, let him fast, for it is a protection (wija’) for him.” (Agreed upon)'},
+ {q:'Pictures and videos on a screen are not subject to the rules of looking, because they are not real.',ev:'A screen is like the street: looking at what is forbidden on it is forbidden, and watching pornography is absolutely forbidden.'},
+ {q:'In a study of 304 scenes from pornographic films, 88 out of every 100 scenes contained…',o:['Violence and hitting','Love and mercy','Useful education','Sport'],ev:'These films are lies, acting and violence — not love. (Bridges study, 2010)'},
+ {q:'A young man came to ask the Prophet ﷺ for permission to commit zina. What did the Prophet ﷺ ask him?',o:['“Would you like it for your mother?”','“How old are you?”','“Which tribe are you from?”','He did not ask, and ordered him to be thrown out'],ev:'Then he made dua for him: “O Allah, forgive his sin, purify his heart and protect his chastity.” (Ahmad)'},
+ {q:'Which of these is NOT one of the conditions for watching films and series?',o:['That they contain no musical instruments','That they contain no immodestly dressed women','That they call to noble character','That they are long'],ev:'The more these conditions are missing, the better it is to stay away; nothing equals safety.'},
+ {q:'The ruling on shaving the beard according to the majority of jurists:',o:['Forbidden','Recommended','Obligatory','Permissible, without dislike'],ev:'“Trim the moustaches and let the beards grow.” (Agreed upon) Trimming the moustache is sunnah.'},
+ {q:'What is “qaza‘”?',o:['Shaving part of the head and leaving part','Shaving the whole head','Growing the hair long','Dyeing the hair'],ev:'The prohibition of qaza‘ is reported in the two Sahihs from Ibn Umar (may Allah be pleased with them).'},
+ {q:'Which ring is a man not permitted to wear?',o:['A gold ring','A silver ring','An iron ring (according to the stronger view)','None of the above'],ev:'The Prophet ﷺ forbade men to wear gold rings, and he himself wore a silver ring.'},
+ {q:'A man’s ‘awrah according to the strongest opinion:',o:['From the navel to the knee','The knee only','The face and hands','From the chest to the feet'],ev:'For this reason it is not permitted to wear clothes that are tight or torn so as to reveal the ‘awrah.'},
+ {q:'It is permissible to hang charms or amulets (tama’im) made of bones or cowrie shells for protection.',ev:'“Whoever hangs an amulet has committed shirk.” (Ahmad) So they are forbidden.'},
+ {q:'Complete the hadith: “The covenant between us and them is the ___; whoever abandons it has disbelieved.”',o:['Prayer','Fasting','Zakat','Hajj'],ev:'Narrated by the authors of the Sunan.'},
+ {q:'In Islam, prayer is like the ___ of a house.',o:['Pillar','Door','Window','Roof'],ev:'“It is the pillar of Islam: whoever establishes it has established the religion, and whoever abandons it has demolished the religion.”'},
+ {q:'Abandoning the prayer entirely out of laziness is a minor sin.',ev:'“Between a man and shirk and kufr is abandoning the prayer.” (Muslim) According to most of the early scholars (Salaf), it is kufr.'},
+ {q:'The default ruling on playing sports such as football:',o:['Permissible, within limits','Forbidden','Obligatory','Always disliked'],ev:'Provided that the ‘awrah is covered, prayer and time are not neglected, and fanatical partisanship is avoided.'},
+ {q:'The ruling on musical instruments according to the majority of scholars:',o:['Forbidden','Recommended','Obligatory','There is no disagreement that they are permitted'],ev:'“There will be among my ummah people who will treat as lawful illicit sex, silk, wine and musical instruments.” (Bukhari)'},
+ {q:'A young man may message a non-mahram girl if he believes he is safe from temptation.',ev:'It is not permitted, even if he thinks he is safe. “Do not be soft in speech, lest he in whose heart is a disease should covet.” (Al-Ahzab 33:32)'},
+ {q:'A Muslim should not watch matches that waste time and cause prayers to be missed.',ev:'Watching some of them, without neglecting prayer or wasting time, is fine — while guarding against fanaticism.'},
+ {q:'Complete: “Insulting a Muslim is ___, and fighting him is disbelief.”',o:['Fusuq (transgression)','Permissible','A joke','A minor matter'],ev:'Agreed upon. Allah says: “The believers are but brothers, so make peace between your brothers.” (Al-Hujurat 49:10)'},
+ {q:'What is “ghibah” (backbiting)?',o:['Mentioning your brother in a way he dislikes','Carrying words between people to cause trouble','Lying in business','Staying silent about the truth'],ev:'The Prophet ﷺ said: “Backbiting is mentioning your brother in a way he dislikes.” Carrying words to cause trouble is “namimah” (tale-bearing).'},
+ {q:'Mocking Allah or the religion as a joke is nothing serious.',ev:'“Say: Was it Allah, His verses and His Messenger that you were mocking? Make no excuse; you have disbelieved after your belief.” (At-Tawbah 9:65–66)'},
+ {q:'Complete: “The believer is not a slanderer, nor one who curses, nor obscene, nor ___.”',o:['Foul-mouthed','Wealthy','Weak','Silent'],ev:'So foul language, even in jest, does not befit a Muslim.'},
+ {q:'Allah says: “Do not approach zina.” The prohibition of “approaching” includes:',o:['The steps that lead to it, such as being alone together and forbidden looking','The act only','Talking about marriage','Nothing'],ev:'“And do not approach zina; indeed it is an immorality and an evil way.” (Al-Isra 17:32) “Zina online” is one of its means.'},
+ {q:'“Qadhf of the muhsanat” means:',o:['Accusing a chaste woman of zina without proof','Greeting women','Marrying a righteous woman','Making dua for women'],ev:'It is one of the seven destructive sins: “Avoid the seven destroyers… and slandering chaste, unaware, believing women.” (Agreed upon)'},
+ {q:'Joking by accusing people of immorality (“hazar”) is normal and does no harm.',ev:'This is a grave mistake: it is a form of qadhf, which is a major sin.'},
+ {q:'Theft and sodomy (the act of the people of Lut) are among:',o:['Major sins','Minor sins','Permissible matters','Mildly disliked things'],ev:'“As for the thief, male or female, cut off their hands.” (Al-Ma’idah 5:38) And Allah destroyed the people of Lut with a severe punishment.'}
+];
+if(EN_.length!==Q.length)console.warn('English questions out of step with Q');
+const QEN=Q.map((q,i)=>Object.assign({},q,EN_[i]||{}));
+const D=qi=>E()?QEN[qi]:Q[qi];
 const root=document.getElementById('root');
 const $=s=>document.querySelector(s);
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -299,31 +357,31 @@ function startScreen(){
  const prev=load();
  const counts=SECS.map((_,i)=>Q.filter(q=>q.s===i).length);
  root.innerHTML=`<div class="wrap start">
- <section class="hero"><div class="eb">الاخْتِبَارُ الشَّامِلُ</div><h1>فِقْهُ الشَّبَابِ وَمَرَاتِبُ الدِّينِ</h1>
-  <p>اخْتِبَارٌ عَلَى كُلِّ الدُّرُوسِ الَّتِي دَرَسْنَاهَا. اقْرَأْ كُلَّ سُؤَالٍ جَيِّدًا، ثُمَّ اخْتَرِ الإِجَابَةَ. بِالتَّوْفِيقِ إِنْ شَاءَ اللهُ.</p>
-  <div class="stats"><div class="stat"><b>${Q.length}</b><span>سُؤَالًا</span></div><div class="stat"><b>100</b><span>الدَّرَجَةُ الكُلِّيَّةُ</span></div><div class="stat"><b>${MIN}</b><span>دَقِيقَةً</span></div><div class="stat"><b>8</b><span>أَقْسَامٍ</span></div></div>
+ <section class="hero"><div class="eb">${T('الاخْتِبَارُ الشَّامِلُ','Comprehensive exam')}</div><h1>${T('فِقْهُ الشَّبَابِ وَمَرَاتِبُ الدِّينِ','Youth Fiqh and the Levels of the Religion')}</h1>
+  <p>${T('اخْتِبَارٌ عَلَى كُلِّ الدُّرُوسِ الَّتِي دَرَسْنَاهَا. اقْرَأْ كُلَّ سُؤَالٍ جَيِّدًا، ثُمَّ اخْتَرِ الإِجَابَةَ. بِالتَّوْفِيقِ إِنْ شَاءَ اللهُ.','An exam on all the lessons we have studied. Read each question carefully, then choose your answer. Good luck, in sha Allah.')}</p>
+  <div class="stats"><div class="stat"><b>${Q.length}</b><span>${T('سُؤَالًا','questions')}</span></div><div class="stat"><b>100</b><span>${T('الدَّرَجَةُ الكُلِّيَّةُ','total marks')}</span></div><div class="stat"><b>${MIN}</b><span>${T('دَقِيقَةً','minutes')}</span></div><div class="stat"><b>8</b><span>${T('أَقْسَامٍ','sections')}</span></div></div>
  </section>
  <div class="grid2">
-  <section class="panel"><h2>بَيَانَاتُ الطَّالِبِ</h2>
-   <div class="field"><label for="sname">الاسْمُ الكَامِلُ</label><input id="sname" autocomplete="name" placeholder="اكْتُبِ اسْمَكَ هُنَا" value="${esc(prev&&!prev.done?prev.name:'')}"></div>
-   <div class="field"><label for="sgroup">المَجْمُوعَةُ أَوِ الفَصْلُ (اخْتِيَارِيٌّ)</label><input id="sgroup" placeholder="مِثَالٌ: مَجْمُوعَةُ السَّبْتِ" value="${esc(prev&&!prev.done?prev.group||'':'')}"></div>
-   <h2 style="margin-top:6px">التَّعْلِيمَاتُ</h2>
+  <section class="panel"><h2>${T('بَيَانَاتُ الطَّالِبِ','Student details')}</h2>
+   <div class="field"><label for="sname">${T('الاسْمُ الكَامِلُ','Full name')}</label><input id="sname" autocomplete="name" placeholder="${T('اكْتُبِ اسْمَكَ هُنَا','Type your name here')}" value="${esc(prev&&!prev.done?prev.name:'')}"></div>
+   <div class="field"><label for="sgroup">${T('المَجْمُوعَةُ أَوِ الفَصْلُ (اخْتِيَارِيٌّ)','Group or class (optional)')}</label><input id="sgroup" placeholder="${T('مِثَالٌ: مَجْمُوعَةُ السَّبْتِ','Example: Saturday group')}" value="${esc(prev&&!prev.done?prev.group||'':'')}"></div>
+   <h2 style="margin-top:6px">${T('التَّعْلِيمَاتُ','Instructions')}</h2>
    <ol class="rules">
-    <li>عِنْدَكَ <b>${MIN} دَقِيقَةً</b>. عِنْدَمَا يَنْتَهِي الوَقْتُ، يُسَلَّمُ الاخْتِبَارُ وَحْدَهُ.</li>
-    <li>كُلُّ سُؤَالٍ = <b>${PER} دَرَجَةٍ</b>. فِي «التَّوْصِيلِ» وَ«التَّرْتِيبِ» تَأْخُذُ جُزْءًا مِنَ الدَّرَجَةِ عَلَى كُلِّ جُزْءٍ صَحِيحٍ.</li>
-    <li>تَسْتَطِيعُ الرُّجُوعَ لِأَيِّ سُؤَالٍ، وَوَضْعَ <b>عَلَامَةِ مُرَاجَعَةٍ</b> عَلَى السُّؤَالِ.</li>
-    <li>بَعْدَ التَّسْلِيمِ تَرَى دَرَجَتَكَ، وَالإِجَابَةَ الصَّحِيحَةَ مَعَ الدَّلِيلِ.</li>
+    <li>${E()?`You have <b>${MIN} minutes</b>. When time runs out, the exam is submitted automatically.`:`عِنْدَكَ <b>${MIN} دَقِيقَةً</b>. عِنْدَمَا يَنْتَهِي الوَقْتُ، يُسَلَّمُ الاخْتِبَارُ وَحْدَهُ.`}</li>
+    <li>${E()?`Each question is worth <b>${PER} marks</b>. In “Matching” and “Ordering” you earn part of the mark for each correct part.`:`كُلُّ سُؤَالٍ = <b>${PER} دَرَجَةٍ</b>. فِي «التَّوْصِيلِ» وَ«التَّرْتِيبِ» تَأْخُذُ جُزْءًا مِنَ الدَّرَجَةِ عَلَى كُلِّ جُزْءٍ صَحِيحٍ.`}</li>
+    <li>${E()?`You can go back to any question and put a <b>review flag</b> on it.`:`تَسْتَطِيعُ الرُّجُوعَ لِأَيِّ سُؤَالٍ، وَوَضْعَ <b>عَلَامَةِ مُرَاجَعَةٍ</b> عَلَى السُّؤَالِ.`}</li>
+    <li>${T('بَعْدَ التَّسْلِيمِ تَرَى دَرَجَتَكَ، وَالإِجَابَةَ الصَّحِيحَةَ مَعَ الدَّلِيلِ.','After you submit, you see your score and the correct answer with its evidence.')}</li>
    </ol>
   </section>
-  <section class="panel"><h2>أَقْسَامُ الاخْتِبَارِ</h2><div class="units">
-   ${SECS.map((s,i)=>`<div class="unit"><div class="ic">${I(s[1])}</div><span>${s[0]}</span><em>${counts[i]} أَسْئِلَةٍ</em></div>`).join('')}
+  <section class="panel"><h2>${T('أَقْسَامُ الاخْتِبَارِ','Exam sections')}</h2><div class="units">
+   ${SECS.map((s,i)=>`<div class="unit"><div class="ic">${I(s[1])}</div><span>${secName(i)}</span><em>${counts[i]} ${T('أَسْئِلَةٍ','questions')}</em></div>`).join('')}
   </div></section>
  </div>
  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px">
-  ${prev&&!prev.done?`<button class="btn gold" id="resume">أَكْمِلِ الاخْتِبَارَ السَّابِقَ ${I('arrowL')}</button><button class="btn ghost" id="go">ابْدَأْ مِنْ جَدِيدٍ</button>`:`<button class="btn gold" id="go">ابْدَأِ الاخْتِبَارَ ${I('arrowL')}</button>`}
+  ${prev&&!prev.done?`<button class="btn gold" id="resume">${T('أَكْمِلِ الاخْتِبَارَ السَّابِقَ','Resume the previous exam')} ${I(E()?'arrowR':'arrowL')}</button><button class="btn ghost" id="go">${T('ابْدَأْ مِنْ جَدِيدٍ','Start over')}</button>`:`<button class="btn gold" id="go">${T('ابْدَأِ الاخْتِبَارَ','Start the exam')} ${I(E()?'arrowR':'arrowL')}</button>`}
   <span class="err" id="err"></span>
  </div></div>`;
- $('#go').onclick=()=>{const n=$('#sname').value.trim();if(n.length<3){$('#err').textContent='اكْتُبِ اسْمَكَ أَوَّلًا (3 أَحْرُفٍ عَلَى الأَقَلِّ).';$('#sname').focus();return}
+ $('#go').onclick=()=>{const n=$('#sname').value.trim();if(n.length<3){$('#err').textContent=T('اكْتُبِ اسْمَكَ أَوَّلًا (3 أَحْرُفٍ عَلَى الأَقَلِّ).','Please type your name first (at least 3 letters).');$('#sname').focus();return}
   // shuffle questions inside each section, keep section order; shuffle options
   const order=[];SECS.forEach((_,si)=>shuffle(Q.map((q,i)=>i).filter(i=>Q[i].s===si)).forEach(i=>order.push(i)));
   const optOrder={};Q.forEach((q,i)=>{if(q.t==='mcq')optOrder[i]=q.fix?[0,1,2,3]:shuffle([0,1,2,3]);if(q.t==='match')optOrder[i]=shuffle(q.pairs.map((_,k)=>k));if(q.t==='order')optOrder[i]=shuffle(q.items.map((_,k)=>k))});
@@ -339,10 +397,10 @@ function answered(qi){const q=Q[qi],a=S.ans[qi];if(a==null)return false;
 function examScreen(){
  $('#timer').hidden=false;$('#hprog').hidden=false;
  root.innerHTML=`<div class="wrap exam"><section class="qcard" id="qcard" aria-live="polite"></section>
- <aside class="side"><h3>خَرِيطَةُ الأَسْئِلَةِ</h3><div class="map" id="map"></div>
-  <div class="legend"><span><i style="background:var(--navy);border-color:var(--navy)"></i>أُجِيبَ</span><span><i></i>لَمْ يُجَبْ</span><span><i style="background:var(--flag);border-color:var(--flag);border-radius:50%"></i>لِلْمُرَاجَعَةِ</span></div>
+ <aside class="side"><h3>${T('خَرِيطَةُ الأَسْئِلَةِ','Question map')}</h3><div class="map" id="map"></div>
+  <div class="legend"><span><i style="background:var(--navy);border-color:var(--navy)"></i>${T('أُجِيبَ','Answered')}</span><span><i></i>${T('لَمْ يُجَبْ','Not answered')}</span><span><i style="background:var(--flag);border-color:var(--flag);border-radius:50%"></i>${T('لِلْمُرَاجَعَةِ','To review')}</span></div>
   <div class="counts" id="counts"></div></aside></div>
- <div class="bottombar"><div class="wrap"><button class="btn ghost" id="prev">${I('arrowR')} السَّابِقُ</button><div class="sp"></div><button class="btn" id="next">التَّالِي ${I('arrowL')}</button><button class="btn gold" id="submit">تَسْلِيمٌ</button></div></div>`;
+ <div class="bottombar"><div class="wrap"><button class="btn ghost" id="prev">${I(E()?'arrowL':'arrowR')} ${T('السَّابِقُ','Previous')}</button><div class="sp"></div><button class="btn" id="next">${T('التَّالِي','Next')} ${I(E()?'arrowR':'arrowL')}</button><button class="btn gold" id="submit">${T('تَسْلِيمٌ','Submit')}</button></div></div>`;
  $('#prev').onclick=()=>go(S.cur-1);$('#next').onclick=()=>go(S.cur+1);$('#submit').onclick=confirmSubmit;
  clearInterval(tick);tick=setInterval(updTimer,500);updTimer();render();
 }
@@ -351,21 +409,21 @@ function updTimer(){const ms=Math.max(0,S.end-Date.now());const m=Math.floor(ms/
  if(ms<=0){clearInterval(tick);finish()}}
 function go(i){if(i<0||i>=S.order.length)return;S.cur=i;save();render();window.scrollTo({top:0,behavior:'smooth'})}
 function render(){
- const qi=S.order[S.cur],q=Q[qi],a=S.ans[qi];
+ const qi=S.order[S.cur],q=D(qi),a=S.ans[qi],LET=E()?LET_EN:LET_AR;
  let body='';
  if(q.t==='mcq'){body=`<div class="opts">${S.optOrder[qi].map((k,pos)=>`<button class="opt ${a===k?'sel':''}" data-k="${k}"><b>${LET[pos]}</b><span>${q.o[k]}</span></button>`).join('')}</div>`}
- else if(q.t==='tf'){body=`<div class="opts tf"><button class="opt ${a===true?'sel':''}" data-tf="1">${I('check')} صَحٌّ</button><button class="opt ${a===false?'sel':''}" data-tf="0">${I('x')} خَطَأٌ</button></div>`}
+ else if(q.t==='tf'){body=`<div class="opts tf"><button class="opt ${a===true?'sel':''}" data-tf="1">${I('check')} ${T('صَحٌّ','True')}</button><button class="opt ${a===false?'sel':''}" data-tf="0">${I('x')} ${T('خَطَأٌ','False')}</button></div>`}
  else if(q.t==='match'){const rights=S.optOrder[qi];const cur=a||{};
-  body=`<p class="hint">اخْتَرْ مِنَ القَائِمَةِ المَعْنَى المُنَاسِبَ لِكُلِّ كَلِمَةٍ.</p>${q.pairs.map((p,k)=>`<div class="mrow"><span class="l">${p[0]}</span><select data-k="${k}" class="${cur[k]!=null&&cur[k]!==''?'done':''}" aria-label="${esc(p[0])}"><option value="">— اخْتَرْ —</option>${rights.map(r=>`<option value="${r}" ${String(cur[k])===String(r)?'selected':''}>${q.pairs[r][1]}</option>`).join('')}</select></div>`).join('')}`}
+  body=`<p class="hint">${T('اخْتَرْ مِنَ القَائِمَةِ المَعْنَى المُنَاسِبَ لِكُلِّ كَلِمَةٍ.','For each item, choose the matching meaning from the list.')}</p>${q.pairs.map((p,k)=>`<div class="mrow"><span class="l">${p[0]}</span><select data-k="${k}" class="${cur[k]!=null&&cur[k]!==''?'done':''}" aria-label="${esc(p[0])}"><option value="">${T('— اخْتَرْ —','— choose —')}</option>${rights.map(r=>`<option value="${r}" ${String(cur[k])===String(r)?'selected':''}>${q.pairs[r][1]}</option>`).join('')}</select></div>`).join('')}`}
  else if(q.t==='order'){const seq=a||[];const pool=S.optOrder[qi].filter(k=>!seq.includes(k));
-  body=`<p class="hint">اضْغَطْ عَلَى الخُطُوَاتِ بِالتَّرْتِيبِ. لِلتَّعْدِيلِ: اضْغَطْ عَلَى الخُطْوَةِ فِي «تَرْتِيبِكَ» لِتُرْجِعَهَا.</p>
-  <div class="order"><div><h4>الخُطُوَاتُ</h4><div class="pool">${pool.length?pool.map(k=>`<button class="chipq" data-add="${k}">${q.items[k]}</button>`).join(''):'<span class="empty">تَمَّ! ✓</span>'}</div></div>
-  <div><h4>تَرْتِيبُكَ</h4><div class="seq">${seq.length?seq.map((k,n)=>`<button class="chipq" data-rm="${n}"><b>${n+1}</b>${q.items[k]}</button>`).join(''):'<span class="empty">ابْدَأْ بِالضَّغْطِ عَلَى الخُطْوَةِ الأُولَى.</span>'}</div></div></div>`}
+  body=`<p class="hint">${T('اضْغَطْ عَلَى الخُطُوَاتِ بِالتَّرْتِيبِ. لِلتَّعْدِيلِ: اضْغَطْ عَلَى الخُطْوَةِ فِي «تَرْتِيبِكَ» لِتُرْجِعَهَا.','Tap the steps in the right order. To undo one, tap it in “Your order” to send it back.')}</p>
+  <div class="order"><div><h4>${T('الخُطُوَاتُ','Steps')}</h4><div class="pool">${pool.length?pool.map(k=>`<button class="chipq" data-add="${k}">${q.items[k]}</button>`).join(''):`<span class="empty">${T('تَمَّ! ✓','Done! ✓')}</span>`}</div></div>
+  <div><h4>${T('تَرْتِيبُكَ','Your order')}</h4><div class="seq">${seq.length?seq.map((k,n)=>`<button class="chipq" data-rm="${n}"><b>${n+1}</b>${q.items[k]}</button>`).join(''):`<span class="empty">${T('ابْدَأْ بِالضَّغْطِ عَلَى الخُطْوَةِ الأُولَى.','Start by tapping the first step.')}</span>`}</div></div></div>`}
  const sec=SECS[q.s];
- $('#qcard').innerHTML=`<div class="qhead"><span class="sec">${I(sec[1])}${sec[0]}</span><span class="qtype">${TYPE[q.t]}</span></div>
-  <div class="qn">سُؤَالٌ ${S.cur+1} مِنْ ${S.order.length}</div>
+ $('#qcard').innerHTML=`<div class="qhead"><span class="sec">${I(sec[1])}${secName(q.s)}</span><span class="qtype">${(E()?TYPE_EN:TYPE_AR)[q.t]}</span></div>
+  <div class="qn">${T(`سُؤَالٌ ${S.cur+1} مِنْ ${S.order.length}`,`Question ${S.cur+1} of ${S.order.length}`)}</div>
   <div class="qtext">${q.q}</div>${body}
-  <div class="qfoot"><button class="flagb ${S.flags[qi]?'on':''}" id="flag">${I('flag')} ${S.flags[qi]?'عَلَيْهِ عَلَامَةُ مُرَاجَعَةٍ':'ضَعْ عَلَامَةَ مُرَاجَعَةٍ'}</button><span class="qn">${PER} دَرَجَةٍ</span></div>`;
+  <div class="qfoot"><button class="flagb ${S.flags[qi]?'on':''}" id="flag">${I('flag')} ${S.flags[qi]?T('عَلَيْهِ عَلَامَةُ مُرَاجَعَةٍ','Flagged for review'):T('ضَعْ عَلَامَةَ مُرَاجَعَةٍ','Flag for review')}</button><span class="qn">${PER} ${T('دَرَجَةٍ','marks')}</span></div>`;
  const card=$('#qcard');
  card.querySelectorAll('[data-k].opt').forEach(b=>b.onclick=()=>{S.ans[qi]=+b.dataset.k;save();render()});
  card.querySelectorAll('[data-tf]').forEach(b=>b.onclick=()=>{S.ans[qi]=b.dataset.tf==='1';save();render()});
@@ -375,17 +433,17 @@ function render(){
  $('#flag').onclick=()=>{S.flags[qi]=!S.flags[qi];save();render()};
  $('#prev').disabled=S.cur===0;$('#next').disabled=S.cur===S.order.length-1;
  // map
- $('#map').innerHTML=S.order.map((qq,n)=>`<button class="${answered(qq)?'ans':''} ${n===S.cur?'cur':''} ${S.flags[qq]?'fl':''}" data-n="${n}" aria-label="سؤال ${n+1}">${n+1}</button>`).join('');
+ $('#map').innerHTML=S.order.map((qq,n)=>`<button class="${answered(qq)?'ans':''} ${n===S.cur?'cur':''} ${S.flags[qq]?'fl':''}" data-n="${n}" aria-label="${T('سؤال','Question')} ${n+1}">${n+1}</button>`).join('');
  $('#map').querySelectorAll('button').forEach(b=>b.onclick=()=>go(+b.dataset.n));
  const done=S.order.filter(answered).length,fl=S.order.filter(x=>S.flags[x]).length;
- $('#counts').innerHTML=`أُجِيبَ: <b>${done}</b> مِنْ ${S.order.length}<br>لِلْمُرَاجَعَةِ: <b>${fl}</b>`;
+ $('#counts').innerHTML=E()?`Answered: <b>${done}</b> of ${S.order.length}<br>To review: <b>${fl}</b>`:`أُجِيبَ: <b>${done}</b> مِنْ ${S.order.length}<br>لِلْمُرَاجَعَةِ: <b>${fl}</b>`;
  $('#hprog i').style.width=(done/S.order.length*100)+'%';
 }
 function confirmSubmit(){
  const left=S.order.filter(x=>!answered(x)).length;
  const m=document.createElement('div');m.className='modal';
- m.innerHTML=`<div class="mbox" role="dialog" aria-modal="true"><h3>تَسْلِيمُ الاخْتِبَارِ؟</h3><p>${left?`بَقِيَ <b style="color:var(--bad)">${left}</b> ${left>10?'سُؤَالًا':'أَسْئِلَةٍ'} بِدُونِ إِجَابَةٍ. هَلْ تُرِيدُ التَّسْلِيمَ الآنَ؟`:'أَجَبْتَ عَنْ كُلِّ الأَسْئِلَةِ. بَعْدَ التَّسْلِيمِ لَا يُمْكِنُ التَّعْدِيلُ.'}</p>
- <div class="row"><button class="btn gold" id="yes">نَعَمْ، سَلِّمْ</button><button class="btn ghost" id="no">رُجُوعٌ لِلْأَسْئِلَةِ</button></div></div>`;
+ m.innerHTML=`<div class="mbox" role="dialog" aria-modal="true"><h3>${T('تَسْلِيمُ الاخْتِبَارِ؟','Submit the exam?')}</h3><p>${left?(E()?`<b style="color:var(--bad)">${left}</b> question${left===1?'':'s'} ${left===1?'is':'are'} still unanswered. Submit now?`:`بَقِيَ <b style="color:var(--bad)">${left}</b> ${left>10?'سُؤَالًا':'أَسْئِلَةٍ'} بِدُونِ إِجَابَةٍ. هَلْ تُرِيدُ التَّسْلِيمَ الآنَ؟`):T('أَجَبْتَ عَنْ كُلِّ الأَسْئِلَةِ. بَعْدَ التَّسْلِيمِ لَا يُمْكِنُ التَّعْدِيلُ.','You have answered every question. After submitting you cannot change your answers.')}</p>
+ <div class="row"><button class="btn gold" id="yes">${T('نَعَمْ، سَلِّمْ','Yes, submit')}</button><button class="btn ghost" id="no">${T('رُجُوعٌ لِلْأَسْئِلَةِ','Back to the questions')}</button></div></div>`;
  document.body.appendChild(m);m.querySelector('#yes').focus();
  m.querySelector('#no').onclick=()=>m.remove();m.onclick=e=>{if(e.target===m)m.remove()};
  m.querySelector('#yes').onclick=()=>{m.remove();finish()};
@@ -398,7 +456,7 @@ function grade(qi){const q=Q[qi],a=S.ans[qi];
  if(q.t==='match'){if(!a)return 0;let c=0;q.pairs.forEach((_,k)=>{if(a[k]===k)c++});return c/q.pairs.length}
  if(q.t==='order'){if(!a)return 0;let c=0;q.items.forEach((_,k)=>{if(a[k]===k)c++});return c/q.items.length}
  return 0}
-function label(p){return p>=90?'مُمْتَازٌ':p>=80?'جَيِّدٌ جِدًّا':p>=65?'جَيِّدٌ':p>=50?'مَقْبُولٌ':'يَحْتَاجُ مُرَاجَعَةً'}
+function label(p){return E()?(p>=90?'Excellent':p>=80?'Very good':p>=65?'Good':p>=50?'Pass':'Needs review'):(p>=90?'مُمْتَازٌ':p>=80?'جَيِّدٌ جِدًّا':p>=65?'جَيِّدٌ':p>=50?'مَقْبُولٌ':'يَحْتَاجُ مُرَاجَعَةً')}
 
 function finish(){
  clearInterval(tick);S.done=true;S.finishedAt=S.finishedAt||Date.now();save();
@@ -406,38 +464,38 @@ function finish(){
  const g={};S.order.forEach(qi=>g[qi]=grade(qi));
  let total=Math.round(S.order.reduce((t,qi)=>t+g[qi]*PER,0)*2)/2;
  const pct=total;const used=Math.round((S.finishedAt-S.start)/60000);
- const secs=SECS.map((s,i)=>{const qs=Q.map((q,k)=>k).filter(k=>Q[k].s===i);const got=qs.reduce((t,k)=>t+g[k],0);return {name:s[0],got,max:qs.length,p:Math.round(got/qs.length*100)}});
- const date=new Date(S.finishedAt).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
+ const secs=SECS.map((s,i)=>{const qs=Q.map((q,k)=>k).filter(k=>Q[k].s===i);const got=qs.reduce((t,k)=>t+g[k],0);return {name:secName(i),got,max:qs.length,p:Math.round(got/qs.length*100)}});
+ const date=new Date(S.finishedAt).toLocaleDateString(E()?'en-GB':'ar-EG',{year:'numeric',month:'long',day:'numeric'});
  const nOk=S.order.filter(x=>g[x]===1).length,nBad=S.order.filter(x=>g[x]===0).length,nPart=S.order.length-nOk-nBad;
- const summary=`نتيجة اختبار فقه الشباب\nالاسم: ${S.name}${S.group?'\nالمجموعة: '+S.group:''}\nالدرجة: ${total} / 100 (${label(pct).replace(/[ً-ْ]/g,'')})\nالتاريخ: ${date} · الوقت: ${used} دقيقة\n`+secs.map(s=>`- ${s.name.replace(/[ً-ْ]/g,'')}: ${s.p}%`).join('\n');
+ const summary=E()?`Youth Fiqh Exam result\nName: ${S.name}${S.group?'\nGroup: '+S.group:''}\nScore: ${total} / 100 (${label(pct)})\nDate: ${date} · Time: ${used} min\n`+secs.map(s=>`- ${s.name}: ${s.p}%`).join('\n'):`نتيجة اختبار فقه الشباب\nالاسم: ${S.name}${S.group?'\nالمجموعة: '+S.group:''}\nالدرجة: ${total} / 100 (${label(pct).replace(/[ً-ْ]/g,'')})\nالتاريخ: ${date} · الوقت: ${used} دقيقة\n`+secs.map(s=>`- ${s.name.replace(/[ً-ْ]/g,'')}: ${s.p}%`).join('\n');
  const C=2*Math.PI*52;
  root.innerHTML=`<div class="wrap results">
- <section class="cert"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#0E2A38" stroke-width="12"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#C9A35A" stroke-width="12" stroke-linecap="round" stroke-dasharray="0 ${C}" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1)"/></svg><div class="v"><div><b>${total}</b><span>مِنْ 100</span></div></div></div>
-  <div><div class="eb">نَتِيجَةُ اخْتِبَارِ فِقْهِ الشَّبَابِ</div><h2>${esc(S.name)}</h2><span class="grade">${label(pct)}</span>
-   <p>${S.group?esc(S.group)+' · ':''}${date} · الوَقْتُ: ${used} دَقِيقَةً<br>صَحِيحٌ: ${nOk} · جُزْئِيٌّ: ${nPart} · خَطَأٌ أَوْ بِدُونِ إِجَابَةٍ: ${nBad}</p>
-   <div class="dua">«مَنْ يُرِدِ اللهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ»</div></div></section>
+ <section class="cert"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#0E2A38" stroke-width="12"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#C9A35A" stroke-width="12" stroke-linecap="round" stroke-dasharray="0 ${C}" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1)"/></svg><div class="v"><div><b>${total}</b><span>${T('مِنْ 100','out of 100')}</span></div></div></div>
+  <div><div class="eb">${T('نَتِيجَةُ اخْتِبَارِ فِقْهِ الشَّبَابِ','Youth Fiqh Exam result')}</div><h2>${esc(S.name)}</h2><span class="grade">${label(pct)}</span>
+   <p>${S.group?esc(S.group)+' · ':''}${date} · ${T(`الوَقْتُ: ${used} دَقِيقَةً<br>صَحِيحٌ: ${nOk} · جُزْئِيٌّ: ${nPart} · خَطَأٌ أَوْ بِدُونِ إِجَابَةٍ: ${nBad}`,`Time: ${used} min<br>Correct: ${nOk} · Partly correct: ${nPart} · Wrong or unanswered: ${nBad}`)}</p>
+   <div class="dua">«مَنْ يُرِدِ اللهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ»${E()?`<div style="font:600 15px/1.6 var(--f-ui);margin-top:4px">“When Allah wants good for someone, He gives him understanding of the religion.” (Agreed upon)</div>`:''}</div></div></section>
  <div class="rgrid">
-  <section class="panel"><h2>النَّتِيجَةُ فِي كُلِّ قِسْمٍ</h2>${secs.map(s=>`<div class="brow"><span>${s.name}</span><div class="tr"><i class="${s.p<50?'lo':s.p>=85?'hi':''}" data-w="${s.p}" style="width:0"></i></div><b>${s.p}%</b></div>`).join('')}</section>
-  <section class="panel"><h2>أَرْسِلْ نَتِيجَتَكَ لِلْمُعَلِّمِ</h2><p style="margin:0 0 12px;font:600 15.5px/1.8 var(--f-ui);color:var(--muted)">انْسَخِ النَّتِيجَةَ وَأَرْسِلْهَا لِلْمُعَلِّمِ عَلَى وَاتْسَاب، أَوْ خُذْ صُورَةً (سكرين شوت) لِهَذِهِ الصَّفْحَةِ.</p>
-   <div class="actions"><button class="btn" id="copy">${I('copy')} نَسْخُ النَّتِيجَةِ</button><button class="btn ghost" id="again">${I('redo')} اخْتِبَارٌ جَدِيدٌ</button></div>
-   <textarea class="copybox" id="cbox" readonly aria-label="نص النتيجة">${esc(summary)}</textarea><div class="err" id="cmsg" style="color:var(--ok)"></div></section>
+  <section class="panel"><h2>${T('النَّتِيجَةُ فِي كُلِّ قِسْمٍ','Result in each section')}</h2>${secs.map(s=>`<div class="brow"><span>${s.name}</span><div class="tr"><i class="${s.p<50?'lo':s.p>=85?'hi':''}" data-w="${s.p}" style="width:0"></i></div><b>${s.p}%</b></div>`).join('')}</section>
+  <section class="panel"><h2>${T('أَرْسِلْ نَتِيجَتَكَ لِلْمُعَلِّمِ','Send your result to the teacher')}</h2><p style="margin:0 0 12px;font:600 15.5px/1.8 var(--f-ui);color:var(--muted)">${T('انْسَخِ النَّتِيجَةَ وَأَرْسِلْهَا لِلْمُعَلِّمِ عَلَى وَاتْسَاب، أَوْ خُذْ صُورَةً (سكرين شوت) لِهَذِهِ الصَّفْحَةِ.','Copy the result and send it to your teacher on WhatsApp, or take a screenshot of this page.')}</p>
+   <div class="actions"><button class="btn" id="copy">${I('copy')} ${T('نَسْخُ النَّتِيجَةِ','Copy result')}</button><button class="btn ghost" id="again">${I('redo')} ${T('اخْتِبَارٌ جَدِيدٌ','New exam')}</button></div>
+   <textarea class="copybox" id="cbox" readonly aria-label="${T('نص النتيجة','Result text')}">${esc(summary)}</textarea><div class="err" id="cmsg" style="color:var(--ok)"></div></section>
  </div>
- <section class="review"><h2>مُرَاجَعَةُ الإِجَابَاتِ</h2>
-  <div class="filters"><button class="on" data-f="all">الكُلُّ (${S.order.length})</button><button data-f="bad">الأَخْطَاءُ (${nBad+nPart})</button><button data-f="ok">الصَّحِيحُ (${nOk})</button></div>
+ <section class="review"><h2>${T('مُرَاجَعَةُ الإِجَابَاتِ','Review your answers')}</h2>
+  <div class="filters"><button class="on" data-f="all">${T('الكُلُّ','All')} (${S.order.length})</button><button data-f="bad">${T('الأَخْطَاءُ','Mistakes')} (${nBad+nPart})</button><button data-f="ok">${T('الصَّحِيحُ','Correct')} (${nOk})</button></div>
   <div id="rlist"></div></section></div>`;
  requestAnimationFrame(()=>requestAnimationFrame(()=>{$('#arc').setAttribute('stroke-dasharray',`${C*pct/100} ${C}`);document.querySelectorAll('.brow i').forEach(i=>i.style.width=i.dataset.w+'%')}));
- $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary);$('#cmsg').textContent='تَمَّ النَّسْخُ ✓'}catch(e){const t=$('#cbox');t.focus();t.select();$('#cmsg').textContent='النَّصُّ مُحَدَّدٌ: اضْغَطْ «نَسْخ» مِنْ لَوْحَةِ المَفَاتِيحِ.'}};
- $('#again').onclick=()=>{const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mbox"><h3>اخْتِبَارٌ جَدِيدٌ؟</h3><p>سَتُحْذَفُ هَذِهِ النَّتِيجَةُ مِنْ هَذَا الجِهَازِ. انْسَخْهَا أَوَّلًا إِنْ لَمْ تُرْسِلْهَا.</p><div class="row"><button class="btn gold" id="y">نَعَمْ</button><button class="btn ghost" id="n">إِلْغَاءٌ</button></div></div>`;document.body.appendChild(m);
+ $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary);$('#cmsg').textContent=T('تَمَّ النَّسْخُ ✓','Copied ✓')}catch(e){const t=$('#cbox');t.focus();t.select();$('#cmsg').textContent=T('النَّصُّ مُحَدَّدٌ: اضْغَطْ «نَسْخ» مِنْ لَوْحَةِ المَفَاتِيحِ.','The text is selected: press Copy on your keyboard.')}};
+ $('#again').onclick=()=>{const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mbox"><h3>${T('اخْتِبَارٌ جَدِيدٌ؟','Start a new exam?')}</h3><p>${T('سَتُحْذَفُ هَذِهِ النَّتِيجَةُ مِنْ هَذَا الجِهَازِ. انْسَخْهَا أَوَّلًا إِنْ لَمْ تُرْسِلْهَا.','This result will be deleted from this device. Copy it first if you have not sent it.')}</p><div class="row"><button class="btn gold" id="y">${T('نَعَمْ','Yes')}</button><button class="btn ghost" id="n">${T('إِلْغَاءٌ','Cancel')}</button></div></div>`;document.body.appendChild(m);
   m.querySelector('#n').onclick=()=>m.remove();m.querySelector('#y').onclick=()=>{m.remove();try{localStorage.removeItem(KEY)}catch(e){}S=null;startScreen();window.scrollTo(0,0)}};
- function ansText(qi){const q=Q[qi],a=S.ans[qi];
+ function ansText(qi){const q=D(qi),a=S.ans[qi],TF=E()?['True','False']:['صَحٌّ','خَطَأٌ'];
   if(q.t==='mcq')return {you:a==null?'—':q.o[a],right:q.o[q.a]};
-  if(q.t==='tf')return {you:a==null?'—':(a?'صَحٌّ':'خَطَأٌ'),right:q.a?'صَحٌّ':'خَطَأٌ'};
+  if(q.t==='tf')return {you:a==null?'—':(a?TF[0]:TF[1]),right:q.a?TF[0]:TF[1]};
   if(q.t==='match')return {you:a?q.pairs.map((p,k)=>p[0]+' ← '+(a[k]!=null?q.pairs[a[k]][1]:'—')).join('<br>'):'—',right:q.pairs.map(p=>p[0]+' ← '+p[1]).join('<br>')};
   if(q.t==='order')return {you:a?a.map(k=>q.items[k]).join(' ← '):'—',right:q.items.join(' ← ')};}
- function list(f){$('#rlist').innerHTML=S.order.map((qi,n)=>({qi,n})).filter(({qi})=>f==='all'||(f==='ok'?g[qi]===1:g[qi]<1)).map(({qi,n})=>{const q=Q[qi],t=ansText(qi),v=g[qi];
-  return `<article class="ritem ${v===1?'':v===0?'bad':'part'}"><div class="top"><span>سُؤَالٌ ${n+1} · ${SECS[q.s][0]}</span><span>${Math.round(v*PER*10)/10} / ${PER}</span></div>
-  <div class="q">${q.q}</div><div class="ans">${v===1?`<span class="right">✓ ${t.right}</span>`:`<span class="you">إِجَابَتُكَ: ${t.you}</span><br><span class="right">الصَّوَابُ: ${t.right}</span>`}</div>
-  <div class="ev"><b>الدَّلِيلُ: </b>${q.ev}</div></article>`}).join('')||'<p class="hint">لَا يُوجَدُ.</p>'}
+ function list(f){$('#rlist').innerHTML=S.order.map((qi,n)=>({qi,n})).filter(({qi})=>f==='all'||(f==='ok'?g[qi]===1:g[qi]<1)).map(({qi,n})=>{const q=D(qi),t=ansText(qi),v=g[qi];
+  return `<article class="ritem ${v===1?'':v===0?'bad':'part'}"><div class="top"><span>${T(`سُؤَالٌ ${n+1}`,`Question ${n+1}`)} · ${secName(q.s)}</span><span>${Math.round(v*PER*10)/10} / ${PER}</span></div>
+  <div class="q">${q.q}</div><div class="ans">${v===1?`<span class="right">✓ ${t.right}</span>`:`<span class="you">${T('إِجَابَتُكَ','Your answer')}: ${t.you}</span><br><span class="right">${T('الصَّوَابُ','Correct answer')}: ${t.right}</span>`}</div>
+  <div class="ev"><b>${T('الدَّلِيلُ','Evidence')}: </b>${q.ev}</div></article>`}).join('')||`<p class="hint">${T('لَا يُوجَدُ.','Nothing to show.')}</p>`}
  list('all');
  document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');list(b.dataset.f)});
  window.scrollTo(0,0);
@@ -446,6 +504,10 @@ function finish(){
 /* boot */
 const prev=load();
 if(prev&&prev.done){S=prev;finish()}else startScreen();
+/* the shared top bar switches language: redraw the current screen in the new language */
+window.addEventListener('tq-lang',()=>{
+ if(!S){const n=$('#sname'),g=$('#sgroup'),nv=n?n.value:'',gv=g?g.value:'';startScreen();if(nv)$('#sname').value=nv;if(gv)$('#sgroup').value=gv}
+ else if(S.done)finish();else examScreen()});
 })();
 </script>
 
