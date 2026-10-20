@@ -17,3 +17,7 @@ body.show-en .tr{display:block}
 
 /* English promoted by TQI.auto(): same size and colour as the surrounding text */
 body.show-en .tq-pri{font-size:1em!important;color:inherit!important;font-weight:inherit!important;font-style:normal}
+
+/* translation line added by TQI.dict("§…") under an Arabic quotation */
+.tq-tr{display:none}
+body.show-en .tq-tr{display:block;margin-top:6px;font:500 .55em/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;direction:ltr;text-align:start;color:inherit;opacity:.85;letter-spacing:0}

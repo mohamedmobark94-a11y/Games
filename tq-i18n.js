@@ -46,24 +46,35 @@
   var PATS=[[/^لون (#[0-9a-f]+)$/i,'Colour $1'],[/^سمك (\d+)$/,'Thickness $1']];
   var ATTRS=['title','aria-label'];
   function tr1(v){var k=String(v).trim();if(DICT.hasOwnProperty(k))return DICT[k];for(var i=0;i<PATS.length;i++)if(PATS[i][0].test(k))return k.replace(PATS[i][0],PATS[i][1]);return null}
+  /* a dictionary value starting with "§" keeps the Arabic (a verse, a hadith) and adds the English translation underneath */
+  function txNode(n,en){
+    var raw=n.__tqo!==undefined?n.__tqo:n.nodeValue,m=raw.match(/^(\s*)([\s\S]*?)(\s*)$/),t=en?tr1(m[2]):null;
+    if(t!==null){
+      if(n.__tqo===undefined)n.__tqo=n.nodeValue;
+      if(t.charAt(0)==='\u00a7'){
+        if(!n.__tqx&&n.parentNode){var sp=document.createElement('span');sp.className='tq-tr';sp.textContent=t.slice(1);n.parentNode.insertBefore(sp,n.nextSibling);n.__tqx=sp}
+      }else n.nodeValue=m[1]+t+m[3]
+    }else if(n.__tqo!==undefined){
+      n.nodeValue=n.__tqo;delete n.__tqo;
+      if(n.__tqx){n.__tqx.remove();n.__tqx=null}
+    }
+  }
   function dictRoot(root,en){
     if(!root||root.nodeType!==1&&root.nodeType!==9)return;
     var els=root.nodeType===1?[root].concat([].slice.call(root.querySelectorAll('*'))):[].slice.call(root.querySelectorAll('*'));
     els.forEach(function(el){
-      if(/^(SCRIPT|STYLE)$/.test(el.tagName))return;
+      if(/^(SCRIPT|STYLE)$/.test(el.tagName)||el.classList.contains('tq-tr'))return;
       ATTRS.forEach(function(a){
         var cur=el.getAttribute(a);if(cur===null)return;
         var o=el.__tqa&&el.__tqa[a];
-        if(en){var t=tr1(o!==undefined?o:cur);if(t!==null){(el.__tqa=el.__tqa||{})[a]=o!==undefined?o:cur;el.setAttribute(a,t)}}
+        if(en){var t=tr1(o!==undefined?o:cur);if(t!==null&&t.charAt(0)!=='\u00a7'){(el.__tqa=el.__tqa||{})[a]=o!==undefined?o:cur;el.setAttribute(a,t)}}
         else if(o!==undefined){el.setAttribute(a,o);delete el.__tqa[a]}
       });
-      el.childNodes.forEach(function(n){
-        if(n.nodeType!==3)return;
-        if(en){var t=n.__tqo!==undefined?tr1(n.__tqo):tr1(n.nodeValue);if(t!==null){if(n.__tqo===undefined)n.__tqo=n.nodeValue;n.nodeValue=t}}
-        else if(n.__tqo!==undefined){n.nodeValue=n.__tqo;delete n.__tqo}
-      });
+      [].slice.call(el.childNodes).forEach(function(n){if(n.nodeType===3)txNode(n,en)});
     });
   }
+  /* TQI.t('عربي') → English in English mode, otherwise unchanged (for strings built in code) */
+  window.TQI.t=function(s){if(!document.body.classList.contains('show-en'))return s;var t=tr1(String(s).trim());return t===null||t.charAt(0)==='\u00a7'?s:t};
   /* Auto-pairing: where a page already writes  Arabic <span class="en">English</span>, English mode hides the Arabic text node
      and promotes the English span. Learning content (letters, words, verses…) is excluded via a selector. */
   var AR_RE=/[\u0600-\u06FF]/;
@@ -91,7 +102,7 @@
     var en=function(){return document.body.classList.contains('show-en')};
     relabel();dictRoot(document.body,en());autoRoot(document.body,en());
     new MutationObserver(function(){relabel();dictRoot(document.body,en());autoRoot(document.body,en())}).observe(document.body,{attributes:true,attributeFilter:['class']});
-    new MutationObserver(function(ms){if(!en())return;ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1){dictRoot(n,true);autoRoot(n,true)}})})}).observe(document.body,{childList:true,subtree:true});
+    new MutationObserver(function(ms){if(!en())return;ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1){dictRoot(n,true);autoRoot(n,true)}else if(n.nodeType===3&&n.parentNode&&n.parentNode.nodeType===1&&!n.parentNode.classList.contains('tq-tr'))txNode(n,true)})})}).observe(document.body,{childList:true,subtree:true});
   }
   if(document.body)boot();else document.addEventListener('DOMContentLoaded',boot);
 })();
