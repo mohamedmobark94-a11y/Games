@@ -1046,7 +1046,10 @@ $('#bPrev').onclick=()=>show(idx-1);$('#bNext').onclick=()=>show(idx+1);
 $('#bNotes').onclick=()=>{const n=$('#notes');n.hidden=!n.hidden;$('#bNotes').classList.toggle('on',!n.hidden);if(!n.hidden)notes()};
 $('#bPen').onclick=togglePen;
 $('#bSnd').onclick=()=>{sndOn=!sndOn;$('#bSnd').textContent=sndOn?'Sound':'Muted';ac()};
-$('#bLang').onclick=()=>{lang=lang==='en'?'ar':'en';build();drawBoard()};
+const setL=l=>{lang=l;document.body.classList.toggle('show-en',l==='en');try{localStorage.setItem('tq-lang',l)}catch(e){}build();drawBoard()};
+$('#bLang').onclick=()=>setL(lang==='en'?'ar':'en');
+/* the shared top bar (tq-nav.js) sets the site language; this lesson follows it */
+window.addEventListener('tq-lang',e=>{if(e.detail!==lang)setL(e.detail)});
 function full(){const d=document,e=d.documentElement;try{if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}catch(x){}}
 $('#bFull').onclick=full;
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(idx+1);if(e.key==='ArrowLeft')show(idx-1);if(e.key==='n'||e.key==='N')$('#bNotes').click();if(e.key==='d'||e.key==='D')togglePen();if(e.key==='m'||e.key==='M')$('#bSnd').click();if(e.key==='f'||e.key==='F')full()});
