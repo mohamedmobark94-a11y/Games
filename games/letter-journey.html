@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>رحلة الحرف</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -121,63 +121,63 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">رِحْلَةُ <b>الحَرْف</b> 💨 <span class="en">The Letter's Journey</span><small>ترتيل القرآن · Tarteel Al-Quran — مخارج الحروف من «الوجيز في علم التجويد»</small></h1>
+    <h1 class="brand">رِحْلَةُ <b>الحَرْف</b> 💨 <span class="en">The Letter's Journey</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — مخارج الحروف من «الوجيز في علم التجويد»</span><span class="ui-en">Tarteel Al-Quran — the points of articulation of the letters, from <i>Al-Wajiz fi ‘Ilm at-Tajwid</i></span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
   <div class="bar">
-    <label for="lvSel">المستوى:</label>
-    <select id="lvSel"><option value="1">① المخارج العامة الخمسة</option><option value="2" selected>② ألقاب الحروف</option><option value="3">③ المخارج السبعة عشر</option></select>
-    <label for="modeSel">اللعبة:</label>
-    <select id="modeSel"><option value="find">أَيْنَ يَخْرُجُ الحَرْف؟</option><option value="name">هَاتِ حُرُوفَه!</option></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <label for="lvSel"><span class="ui-ar">المستوى:</span><span class="ui-en">Level:</span></label>
+    <select id="lvSel"><option value="1" data-en="① The five general areas">① المخارج العامة الخمسة</option><option value="2" selected data-en="② The letter groups">② ألقاب الحروف</option><option value="3" data-en="③ The seventeen points of articulation">③ المخارج السبعة عشر</option></select>
+    <label for="modeSel"><span class="ui-ar">اللعبة:</span><span class="ui-en">Game:</span></label>
+    <select id="modeSel"><option value="find" data-en="Where does the letter come from?">أَيْنَ يَخْرُجُ الحَرْف؟</option><option value="name" data-en="Name its letters!">هَاتِ حُرُوفَه!</option></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams">فريقان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0">
     <div class="panel diagram">
-      <h2>💨 رِحْلَةُ الهَوَاء: مِنَ الصَّدْرِ ← إِلَى الشَّفَتَيْن <span class="en">Air journey: chest → lips</span></h2>
-      <svg class="tract" viewBox="0 0 360 290" role="img" aria-label="رسم تخطيطي لمخارج الحروف: الحلق واللسان والشفتان والخيشوم والجوف">
+      <h2><span class="ui-ar">💨 رِحْلَةُ الهَوَاء: مِنَ الصَّدْرِ ← إِلَى الشَّفَتَيْن</span><span class="ui-en">💨 The journey of the air: from the chest → to the lips</span></h2>
+      <svg class="tract" viewBox="0 0 360 290" role="img" aria-label="Diagram of the points of articulation: throat, tongue, lips, nasal passage and cavity · رسم تخطيطي لمخارج الحروف">
         <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9C7A35"/></marker></defs>
         <!-- jawf: the open cavity of throat + mouth -->
         <path id="z-jawf" class="z" d="M40,92 H262 V276 H306 V92" fill="none" stroke="var(--jawf)" stroke-width="3" stroke-dasharray="7 6" opacity=".55"/>
         <!-- nose -->
         <path id="z-khay" class="z" d="M70,36 Q60,36 58,50 L58,70 H250 Q262,70 262,58 V48 Q262,36 250,36 Z" fill="#F6DDC8" stroke="var(--khay)" stroke-width="2"/>
-        <text x="160" y="58" text-anchor="middle" fill="var(--khay)" font-size="14">الخَيْشُوم</text>
+        <text class="ui-ar" x="160" y="58" text-anchor="middle" fill="var(--khay)" font-size="14">الخَيْشُوم</text><text class="ui-en" x="160" y="58" text-anchor="middle" fill="var(--khay)" font-size="14">Nasal passage</text>
         <!-- mouth roof -->
         <path d="M44,96 H258" stroke="#BFA77A" stroke-width="3"/>
         <!-- throat: three parts (top = adna, bottom = aqsa) -->
         <rect id="z-h1" class="z halq" x="262" y="96" width="44" height="58" fill="#F5D3CF" stroke="var(--halq)" stroke-width="2"/>
         <rect id="z-h2" class="z halq" x="262" y="154" width="44" height="58" fill="#F5D3CF" stroke="var(--halq)" stroke-width="2"/>
         <rect id="z-h3" class="z halq" x="262" y="212" width="44" height="58" fill="#F5D3CF" stroke="var(--halq)" stroke-width="2"/>
-        <text x="320" y="130" fill="var(--halq)" font-size="11" text-anchor="start">أَدْنَى</text>
-        <text x="320" y="188" fill="var(--halq)" font-size="11">وَسَط</text>
-        <text x="320" y="246" fill="var(--halq)" font-size="11">أَقْصَى</text>
-        <text x="284" y="288" text-anchor="middle" fill="var(--halq)" font-size="13">الحَلْق</text>
+        <text class="ui-ar" x="320" y="130" fill="var(--halq)" font-size="11" text-anchor="start">أَدْنَى</text><text class="ui-en" x="320" y="130" fill="var(--halq)" font-size="11" text-anchor="start">Upper</text>
+        <text class="ui-ar" x="320" y="188" fill="var(--halq)" font-size="11">وَسَط</text><text class="ui-en" x="320" y="188" fill="var(--halq)" font-size="11">Middle</text>
+        <text class="ui-ar" x="320" y="246" fill="var(--halq)" font-size="11">أَقْصَى</text><text class="ui-en" x="320" y="246" fill="var(--halq)" font-size="11">Deepest</text>
+        <text class="ui-ar" x="284" y="288" text-anchor="middle" fill="var(--halq)" font-size="13">الحَلْق</text><text class="ui-en" x="284" y="288" text-anchor="middle" fill="var(--halq)" font-size="13">Throat</text>
         <!-- tongue: tip (left) → middle → back (right) -->
         <path id="z-t-taraf" class="z lisan" d="M58,168 Q56,150 80,146 L120,140 V172 H58 Z" fill="#CFE2F3" stroke="var(--lisan)" stroke-width="2"/>
         <path id="z-t-wasat" class="z lisan" d="M120,140 Q160,120 200,124 V172 H120 Z" fill="#CFE2F3" stroke="var(--lisan)" stroke-width="2"/>
         <path id="z-t-aqsa" class="z lisan" d="M200,124 Q240,128 258,150 V172 H200 Z" fill="#CFE2F3" stroke="var(--lisan)" stroke-width="2"/>
         <path id="z-t-hafa" class="z lisan" d="M86,166 Q150,160 236,166" fill="none" stroke="var(--lisan)" stroke-width="3" stroke-dasharray="3 4"/>
-        <text x="158" y="192" text-anchor="middle" fill="var(--lisan)" font-size="13">اللِّسَان</text>
-        <text x="86" y="162" text-anchor="middle" fill="var(--lisan)" font-size="10">طَرَف</text>
-        <text x="160" y="150" text-anchor="middle" fill="var(--lisan)" font-size="10">وَسَط</text>
-        <text x="228" y="156" text-anchor="middle" fill="var(--lisan)" font-size="10">أَقْصَى</text>
+        <text class="ui-ar" x="158" y="192" text-anchor="middle" fill="var(--lisan)" font-size="13">اللِّسَان</text><text class="ui-en" x="158" y="192" text-anchor="middle" fill="var(--lisan)" font-size="13">Tongue</text>
+        <text class="ui-ar" x="86" y="162" text-anchor="middle" fill="var(--lisan)" font-size="10">طَرَف</text><text class="ui-en" x="86" y="162" text-anchor="middle" fill="var(--lisan)" font-size="10">Tip</text>
+        <text class="ui-ar" x="160" y="150" text-anchor="middle" fill="var(--lisan)" font-size="10">وَسَط</text><text class="ui-en" x="160" y="150" text-anchor="middle" fill="var(--lisan)" font-size="10">Middle</text>
+        <text class="ui-ar" x="228" y="156" text-anchor="middle" fill="var(--lisan)" font-size="10">أَقْصَى</text><text class="ui-en" x="228" y="156" text-anchor="middle" fill="var(--lisan)" font-size="10">Back</text>
         <!-- teeth -->
         <rect id="z-teeth-up" class="z" x="46" y="98" width="12" height="16" rx="3" fill="#fff" stroke="#9C8A6A"/>
         <rect id="z-teeth-dn" class="z" x="46" y="170" width="12" height="14" rx="3" fill="#fff" stroke="#9C8A6A"/>
         <!-- lips -->
         <ellipse id="z-lip-up" class="z shafa" cx="32" cy="104" rx="14" ry="11" fill="#D5EFDD" stroke="var(--shafa)" stroke-width="2"/>
         <ellipse id="z-lip-dn" class="z shafa" cx="32" cy="178" rx="14" ry="11" fill="#D5EFDD" stroke="var(--shafa)" stroke-width="2"/>
-        <text x="32" y="210" text-anchor="middle" fill="var(--shafa)" font-size="12">الشَّفَتَان</text>
+        <text class="ui-ar" x="32" y="210" text-anchor="middle" fill="var(--shafa)" font-size="12">الشَّفَتَان</text><text class="ui-en" x="32" y="210" text-anchor="middle" fill="var(--shafa)" font-size="12">Lips</text>
         <!-- air -->
-                <text x="160" y="240" text-anchor="middle" fill="var(--jawf)" font-size="12">الجَوْف (فَرَاغُ الحَلْقِ وَالفَم)</text>
+                <text class="ui-ar" x="160" y="240" text-anchor="middle" fill="var(--jawf)" font-size="12">الجَوْف (فَرَاغُ الحَلْقِ وَالفَم)</text><text class="ui-en" x="160" y="240" text-anchor="middle" fill="var(--jawf)" font-size="12">Cavity (space of throat and mouth)</text>
         <path d="M284,268 V236 Q284,224 268,224 H120 Q90,224 70,214" fill="none" stroke="#9C7A35" stroke-width="2" stroke-dasharray="4 5" marker-end="url(#ar)"/>
       </svg>
-      <div class="legend"><span style="background:var(--jawf)">الجَوْف</span><span style="background:var(--halq)">الحَلْق</span><span style="background:var(--lisan)">اللِّسَان</span><span style="background:var(--shafa)">الشَّفَتَان</span><span style="background:var(--khay)">الخَيْشُوم</span></div>
-      <div class="book">📚 المصدر: محمود سيبويه البدوي، «الوجيز في علم التجويد»، باب مخارج الحروف، ص ٤–١٠ (بترقيم الشاملة آليًّا). رسم تقريبي للتوضيح.</div>
+      <div class="legend"><span style="background:var(--jawf)"><span class="ui-ar">الجَوْف</span><span class="ui-en">Cavity</span></span><span style="background:var(--halq)"><span class="ui-ar">الحَلْق</span><span class="ui-en">Throat</span></span><span style="background:var(--lisan)"><span class="ui-ar">اللِّسَان</span><span class="ui-en">Tongue</span></span><span style="background:var(--shafa)"><span class="ui-ar">الشَّفَتَان</span><span class="ui-en">Lips</span></span><span style="background:var(--khay)"><span class="ui-ar">الخَيْشُوم</span><span class="ui-en">Nasal passage</span></span></div>
+      <div class="book"><span class="ui-ar">📚 المصدر: محمود سيبويه البدوي، «الوجيز في علم التجويد»، باب مخارج الحروف، ص ٤–١٠ (بترقيم الشاملة آليًّا). رسم تقريبي للتوضيح.</span><span class="ui-en">📚 Source: Mahmud Sibawayh al-Badawi, <i>Al-Wajiz fi ‘Ilm at-Tajwid</i>, chapter on the points of articulation, pp. 4–10 (page numbers as auto-assigned by Shamela). The drawing is approximate, for illustration.</span></div>
     </div>
     <div class="panel card" id="qa" aria-live="polite"></div>
   </section>
@@ -192,7 +192,8 @@ body.ink-laser .ink-cv{cursor:none!important}
    LETTERS = الحروف: l الحرف، say طريقة الاختبار (يسكَّن الحرف وتدخل عليه همزة)، m رقم المخرج، label وصف اختياري
    لتغيير الدرس: احذف/أضف حروفًا في LETTERS فقط (مثلًا حروف الحلق وحدها).
    ============================================================ */
-const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي', ref:'باب مخارج الحروف، ص ٤–١٠ (بترقيم الشاملة آليًّا)'};
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي', ref:'باب مخارج الحروف، ص ٤–١٠ (بترقيم الشاملة آليًّا)',
+  en:"Al-Wajiz fi 'Ilm at-Tajwid — Mahmud Sibawayh al-Badawi", refEn:'chapter on the points of articulation, pp. 4–10 (page numbers as auto-assigned by Shamela)'};
 const AREAS = {
   jawf:{ar:'الجَوْف',en:'The open cavity (mouth & throat space)',c:'var(--jawf)',zones:['z-jawf']},
   halq:{ar:'الحَلْق',en:'The throat',c:'var(--halq)',zones:['z-h1','z-h2','z-h3']},
@@ -239,11 +240,18 @@ const LETTERS = [
   {l:'ظ',say:'أَظْ',m:14},{l:'ذ',say:'أَذْ',m:14},{l:'ث',say:'أَثْ',m:14},{l:'ف',say:'أَفْ',m:15},{l:'ب',say:'أَبْ',m:16},{l:'م',say:'أَمْ',m:16},
   {l:'و',say:'أَوْ',label:'الوَاوُ غَيْرُ المَدِّيَّة',m:16},{l:'نْ',say:'أَنْتُمْ',label:'غُنَّةُ النُّونِ المُخْفَاة',m:17},
 ];
+const MK_BQ_EN = {"1": "The jawf (cavity), which is the empty space inside the mouth and throat; from it come the three madd letters.", "2": "The deepest part of the throat, that is, the part farthest from the mouth and nearest the chest; from it come two letters: the hamzah, then the hā’.", "3": "The middle of the throat; from it come the undotted ‘ayn, then the ḥā’.", "4": "The upper throat, that is, the part nearest the mouth; from it come the ghayn, then the khā’.", "5": "The back of the tongue, that is, the part farthest toward the throat, together with the part of the upper palate opposite it; from it comes the qāf.", "6": "The back of the tongue and the part of the upper palate opposite it, just below the point of the qāf; from it comes the kāf.", "7": "The middle of the tongue and the part of the upper palate opposite it; from it come three letters: the jīm, then the shīn, then the non-madd yā’.", "8": "One of the two edges of the tongue and the upper molars opposite it; from it comes the dotted ḍād.", "9": "What lies between both edges of the tongue, after the point of the ḍād, together with the gums opposite them… from it comes the lām.", "10": "The tip of the tongue and the gums of the upper teeth opposite it, slightly below the point of the lām; from it comes the nūn.", "11": "The tip of the tongue together with its back, near its head; from it comes the rā’.", "12": "The tip of the tongue with the root of the two upper front teeth; from it come the undotted ṭā’ and dāl, then the tā’.", "13": "The tip of the tongue just above the two lower front teeth; from it come the ṣād, then the sīn, then the zāy.", "14": "The tip of the tongue with the edges of the two upper front teeth; from it come the ẓā’, then the dhāl, then the thā’.", "15": "The inside of the lower lip with the edges of the two upper front teeth; from it comes the fā’.", "16": "Both lips together; from them come the bā’… then the mīm, then the non-madd wāw.", "17": "The khayshūm, which is the farthest part of the nose; from it come the two letters of ghunnah, the nūn and the mīm when they are hidden (ikhfā’) or merged (idghām) with ghunnah."};
+MAKHARIJ.forEach(m=>{m.bqEn=MK_BQ_EN[m.id]});
+const LBL_EN = {"الأَلِفُ المَدِّيَّة": "the madd alif", "الوَاوُ المَدِّيَّة": "the madd wāw", "اليَاءُ المَدِّيَّة": "the madd yā’", "اليَاءُ غَيْرُ المَدِّيَّة": "the non-madd yā’", "الوَاوُ غَيْرُ المَدِّيَّة": "the non-madd wāw", "غُنَّةُ النُّونِ المُخْفَاة": "ghunnah of the hidden nūn"};
 const ROUND = 10;   // عدد الحروف في الجولة
 const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَكَ اللهُ فِيك!','مُمْتَاز!'], PRAISE_EN=['Well done!','Masha Allah!','Barak Allahu feek!','Excellent!'];
 /* ============================================================ */
 
 const $=s=>document.querySelector(s);
+const {U,tr}=TQI;
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
+const west=s=>String(s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const bqH=(a,e)=>`<div class="bq">«${a}»${tr('“'+e+'”')}</div>`;
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const MK=Object.fromEntries(MAKHARIJ.map(m=>[m.id,m]));
@@ -258,7 +266,7 @@ const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i
   win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#C9A35A','#C0392B','#2471A3','#1E8449','#8E44AD','#D35400'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- diagram highlight ---------- */
 const ALLZ=[...document.querySelectorAll('svg .z')];
@@ -277,10 +285,10 @@ function siblings(lv,k){return LETTERS.filter(L=>keyOf(lv,L)===k)}
 /* ---------- state ---------- */
 let teams=[],turn=0,queue=[],idx=0,lv=2,mode='find',done=false,missed=[];
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ نُجُومِي','⭐ My stars'),c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}];
+  return [{nm:U('🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'),c:'var(--teamA)'},{nm:U('🔴 الفَرِيقُ الأَحْمَر','🔴 Red team'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 function newGame(){
   lv=+$('#lvSel').value;mode=$('#modeSel').value;
   teams=teamDefs().map(t=>({...t,pts:0}));turn=0;idx=0;missed=[];
@@ -289,12 +297,12 @@ function newGame(){
 }
 const qa=$('#qa');
 function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
-function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en" style="color:#fff">Next</span></button></div>`}
+function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">${U('التَّالِي ←','Next →')}</button></div>`}
 function bindNext(){$('#nextB').onclick=()=>{idx++;turn=(turn+1)%teams.length;renderTeams();show()};$('#nextB').focus({preventScroll:true})}
 function infoHtml(L){const m=MK[L.m],sib=LETTERS.filter(x=>x.m===L.m).map(x=>x.l);
-  return `<div class="info" style="--ac:${AREAS[m.area].c}"><div class="t">📍 ${m.ar} — رقم ${ar(m.id)} مِنْ ١٧ · ${GROUPS[m.g].ar}<span class="en blk">${m.en} · ${GROUPS[m.g].en}</span></div>
-   <div class="bq">«${m.bq}»</div><small>${BOOK.ar}، ${BOOK.ref}</small>
-   <div>حُرُوفُ هَذَا المَخْرَج: <span class="sib">${[...new Set(sib)].join(' ')}</span></div></div>`}
+  return `<div class="info" style="--ac:${AREAS[m.area].c}"><div class="t">${U(`📍 ${m.ar} — رقم ${ar(m.id)} مِنْ ١٧ · ${GROUPS[m.g].ar}`,`📍 ${m.en} — number ${m.id} of 17 · ${GROUPS[m.g].en}`)}</div>
+   ${bqH(m.bq,m.bqEn)}<small>${U(BOOK.ar+'، '+BOOK.ref,BOOK.en+', '+BOOK.refEn)}</small>
+   <div>${U('حُرُوفُ هَذَا المَخْرَج:','The letters of this point of articulation:')} <span class="sib">${[...new Set(sib)].join(' ')}</span></div></div>`}
 
 function show(){
   if(idx>=queue.length){end();return}
@@ -304,12 +312,12 @@ function show(){
 }
 function showFind(L){
   const st=stationsFor(lv),ans=keyOf(lv,L);let tries=0,over=false;
-  qa.innerHTML=`<div class="prog"><span>الحَرْف ${ar(idx+1)} مِنْ ${ar(queue.length)}</span><span>${teams[turn].nm}</span></div>
-    <div class="letter">${L.l}${L.label?`<small>${L.label}</small>`:''}</div>
-    <div class="say">قُلْ: «${L.say}»</div>
-    <div class="tip">👂 سَكِّنِ الحَرْفَ وَقَبْلَهُ هَمْزَةٌ مَفْتُوحَة، ثُمَّ انْتَبِهْ: أَيْنَ انْقَطَعَ الصَّوْت؟ <span class="en blk">Say it with a sukūn after a hamza and feel where the sound stops.</span></div>
-    <div class="q">أَيْنَ يَخْرُجُ الحَرْف؟ <span class="en">Where does it come from?</span></div>
-    <div class="stations ${lv===1?'big':''}">${st.map(s=>`<button class="st" data-k="${s.k}" style="--ac:${s.c}">${s.n?`<span class="n">${ar(s.n)}</span>`:''}<span>${s.ar}<span class="en">${s.en}</span></span></button>`).join('')}</div>
+  qa.innerHTML=`<div class="prog"><span>${U(`الحَرْف ${ar(idx+1)} مِنْ ${ar(queue.length)}`,`Letter ${idx+1} of ${queue.length}`)}</span><span>${teams[turn].nm}</span></div>
+    <div class="letter">${L.l}${L.label?`<small>${U(L.label,LBL_EN[L.label]||L.label)}</small>`:''}</div>
+    <div class="say">${U('قُلْ:','Say:')} «${L.say}»</div>
+    <div class="tip">${U('👂 سَكِّنِ الحَرْفَ وَقَبْلَهُ هَمْزَةٌ مَفْتُوحَة، ثُمَّ انْتَبِهْ: أَيْنَ انْقَطَعَ الصَّوْت؟','👂 Say the letter with a sukūn after an open hamzah, then notice: where does the sound stop?')}</div>
+    <div class="q">${U('أَيْنَ يَخْرُجُ الحَرْف؟','Where does the letter come from?')}</div>
+    <div class="stations ${lv===1?'big':''}">${st.map(s=>`<button class="st" data-k="${s.k}" style="--ac:${s.c}">${s.n?`<span class="n">${U(ar(s.n),s.n)}</span>`:''}<span>${U(s.ar,s.en)}</span></button>`).join('')}</div>
     <div id="after"></div>`;
   qa.querySelectorAll('.st').forEach(b=>b.onclick=()=>{
     if(over||b.classList.contains('bad'))return;ac();
@@ -321,12 +329,12 @@ function showFind(L){
 }
 function showName(s){
   const sib=siblings(lv,s.k);light(s.zones);
-  qa.innerHTML=`<div class="prog"><span>المَحَطَّة ${ar(idx+1)} مِنْ ${ar(queue.length)}</span><span>${teams[turn].nm}</span></div>
-    <div class="q" style="font-size:1.6rem;color:${s.c}">${s.n?ar(s.n)+' · ':''}${s.ar} <span class="en blk">${s.en}</span></div>
-    <div class="tip">👀 انْظُرْ إِلَى الرَّسْم. هَاتِ كُلَّ الحُرُوفِ الَّتِي تَخْرُجُ مِنْ هُنَا، وَقُلْ كُلَّ حَرْفٍ بِالاخْتِبَار (أَبْ، أَتْ…). <span class="en blk">Name every letter that comes from here and test each one.</span></div>
+  qa.innerHTML=`<div class="prog"><span>${U(`المَحَطَّة ${ar(idx+1)} مِنْ ${ar(queue.length)}`,`Station ${idx+1} of ${queue.length}`)}</span><span>${teams[turn].nm}</span></div>
+    <div class="q" style="font-size:1.6rem;color:${s.c}">${U((s.n?ar(s.n)+' · ':'')+s.ar,(s.n?s.n+' · ':'')+s.en)}</div>
+    <div class="tip">${U('👀 انْظُرْ إِلَى الرَّسْم. هَاتِ كُلَّ الحُرُوفِ الَّتِي تَخْرُجُ مِنْ هُنَا، وَقُلْ كُلَّ حَرْفٍ بِالاخْتِبَار (أَبْ، أَتْ…).','👀 Look at the diagram. Name every letter that comes from here, and say each one with the test (ab, at…).')}</div>
     <div class="say" id="ansL" style="visibility:hidden">${[...new Set(sib.map(x=>x.l))].join(' ')}</div>
-    <div class="row"><button class="big-btn ghost" id="revB">👀 أَظْهِرِ الحُرُوف</button></div>
-    <div class="row" id="judge"><button class="big-btn green" id="okB">✓ كُلُّهَا صَحّ (+٢)</button><button class="big-btn" id="halfB">½ بَعْضُهَا (+١)</button><button class="big-btn red" id="noB">✗ لَا</button></div>
+    <div class="row"><button class="big-btn ghost" id="revB">${U('👀 أَظْهِرِ الحُرُوف','👀 Show the letters')}</button></div>
+    <div class="row" id="judge"><button class="big-btn green" id="okB">${U('✓ كُلُّهَا صَحّ (+٢)','✓ All correct (+2)')}</button><button class="big-btn" id="halfB">${U('½ بَعْضُهَا (+١)','½ Some of them (+1)')}</button><button class="big-btn red" id="noB">${U('✗ لَا','✗ No')}</button></div>
     <div id="after"></div>`;
   const rev=()=>{$('#ansL').style.visibility='visible';sfx.pop()};
   $('#revB').onclick=()=>{ac();rev()};
@@ -337,11 +345,11 @@ function showName(s){
 function end(){
   light(null);
   const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمْ','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
   qa.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
-    ${missed.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${missed.join(' ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
-    <div class="tip">💡 جَرِّبْ مِرْآةً أَمَامَ الطَّالِب: يَرَى شَفَتَيْهِ وَلِسَانَهُ وَهُوَ يَقُولُ «أَفْ، أَبْ، أَثْ». <span class="en blk">Tip: a mirror helps the student see lips and tongue.</span></div>
-    <button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div>`;
+    ${missed.length?`<div>${U('رَاجِعْ هَذِهِ أَوَّلًا:','Review these first:')}</div><div class="miss">${missed.join(' ')}</div>`:`<div>${U('لَا أَخْطَاء — مَا شَاءَ الله! 🌟','No mistakes — Masha Allah! 🌟')}</div>`}
+    <div class="tip">${U('💡 جَرِّبْ مِرْآةً أَمَامَ الطَّالِب: يَرَى شَفَتَيْهِ وَلِسَانَهُ وَهُوَ يَقُولُ «أَفْ، أَبْ، أَثْ».','💡 Tip: put a mirror in front of the student so they can see their lips and tongue as they say “af, ab, ath”.')}</div>
+    <button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
@@ -349,7 +357,7 @@ function end(){
 ['#lvSel','#modeSel','#teamSel'].forEach(s=>$(s).onchange=newGame);
 $('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'&&$('#nextB')){e.preventDefault();$('#nextB').click()}});
 newGame();
 </script>

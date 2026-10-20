@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>إشارات الوقف</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -180,47 +180,47 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">إِشَارَاتُ <b>الوَقْف</b> 🚦 <span class="en">Waqf Traffic Lights</span><small>ترتيل القرآن · Tarteel Al-Quran — باب الوقف والابتداء وهمزة الوصل من «الوجيز في علم التجويد»</small></h1>
+    <h1 class="brand">إِشَارَاتُ <b>الوَقْف</b> 🚦 <span class="en">Waqf Traffic Lights</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — باب الوقف والابتداء وهمزة الوصل من «الوجيز في علم التجويد»</span><span class="ui-en">Tarteel Al-Quran — the chapters on stopping and starting and on hamzat al-waṣl, from <i>Al-Wajiz fi ‘Ilm at-Tajwid</i></span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
   <div class="bar">
-    <label for="modeSel">اللعبة:</label>
+    <label for="modeSel"><span class="ui-ar">اللعبة:</span><span class="ui-en">Game:</span></label>
     <select id="modeSel">
-      <option value="waqf">🚦 إِشَارَةُ الوَقْف (أَيْنَ أَقِف؟ مِنْ أَيْنَ أَبْدَأ؟)</option>
-      <option value="wasl">🔑 مِفْتَاحُ البِدَايَة (همزة الوصل)</option>
-      <option value="sakt">⏸ وَقْفٌ أَمْ سَكْتٌ أَمْ قَطْع؟ (+ سكتات حفص)</option>
+      <option value="waqf" data-en="🚦 The stop light (where do I stop? where do I restart?)">🚦 إِشَارَةُ الوَقْف (أَيْنَ أَقِف؟ مِنْ أَيْنَ أَبْدَأ؟)</option>
+      <option value="wasl" data-en="🔑 The key to starting (hamzat al-waṣl)">🔑 مِفْتَاحُ البِدَايَة (همزة الوصل)</option>
+      <option value="sakt" data-en="⏸ Waqf, sakt or qaṭʿ? (+ the sakt spots of Ḥafṣ)">⏸ وَقْفٌ أَمْ سَكْتٌ أَمْ قَطْع؟ (+ سكتات حفص)</option>
     </select>
-    <label for="setSel">الأمثلة:</label>
+    <label for="setSel"><span class="ui-ar">الأمثلة:</span><span class="ui-en">Examples:</span></label>
     <select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
-    <button class="tbtn" id="spdB" aria-pressed="false" title="في «مفتاح البداية»: نقاط أكثر للأسرع (مثل Kahoot)">⚡ سُرْعَة</button>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams">فريقان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
+    <button class="tbtn" id="spdB" aria-pressed="false" title="في «مفتاح البداية»: نقاط أكثر للأسرع (مثل Kahoot)" data-en-title="In “The key to starting”: more points for the fastest (like Kahoot)"><span class="ui-ar">⚡ سُرْعَة</span><span class="ui-en">⚡ Speed</span></button>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0">
     <div class="panel card" id="qa" aria-live="polite"></div>
     <div class="panel side">
-      <h2>🚦 إِشَارَةُ المُرُورِ فِي التِّلَاوَة <span class="en blk">The recitation traffic light</span></h2>
+      <h2><span class="ui-ar">🚦 إِشَارَةُ المُرُورِ فِي التِّلَاوَة</span><span class="ui-en">🚦 The traffic light of recitation</span></h2>
       <div class="tl">
         <div class="pole" aria-hidden="true"><div class="lamp" id="lp-red" style="--lc:var(--red)"></div><div class="lamp" id="lp-yellow" style="--lc:var(--yellow)"></div><div class="lamp" id="lp-green" style="--lc:var(--green)"></div></div>
         <div class="legend">
-          <div style="--lc:var(--green)"><i></i><span>قِفْ ← وَابْدَأْ بِمَا بَعْدَهَا<small>تَامّ · كَافٍ · رَأْسُ آيَة</small></span></div>
-          <div style="--lc:var(--yellow)"><i></i><span>قِفْ ← ثُمَّ ارْجِعْ وَصِلْ<small>حَسَن (لَيْسَ رَأْسَ آيَة)</small></span></div>
-          <div style="--lc:var(--red)"><i></i><span>لَا تَقِفْ! (إِلَّا لِضَرُورَة) ← ارْجِعْ<small>قَبِيح · أَشَدُّ قُبْحًا</small></span></div>
+          <div style="--lc:var(--green)"><i></i><span><span class="ui-ar">قِفْ ← وَابْدَأْ بِمَا بَعْدَهَا</span><span class="ui-en">Stop → and start with what follows</span><small><span class="ui-ar">تَامّ · كَافٍ · رَأْسُ آيَة</span><span class="ui-en">complete · sufficient · end of an āyah</span></small></span></div>
+          <div style="--lc:var(--yellow)"><i></i><span><span class="ui-ar">قِفْ ← ثُمَّ ارْجِعْ وَصِلْ</span><span class="ui-en">Stop → then go back and join</span><small><span class="ui-ar">حَسَن (لَيْسَ رَأْسَ آيَة)</span><span class="ui-en">good (not the end of an āyah)</span></small></span></div>
+          <div style="--lc:var(--red)"><i></i><span><span class="ui-ar">لَا تَقِفْ! (إِلَّا لِضَرُورَة) ← ارْجِعْ</span><span class="ui-en">Don’t stop! (unless you must) → go back</span><small><span class="ui-ar">قَبِيح · أَشَدُّ قُبْحًا</span><span class="ui-en">bad · the worst</span></small></span></div>
         </div>
       </div>
       <div class="car" id="car" aria-hidden="true">🚗</div>
-      <div class="hadith"><div class="bq">«كان رسول الله ﷺ إذا قرأ قطع قراءته آية آية. يقول: بسم الله الرحمن الرحيم، ثم يقف، ثم يقول: الحمد لله رب العالمين، ثم يقف…»</div>
-        <small>حديث أم سلمة ﵂ كما أورده المؤلف (ص ٤٣)، وقال: «وهذا الحديث أصل في هذا الباب». التخريج في حاشية الكتاب (من المحقق): أبو داود (٤٠٠١)، والترمذي (٢٩٢٨)، وأحمد ٦/٣٠٢، ونقل عن ابن الجزري في «النشر»: «حديث حسن وسنده صحيح».</small></div>
+      <div class="hadith"><div class="bq">«كان رسول الله ﷺ إذا قرأ قطع قراءته آية آية. يقول: بسم الله الرحمن الرحيم، ثم يقف، ثم يقول: الحمد لله رب العالمين، ثم يقف…»<span class="tr">“When Allah’s Messenger ﷺ recited, he would cut his recitation verse by verse. He would say: ‘In the name of Allah, the Entirely Merciful, the Especially Merciful’, then stop; then he would say: ‘Praise be to Allah, Lord of the worlds’, then stop…”</span></div>
+        <small><span class="ui-ar">حديث أم سلمة ﵂ كما أورده المؤلف (ص ٤٣)، وقال: «وهذا الحديث أصل في هذا الباب». التخريج في حاشية الكتاب (من المحقق): أبو داود (٤٠٠١)، والترمذي (٢٩٢٨)، وأحمد ٦/٣٠٢، ونقل عن ابن الجزري في «النشر»: «حديث حسن وسنده صحيح».</span><span class="ui-en">The ḥadīth of Umm Salamah, may Allah be pleased with her, as quoted by the author (p. 43), who said: “This ḥadīth is the basis of this chapter.” The takhrīj in the book’s footnote (by the editor): Abū Dāwūd (4001), at-Tirmidhī (2928) and Aḥmad 6/302, and it quotes Ibn al-Jazarī in “an-Nashr”: “A good ḥadīth with a sound chain.”</span></small></div>
       <div class="breath">
-        <b>🫁 اِسْمَعِ الفَرْق <span class="en">Hear the difference</span></b>
+        <b><span class="ui-ar">🫁 اِسْمَعِ الفَرْق</span><span class="ui-en">🫁 Hear the difference</span></b>
         <div class="row">
-          <button class="tbtn" id="bWaqf">🫁 وَقْف (بِنَفَس)</button>
-          <button class="tbtn" id="bSakt">⏸ سَكْت (بِلَا نَفَس)</button>
-          <button class="tbtn" id="bQat">📕 قَطْع (اِنْتِهَاء)</button>
+          <button class="tbtn" id="bWaqf"><span class="ui-ar">🫁 وَقْف (بِنَفَس)</span><span class="ui-en">🫁 Waqf (with a breath)</span></button>
+          <button class="tbtn" id="bSakt"><span class="ui-ar">⏸ سَكْت (بِلَا نَفَس)</span><span class="ui-en">⏸ Sakt (no breath)</span></button>
+          <button class="tbtn" id="bQat"><span class="ui-ar">📕 قَطْع (اِنْتِهَاء)</span><span class="ui-en">📕 Qaṭʿ (ending)</span></button>
         </div>
       </div>
       <div class="book" id="bookRef"></div>
@@ -238,7 +238,8 @@ body.ink-laser .ink-cv{cursor:none!important}
    SAKT = سكتات حفص: {w:[الكلمات], gap:رقم الكلمة التي بعدها السكت (من ٠), ref, why}
    SCENES = مواقف «وقف أم سكت أم قطع؟»: {ar, en, a:'waqf'|'sakt'|'qat'}
    ============================================================ */
-const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب الوقف والابتداء ص ٤١–٤٥، وباب همزة الوصل ص ٥٧–٥٩ (بترقيم الشاملة آليًّا)'};
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب الوقف والابتداء ص ٤١–٤٥، وباب همزة الوصل ص ٥٧–٥٩ (بترقيم الشاملة آليًّا)',
+  en:"Al-Wajiz fi 'Ilm at-Tajwid — Mahmud Sibawayh al-Badawi (d. 1415 AH)", refEn:'chapter on stopping and starting pp. 41–45, and chapter on hamzat al-waṣl pp. 57–59 (page numbers as auto-assigned by Shamela)'};
 const LIGHTS = {
   green:{ar:'قِفْ ← وَابْدَأْ بِمَا بَعْدَهَا',sub:'المَعْنَى تَمَّ',en:'Stop, then start after it',c:'var(--green)',snd:'go'},
   yellow:{ar:'قِفْ ← ثُمَّ ارْجِعْ وَصِلْ',sub:'مَعْنًى حَسَن، لَكِنَّ مَا بَعْدَهُ مُتَعَلِّقٌ بِه',en:'Stop, then go back and join',c:'var(--yellow)',snd:'wait'},
@@ -254,6 +255,11 @@ const NAMES = {
   qabih:{ar:'قَبِيح',en:'Bad',c:'var(--red)',lafz:1,mana:1,
     bq:'«هو الوقف على لفظ غير مفيد، وقد تعلق ما بعده بما قبله لفظا ومعنى، كالوقف على المبتدأ دون خبره، أو على المضاف دون المضاف إليه» (ص ٤٣)، «ولا يجوز إلا لضرورة، كانقطاع نفس ونحوه… ولا بد من الابتداء بالكلمة الموقوف عليها، أو بما قبلها» (ص ٤٤).'},
 };
+const LIGHT_SUB_EN = {"green": "The meaning is complete", "yellow": "A good meaning, but what follows is connected to it", "red": "Unless you must (breath) → then go back"};
+Object.entries(LIGHT_SUB_EN).forEach(([k,v])=>{LIGHTS[k].subEn=v});
+const NAME_BQ_EN = {"tam": "“It is stopping on a word whose following words are not connected to it, nor to what precedes it, neither in wording nor in meaning… This type is found most often at the ends of verses and at the end of stories… its ruling: stopping on it and starting with what follows it is good” (p. 41).", "kafi": "“It is stopping on a word whose following words are not connected to it, nor to what precedes it in wording, but only in meaning… its ruling: like the complete one” (p. 42).", "hasan": "“It is stopping on a word to which what follows is connected, or to what precedes it, in wording and meaning, provided that it gives a meaning on which silence is good… so whoever stops on it and wants to start, joins it with what follows; because starting with what is connected in wording to what precedes is bad. And if it is the end of a verse… stopping on it and starting with what follows is good” (p. 42).", "qabih": "“It is stopping on a word that gives no benefit, while what follows is connected to what precedes it in wording and meaning, like stopping on the subject without its predicate, or on the first term of an annexation without the second” (p. 43); “it is not permitted except out of necessity, such as running out of breath… and one must start with the word that was stopped on, or with what precedes it” (p. 44)."};
+Object.entries(NAME_BQ_EN).forEach(([k,v])=>{NAMES[k].bqEn=v});
+const NAME_SUB_EN = {"tam": "No connection: neither in wording nor in meaning", "kafi": "Connected in meaning only", "hasan": "In wording and meaning… but it gives a meaning", "qabih": "In wording and meaning… and it gives no meaning"};
 const TYPES = {
   tam:{light:'green',name:'tam'}, kafi:{light:'green',name:'kafi'}, hasan:{light:'yellow',name:'hasan'},
   hasanHead:{light:'green',name:'hasan',head:1}, head:{light:'green',name:null,head:1},
@@ -262,25 +268,25 @@ const TYPES = {
 };
 const WAQF_SETS = {
   book:{ar:'📖 أمثلة الكتاب (الوجيز)',en:'Book examples',items:[
-    {t:'أُولَئِكَ عَلَى هُدًى مِنْ رَبِّهِمْ وَأُولَئِكَ هُمُ الْمُفْلِحُونَ ⏸ ^إِنَّ الَّذِينَ كَفَرُوا',ref:'البقرة: ٥–٦',k:'tam',note:'«فإن الأولى من تمام أحوال المؤمنين، والثانية متعلقة بأحوال الكافرين» (ص ٤١).'},
-    {t:'أَمْ لَمْ تُنْذِرْهُمْ لَا يُؤْمِنُونَ ⏸ ^خَتَمَ اللَّهُ عَلَى قُلُوبِهِمْ',ref:'البقرة: ٦–٧',k:'kafi',note:'«فإن قوله: \"لا يؤمنون\" مع ما بعده متعلق بالكافرين من جهة المعنى» (ص ٤٢).'},
-    {t:'^الْحَمْدُ لِلَّهِ ⏸ رَبِّ الْعَالَمِينَ',ref:'الفاتحة: ٢',k:'hasan',note:'«فهذه الجملة أفادت معنى، لكن ما بعد لفظ الجلالة متعلق به؛ لكونه صفة له» (ص ٤٢) ← ارجع وابدأ من «الْحَمْدُ».'},
-    {t:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ⏸ ^الرَّحْمَنِ الرَّحِيمِ',ref:'الفاتحة: ٢–٣',k:'hasanHead',note:'حَسَن (ما بعده صفة متعلقة به) لكنه رأس آية، و«الوقف على رءوس الآي سنة مطلقا» (ص ٤٣) ← ابدأ بما بعده.'},
-    {t:'^لَعَلَّكُمْ ^تَتَفَكَّرُونَ ⏸ ^فِي الدُّنْيَا وَالْآخِرَةِ',ref:'البقرة: ٢١٩–٢٢٠',k:'head',note:'💬 للنقاش: رأس آية، والمشهور «عند غالب أهل هذا الفن» الابتداء بما بعده، وقال بعضهم: لا يحسن الابتداء بـ«في الدنيا والآخرة» لأنه لا يفيد معنى إلا بما قبله «بل يستحب العود لما قبله» (ص ٤٣). كلا الوجهين صحيح هنا.'},
-    {t:'^الْحَمْدُ ⏸ لِلَّهِ رَبِّ الْعَالَمِينَ',ref:'الفاتحة: ٢',k:'qabih',note:'«فالوقف على: \"الحمد\" من قوله تعالى: الْحَمْدُ لِلَّهِ قبيح» (ص ٤٤) — مبتدأ بلا خبر.'},
-    {t:'^بِسْمِ ⏸ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',ref:'الفاتحة: ١',k:'qabih',note:'«وكذلك الوقف على: \"بسم\" من: بِسْمِ اللَّهِ» (ص ٤٤) — مضاف بلا مضاف إليه.'},
-    {t:'^إِنَّ اللَّهَ لَا يَسْتَحْيِي ⏸ أَنْ يَضْرِبَ مَثَلًا',ref:'البقرة: ٢٦',k:'aqbah',note:'«وأشد قبحا الوقف والابتداء الموهمان خلاف المراد… فمن وقف على مثل هذا لضرورة وجب عليه أن يرجع إلى ما قبله، ويصل الكلام بعضه ببعض» (ص ٤٤).'},
-    {t:'^لَقَدْ سَمِعَ اللَّهُ ^قَوْلَ الَّذِينَ قَالُوا ⏸ إِنَّ اللَّهَ فَقِيرٌ',ref:'آل عمران: ١٨١',k:'aqbah',note:'الوقف على «قالوا» ثم الابتداء بـ«إن الله فقير» من أشد القبح: يوهم «وصفا لا يليق به تعالى» (ص ٤٤) ← ارجع وصِل.'},
-    {t:'^لِكَيْ ⏸ لَا يَعْلَمَ مِنْ بَعْدِ عِلْمٍ شَيْئًا',ref:'الحج: ٥',k:'rasm',note:'«ولا يأتي [الوقف] في وسط الكلمة، ولا فيما اتصل رسما، فلا يوقف على: \"لكي\"… لاتصاله رسما» (ص ٤١) — في المصحف: لِكَيْلَا (كلمة واحدة).'},
+    {t:'أُولَئِكَ عَلَى هُدًى مِنْ رَبِّهِمْ وَأُولَئِكَ هُمُ الْمُفْلِحُونَ ⏸ ^إِنَّ الَّذِينَ كَفَرُوا',ref:'البقرة: ٥–٦',k:'tam',note:'«فإن الأولى من تمام أحوال المؤمنين، والثانية متعلقة بأحوال الكافرين» (ص ٤١).',noteEn:"“For the first part belongs to the states of the believers, and the second concerns the states of the disbelievers” (p. 41)."},
+    {t:'أَمْ لَمْ تُنْذِرْهُمْ لَا يُؤْمِنُونَ ⏸ ^خَتَمَ اللَّهُ عَلَى قُلُوبِهِمْ',ref:'البقرة: ٦–٧',k:'kafi',note:'«فإن قوله: \"لا يؤمنون\" مع ما بعده متعلق بالكافرين من جهة المعنى» (ص ٤٢).',noteEn:"“For His saying ‘they do not believe’ together with what follows is connected to the disbelievers in meaning” (p. 42)."},
+    {t:'^الْحَمْدُ لِلَّهِ ⏸ رَبِّ الْعَالَمِينَ',ref:'الفاتحة: ٢',k:'hasan',note:'«فهذه الجملة أفادت معنى، لكن ما بعد لفظ الجلالة متعلق به؛ لكونه صفة له» (ص ٤٢) ← ارجع وابدأ من «الْحَمْدُ».',noteEn:"“This sentence gave a meaning, but what follows the word of majesty is connected to it, since it is a description of it” (p. 42) → go back and start from “al-ḥamdu”."},
+    {t:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ⏸ ^الرَّحْمَنِ الرَّحِيمِ',ref:'الفاتحة: ٢–٣',k:'hasanHead',note:'حَسَن (ما بعده صفة متعلقة به) لكنه رأس آية، و«الوقف على رءوس الآي سنة مطلقا» (ص ٤٣) ← ابدأ بما بعده.',noteEn:"Ḥasan (what follows is a description connected to it), but it is the end of an āyah, and “stopping at the ends of verses is a sunnah in every case” (p. 43) → start with what follows."},
+    {t:'^لَعَلَّكُمْ ^تَتَفَكَّرُونَ ⏸ ^فِي الدُّنْيَا وَالْآخِرَةِ',ref:'البقرة: ٢١٩–٢٢٠',k:'head',note:'💬 للنقاش: رأس آية، والمشهور «عند غالب أهل هذا الفن» الابتداء بما بعده، وقال بعضهم: لا يحسن الابتداء بـ«في الدنيا والآخرة» لأنه لا يفيد معنى إلا بما قبله «بل يستحب العود لما قبله» (ص ٤٣). كلا الوجهين صحيح هنا.',noteEn:"💬 For discussion: it is the end of an āyah, and the well-known view “among most people of this field” is to start with what follows; some said it is not good to start with “in the world and the Hereafter” because it gives no meaning except with what precedes it, “rather it is recommended to go back to what precedes” (p. 43). Both ways are valid here."},
+    {t:'^الْحَمْدُ ⏸ لِلَّهِ رَبِّ الْعَالَمِينَ',ref:'الفاتحة: ٢',k:'qabih',note:'«فالوقف على: \"الحمد\" من قوله تعالى: الْحَمْدُ لِلَّهِ قبيح» (ص ٤٤) — مبتدأ بلا خبر.',noteEn:"“Stopping on ‘al-ḥamd’ in His saying ‘al-ḥamdu lillāh’ is bad” (p. 44) — a subject without a predicate."},
+    {t:'^بِسْمِ ⏸ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',ref:'الفاتحة: ١',k:'qabih',note:'«وكذلك الوقف على: \"بسم\" من: بِسْمِ اللَّهِ» (ص ٤٤) — مضاف بلا مضاف إليه.',noteEn:"“Likewise stopping on ‘bism’ in ‘bismi llāh’” (p. 44) — the first term of an annexation without the second."},
+    {t:'^إِنَّ اللَّهَ لَا يَسْتَحْيِي ⏸ أَنْ يَضْرِبَ مَثَلًا',ref:'البقرة: ٢٦',k:'aqbah',note:'«وأشد قبحا الوقف والابتداء الموهمان خلاف المراد… فمن وقف على مثل هذا لضرورة وجب عليه أن يرجع إلى ما قبله، ويصل الكلام بعضه ببعض» (ص ٤٤).',noteEn:"“And worse in badness are stopping and starting that suggest the opposite of what is meant… so whoever stops on something like this out of necessity must go back to what precedes it and join the speech together” (p. 44)."},
+    {t:'^لَقَدْ سَمِعَ اللَّهُ ^قَوْلَ الَّذِينَ قَالُوا ⏸ إِنَّ اللَّهَ فَقِيرٌ',ref:'آل عمران: ١٨١',k:'aqbah',note:'الوقف على «قالوا» ثم الابتداء بـ«إن الله فقير» من أشد القبح: يوهم «وصفا لا يليق به تعالى» (ص ٤٤) ← ارجع وصِل.',noteEn:"Stopping on “they said” and then starting with “Allah is poor” is among the worst: it suggests “a description unbefitting Him, the Exalted” (p. 44) → go back and join."},
+    {t:'^لِكَيْ ⏸ لَا يَعْلَمَ مِنْ بَعْدِ عِلْمٍ شَيْئًا',ref:'الحج: ٥',k:'rasm',note:'«ولا يأتي [الوقف] في وسط الكلمة، ولا فيما اتصل رسما، فلا يوقف على: \"لكي\"… لاتصاله رسما» (ص ٤١) — في المصحف: لِكَيْلَا (كلمة واحدة).',noteEn:"“And [stopping] does not occur in the middle of a word, nor in what is joined in the written form, so one does not stop on ‘li-kay’… because of its being joined in writing” (p. 41) — in the muṣḥaf it is li-kaylā (one word)."},
   ]},
   juz:{ar:'🌙 تدريب من قصار السور',en:'Short surahs practice',items:[
     {t:'قُلْ هُوَ اللَّهُ أَحَدٌ ⏸ ^اللَّهُ الصَّمَدُ',ref:'الإخلاص: ١–٢',k:'head'},
     {t:'وَالْعَصْرِ ⏸ ^إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ',ref:'العصر: ١–٢',k:'head'},
-    {t:'^إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ ⏸ ^إِلَّا الَّذِينَ آمَنُوا',ref:'العصر: ٢–٣',k:'head',note:'💬 مثل «تتفكرون * في الدنيا»: رأس آية فالمشهور الابتداء بما بعده، ومن رأى أن «إلا الذين آمنوا» لا يفيد إلا بما قبله عاد ووصل (ص ٤٣). الوجهان صحيحان.'},
-    {t:'^قُلْ ⏸ هُوَ اللَّهُ أَحَدٌ',ref:'الإخلاص: ١',k:'qabih',note:'«قُلْ» وحدها لا تفيد شيئًا، وما بعدها (المقول) متعلق بها لفظًا ومعنى ← قبيح، فابدأ بها نفسها (ص ٤٣–٤٤).'},
-    {t:'^مَالِكِ ⏸ يَوْمِ الدِّينِ',ref:'الفاتحة: ٤',k:'qabih',note:'«مَالِكِ» مضاف و«يَوْمِ» مضاف إليه ← «كالوقف… على المضاف دون المضاف إليه» (ص ٤٣).'},
-    {t:'^قُلْ أَعُوذُ ^بِرَبِّ ⏸ الْفَلَقِ',ref:'الفلق: ١',k:'qabih',note:'«بِرَبِّ» مضاف و«الْفَلَقِ» مضاف إليه ← قبيح؛ ابدأ بالكلمة الموقوف عليها أو بما قبلها (ص ٤٤).'},
-    {t:'^تَبَّتْ يَدَا ⏸ أَبِي لَهَبٍ وَتَبَّ',ref:'المسد: ١',k:'qabih',note:'«يَدَا» مضاف و«أَبِي لَهَبٍ» مضاف إليه ← قبيح؛ و«يَدَا أَبِي لَهَبٍ» لا تصلح بداية وحدها، فارجع إلى «تَبَّتْ».'},
+    {t:'^إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ ⏸ ^إِلَّا الَّذِينَ آمَنُوا',ref:'العصر: ٢–٣',k:'head',note:'💬 مثل «تتفكرون * في الدنيا»: رأس آية فالمشهور الابتداء بما بعده، ومن رأى أن «إلا الذين آمنوا» لا يفيد إلا بما قبله عاد ووصل (ص ٤٣). الوجهان صحيحان.',noteEn:"💬 Like “tatafakkarūn * fī d-dunyā”: it is the end of an āyah, so the well-known view is to start with what follows; and whoever thinks that “illā lladhīna āmanū” gives no meaning except with what precedes it goes back and joins (p. 43). Both ways are valid."},
+    {t:'^قُلْ ⏸ هُوَ اللَّهُ أَحَدٌ',ref:'الإخلاص: ١',k:'qabih',note:'«قُلْ» وحدها لا تفيد شيئًا، وما بعدها (المقول) متعلق بها لفظًا ومعنى ← قبيح، فابدأ بها نفسها (ص ٤٣–٤٤).',noteEn:"“Qul” alone gives no meaning, and what follows it (the thing said) is connected to it in wording and meaning → bad; so start with the word itself (pp. 43–44)."},
+    {t:'^مَالِكِ ⏸ يَوْمِ الدِّينِ',ref:'الفاتحة: ٤',k:'qabih',note:'«مَالِكِ» مضاف و«يَوْمِ» مضاف إليه ← «كالوقف… على المضاف دون المضاف إليه» (ص ٤٣).',noteEn:"“Māliki” is the first term of an annexation and “yawmi” the second → “like stopping… on the first term without the second” (p. 43)."},
+    {t:'^قُلْ أَعُوذُ ^بِرَبِّ ⏸ الْفَلَقِ',ref:'الفلق: ١',k:'qabih',note:'«بِرَبِّ» مضاف و«الْفَلَقِ» مضاف إليه ← قبيح؛ ابدأ بالكلمة الموقوف عليها أو بما قبلها (ص ٤٤).',noteEn:"“Bi-rabbi” is the first term and “al-falaq” the second → bad; start with the word that was stopped on or with what precedes it (p. 44)."},
+    {t:'^تَبَّتْ يَدَا ⏸ أَبِي لَهَبٍ وَتَبَّ',ref:'المسد: ١',k:'qabih',note:'«يَدَا» مضاف و«أَبِي لَهَبٍ» مضاف إليه ← قبيح؛ و«يَدَا أَبِي لَهَبٍ» لا تصلح بداية وحدها، فارجع إلى «تَبَّتْ».',noteEn:"“Yadā” is the first term and “Abī Lahab” the second → bad; and “yadā Abī Lahab” is not good as a start by itself, so go back to “tabbat”."},
     {t:'إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ ⏸ ^وَرَأَيْتَ النَّاسَ',ref:'النصر: ١–٢',k:'head'},
   ]},
 };
@@ -320,6 +326,11 @@ const WASL = [
   {t:'ٱسْمُ',ctx:'تَبَارَكَ ٱسْمُ رَبِّكَ',ref:'الرحمن: ٧٨',ans:['i'],kind:'n7',say:'إِسْمُ رَبِّكَ'},
   {t:'ٱلِٱسْمُ',ctx:'بِئْسَ ٱلِٱسْمُ ٱلْفُسُوقُ',ref:'الحجرات: ١١',ans:['a','l'],kind:'ism',say:'أَلِسْمُ — أَوْ — لِسْمُ'},
 ];
+const WASL_BQ_EN = {"vu": "“The hamzat al-waṣl in a verb takes a ḍammah when starting, if its third letter has an original ḍammah, such as: unẓur, ukhruj, uḍṭurra, usthuzi’a” (p. 57).", "va": "“If the third letter of the verb has an incidental ḍammah, the hamzat al-waṣl takes a kasrah… for the original of these words is: iqḍiyū, ibniyū, imshiyū, i’tiyū, with a kasrah on the ʿayn of the verb; when its final letter was dropped, the ʿayn took a ḍammah to suit the wāw, so the ḍammah is incidental” (p. 58).", "vi": "“The hamzat al-waṣl in a verb takes a kasrah when starting if its third letter has a kasrah, such as: iḍrib, irjiʿ, or a fatḥah, such as: idhhab, iftaḥ” (p. 58).", "al": "“The hamzah of ‘al’ takes a fatḥah when starting, such as al-arḍ, al-insān, al-ʿilm” (p. 58); “and it is not preserved in any particle except ‘al’” (p. 57).", "ms": "“The hamzat al-waṣl takes a kasrah when starting in the verbal noun of a five-letter verb, such as ibtighā’a, and in the verbal noun of a six-letter verb, such as istighfār” (p. 58).", "n7": "“Only seven of them occur in the Noble Qur’an: ibn… ibnah… imru’… ithnān… ithnatān… imra’ah… and ism… and the hamzat al-waṣl takes a kasrah when starting with these nouns” (pp. 58–59).", "ism": "“It is permissible to start with the lām, or with the hamzat al-waṣl, in the word ‘al-ism’ in His saying: ‘How evil is the name of disobedience’” (p. 58), and the line of “Laʼāliʼ al-Bayān” quoted in the footnote: “Start with a hamzah or a lām when beginning… ‘al-ism’ of ‘al-fusūq’.”"};
+const WASL_LBL_EN = {"vu": "A verb whose third letter has an original ḍammah → أُ (u)", "va": "🪤 An incidental ḍammah → إِ (i)", "vi": "A verb whose third letter has a kasrah or fatḥah → إِ (i)", "al": "“al” → أَ (a)", "ms": "The verbal noun of a five- or six-letter verb → إِ (i)", "n7": "The seven nouns → إِ (i)", "ism": "⭐ “al-ism” in al-Ḥujurāt: two ways"};
+Object.keys(WASL_KINDS).forEach(k=>{WASL_KINDS[k].bqEn=WASL_BQ_EN[k];WASL_KINDS[k].en=WASL_LBL_EN[k]});
+const KEY_SUB_EN = {"u": "ḍammah", "i": "kasrah", "a": "fatḥah", "l": "directly with lām"};
+Object.keys(KEYS).forEach(k=>{KEYS[k].subEn=KEY_SUB_EN[k]});
 const SCENES = [
   {ar:'قَرَأْتُ «الْمُفْلِحُونَ»، ثُمَّ أَخَذْتُ نَفَسًا، ثُمَّ أَكْمَلْتُ القِرَاءَة.',en:'I stopped, took a breath, and continued.',a:'waqf'},
   {ar:'قَطَعْتُ صَوْتِي لَحْظَةً قَصِيرَةً جِدًّا بِلَا نَفَس، ثُمَّ أَكْمَلْت.',en:'I paused very briefly without breathing, then continued.',a:'sakt'},
@@ -339,6 +350,10 @@ const SAKT = [
   {w:['كَلَّا','بَلْ','رَانَ','عَلَى','قُلُوبِهِمْ'],gap:1,ref:'المطففين: ١٤',why:'السكت «على لام \"بل\" لما تقدم في مَنْ رَاقٍ» (ص ٤٥) — والسكت يمنع الإدغام.'},
   {w:['مَا','أَغْنَى','عَنِّي','مَالِيَهْ','هَلَكَ','عَنِّي','سُلْطَانِيَهْ'],gap:3,ref:'الحاقة: ٢٨–٢٩',why:'«موضع خامس مختلف فيه… ففيه السكت والإدغام كما تقدم في باب \"المتماثلين\"» (ص ٤٥).',alt:1},
 ];
+const SCENE_EN = {"waqf": {"en": "Waqf (stopping)", "subEn": "Cutting the sound + a breath + the intention to continue", "bqEn": "“It is cutting off the sound on a word for a time in which one normally breathes, with the intention of resuming recitation, so breathing must accompany it” (p. 41)."}, "sakt": {"en": "Sakt (pause)", "subEn": "A brief time without a breath", "bqEn": "“It is cutting off the sound for a brief time without breathing, and it occurs in the middle of a word and at its end” (p. 41)."}, "qat": {"en": "Qaṭʿ (ending)", "subEn": "Ending the recitation", "bqEn": "“It is cutting off the recitation completely, and it occurs only at the ends of verses, because the ends of verses are in themselves points of ending” (p. 41)."}, "none": {"en": "Not allowed", "subEn": "Stopping cannot be in the middle of a word", "bqEn": "“And [stopping] does not occur in the middle of a word, nor in what is joined in the written form” (p. 41)."}};
+SCENE_OPTS.forEach(o=>Object.assign(o,SCENE_EN[o.k]));
+const SAKT_EN = ["“The sakt is on the alif that replaces the tanwīn in the word ‘ʿiwajā’, to make clear that what follows, His saying ‘qayyimā’, is not connected to what precedes it” (p. 44).", "“The sakt is on the alif of ‘marqadinā’, to make clear that the speech of the disbelievers has ended, and what follows… is not from their speech but from the speech of the angels, or of the believers” (p. 44).", "“The sakt is on the nūn of ‘man’, lest it be imagined that it forms one word with what follows, on the pattern ‘faʿʿāl’” (p. 45).", "“The sakt is on the lām of ‘bal’, as mentioned about ‘man rāq’” (p. 45) — and the sakt prevents idghām.", "“A fifth place, on which there is disagreement… it has the sakt and the idghām, as mentioned in the chapter on ‘the two identical letters’” (p. 45)."];
+SAKT.forEach((s,i)=>{s.whyEn=SAKT_EN[i]});
 const ROUND = 10;     // عدد الأسئلة في الجولة
 const RETRY_GAP = 3;  // السؤال الخطأ يرجع بعد ٣ أسئلة
 const SPEED_SECONDS = 12; // وضع ⚡ السرعة في «مفتاح البداية»
@@ -347,6 +362,12 @@ const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَك�
 
 const $=s=>document.querySelector(s);
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const {U,tr}=TQI;
+const REF=r=>{const e=TQI.ref(r);return U('﴿'+r+'﴾',e===r?'﴿'+r+'﴾':e)};
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
+const west=s=>String(s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const BOOKU=()=>U(BOOK.ar+'، '+BOOK.ref,BOOK.en+', '+BOOK.refEn);
+const bqH=(a,e)=>`<div class="bq">${a}${tr(e)}</div>`;
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 /* ---------- word HTML: [marked] part, ZWJ keeps letters joined across the coloured span ---------- */
@@ -375,7 +396,7 @@ $('#bSakt').onclick=()=>{ac();voice(.7);voice(.7,.95)};
 $('#bQat').onclick=()=>{ac();voice(.9);[784,659,523].forEach((f,i)=>tone(f,.3,'sine',.12,1.1+i*.2))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#E2B85C','#2ECC71','#F5C33B','#E74C3C','#5DADE2','#AF7AC5'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- traffic light ---------- */
 function light(c){['red','yellow','green'].forEach(k=>$('#lp-'+k).classList.toggle('on',k===c));const car=$('#car');car.className='car';if(c&&c!=='yellow'){void car.offsetWidth;car.classList.add(c==='green'?'go':'back')}}
@@ -383,16 +404,16 @@ function light(c){['red','yellow','green'].forEach(k=>$('#lp-'+k).classList.togg
 /* ---------- state ---------- */
 let teams=[],turn=0,queue=[],idx=0,mode='waqf',missed=[],stats={},speedOn=false,spTimer=0;
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ نُجُومِي','⭐ My stars'),c:'var(--gold)'}];
+  if(v==='tv')return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}];
+  return [{nm:U('🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'),c:'var(--teamA)'},{nm:U('🔴 الفَرِيقُ الأَحْمَر','🔴 Red team'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 const qa=$('#qa');
 function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
 function stat(k,ok){const s=stats[k]||(stats[k]={ok:0,n:0});s.n++;if(ok)s.ok++}
 function miss(it){missed.push(it);const q=queue[idx];if(!q.retry)queue.splice(Math.min(idx+1+RETRY_GAP,queue.length),0,{it,retry:true})}
 function setOptions(){mode=$('#modeSel').value;const sel=$('#setSel');sel.disabled=mode!=='waqf';
-  sel.innerHTML=mode==='waqf'?Object.entries(WAQF_SETS).map(([k,s])=>`<option value="${k}">${s.ar}</option>`).join(''):'<option>—</option>';
+  sel.innerHTML=mode==='waqf'?Object.entries(WAQF_SETS).map(([k,s])=>`<option value="${k}" data-en="${s.en}">${s.ar}</option>`).join(''):'<option>—</option>';TQI.relabel();
   $('#spdB').style.display=mode==='wasl'?'':'none'}
 function roundOf(items,keyFn){const by={};items.forEach(it=>{const k=keyFn(it);(by[k]=by[k]||[]).push(it)});
   const pick=Object.values(by).map(a=>shuffle(a)[0]);const rest=shuffle(items.filter(it=>!pick.includes(it)));
@@ -403,18 +424,18 @@ function newGame(){clearInterval(spTimer);
   else if(mode==='wasl')queue=roundOf(WASL,it=>it.kind);
   else queue=[...shuffle(SCENES).map(s=>({it:{scene:s},retry:false})),...SAKT.map(s=>({it:s,retry:false}))];
   light(null);renderTeams();
-  $('#bookRef').textContent='📚 المصدر: '+BOOK.ar+'، '+BOOK.ref+'. أمثلة «قصار السور» أضفناها للتدريب وطبّقنا عليها تعريفات الكتاب نفسها.';
+  $('#bookRef').innerHTML=U('📚 المصدر: '+BOOK.ar+'، '+BOOK.ref+'. أمثلة «قصار السور» أضفناها للتدريب وطبّقنا عليها تعريفات الكتاب نفسها.','📚 Source: '+BOOK.en+', '+BOOK.refEn+'. We added “short surahs” examples for practice and applied the book’s own definitions to them.');
   show();
 }
-function header(){return `<div class="prog"><span>${ar(idx+1)} مِنْ ${ar(queue.length)}${queue[idx].retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>`}
-function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">التَّالِي ← <span class="en" style="color:#10263A">Next</span></button></div>`}
+function header(){return `<div class="prog"><span>${U(`${ar(idx+1)} مِنْ ${ar(queue.length)}`,`${idx+1} of ${queue.length}`)}${queue[idx].retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>`}
+function nextBtn(){return `<div class="row"><button class="big-btn" id="nextB">${U('التَّالِي ←','Next →')}</button></div>`}
 function bindNext(){$('#nextB').onclick=()=>{idx++;turn=(turn+1)%teams.length;renderTeams();show()};$('#nextB').focus({preventScroll:true})}
 function show(){clearInterval(spTimer);if(idx>=queue.length){end();return}
   light(null);const {it}=queue[idx];
   if(mode==='waqf')showWaqf(it);else if(mode==='wasl')showWasl(it);else (it.scene?showScene(it.scene):showSakt(it));
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
-function opts(list,id,cls='ob'){return list.map((o,i)=>`<button class="${cls}" data-i="${i}" style="--ac:${o.c||'var(--gold)'};--lc:${o.c||'var(--gold)'}">${cls==='lb'?'<i></i>':''}${o.ar}${o.sub?`<small>${o.sub}</small>`:''}<span class="en">${o.en||''}</span></button>`).join('')}
+function opts(list,id,cls='ob'){return list.map((o,i)=>`<button class="${cls}" data-i="${i}" style="--ac:${o.c||'var(--gold)'};--lc:${o.c||'var(--gold)'}">${cls==='lb'?'<i></i>':''}${o.ar}${o.sub?`<small>${o.subEn?U(o.sub,o.subEn):o.sub}</small>`:''}<span class="en">${o.en||''}</span></button>`).join('')}
 // one multiple-choice step; cb(firstTry)
 function ask(host,qHtml,list,correct,cb,{cls='ob',wrap='opts',tries=1,html}={}){
   const ok=Array.isArray(correct)?correct:[correct];
@@ -431,24 +452,24 @@ function ask(host,qHtml,list,correct,cb,{cls='ob',wrap='opts',tries=1,html}={}){
 function parseVerse(t){const words=[];let stopAfter=-1;
   t.trim().split(/\s+/).forEach(tok=>{if(tok==='⏸'){stopAfter=words.length-1;return}const st=tok.startsWith('^');words.push({w:st?tok.slice(1):tok,start:st})});
   return {words,stopAfter}}
-function roadHTML(P,lit){return P.words.map((x,i)=>`<span class="w" data-wi="${i}">${x.w}</span>${i===P.stopAfter?`<span class="stop" id="stopSign" style="--sc:${lit||'#7F8C8D'}">قِفْ<br>؟</span>`:''}`).join('')}
+function roadHTML(P,lit){return P.words.map((x,i)=>`<span class="w" data-wi="${i}">${x.w}</span>${i===P.stopAfter?`<span class="stop" id="stopSign" style="--sc:${lit||'#7F8C8D'}">${U('قِفْ<br>؟','STOP<br>?')}</span>`:''}`).join('')}
 function showWaqf(it){const T=TYPES[it.k],P=parseVerse(it.t),L=LIGHTS[T.light];
-  qa.innerHTML=`${header()}<div class="road" id="road">${roadHTML(P)}</div><div class="ref">﴿${it.ref}﴾</div>
-    <div class="q">🎙️ اِقْرَأْ حَتَّى إِشَارَةِ «قِفْ»، ثُمَّ قَرِّر: <span class="en blk">Read up to the stop sign, then decide:</span></div><div id="steps" style="display:contents"></div>`;
+  qa.innerHTML=`${header()}<div class="road" id="road">${roadHTML(P)}</div><div class="ref">${REF(it.ref)}</div>
+    <div class="q">${U('🎙️ اِقْرَأْ حَتَّى إِشَارَةِ «قِفْ»، ثُمَّ قَرِّر:','🎙️ Read up to the “STOP” sign, then decide:')}</div><div id="steps" style="display:contents"></div>`;
   const steps=$('#steps');let clean=true;const lk=Object.keys(LIGHTS);
-  ask(steps,`① مَا لَوْنُ الإِشَارَة هُنَا؟ <span class="en blk">Which light is it here?</span>`,lk.map(k=>LIGHTS[k]),lk.indexOf(T.light),ok=>{
-    if(!ok)clean=false;light(T.light);sfx[L.snd]();const s=$('#stopSign');s.style.setProperty('--sc',L.c);s.innerHTML=T.light==='green'?'قِفْ<br>✓':T.light==='yellow'?'قِفْ<br>↩':'لَا<br>✋';
+  ask(steps,U('① مَا لَوْنُ الإِشَارَة هُنَا؟','① Which light is it here?'),lk.map(k=>LIGHTS[k]),lk.indexOf(T.light),ok=>{
+    if(!ok)clean=false;light(T.light);sfx[L.snd]();const s=$('#stopSign');s.style.setProperty('--sc',L.c);s.innerHTML=T.light==='green'?U('قِفْ<br>✓','STOP<br>✓'):T.light==='yellow'?U('قِفْ<br>↩','STOP<br>↩'):U('لَا<br>✋','NO<br>✋');
     stat('light-'+T.light,ok);
     if(T.name)nameStep();else restartStep();
   },{cls:'lb',wrap:'lights'});
   function nameStep(){const nk=['tam','kafi','hasan','qabih'];
-    const cell=k=>{const N=NAMES[k];return `<button class="ob" data-i="${nk.indexOf(k)}" style="--ac:${N.c}">${N.ar}<small>${k==='tam'?'لَا تَعَلُّق: لَا لَفْظًا وَلَا مَعْنًى':k==='kafi'?'تَعَلُّقٌ فِي المَعْنَى فَقَط':k==='hasan'?'لَفْظًا وَمَعْنًى… لَكِنْ أَفَادَ مَعْنًى':'لَفْظًا وَمَعْنًى… وَلَمْ يُفِدْ مَعْنًى'}</small><span class="en">${N.en}</span></button>`};
-    const html=`<span class="hd"></span><span class="hd">مَا بَعْدَهَا <b>لَا</b> يَتَعَلَّقُ بِهَا لَفْظًا (إِعْرَابًا)</span><span class="hd">مَا بَعْدَهَا يَتَعَلَّقُ بِهَا لَفْظًا وَمَعْنًى</span>
-      <span class="hd">وَلَا مَعْنًى ↓<br>/ أَفَادَ ↓</span>${cell('tam')}${cell('hasan')}<span class="hd">مَعْنًى فَقَط ↓<br>/ لَمْ يُفِدْ ↓</span>${cell('kafi')}${cell('qabih')}`;
-    ask(steps,`② مَا اسْمُ هَذَا الوَقْف؟ اُنْظُرْ إِلَى «التَّعَلُّق» <span class="en blk">Name it: how is what follows connected?</span>`,null,nk.indexOf(T.name),ok=>{if(!ok)clean=false;stat('name-'+T.name,ok);restartStep()},{wrap:'grid2',html});
+    const cell=k=>{const N=NAMES[k];return `<button class="ob" data-i="${nk.indexOf(k)}" style="--ac:${N.c}">${N.ar}<small>${U(k==='tam'?'لَا تَعَلُّق: لَا لَفْظًا وَلَا مَعْنًى':k==='kafi'?'تَعَلُّقٌ فِي المَعْنَى فَقَط':k==='hasan'?'لَفْظًا وَمَعْنًى… لَكِنْ أَفَادَ مَعْنًى':'لَفْظًا وَمَعْنًى… وَلَمْ يُفِدْ مَعْنًى',NAME_SUB_EN[k])}</small><span class="en">${N.en}</span></button>`};
+    const html=`<span class="hd"></span><span class="hd">${U('مَا بَعْدَهَا <b>لَا</b> يَتَعَلَّقُ بِهَا لَفْظًا (إِعْرَابًا)','What follows is <b>not</b> connected to it in wording (grammar)')}</span><span class="hd">${U('مَا بَعْدَهَا يَتَعَلَّقُ بِهَا لَفْظًا وَمَعْنًى','What follows is connected to it in wording and meaning')}</span>
+      <span class="hd">${U('وَلَا مَعْنًى ↓<br>/ أَفَادَ ↓','nor in meaning ↓<br>/ it gave meaning ↓')}</span>${cell('tam')}${cell('hasan')}<span class="hd">${U('مَعْنًى فَقَط ↓<br>/ لَمْ يُفِدْ ↓','in meaning only ↓<br>/ it gave none ↓')}</span>${cell('kafi')}${cell('qabih')}`;
+    ask(steps,U('② مَا اسْمُ هَذَا الوَقْف؟ اُنْظُرْ إِلَى «التَّعَلُّق»','② What is this stop called? Look at “the connection” — how is what follows connected?'),null,nk.indexOf(T.name),ok=>{if(!ok)clean=false;stat('name-'+T.name,ok);restartStep()},{wrap:'grid2',html});
   }
   function restartStep(){
-    steps.insertAdjacentHTML('beforeend',`<div class="step"><div class="q">③ ${T.light==='green'?'تَوَقَّفْتَ وَتَنَفَّسْتَ… مِنْ أَيْنَ تَبْدَأ؟':'اِنْقَطَعَ نَفَسُكَ هُنَا… مِنْ أَيْنَ تَبْدَأُ بَعْدَ النَّفَس؟'} اِضْغَطْ عَلَى الكَلِمَة <span class="en blk">Where do you start again? Tap the word.</span></div></div>`);
+    steps.insertAdjacentHTML('beforeend',`<div class="step"><div class="q">${U(`③ ${T.light==='green'?'تَوَقَّفْتَ وَتَنَفَّسْتَ… مِنْ أَيْنَ تَبْدَأ؟':'اِنْقَطَعَ نَفَسُكَ هُنَا… مِنْ أَيْنَ تَبْدَأُ بَعْدَ النَّفَس؟'} اِضْغَطْ عَلَى الكَلِمَة`,`③ ${T.light==='green'?'You stopped and breathed… where do you start from?':'You ran out of breath here… where do you start from after the breath?'} Tap the word.`)}</div></div>`);
     const ws=[...document.querySelectorAll('#road .w')];let tries=2,done=false;
     ws.forEach(sp=>{const b=document.createElement('button');b.className='w';b.dataset.wi=sp.dataset.wi;b.innerHTML=sp.innerHTML;sp.replaceWith(b);
       b.onclick=()=>{if(done)return;ac();const i=+b.dataset.wi;
@@ -458,28 +479,28 @@ function showWaqf(it){const T=TYPES[it.k],P=parseVerse(it.t),L=LIGHTS[T.light];
   }
   function finish(good){stat('restart',good);if(good)setTimeout(()=>award(2),150);else{sfx.pop();miss(it)}
     const N=T.name?NAMES[T.name]:null;
-    const title=T.rasm?'⛔ لَا وَقْفَ دَاخِلَ كَلِمَةٍ مُتَّصِلَةٍ رَسْمًا':T.head&&!N?'📍 رَأْسُ آيَة — الوَقْفُ عَلَيْهَا سُنَّة':`وَقْفٌ ${N.ar}${T.head?' + رَأْسُ آيَة':''}${T.worst?' — ⛔ أَشَدُّ قُبْحًا':''}`;
+    const title=T.rasm?U('⛔ لَا وَقْفَ دَاخِلَ كَلِمَةٍ مُتَّصِلَةٍ رَسْمًا','⛔ No stopping inside a word that is joined in writing'):T.head&&!N?U('📍 رَأْسُ آيَة — الوَقْفُ عَلَيْهَا سُنَّة','📍 The end of an āyah — stopping on it is a sunnah'):U(`وَقْفٌ ${N.ar}${T.head?' + رَأْسُ آيَة':''}${T.worst?' — ⛔ أَشَدُّ قُبْحًا':''}`,`${N.en} stop${T.head?' + the end of an āyah':''}${T.worst?' — ⛔ the worst kind':''}`);
     const ex=document.createElement('div');ex.style.display='contents';
     ex.innerHTML=`<div class="info" style="--ac:${L.c}"><div class="t">${title}</div>
-      ${it.note?`<div class="why">🔸 ${it.note}</div>`:''}
-      ${N?`<div class="bq">${N.bq}</div>`:T.head?'<div class="bq">«لأن الوقف على رءوس الآي سنة مطلقا؛ لحديث أم سلمة» (ص ٤٣).</div>':''}
-      <div class="why" style="color:${L.c}">🚦 ${L.ar} <span class="en">${L.en}</span></div>
-      <small>${BOOK.ar}، ${BOOK.ref}</small></div>
-      <div class="tip">🎙️ الآنَ اقْرَأْهَا مِنْ جَدِيد: قِفْ ← خُذْ نَفَسًا 🫁 ← اِبْدَأْ مِنَ الكَلِمَةِ الخَضْرَاء. <span class="en blk">Now read it again: stop, breathe, restart from the green word.</span></div>${nextBtn()}`;
+      ${it.note?`<div class="why">🔸 ${it.note}${tr(it.noteEn)}</div>`:''}
+      ${N?bqH(N.bq,N.bqEn):T.head?bqH('«لأن الوقف على رءوس الآي سنة مطلقا؛ لحديث أم سلمة» (ص ٤٣).','“Because stopping at the ends of verses is a sunnah in every case, because of the ḥadīth of Umm Salamah” (p. 43).'):''}
+      <div class="why" style="color:${L.c}">🚦 ${U(L.ar,L.en)}</div>
+      <small>${BOOKU()}</small></div>
+      <div class="tip">${U('🎙️ الآنَ اقْرَأْهَا مِنْ جَدِيد: قِفْ ← خُذْ نَفَسًا 🫁 ← اِبْدَأْ مِنَ الكَلِمَةِ الخَضْرَاء.','🎙️ Now read it again: stop → take a breath 🫁 → restart from the green word.')}</div>${nextBtn()}`;
     qa.appendChild(ex);bindNext()}
 }
 
 /* ---------- mode 2: hamzat al-wasl key ---------- */
 function showWasl(it){const K=WASL_KINDS[it.kind];const keys=it.kind==='ism'?['u','i','a','l']:['u','i','a'];
-  qa.innerHTML=`${header()}<div class="ctx">﴿${it.ctx}﴾ <span class="ref">${it.ref}</span></div>
+  qa.innerHTML=`${header()}<div class="ctx">﴿${it.ctx}﴾ <span class="ref">${RF(it.ref)}</span></div>
     <div class="door" id="door">${wordHTML(it.t)}</div>
     ${speedOn?'<div class="speed" id="spd"><i id="spdI"></i></div>':''}
-    <div class="q">🔑 لَوْ بَدَأْتَ القِرَاءَةَ بِهَذِهِ الكَلِمَة، بِأَيِّ مِفْتَاحٍ تَفْتَحُهَا؟ <span class="en blk">If you START with this word, which key opens it?</span></div>
+    <div class="q">${U('🔑 لَوْ بَدَأْتَ القِرَاءَةَ بِهَذِهِ الكَلِمَة، بِأَيِّ مِفْتَاحٍ تَفْتَحُهَا؟','🔑 If you START reciting with this word, which key opens it?')}</div>
     <div id="steps" style="display:contents"></div>`;
   const t0=performance.now();let timeUp=false;
   if(speedOn){const bar=$('#spdI');requestAnimationFrame(()=>{bar.style.transitionDuration=SPEED_SECONDS+'s';bar.style.transform='scaleX(0)'});
     spTimer=setTimeout(()=>{timeUp=true},SPEED_SECONDS*1000)}
-  const list=keys.map(k=>({ar:`<b>${KEYS[k].ar}</b>`,sub:KEYS[k].sub,en:KEYS[k].en}));
+  const list=keys.map(k=>({ar:`<b>${KEYS[k].ar}</b>`,sub:KEYS[k].sub,subEn:KEYS[k].subEn,en:KEYS[k].en}));
   const correct=it.ans.map(a=>keys.indexOf(a));
   ask($('#steps'),'',list,correct,ok=>{clearTimeout(spTimer);const sec=(performance.now()-t0)/1000;
     if(speedOn){const b=$('#spdI');b.style.transitionDuration='0s';b.style.transform=getComputedStyle(b).transform}
@@ -488,30 +509,30 @@ function showWasl(it){const K=WASL_KINDS[it.kind];const keys=it.kind==='ism'?['u
     if(ok)setTimeout(()=>award(pts),250);else{sfx.pop();miss(it)}
     const ex=document.createElement('div');ex.style.display='contents';
     ex.innerHTML=`<div class="say">🗝️ ${it.say}</div>
-      <div class="info" style="--ac:${K.c}"><div class="t">${K.ar}</div><div class="bq">${K.bq}</div>
-      <div class="why">🔸 «همزة الوصل هي التي تسقط وصلا وتثبت ابتداء بخلاف همزة القطع، فإنها تثبت وصلا وابتداء» (ص ٥٧) — لِذَلِكَ: ﴿${it.ctx}﴾ تُقْرَأُ وَصْلًا بِلَا هَمْزَة.</div>
-      ${it.kind.startsWith('v')?'<div class="why">👀 السِّرّ: اُنْظُرْ إِلَى الحَرْفِ <b>الثَّالِث</b> (المُلَوَّن) — ضَمٌّ أَصْلِيّ ← أُ ، غَيْرُ ذَلِكَ ← إِ</div>':''}
-      ${speedOn&&ok?`<div class="why">⚡ ${ar(sec.toFixed(1))} ث ← +${ar(pts)}</div>`:''}
-      <small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+      <div class="info" style="--ac:${K.c}"><div class="t">${U(K.ar,K.en)}</div>${bqH(K.bq,K.bqEn)}
+      <div class="why">${U(`🔸 «همزة الوصل هي التي تسقط وصلا وتثبت ابتداء بخلاف همزة القطع، فإنها تثبت وصلا وابتداء» (ص ٥٧) — لِذَلِكَ: ﴿${it.ctx}﴾ تُقْرَأُ وَصْلًا بِلَا هَمْزَة.`,`🔸 “The hamzat al-waṣl is the one that drops when joining and is kept when starting, unlike the hamzat al-qaṭʿ, which is kept both when joining and when starting” (p. 57) — so ﴿${it.ctx}﴾ is read joined, without a hamzah.`)}</div>
+      ${it.kind.startsWith('v')?`<div class="why">${U('👀 السِّرّ: اُنْظُرْ إِلَى الحَرْفِ <b>الثَّالِث</b> (المُلَوَّن) — ضَمٌّ أَصْلِيّ ← أُ ، غَيْرُ ذَلِكَ ← إِ','👀 The secret: look at the <b>third</b> letter (the coloured one) — an original ḍammah → أُ, anything else → إِ')}</div>`:''}
+      ${speedOn&&ok?`<div class="why">${U(`⚡ ${ar(sec.toFixed(1))} ث ← +${ar(pts)}`,`⚡ ${sec.toFixed(1)} s → +${pts}`)}</div>`:''}
+      <small>${BOOKU()}</small></div>${nextBtn()}`;
     qa.appendChild(ex);bindNext()},{cls:'key',wrap:'keys'});
 }
 
 /* ---------- mode 3: waqf / sakt / qat + Ḥafṣ's sakt spots ---------- */
 function showScene(s){
-  qa.innerHTML=`${header()}<div class="q">🎬 مَاذَا فَعَلَ القَارِئ؟ <span class="en blk">What did the reciter do?</span></div>
-    <div class="info" style="--ac:var(--gold);text-align:center"><div class="bq" style="font-size:1.5rem">${s.ar}</div><span class="en blk">${s.en}</span></div><div id="steps" style="display:contents"></div>`;
+  qa.innerHTML=`${header()}<div class="q">${U('🎬 مَاذَا فَعَلَ القَارِئ؟','🎬 What did the reciter do?')}</div>
+    <div class="info" style="--ac:var(--gold);text-align:center"><div class="bq" style="font-size:1.5rem">${U(s.ar,s.en)}</div></div><div id="steps" style="display:contents"></div>`;
   ask($('#steps'),'',SCENE_OPTS,SCENE_OPTS.findIndex(o=>o.k===s.a),ok=>{stat('scene',ok);const O=SCENE_OPTS.find(o=>o.k===s.a);
     light(s.a==='none'?'red':s.a==='sakt'?'yellow':'green');
     ({waqf:$('#bWaqf'),sakt:$('#bSakt'),qat:$('#bQat')})[s.a]?.click();
     if(ok)setTimeout(()=>award(1),150);else{sfx.pop();miss({scene:s})}
     const ex=document.createElement('div');ex.style.display='contents';
-    ex.innerHTML=`<div class="info" style="--ac:${O.c}"><div class="t">${O.ar}</div><div class="bq">${O.bq}</div><small>${BOOK.ar}، ${BOOK.ref}</small></div>${nextBtn()}`;
+    ex.innerHTML=`<div class="info" style="--ac:${O.c}"><div class="t">${U(O.ar,'🫁⏸📕⛔'.includes(O.ar[0])?O.ar[0]+' '+O.en:O.en)}</div>${bqH(O.bq,O.bqEn)}<small>${BOOKU()}</small></div>${nextBtn()}`;
     qa.appendChild(ex);bindNext()});
 }
 function showSakt(it){
-  const road=it.w.map((w,i)=>`<span class="w">${w}</span>${i<it.w.length-1?`<button class="gap" data-g="${i}" aria-label="هنا">·</button>`:''}`).join('');
-  qa.innerHTML=`${header()}<div class="q">⏸ سَكْتَةُ حَفْص: أَيْنَ يَسْكُتُ القَارِئُ هُنَا؟ اِضْغَطْ عَلَى الفَرَاغ <span class="en blk">Where does Ḥafṣ make a sakt? Tap the gap.</span></div>
-    <div class="road" id="road">${road}</div><div class="ref">﴿${it.ref}﴾</div><div id="steps" style="display:contents"></div>`;
+  const road=it.w.map((w,i)=>`<span class="w">${w}</span>${i<it.w.length-1?`<button class="gap" data-g="${i}" aria-label="Here · هنا">·</button>`:''}`).join('');
+  qa.innerHTML=`${header()}<div class="q">${U('⏸ سَكْتَةُ حَفْص: أَيْنَ يَسْكُتُ القَارِئُ هُنَا؟ اِضْغَطْ عَلَى الفَرَاغ','⏸ The sakt of Ḥafṣ: where does the reciter pause here? Tap the gap.')}</div>
+    <div class="road" id="road">${road}</div><div class="ref">${REF(it.ref)}</div><div id="steps" style="display:contents"></div>`;
   let tries=2,done=false;
   document.querySelectorAll('.gap').forEach(g=>g.onclick=()=>{if(done)return;ac();
     if(+g.dataset.g===it.gap){done=true;g.classList.add('hit');g.textContent='ۜ';fin(tries===2)}
@@ -519,28 +540,29 @@ function showSakt(it){
   function fin(ok){document.querySelectorAll('.gap').forEach(g=>g.disabled=true);stat('sakt',ok);light('yellow');$('#bSakt').click();
     if(ok)setTimeout(()=>award(1),150);else{sfx.pop();miss(it)}
     const ex=document.createElement('div');ex.style.display='contents';
-    ex.innerHTML=`<div class="info" style="--ac:var(--purple)"><div class="t">⏸ سَكْتَة: «قطع الصوت زمنا يسيرا من غير تنفس» (ص ٤١)${it.alt?' — وَفِيهَا وَجْهٌ ثَانٍ: الإِدْغَام':''}</div><div class="bq">${it.why}</div>
-      <div class="why">🎙️ اِقْرَأْهَا: سَكْتَةٌ قَصِيرَةٌ ⏸ بِلَا نَفَس، ثُمَّ أَكْمِلْ. (اِسْمَعِ الفَرْقَ بِزِرِّ «سَكْت» عَلَى اليَمِين)</div>
-      <small>${BOOK.ar}، ${BOOK.ref} — السكت عن حفص في أربعة مواضع (ص ٤٤–٤٥)</small></div>${nextBtn()}`;
+    ex.innerHTML=`<div class="info" style="--ac:var(--purple)"><div class="t">${U(`⏸ سَكْتَة: «قطع الصوت زمنا يسيرا من غير تنفس» (ص ٤١)${it.alt?' — وَفِيهَا وَجْهٌ ثَانٍ: الإِدْغَام':''}`,`⏸ Sakt: “cutting off the sound for a brief time without breathing” (p. 41)${it.alt?' — and it has a second way: idghām':''}`)}</div>${bqH(it.why,it.whyEn)}
+      <div class="why">${U('🎙️ اِقْرَأْهَا: سَكْتَةٌ قَصِيرَةٌ ⏸ بِلَا نَفَس، ثُمَّ أَكْمِلْ. (اِسْمَعِ الفَرْقَ بِزِرِّ «سَكْت» عَلَى اليَمِين)','🎙️ Recite it: a short pause ⏸ with no breath, then continue. (Hear the difference with the “Sakt” button on the right.)')}</div>
+      <small>${U(BOOK.ar+'، '+BOOK.ref+' — السكت عن حفص في أربعة مواضع (ص ٤٤–٤٥)',BOOK.en+', '+BOOK.refEn+' — the sakt of Ḥafṣ occurs in four places (pp. 44–45)')}</small></div>${nextBtn()}`;
     qa.appendChild(ex);bindNext()}
 }
 
 /* ---------- end ---------- */
+const STAT_EN={'light-green':'🟢 The green light','light-yellow':'🟡 The yellow light','light-red':'🔴 The red light','name-tam':'Name: complete','name-kafi':'Name: sufficient','name-hasan':'Name: good','name-qabih':'Name: bad',restart:'↩ Where do I restart?',scene:'Waqf / sakt / qaṭʿ',sakt:'⏸ The sakt spots of Ḥafṣ'};
 const STAT_NAMES={'light-green':{ar:'🟢 الإِشَارَةُ الخَضْرَاء',c:'var(--green)'},'light-yellow':{ar:'🟡 الإِشَارَةُ الصَّفْرَاء',c:'var(--yellow)'},'light-red':{ar:'🔴 الإِشَارَةُ الحَمْرَاء',c:'var(--red)'},
   'name-tam':{ar:'اسْم: تَامّ',c:'var(--green)'},'name-kafi':{ar:'اسْم: كَافٍ',c:'var(--blue)'},'name-hasan':{ar:'اسْم: حَسَن',c:'var(--yellow)'},'name-qabih':{ar:'اسْم: قَبِيح',c:'var(--red)'},
   restart:{ar:'↩ مِنْ أَيْنَ أَبْدَأ؟',c:'var(--gold)'},scene:{ar:'وَقْف/سَكْت/قَطْع',c:'var(--blue)'},sakt:{ar:'⏸ سَكَتَاتُ حَفْص',c:'var(--purple)'},
   ...Object.fromEntries(Object.entries(WASL_KINDS).map(([k,K])=>[k,{ar:K.ar.replace(/ ←.*/,''),c:K.c}]))};
 function end(){light(null);
   const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
-  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${STAT_NAMES[k]?.c||'var(--gold)'}"><span>${STAT_NAMES[k]?.ar||k}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${ar(s.ok)}/${ar(s.n)}</span></div>`).join('');
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمْ','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
+  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${STAT_NAMES[k]?.c||'var(--gold)'}"><span>${STAT_NAMES[k]?U(STAT_NAMES[k].ar,STAT_EN[k]||STAT_NAMES[k].ar):k}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${U(`${ar(s.ok)}/${ar(s.n)}`,`${s.ok}/${s.n}`)}</span></div>`).join('');
   const uniq=[...new Set(missed)];
-  const label=it=>it.scene?'🎬 '+it.scene.ar:it.w?it.w.join(' ')+` (${it.ref})`:it.ctx?it.ctx+` (${it.ref})`:it.t.replace(/\^/g,'')+` (${it.ref})`;
+  const label=it=>it.scene?'🎬 '+U(it.scene.ar,it.scene.en):it.w?it.w.join(' ')+` (${RF(it.ref)})`:it.ctx?it.ctx+` (${RF(it.ref)})`:it.t.replace(/\^/g,'')+` (${RF(it.ref)})`;
   qa.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
-    <div class="q">📊 تَقْرِيرُ الإِشَارَات (صَحّ مِنْ أَوَّلِ مَرَّة) <span class="en">Report</span></div><div class="report">${rows}</div>
-    ${uniq.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${uniq.map(label).join(' ۞ ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
-    <div class="tip">💡 تَحَدِّي الخِتَام: اِفْتَحْ سُورَتَكَ وَاقْرَأْ آيَةً طَوِيلَة. ضَعْ بِالقَلَمِ ✏️ إِشَارَةً 🟢 حَيْثُ تَقِفُ لِلنَّفَس، وَ🔴 حَيْثُ لَا يَجُوزُ الوَقْف — ثُمَّ اقْرَأْهَا كَمَا خَطَّطْت. <span class="en blk">Closing challenge: mark 🟢 breathing stops and 🔴 no-stop places on a long āyah from your surah, then recite it as planned.</span></div>
-    <button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div>`;
+    <div class="q">${U('📊 تَقْرِيرُ الإِشَارَات (صَحّ مِنْ أَوَّلِ مَرَّة)','📊 Signals report (correct on the first try)')}</div><div class="report">${rows}</div>
+    ${uniq.length?`<div>${U('رَاجِعْ هَذِهِ أَوَّلًا:','Review these first:')}</div><div class="miss">${uniq.map(label).join(' ۞ ')}</div>`:`<div>${U('لَا أَخْطَاء — مَا شَاءَ الله! 🌟','No mistakes — Masha Allah! 🌟')}</div>`}
+    <div class="tip">${U('💡 تَحَدِّي الخِتَام: اِفْتَحْ سُورَتَكَ وَاقْرَأْ آيَةً طَوِيلَة. ضَعْ بِالقَلَمِ ✏️ إِشَارَةً 🟢 حَيْثُ تَقِفُ لِلنَّفَس، وَ🔴 حَيْثُ لَا يَجُوزُ الوَقْف — ثُمَّ اقْرَأْهَا كَمَا خَطَّطْت.','💡 Closing challenge: open your surah and read a long āyah. With the pen ✏️ mark 🟢 where you stop to breathe and 🔴 where stopping is not allowed — then recite it as you planned.')}</div>
+    <button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
@@ -550,9 +572,10 @@ $('#modeSel').onchange=()=>{setOptions();newGame()};['#setSel','#teamSel'].forEa
 $('#newB').onclick=newGame;
 $('#spdB').onclick=()=>{speedOn=!speedOn;$('#spdB').setAttribute('aria-pressed',speedOn);newGame()};
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'&&$('#nextB')){e.preventDefault();$('#nextB').click()}});
 newGame();
+TQI.auto('.road,.w,.door,.ctx,.say,.miss,.stop,.gap,.key b');
 </script>
 <script>
 (function(){

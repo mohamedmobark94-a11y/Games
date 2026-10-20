@@ -1,5 +1,6 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}body.show-en .steps button .t{font-size:.95em}
+</style></head><body class="tq-i18n">
 <title>كنز الضبط</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -188,9 +189,9 @@ body.ink-laser .ink-cv{cursor:none!important}
   <header class="top">
     <div class="top-row">
       <h1 class="brand"><span class="chest-ico">🧰</span> كَنْزُ الضَّبْط <span class="en in">· The Ḍabṭ Treasure</span>
-        <small>خَمْسَةُ مَفَاتِيح لِحِفْظِ كُلِّ آيَة — من كتاب «كيف تحفظ القرآن الكريم» · ترتيل القرآن | Tarteel Al-Quran</small></h1>
-      <button class="tbtn" id="homeB" title="البداية">🏠</button>
-      <button class="tbtn" id="sndB" aria-pressed="false" title="الصوت">🔊</button>
+        <small><span class="ui-ar">خَمْسَةُ مَفَاتِيح لِحِفْظِ كُلِّ آيَة — من كتاب «كيف تحفظ القرآن الكريم» · ترتيل القرآن | Tarteel Al-Quran</span><span class="ui-en">Five keys to memorise every āyah — from the book <i>How to Memorise the Noble Qur’an</i> · Tarteel Al-Quran</span></small></h1>
+      <button class="tbtn" id="homeB" title="البداية" data-en-title="Back to the start" aria-label="Back to the start · البداية">🏠</button>
+      <button class="tbtn" id="sndB" aria-pressed="false" title="الصوت" data-en-title="Sound" aria-label="Sound · الصوت">🔊</button>
       <button class="tbtn" id="enB" aria-pressed="false">English</button>
     </div>
     <div class="score-row" id="scores"></div>
@@ -282,6 +283,8 @@ const BQ = {
   three:{t:'ضبط الصورة المدركة بحيث يمكن أداؤها من غير كتاب — والمواظبة والمعاهدة للمحفوظ — وعدم النسيان', p:'العناصر الثلاثة لمعنى «حفظ القرآن»، ص ٤٦.'},
   hijr:{t:'«حافظ القرآن» إذا نسب إلى الله فيراد به «صيانته وحفظه من التبديل والتغيير والتحريف والزيادة والنقصان»', p:'ص ٤٨، مع آية الحجر ٩ — وإذا نسب إلى الناس: «الاستظهار، والعمل بمقتضاه».'}
 };
+Object.entries({"dabt": {"tEn": "“Ḍabṭ” is: hearing the speech as it deserves to be heard, then understanding its meaning as it was intended, then memorising it by exerting one’s effort, and holding firm to it by revising it until one performs it well to others.", "pEn": "Al-Jurjānī’s definition in al-Taʿrīfāt, as quoted by the author, p. 60 — the author said: “It combines: listening, understanding, memorising, retaining and performing.”"}, "listen": {"tEn": "“Hearing the speech as it deserves to be heard”", "pEn": "The first step in the definition of ḍabṭ (al-Jurjānī, as quoted by the author, p. 60). So we hear the āyah correctly from the teacher before we recite it."}, "understand": {"tEn": "“When the child grows mentally and the material to memorise is within their level of understanding, memory based on understanding is preferable”", "pEn": "p. 53 — children “have mechanical memory”, so a picture is enough for them, while older learners need the meaning."}, "build": {"tEn": "“Then memorising it by exerting one’s effort”… and “the boy is left at ease at first, then taken gradually”", "pEn": "Al-Jurjānī, p. 60, and the saying of Ibn Jubayr as quoted by the author, p. 55 — and the author warned against those who “take the child with scolding and harshness” (p. 55)."}, "recall": {"tEn": "“Retention… is greatly affected by the number of times the material is recalled in the mind”", "pEn": "p. 60 — the author’s three elements of memory: representation, retention and recall (pp. 59–60)."}, "perform": {"tEn": "“…and holding firm to it by revising it until one performs it well to others”", "pEn": "Al-Jurjānī as quoted by the author, p. 60 — and the memoriser masters the Qur’an “in a way that qualifies them to perform it to others” (p. 47)."}, "ajam": {"tEn": "“You find non-Arab men who memorise the whole Qur’an and yet understand nothing of the Arabic language”", "pEn": "p. 58 — a message for every student who does not speak Arabic: you can do it!"}, "age": {"tEn": "“It is no wonder that the young have greater capacity and mastery, and the old have greater awareness and understanding of the meanings of the Qur’an”", "pEn": "p. 56 — and he said: “I am not one who limits the possibility of memorising the Qur’an to childhood” (p. 52)."}, "three": {"tEn": "Mastering the perceived image so that it can be performed without a book — persistence and regular review of what is memorised — and not forgetting", "pEn": "The three elements of the meaning of “memorising the Qur’an”, p. 46."}, "hijr": {"tEn": "“Ḥāfiẓ of the Qur’an”, when attributed to Allah, means “its protection and preservation from substitution, change, distortion, addition and omission”", "pEn": "p. 48, with Sūrat al-Ḥijr 9 — and when attributed to people: “reciting it by heart, and acting by what it requires”."}}).forEach(([k,v])=>Object.assign(BQ[k],v));
+const WORD_EN={'السَّمَاع':'Hearing','الفَهْم':'Understanding','الحِفْظ':'Memorising','الثَّبَات':'Firmness','الأَدَاء':'Performance'};
 const REVIEW_EVERY = 1;   // after each new āyah (from the 2nd), one quick «رجعة» on an earlier āyah
 const PLAYERS = {
   solo:{ar:'طالب واحد',en:'One student',emo:'🧒',teams:[{ar:'أنت',en:'You',e:'⭐'}]},
@@ -295,7 +298,9 @@ const PLAYERS = {
 const $=s=>document.querySelector(s);
 const stage=$('#s0'), side=$('#side');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const L=(ar,en,inl)=>`${ar}${en?`<span class="en${inl?' in':''}">${esc(en)}</span>`:''}`;
+const {U,tr}=TQI;
+const L=(ar,en,inl)=>en?U(ar,esc(en),!inl):ar;   // Arabic ↔ English pair (English mode shows only the English)
+const BOOK_EN='How to Memorise the Noble Qur’an — Abd ar-Rabb Nawab ad-Din';
 const strip=s=>s.replace(/[ً-ٰٟۖ-ۭـ]/g,'').replace(/[أإآٱ]/g,'ا');
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -344,18 +349,18 @@ function renderSide(open){
    <div class="panel">
      <h3>${L(`🧰 صُنْدُوقُ الآيَة ${S.idx+1}`,`Chest of āyah ${S.idx+1}`)}</h3>
      <div class="chest ${open?'open':''}"><span class="box">${open?'💎':'🧰'}</span></div>
-     <div class="locks">${KEYS.map((k,i)=>`<div class="lock ${S.keys[i]?'got':''}" style="--kc:${k.c}"><span class="i">${S.keys[i]?'🔑':'🔒'}</span>${k.ar}</div>`).join('')}</div>
+     <div class="locks">${KEYS.map((k,i)=>`<div class="lock ${S.keys[i]?'got':''}" style="--kc:${k.c}"><span class="i">${S.keys[i]?'🔑':'🔒'}</span>${U(k.ar,k.en)}</div>`).join('')}</div>
    </div>
    <div class="panel">
      <h3>${L('💎 جَوَاهِرُ '+esc(set.ar),'Gems of '+set.en)}</h3>
-     <div class="jewels">${set.items.map((it,i)=>{const j=S.jewels[i];return `<div class="jewel ${j?'got':''} ${i===S.idx&&!j?'cur':''}" title="${esc(it.ref)}">${j?'💎':i+1}</div>`}).join('')}</div>
+     <div class="jewels">${set.items.map((it,i)=>{const j=S.jewels[i];return `<div class="jewel ${j?'got':''} ${i===S.idx&&!j?'cur':''}" title="${esc(it.refEn||it.ref)}">${j?'💎':i+1}</div>`}).join('')}</div>
      <p class="pg" style="margin:6px 0 0">${L('كل آية تُفتح بخمسة مفاتيح = جوهرة.','Every āyah opens with five keys = one gem.')}</p>
    </div>`;
 }
 function stepsBar(active){
-  return `<div class="steps">${KEYS.map((k,i)=>`<button style="--kc:${k.c}" class="${i===active?'on':''} ${S.keys[i]?'done':''}" data-go="${i}" title="${k.en}"><span class="k">${k.emo}</span><span class="t">${k.ar}</span></button>`).join('')}</div>`;
+  return `<div class="steps">${KEYS.map((k,i)=>`<button style="--kc:${k.c}" class="${i===active?'on':''} ${S.keys[i]?'done':''}" data-go="${i}" title="${k.en}"><span class="k">${k.emo}</span><span class="t">${U(k.ar,k.en)}</span></button>`).join('')}</div>`;
 }
-function bookBox(key){const b=BQ[key];return `<details class="book"><summary>${L('📖 من الكتاب','From the book')}</summary><p class="bq">${esc(b.t)}</p><p class="pg">${esc(b.p)} — «${BOOK}» (الترقيم مطبوع)</p></details>`}
+function bookBox(key){const b=BQ[key];return `<details class="book"><summary>${L('📖 من الكتاب','From the book')}</summary><p class="bq">${esc(b.t)}${tr(b.tEn)}</p><p class="pg">${U(esc(b.p)+' — «'+BOOK+'» (الترقيم مطبوع)',esc(b.pEn)+' — “'+BOOK_EN+'” (printed page numbers)')}</p></details>`}
 function head(i,title,titleEn){
   const k=KEYS[i],it=cur();
   return `<span class="stage-tag"><span class="emo">${k.emo}</span> المِفْتَاح ${i+1}: ${k.ar} <span class="en in" style="color:#fff">· ${k.en}</span></span>
@@ -546,9 +551,9 @@ function renderEnd(){
   stage.innerHTML=`<div class="end fade-in"><div class="big">🏆</div><h2>${L('كَنْزُكَ اليَوْم','Your treasure today')}</h2>
    ${best?`<p style="font-size:1.2rem;font-weight:800">${tie?L('تعادل! كلكم فائزون 🤝','A tie! Everyone wins 🤝'):L(`الفائز: ${best[0].e} ${best[0].ar}`,`Winner: ${best[0].en}`)}</p>`:''}
    <div class="tw"><table class="rep"><thead><tr><th>${L('الآية','Āyah')}</th><th>${L('الجوهرة','Gem')}</th><th>${L('النظرات','Peeks')}</th></tr></thead><tbody>
-   ${set.items.map((it,i)=>{const j=S.jewels[i];return `<tr><td>${esc(it.ref)}</td><td>${j?'💎 '+'⭐'.repeat(j.stars):'—'}</td><td>${j?j.peeks:'—'}</td></tr>`}).join('')}</tbody></table></div>
+   ${set.items.map((it,i)=>{const j=S.jewels[i];return `<tr><td>${U(esc(it.ref),esc(it.refEn||it.ref))}</td><td>${j?'💎 '+'⭐'.repeat(j.stars):'—'}</td><td>${j?j.peeks:'—'}</td></tr>`}).join('')}</tbody></table></div>
    ${miss.length?`<div class="tip" style="text-align:start"><b>${L('راجِعْ هذه الكلمات أولًا:','Review these words first:')}</b><br><span style="font-family:var(--f-q);font-size:1.3rem">${miss.map(esc).join('<br>')}</span></div>`:`<p>${L('لا كلمات للمراجعة — ما شاء الله! 🌟','No words to review — mā shāʾ Allāh! 🌟')}</p>`}
-   <div class="jurjani" style="text-align:start"><p class="bq">${esc(BQ.ajam.t)}</p><p class="pg">${esc(BQ.ajam.p)} — «${BOOK}»</p></div>
+   <div class="jurjani" style="text-align:start"><p class="bq">${esc(BQ.ajam.t)}${tr(BQ.ajam.tEn)}</p><p class="pg">${U(esc(BQ.ajam.p)+' — «'+BOOK+'»',esc(BQ.ajam.pEn)+' — “'+BOOK_EN+'”')}</p></div>
    <div class="tip" style="text-align:start"><b>${L('🏠 تحدي البيت (مفتاح الأداء):','🏠 Home challenge (the “perform” key):')}</b> ${L('علِّمْ آية اليوم لأحد أهلك: اقرأها له مرتين، واشرح له صورة كلمة واحدة، ثم اسمعه يقرأها. وفي الحصة القادمة نبدأ بـ«رجعة» على نفس الآيات.','Teach today’s āyah to someone at home: recite it twice, explain one word’s picture, then listen to them. Next class starts with a look-back on the same āyāt.')}</div>
    <div class="row"><button class="btn gold" id="again">🔁 ${L('مجموعة أخرى','Another set',1)}</button></div></div>`;
   $('#again').onclick=()=>renderSetup();
@@ -561,16 +566,16 @@ function renderSetup(){
   const ch=(grp,obj,curV)=>`<div class="choices" role="group">${Object.entries(obj).map(([k,v])=>`<button class="choice" data-${grp}="${k}" aria-pressed="${k===curV}"><span class="e">${v.emo||'📖'}</span>${L(esc(v.ar),v.en)}</button>`).join('')}</div>`;
   stage.innerHTML=`<div class="setup fade-in">
     <h2>${L('خَمْسَةُ مَفَاتِيح… وَكُلُّ آيَةٍ كَنْز!','Five keys… and every āyah is a treasure!')}</h2>
-    <div class="jurjani"><p class="bq">${esc(BQ.dabt.t)}</p><p class="pg">${esc(BQ.dabt.p)} — «${BOOK}»</p></div>
-    <div class="keys5">${KEYS.map((k,i)=>`<div class="key5" style="--kc:${k.c}"><b><span>${k.emo}</span> ${i+1}. ${k.ar} <span class="en in">${k.en}</span></b><p>${esc(k.word)} — ${L(esc(k.how),k.howEn)}</p></div>`).join('')}</div>
+    <div class="jurjani"><p class="bq">${esc(BQ.dabt.t)}${tr(BQ.dabt.tEn)}</p><p class="pg">${U(esc(BQ.dabt.p)+' — «'+BOOK+'»',esc(BQ.dabt.pEn)+' — “'+BOOK_EN+'”')}</p></div>
+    <div class="keys5">${KEYS.map((k,i)=>`<div class="key5" style="--kc:${k.c}"><b><span>${k.emo}</span> ${U(`${i+1}. ${k.ar}`,`${i+1}. ${k.en}`)}</b><p>${U(esc(k.word),WORD_EN[k.word]||esc(k.word))} — ${L(esc(k.how),k.howEn)}</p></div>`).join('')}</div>
     <h3>${L('١) اختر الآيات','1) Choose the āyāt')}</h3>${ch('set',Object.fromEntries(Object.entries(SETS).map(([k,v])=>[k,{...v,emo:k==='hifz'?'🛡️':'📖'}])),S.set)}
     <h3>${L('٢) عمر الطالب','2) Student’s age')}</h3>${ch('age',AGE,S.age)}
     <p class="pg" style="margin-top:-6px">${L('الصغار: صُوَر + تكرار مرتين + سحابتان. الكبار: معانٍ بالإنجليزية + مرة واحدة + ثلاث سحب (الكتاب ص ٥٣، ٥٦).','Little ones: pictures, two repetitions, two clouds. Older: English meanings, one repetition, three clouds.')}</p>
     <h3>${L('٣) اللاعبون','3) Players')}</h3>${ch('pl',PLAYERS,S.players)}
     <div class="row"><button class="btn gold" id="go" style="font-size:1.25rem;padding:8px 34px">🧰 ${L('اِبْدَأِ الرِّحْلَة','Start',1)}</button></div>
     <details class="book" open><summary>${L('📖 فوائد من الكتاب لهذه اللعبة','Notes from the book')}</summary>
-      ${['three','age','hijr','ajam'].map(k=>`<p class="bq">${esc(BQ[k].t)}</p><p class="pg">${esc(BQ[k].p)}</p>`).join('')}
-      <p class="pg">«${BOOK}» — المبحث الأول والثاني من «القرآن الكريم وحفظه»، ص ٤٥–٦١ (الترقيم مطبوع). نصوص الآيات مطابقة للمكتبة الشاملة (حفص).</p></details>
+      ${['three','age','hijr','ajam'].map(k=>`<p class="bq">${esc(BQ[k].t)}${tr(BQ[k].tEn)}</p><p class="pg">${U(esc(BQ[k].p),esc(BQ[k].pEn))}</p>`).join('')}
+      <p class="pg">${U(`«${BOOK}» — المبحث الأول والثاني من «القرآن الكريم وحفظه»، ص ٤٥–٦١ (الترقيم مطبوع). نصوص الآيات مطابقة للمكتبة الشاملة (حفص).`,`“${BOOK_EN}” — the first and second sections of “The Noble Qur’an and its memorisation”, pp. 45–61 (printed page numbers). The texts of the verses match al-Maktaba al-Shāmila (Ḥafṣ).`)}</p></details>
   </div>`;
   stage.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{S.set=b.dataset.set;sfx.tap();renderSetup()});
   stage.querySelectorAll('[data-age]').forEach(b=>b.onclick=()=>{S.age=b.dataset.age;sfx.tap();renderSetup()});
@@ -596,6 +601,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!/INPUT|TEXTAREA/.te
 renderSetup();
 </script>
 
+<script>TQI.auto('.ayah,.opts,.opt,.w,.jewel,.lock');</script>
 <script>
 /* === Pen tools + whiteboard: claude/lesson-engine/wb.js (unchanged) === */
 (function(){

@@ -1,5 +1,7 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}body.show-en .ch .ds{display:none}
+body.show-en .ch .en{font-size:1em;color:inherit;font-weight:700}
+</style></head><body class="tq-i18n">
 <!doctype html><html lang="ar"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>السمين والنحيف</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -181,22 +183,22 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand"><span class="f">السَّمِينُ</span> وَ<span class="t">النَّحِيف</span> 🐡🐭 <span class="en">Puffy &amp; Skinny Letters</span><small>ترتيل القرآن · Tarteel Al-Quran — التفخيم والترقيق من «الوجيز في علم التجويد»</small></h1>
+    <h1 class="brand"><span class="f">السَّمِينُ</span> وَ<span class="t">النَّحِيف</span> 🐡🐭 <span class="en">Puffy &amp; Skinny Letters</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — التفخيم والترقيق من «الوجيز في علم التجويد»</span><span class="ui-en">Tarteel Al-Quran — heavy (tafkhīm) and light (tarqīq) letters, from <i>Al-Wajiz fi ‘Ilm at-Tajwid</i></span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
-  <div class="modes" role="group" aria-label="اللعبة">
-    <button class="mode" data-m="sort" aria-pressed="true">🐡🐭 سَمِينٌ أَمْ نَحِيف؟ <span class="en">Puffy or skinny?</span></button>
-    <button class="mode" data-m="memo" aria-pressed="false">🃏 تَوْأَمُ الذَّاكِرَة <span class="en">Twin memory</span></button>
-    <button class="mode" data-m="ball" aria-pressed="false">🎈 بَالُونَاتُ السِّمْنَة <span class="en">Balloon levels</span></button>
+  <div class="modes" role="group" aria-label="Game · اللعبة">
+    <button class="mode" data-m="sort" aria-pressed="true"><span class="ui-ar">🐡🐭 سَمِينٌ أَمْ نَحِيف؟</span><span class="ui-en">🐡🐭 Puffy or skinny?</span></button>
+    <button class="mode" data-m="memo" aria-pressed="false"><span class="ui-ar">🃏 تَوْأَمُ الذَّاكِرَة</span><span class="ui-en">🃏 Twin memory</span></button>
+    <button class="mode" data-m="ball" aria-pressed="false"><span class="ui-ar">🎈 بَالُونَاتُ السِّمْنَة</span><span class="ui-en">🎈 Balloon levels</span></button>
   </div>
   <div class="bar">
-    <label for="setSel" id="setLbl">الدرس:</label>
+    <label for="setSel" id="setLbl"><span class="ui-ar">الدرس:</span><span class="ui-en">Lesson:</span></label>
     <select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams">فريقان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0" aria-live="polite"></section>
@@ -213,53 +215,54 @@ body.ink-laser .ink-cv{cursor:none!important}
    BALLOON_LETTERS و LEVELS: مراتب التفخيم الخمس (لعبة البالونات).
    لتستعمل اللعبة مع سورة الطالب: انسخ مجموعة heavy وضع كلمات من سورته (الحرف بين [ ]).
    ============================================================ */
-const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب التفخيم والترقيق، ص ٣٤–٣٧ (بترقيم الشاملة آليًّا)'};
+const BOOK = {ar:'الوجيز في علم التجويد — محمود سيبويه البدوي (ت ١٤١٥هـ)', ref:'باب التفخيم والترقيق، ص ٣٤–٣٧ (بترقيم الشاملة آليًّا)',
+  en:"Al-Wajiz fi 'Ilm at-Tajwid — Mahmud Sibawayh al-Badawi (d. 1415 AH)", refEn:'chapter on tafkhīm and tarqīq, pp. 34–37 (page numbers as auto-assigned by Shamela)'};
 const HEAVY = 'خ ص ض غ ط ق ظ';        // «خُصَّ ضَغْطٍ قِظْ» — حروف الاستعلاء (ص ٣٤)
 const ITBAQ = 'ص ض ط ظ';              // حروف الإطباق: تفخيم أقوى (ص ٣٤)
 const KINDS = {
   fat:{ar:'سَمِين',emo:'🐡',en:'Puffy (heavy · tafkhīm)',ds:'الفَمُ يَمْتَلِئُ بِالصَّوْت',dsEn:'the mouth fills with sound',
     move:'انْفُخْ خَدَّيْكَ 😮 وَافْتَحْ ذِرَاعَيْكَ مِثْلَ البَالُون',moveEn:'Puff your cheeks and open your arms wide like a balloon',
-    term:'تَفْخِيم',bq:'التفخيم: لغة: التسمين. واصطلاحا: عبارة عن سمن يدخل على جسم الحرف -أي صوته- فيمتلئ الفم بصداه.',pg:'٣٤'},
+    term:'تَفْخِيم',bq:'التفخيم: لغة: التسمين. واصطلاحا: عبارة عن سمن يدخل على جسم الحرف -أي صوته- فيمتلئ الفم بصداه.',pg:'٣٤',bqEn:'Tafkhīm: linguistically, “making fat”. Technically: a fatness that enters the body of the letter, that is, its sound, so that the mouth fills with its echo.'},
   thin:{ar:'نَحِيف',emo:'🐭',en:'Skinny (light · tarqīq)',ds:'الفَمُ لَا يَمْتَلِئ',dsEn:'the mouth does not fill',
     move:'ابْتَسِمْ 🙂 وَقِفْ نَحِيفًا مِثْلَ القَلَم، يَدَاكَ بِجَانِبِك',moveEn:'Smile and stand thin like a pencil, arms by your sides',
-    term:'تَرْقِيق',bq:'والترقيق: لغة: التنحيف. واصطلاحا: عبارة عن نحول يدخل على جسم الحرف فلا يمتلئ الفم بصداه.',pg:'٣٤'},
+    term:'تَرْقِيق',bq:'والترقيق: لغة: التنحيف. واصطلاحا: عبارة عن نحول يدخل على جسم الحرف فلا يمتلئ الفم بصداه.',pg:'٣٤',bqEn:'Tarqīq: linguistically, “making thin”. Technically: a thinness that enters the body of the letter, so that the mouth does not fill with its echo.'},
 };
 /* «لماذا؟» — جملة للطفل + نص الكتاب (المتن) بالصفحة */
 const WHY = {
   istila:{kid:'حَرْفٌ مِنْ «خُصَّ ضَغْطٍ قِظْ»: مُؤَخِّرُ اللِّسَانِ يَرْتَفِعُ ⬆️ فَيَمْتَلِئُ الفَمُ — سَمِينٌ دَائِمًا!',kidEn:'A letter of "khuṣṣa ḍaghṭin qiẓ": the back of the tongue rises, so it is ALWAYS puffy.',
-    bq:'أما حروف الاستعلاء: فحكمها التفخيم بلا استثناء، وقد تقدم في باب صفات الحروف أنها سبعة، مجموعة في قولهم: "خص ضغط قظ".',pg:'٣٤'},
+    bq:'أما حروف الاستعلاء: فحكمها التفخيم بلا استثناء، وقد تقدم في باب صفات الحروف أنها سبعة، مجموعة في قولهم: "خص ضغط قظ".',pg:'٣٤',bqEn:'As for the raised letters: their ruling is tafkhīm without exception, and it was mentioned in the chapter on the attributes of the letters that they are seven, gathered in their saying: “khuṣṣa ḍaghṭin qiẓ”.'},
   istifal:{kid:'حَرْفٌ لَيْسَ مِنْ «خُصَّ ضَغْطٍ قِظْ»: اللِّسَانُ يَنْزِلُ ⬇️ فَهُوَ نَحِيف.',kidEn:'Not one of the 7 heavy letters: the tongue stays low, so it is skinny.',
-    bq:'وأما حروف الاستفال: فحكمها الترقيق إلا اللام والراء في بعض أحوالهما، وإلا الألف.',pg:'٣٤'},
+    bq:'وأما حروف الاستفال: فحكمها الترقيق إلا اللام والراء في بعض أحوالهما، وإلا الألف.',pg:'٣٤',bqEn:'As for the lowered letters: their ruling is tarqīq, except the lām and the rā’ in some of their cases, and except the alif.'},
   allah_fat:{kid:'قَبْلَ «اللَّه» فَتْحَةٌ أَوْ ضَمَّة ← اللَّامُ سَمِينَة 🐡',kidEn:'Fatḥah or ḍammah before "Allah" → a puffy Lām.',
-    bq:'تفخم اللام في لفظ الجلالة الواقع بعد فتح نحو: تَاللَّهِ أو ضم مثل: نَصْرُ اللَّهِ.',pg:'٣٥'},
+    bq:'تفخم اللام في لفظ الجلالة الواقع بعد فتح نحو: تَاللَّهِ أو ضم مثل: نَصْرُ اللَّهِ.',pg:'٣٥',bqEn:'The lām in the word of majesty (Allah) is made heavy when it comes after a fatḥah, as in tallāhi, or after a ḍammah, as in naṣru llāhi.'},
   allah_thin:{kid:'قَبْلَ «اللَّه» كَسْرَة ← اللَّامُ نَحِيفَة 🐭',kidEn:'Kasrah before "Allah" → a skinny Lām.',
-    bq:'وترقق إذا وقع لفظ الجلالة بعد كسر مثل: بِاللَّهِ بِسْمِ اللَّهِ.',pg:'٣٥'},
+    bq:'وترقق إذا وقع لفظ الجلالة بعد كسر مثل: بِاللَّهِ بِسْمِ اللَّهِ.',pg:'٣٥',bqEn:'It is made light when the word of majesty comes after a kasrah, as in billāhi and bismi llāhi.'},
   ra_fat:{kid:'عَلَى الرَّاءِ فَتْحَةٌ أَوْ ضَمَّة ← سَمِينَة 🐡 (حَتَّى لَوْ قَبْلَهَا كَسْرَة!)',kidEn:'Fatḥah or ḍammah ON the Rā → puffy (even after a kasrah!).',
-    bq:'فتفخم إذا لم تكن مكسورة بأن كانت مفتوحة: مثل: رَبَّنَا أو مضمومة مثل: رُسُلٌ.',pg:'٣٥'},
+    bq:'فتفخم إذا لم تكن مكسورة بأن كانت مفتوحة: مثل: رَبَّنَا أو مضمومة مثل: رُسُلٌ.',pg:'٣٥',bqEn:'The rā’ is made heavy when it is not under a kasrah: either it has a fatḥah, as in rabbanā, or a ḍammah, as in rusulun.'},
   ra_kasr:{kid:'تَحْتَ الرَّاءِ كَسْرَة ← نَحِيفَة 🐭 دَائِمًا',kidEn:'Kasrah under the Rā → always skinny.',
-    bq:'أن تكون مكسورة سواء أكان الكسر أصليا مثل: رِجَالٌ… أو عارضا مثل: وَأَنْذِرِ النَّاسَ فالراء المكسورة ترقق مطلقا بدون قيد أو شرط.',pg:'٣٥'},
+    bq:'أن تكون مكسورة سواء أكان الكسر أصليا مثل: رِجَالٌ… أو عارضا مثل: وَأَنْذِرِ النَّاسَ فالراء المكسورة ترقق مطلقا بدون قيد أو شرط.',pg:'٣٥',bqEn:'When it has a kasrah, whether the kasrah is original, as in rijālun… or incidental, as in wa-andhiri n-nāsa, the rā’ with a kasrah is made light absolutely, with no condition or restriction.'},
   ra_sakin_fat:{kid:'الرَّاءُ سَاكِنَة ← انْظُرْ قَبْلَهَا: فَتْحَةٌ أَوْ ضَمَّة ← سَمِينَة 🐡',kidEn:'Silent Rā → look before it: fatḥah or ḍammah → puffy.',
-    bq:'وتفخم كذلك إذا كانت ساكنة ولم تستوف شروط الترقيق المتقدمة بأن سكنت بعد فتح مثل: بَرْقٌ أو بعد ضم مثل: الْقُرْآنُ.',pg:'٣٥'},
+    bq:'وتفخم كذلك إذا كانت ساكنة ولم تستوف شروط الترقيق المتقدمة بأن سكنت بعد فتح مثل: بَرْقٌ أو بعد ضم مثل: الْقُرْآنُ.',pg:'٣٥',bqEn:'It is also made heavy when it is sākin and does not meet the conditions of tarqīq above: that is, when it is sākin after a fatḥah, as in barqun, or after a ḍammah, as in al-qur’ānu.'},
   ra_sakin_thin:{kid:'الرَّاءُ سَاكِنَة وَقَبْلَهَا كَسْرَةٌ أَصْلِيَّة فِي نَفْسِ الكَلِمَة ← نَحِيفَة 🐭',kidEn:'Silent Rā with a real kasrah right before it in the same word → skinny.',
-    bq:'أن يكون قبل الراء كسرة أصلية متصلة بها، ولم يقع بعدها حرف استعلاء مفتوح متصل، فإذا استوفت الراء الساكنة هذه الشروط مجتمعة وجب ترقيقها مثل: فِرْعَوْنَ شِرْعَةً.',pg:'٣٥'},
+    bq:'أن يكون قبل الراء كسرة أصلية متصلة بها، ولم يقع بعدها حرف استعلاء مفتوح متصل، فإذا استوفت الراء الساكنة هذه الشروط مجتمعة وجب ترقيقها مثل: فِرْعَوْنَ شِرْعَةً.',pg:'٣٥',bqEn:'There must be an original kasrah directly attached to the rā’, and no open raised letter directly after it in the same word. When the sākin rā’ meets all these conditions together, it must be made light, as in fir‘awna and shir‘atan.'},
   ra_arid:{kid:'فَخّ! الكَسْرَةُ قَبْلَهَا «ضَيْفَة» (هَمْزَةُ وَصْل) ← سَمِينَة 🐡',kidEn:'Trap! The kasrah before it is only a "guest" (hamzat al-waṣl) → puffy.',
-    bq:'أو سكنت بعد كسر إلا أنه عارض مثل: ارْجِعِي في حالة الابتداء بهمزة الوصل، فقد عرض الكسر للابتداء بهمزة الوصل.',pg:'٣٥'},
+    bq:'أو سكنت بعد كسر إلا أنه عارض مثل: ارْجِعِي في حالة الابتداء بهمزة الوصل، فقد عرض الكسر للابتداء بهمزة الوصل.',pg:'٣٥',bqEn:'Or it is sākin after a kasrah that is only incidental, as in irji‘ī when starting with the connecting hamzah, because the kasrah occurs only for the sake of starting with hamzat al-waṣl.'},
   ra_istila:{kid:'فَخّ! بَعْدَ الرَّاءِ حَرْفٌ سَمِين مِنْ «خُصَّ ضَغْطٍ قِظْ» ← سَمِينَة 🐡',kidEn:'Trap! A heavy letter comes right after the Rā → puffy.',
-    bq:'أو سكنت بعد كسر أصلي متصل بالراء إلا أن الراء وقع بعدها حرف استعلاء مفتوح متصل، وقد وقع ذلك في خمس كلمات في القرآن الكريم: قِرْطَاسٍ… وَإِرْصَادًا وفِرْقَةٍ… مِرْصَادًا… لَبِالْمِرْصَادِ.',pg:'٣٥–٣٦'},
+    bq:'أو سكنت بعد كسر أصلي متصل بالراء إلا أن الراء وقع بعدها حرف استعلاء مفتوح متصل، وقد وقع ذلك في خمس كلمات في القرآن الكريم: قِرْطَاسٍ… وَإِرْصَادًا وفِرْقَةٍ… مِرْصَادًا… لَبِالْمِرْصَادِ.',pg:'٣٥–٣٦',bqEn:'Or it is sākin after an original kasrah attached to the rā’, but an open raised letter directly follows the rā’ in the same word. This occurs in five words in the Qur’an: qirṭāsin… irṣādan and firqatin… mirṣādan… la-bil-mirṣād.'},
   alif:{kid:'الأَلِفُ تَمْشِي وَرَاءَ الحَرْفِ الَّذِي قَبْلَهَا 👣: سَمِينٌ ← سَمِينَة، نَحِيفٌ ← نَحِيفَة',kidEn:'Alif copies the letter BEFORE it.',
-    bq:'حكمها أنها تابعة لما قبلها تفخيما وترقيقا، فإذا كان الحرف الذي قبلها مفخما فخمت مثل: قَالَ وطَالَ. وإذا كان مرققا رققت مثل: نَاعِمَةٌ عَالِيَةٍ.',pg:'٣٧'},
+    bq:'حكمها أنها تابعة لما قبلها تفخيما وترقيقا، فإذا كان الحرف الذي قبلها مفخما فخمت مثل: قَالَ وطَالَ. وإذا كان مرققا رققت مثل: نَاعِمَةٌ عَالِيَةٍ.',pg:'٣٧',bqEn:'Its ruling is that it follows what comes before it in heaviness and lightness: if the letter before it is heavy, it is made heavy, as in qāla and ṭāla; if it is light, it is made light, as in nā‘imatun and ‘āliyatin.'},
   ghunna:{kid:'الغُنَّةُ تَنْظُرُ إِلَى الحَرْفِ الَّذِي بَعْدَهَا 👀 (عَكْسُ الأَلِف)',kidEn:'The ghunnah copies the letter AFTER it (the opposite of alif).',
-    bq:'"والعكس في الغن ألف" معناه أن الغنة بعكس الألف، فهي تابعة لما بعدها تفخيما وترقيقا… فحكم الغنة: أنها تابعة لما بعدها تفخيما وترقيقا.',pg:'٣٧'},
+    bq:'"والعكس في الغن ألف" معناه أن الغنة بعكس الألف، فهي تابعة لما بعدها تفخيما وترقيقا… فحكم الغنة: أنها تابعة لما بعدها تفخيما وترقيقا.',pg:'٣٧',bqEn:'“And the opposite for the ghunnah and alif” means that the ghunnah is the opposite of the alif: it follows what comes after it in heaviness and lightness… so the ruling of the ghunnah is that it follows what comes after it.'},
   ra_stop_thin:{kid:'وَقَفْتَ عَلَى الرَّاء: قَبْلَهَا كَسْرَة، أَوْ كَسْرَة + سَاكِنٌ نَحِيف، أَوْ يَاءٌ سَاكِنَة ← نَحِيفَة 🐭',kidEn:'Stopping on Rā: kasrah before it (or kasrah + a light silent letter, or a silent yā) → skinny.',
-    bq:'وإذا وقف على الراء فإنها ترقق في ثلاث حالات: الأولى: أن يقع قبلها كسر مباشر مثل: بَصَائِرُ. الثانية: أن يقع قبلها كسر غير مباشر بأن فصل بينه وبين الراء حرف ساكن مستفل مثل: سِحْرٌ الذِّكْرَ. الثالثة: أن يقع قبلها ياء ساكنة مثل: قَدِيرٌ الْخَيْرُ.',pg:'٣٦'},
+    bq:'وإذا وقف على الراء فإنها ترقق في ثلاث حالات: الأولى: أن يقع قبلها كسر مباشر مثل: بَصَائِرُ. الثانية: أن يقع قبلها كسر غير مباشر بأن فصل بينه وبين الراء حرف ساكن مستفل مثل: سِحْرٌ الذِّكْرَ. الثالثة: أن يقع قبلها ياء ساكنة مثل: قَدِيرٌ الْخَيْرُ.',pg:'٣٦',bqEn:'When stopping on the rā’, it is made light in three cases. First: a kasrah directly before it, as in baṣā’iru. Second: an indirect kasrah, where a light sākin letter separates the kasrah and the rā’, as in siḥrun and adh-dhikra. Third: a sākin yā’ before it, as in qadīrun and al-khayru.'},
   ra_stop_fat:{kid:'وَقَفْتَ عَلَى الرَّاء وَلَيْسَ قَبْلَهَا كَسْرَةٌ وَلَا يَاءٌ سَاكِنَة ← سَمِينَة 🐡',kidEn:'Stopping on Rā with no kasrah or silent yā before it → puffy.',
-    bq:'وتفخم الراء في غير هذه الحالات الثلاث مثل: الْقَمَرَ النُّذُرُ وَالْفَجْرِ.',pg:'٣٦'},
+    bq:'وتفخم الراء في غير هذه الحالات الثلاث مثل: الْقَمَرَ النُّذُرُ وَالْفَجْرِ.',pg:'٣٦',bqEn:'The rā’ is made heavy in cases other than these three, as in al-qamara, an-nudhuru and wal-fajri.'},
   misr:{kid:'وَجْهَان! وَالأَرْجَحُ فِي «مِصْرَ» التَّفْخِيم 🐡 (الصَّادُ السَّمِينَةُ حَاجِزٌ قَوِيّ)',kidEn:'Two ways; the preferred one for "Miṣr" is puffy.',
-    bq:'إذا وقفت على راء مِصْرَ أو راء الْقِطْرِ بسبأ، ففي الراء وجهان: الترقيق والتفخيم… والأرجح في "مصر" التفخيم، وفي "القطر" الترقيق؛ نظرا للوصل، وعملا بالأصل.',pg:'٣٧'},
+    bq:'إذا وقفت على راء مِصْرَ أو راء الْقِطْرِ بسبأ، ففي الراء وجهان: الترقيق والتفخيم… والأرجح في "مصر" التفخيم، وفي "القطر" الترقيق؛ نظرا للوصل، وعملا بالأصل.',pg:'٣٧',bqEn:'When stopping on the rā’ of Miṣra or the rā’ of al-Qiṭri in Sabaʾ, the rā’ has two ways: tarqīq and tafkhīm… and the preferred one for “Miṣr” is tafkhīm, and for “al-Qiṭr” tarqīq, considering the joined form and following the original.'},
   qitr:{kid:'وَجْهَان! وَالأَرْجَحُ فِي «القِطْرِ» التَّرْقِيق 🐭 (لِأَنَّهَا مَكْسُورَةٌ فِي الوَصْل)',kidEn:'Two ways; the preferred one for "al-Qiṭr" is skinny (it has kasrah when joined).',
-    bq:'إذا وقفت على راء مِصْرَ أو راء الْقِطْرِ بسبأ، ففي الراء وجهان: الترقيق والتفخيم… والأرجح في "مصر" التفخيم، وفي "القطر" الترقيق؛ نظرا للوصل، وعملا بالأصل.',pg:'٣٧'},
+    bq:'إذا وقفت على راء مِصْرَ أو راء الْقِطْرِ بسبأ، ففي الراء وجهان: الترقيق والتفخيم… والأرجح في "مصر" التفخيم، وفي "القطر" الترقيق؛ نظرا للوصل، وعملا بالأصل.',pg:'٣٧',bqEn:'When stopping on the rā’ of Miṣra or the rā’ of al-Qiṭri in Sabaʾ, the rā’ has two ways: tarqīq and tafkhīm… and the preferred one for “Miṣr” is tafkhīm, and for “al-Qiṭr” tarqīq, considering the joined form and following the original.'},
 };
-const ITBAQ_NOTE = {kid:'⭐ وَهُوَ مِنْ حُرُوفِ الإِطْبَاق (ص ض ط ظ): أَسْمَنُ الجَمِيع!',bq:'وتختص حروف الإطباق الأربعة بتفخيم أقوى: وهي الصاد، والضاد، والطاء، والظاء.',pg:'٣٤'};
+const ITBAQ_NOTE = {kid:'⭐ وَهُوَ مِنْ حُرُوفِ الإِطْبَاق (ص ض ط ظ): أَسْمَنُ الجَمِيع!',bq:'وتختص حروف الإطباق الأربعة بتفخيم أقوى: وهي الصاد، والضاد، والطاء، والظاء.',pg:'٣٤',bqEn:'The four iṭbāq letters have a stronger tafkhīm: they are the ṣād, the ḍād, the ṭā’ and the ẓā’.'};
 
 const SETS = {
   heavy:{ar:'① حُرُوفُ «خُصَّ ضَغْطٍ قِظْ» مِنْ سُوَرِي (٤–٨ سنين)',en:'The 7 heavy letters in my short surahs (age 4–8)',round:10,
@@ -343,6 +346,7 @@ const PAIRS = [
   {thin:{t:'[ذَ]لَّ',pic:'🙇',en:'was humbled'},fat:{t:'[ظَ]لَّ',pic:'⛱️',en:'stayed'}},
 ];
 const MEMO_SIZES = {3:'٣ أَزْوَاج (٦ بِطَاقَات) — للصِّغَار',4:'٤ أَزْوَاج (٨ بِطَاقَات)',6:'٦ أَزْوَاج (١٢ بِطَاقَة)'};
+const MEMO_EN = {3:'3 pairs (6 cards) — for little ones',4:'4 pairs (8 cards)',6:'6 pairs (12 cards)'};
 /* 🎈 مراتب التفخيم الخمس (ص ٣٤): من الأسمن إلى الأقل */
 const LEVELS = [
   {f:l=>l+'َا',ar:'مَفْتُوحٌ بَعْدَهُ أَلِف',en:'fatḥah + alif'},
@@ -351,7 +355,7 @@ const LEVELS = [
   {f:l=>'أَ'+l+'ْ',ar:'سَاكِن',en:'sukūn'},
   {f:l=>l+'ِ',ar:'مَكْسُور',en:'kasrah'},
 ];
-const LEVEL_BQ = {bq:'للتفخيم خمس مراتب: فأعلاها في المفتوح الذي بعده ألف مثل: طَائِعِينَ فالمفتوح الذي ليس بعده ألف مثل: طَلَبًا فالمضموم مثل: يَسْطُرُونَ فالساكن مثل: أَطْعَمَهُمْ فالمكسور مثل: طِبْتُمْ وهكذا في بقية الأحرف.',pg:'٣٤',
+const LEVEL_BQ = {bq:'للتفخيم خمس مراتب: فأعلاها في المفتوح الذي بعده ألف مثل: طَائِعِينَ فالمفتوح الذي ليس بعده ألف مثل: طَلَبًا فالمضموم مثل: يَسْطُرُونَ فالساكن مثل: أَطْعَمَهُمْ فالمكسور مثل: طِبْتُمْ وهكذا في بقية الأحرف.',pg:'٣٤',bqEn:'Tafkhīm has five levels: the highest is a fatḥah followed by an alif, as in ṭā’i‘īna; then a fatḥah with no alif after it, as in ṭalaban; then a ḍammah, as in yasṭurūna; then a sukūn, as in aṭ‘amahum; then a kasrah, as in ṭibtum — and so on with the rest of the letters.',
   ex:[{t:'[طَا]ئِعِينَ',ref:'فصلت: ١١'},{t:'[طَ]لَبًا',ref:'الكهف: ٤١'},{t:'يَسْ[طُ]رُونَ',ref:'القلم: ١'},{t:'أَ[طْ]عَمَهُمْ',ref:'قريش: ٤'},{t:'[طِ]بْتُمْ',ref:'الزمر: ٧٣'}]};
 const BALLOON_LETTERS = 'ط ق ص خ ض غ ظ';
 const BALLOON_ROUND = 4;
@@ -360,6 +364,10 @@ const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَك�
 /* ============================================================ */
 
 const $=s=>document.querySelector(s);
+const {U,tr}=TQI;
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
+const west=s=>String(s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const bqH=(a,e)=>`<div class="bq">«${a}»${tr('“'+e+'”')}</div>`;
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const plain=t=>t.replace(/[\[\]]/g,'');
@@ -392,28 +400,28 @@ const sfx={
   pop:()=>tone(660,.08,'sine',.15)};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2B705','#E36414','#3A86FF','#22A45D','#8E5CF7','#EF476F'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- state ---------- */
 const S0=$('#s0');
 let mode='sort',teams=[],turn=0,missed=[];
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ نُجُومِي','⭐ My stars'),c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}];
+  return [{nm:U('🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'),c:'var(--teamA)'},{nm:U('🔴 الفَرِيقُ الأَحْمَر','🔴 Red team'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 function award(p,quiet){teams[turn].pts+=p;renderTeams();if(!quiet)sfx.good();praise(p);confetti()}
 function nextTurn(){turn=(turn+1)%teams.length;renderTeams()}
 function stage(){document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}))}
-function cite(pg){return `${BOOK.ar}، ص ${pg} (بترقيم الشاملة آليًّا)`}
-function info(t,kid,kidEn,bq,pg,hc){return `<div class="info" style="--hc:${hc||'var(--gold)'}"><div class="t">${t}</div>${kid?`<div class="kid">${kid}${kidEn?`<span class="en blk">${kidEn}</span>`:''}</div>`:''}<div class="bq">«${bq}»</div><small>${cite(pg)}</small></div>`}
+function cite(pg){return U(`${BOOK.ar}، ص ${pg} (بترقيم الشاملة آليًّا)`,`${BOOK.en}, p. ${west(pg)} (page numbers as auto-assigned by Shamela)`)}
+function info(t,kid,kidEn,bq,pg,hc,bqEn){return `<div class="info" style="--hc:${hc||'var(--gold)'}"><div class="t">${t}</div>${kid?`<div class="kid">${kidEn?U(kid,kidEn):kid}</div>`:''}${bqEn?bqH(bq,bqEn):`<div class="bq">«${bq}»</div>`}<small>${cite(pg)}</small></div>`}
 const kc=k=>k==='fat'?'var(--fat)':'var(--thin)';
 
 function fillSetSel(){const sel=$('#setSel');
-  if(mode==='sort'){$('#setLbl').textContent='الدرس:';sel.innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}">${g.ar}</option>`).join('')}
-  else if(mode==='memo'){$('#setLbl').textContent='البطاقات:';sel.innerHTML=Object.entries(MEMO_SIZES).map(([k,v])=>`<option value="${k}" ${k==='4'?'selected':''}>${v}</option>`).join('')}
-  else{$('#setLbl').textContent='الحروف:';sel.innerHTML=`<option value="mix">كُلُّ «خُصَّ ضَغْطٍ قِظْ» (${ar(BALLOON_ROUND)} حُرُوف)</option>`+BALLOON_LETTERS.split(' ').map(l=>`<option value="${l}">حَرْفُ ${l} فَقَط</option>`).join('')}}
-$('#bookLine').textContent=`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الكلمات من القرآن الكريم (رواية حفص) بمواضعها، وأغلب أمثلة الدرسين ② و③ و④ ومراتب البالونات من الكتاب نفسه؛ كلمات «التوأم» مفردات عربية للتدريب.`;
+  if(mode==='sort'){$('#setLbl').innerHTML=U('الدرس:','Lesson:');sel.innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}" data-en="${g.en}">${g.ar}</option>`).join('')}
+  else if(mode==='memo'){$('#setLbl').innerHTML=U('البطاقات:','Cards:');sel.innerHTML=Object.entries(MEMO_SIZES).map(([k,v])=>`<option value="${k}" ${k==='4'?'selected':''} data-en="${MEMO_EN[k]}">${v}</option>`).join('')}
+  else{$('#setLbl').innerHTML=U('الحروف:','Letters:');sel.innerHTML=`<option value="mix" data-en="All of “khuṣṣa ḍaghṭin qiẓ” (${BALLOON_ROUND} letters)">كُلُّ «خُصَّ ضَغْطٍ قِظْ» (${ar(BALLOON_ROUND)} حُرُوف)</option>`+BALLOON_LETTERS.split(' ').map(l=>`<option value="${l}" data-en="Only the letter ${l}">حَرْفُ ${l} فَقَط</option>`).join('')}TQI.relabel()}
+$('#bookLine').innerHTML=U(`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الكلمات من القرآن الكريم (رواية حفص) بمواضعها، وأغلب أمثلة الدرسين ② و③ و④ ومراتب البالونات من الكتاب نفسه؛ كلمات «التوأم» مفردات عربية للتدريب.`,`📚 Source: ${BOOK.en}, ${BOOK.refEn}. The words come from the Qur’an (Ḥafṣ recitation) in their places, and most examples of lessons ②, ③ and ④ and the balloon levels come from the book itself; the “twin” words are Arabic vocabulary for practice.`);
 
 function newGame(){teams=teamDefs().map(t=>({...t,pts:0}));turn=0;missed=[];renderTeams();
   if(mode==='sort')sortIntro();else if(mode==='memo')memoStart();else ballStart()}
@@ -421,28 +429,28 @@ function newGame(){teams=teamDefs().map(t=>({...t,pts:0}));turn=0;missed=[];rend
 /* ================= ① سمين أم نحيف؟ ================= */
 let queue=[],done=0,goal=10,setK='heavy';
 function sortIntro(){setK=$('#setSel').value;const g=SETS[setK];
-  S0.innerHTML=`<div class="q">👄 بَعْضُ الحُرُوفِ «سَمِينَة» تَمْلَأُ الفَم، وَبَعْضُهَا «نَحِيفَة»! <span class="en blk">Some letters are puffy and fill your mouth; some are skinny!</span></div>
+  S0.innerHTML=`<div class="q">${U('👄 بَعْضُ الحُرُوفِ «سَمِينَة» تَمْلَأُ الفَم، وَبَعْضُهَا «نَحِيفَة»!','👄 Some letters are “puffy” and fill your mouth, and some are “skinny”!')}</div>
    <div class="posters">
-    <div class="poster fat"><div class="big">🐡</div><div class="h">سَمِين = تَفْخِيم <span class="en">Puffy = tafkhīm</span></div>
-      <div class="ls">خُصَّ ضَغْطٍ قِظْ</div><div class="bq">«سمن يدخل على جسم الحرف -أي صوته- فيمتلئ الفم بصداه» (ص ٣٤)</div>
-      <div class="pose">💪 ${KINDS.fat.move}<span class="en blk">${KINDS.fat.moveEn}</span></div>
-      <button class="big-btn orange" id="tryF">🔊 اسْمَعِ السَّمِين</button></div>
-    <div class="poster thin"><div class="big">🐭</div><div class="h">نَحِيف = تَرْقِيق <span class="en">Skinny = tarqīq</span></div>
-      <div class="ls" style="font-size:1.2rem;letter-spacing:0">بَاقِي الحُرُوف… إِلَّا الرَّاءَ وَاللَّامَ وَالأَلِفَ أَحْيَانًا</div><div class="bq">«نحول يدخل على جسم الحرف فلا يمتلئ الفم بصداه» (ص ٣٤)</div>
-      <div class="pose">✏️ ${KINDS.thin.move}<span class="en blk">${KINDS.thin.moveEn}</span></div>
-      <button class="big-btn" id="tryT">🔊 اسْمَعِ النَّحِيف</button></div>
+    <div class="poster fat"><div class="big">🐡</div><div class="h">${U('سَمِين = تَفْخِيم','Puffy = tafkhīm')}</div>
+      <div class="ls">خُصَّ ضَغْطٍ قِظْ</div><div class="bq">${U('«سمن يدخل على جسم الحرف -أي صوته- فيمتلئ الفم بصداه» (ص ٣٤)','“A fatness that enters the body of the letter, that is, its sound, so the mouth fills with its echo” (p. 34)')}</div>
+      <div class="pose">💪 ${U(KINDS.fat.move,KINDS.fat.moveEn)}</div>
+      <button class="big-btn orange" id="tryF">${U('🔊 اسْمَعِ السَّمِين','🔊 Hear the puffy sound')}</button></div>
+    <div class="poster thin"><div class="big">🐭</div><div class="h">${U('نَحِيف = تَرْقِيق','Skinny = tarqīq')}</div>
+      <div class="ls" style="font-size:1.2rem;letter-spacing:0">${U('بَاقِي الحُرُوف… إِلَّا الرَّاءَ وَاللَّامَ وَالأَلِفَ أَحْيَانًا','All the other letters… except the rā’, the lām and the alif, which are sometimes heavy')}</div><div class="bq">${U('«نحول يدخل على جسم الحرف فلا يمتلئ الفم بصداه» (ص ٣٤)','“A thinness that enters the body of the letter, so the mouth does not fill with its echo” (p. 34)')}</div>
+      <div class="pose">✏️ ${U(KINDS.thin.move,KINDS.thin.moveEn)}</div>
+      <button class="big-btn" id="tryT">${U('🔊 اسْمَعِ النَّحِيف','🔊 Hear the skinny sound')}</button></div>
    </div>
-   <div class="tip">🎯 جَرِّبْ: قُلْ «سَ» ثُمَّ «صَ» وَيَدُكَ عَلَى خَدِّك — فِي «صَ» الفَمُ يَمْتَلِئُ وَمُؤَخِّرُ اللِّسَانِ يَرْتَفِع ⬆️ <span class="en blk">Try: say "sa" then "ṣa" with your hand on your cheek: with ṣa your mouth fills up.</span></div>
-   <div class="row"><button class="big-btn green" id="goB">ابْدَأْ: ${g.ar.split(' (')[0]} ▶ <span class="en">Start</span></button></div>`;
+   <div class="tip">${U('🎯 جَرِّبْ: قُلْ «سَ» ثُمَّ «صَ» وَيَدُكَ عَلَى خَدِّك — فِي «صَ» الفَمُ يَمْتَلِئُ وَمُؤَخِّرُ اللِّسَانِ يَرْتَفِع ⬆️','🎯 Try it: say “sa”, then “ṣa”, with your hand on your cheek. With “ṣa” your mouth fills up and the back of your tongue rises ⬆️')}</div>
+   <div class="row"><button class="big-btn green" id="goB">${U('ابْدَأْ: '+g.ar.split(' (')[0]+' ▶','Start: '+g.en.split(' (')[0]+' ▶')}</button></div>`;
   $('#tryF').onclick=()=>{ac();sfx.fat()};$('#tryT').onclick=()=>{ac();sfx.thin()};
   $('#goB').onclick=()=>{ac();goal=Math.min(g.round||10,g.items.length);queue=shuffle(g.items).slice(0,goal);done=0;sortShow()};
   stage()}
 function sortShow(){if(!queue.length){end();return}
   const g=SETS[setK],it=queue.shift(),r=ruleOf(it);let tries=0,over=false;
-  S0.innerHTML=`<div class="prog"><span>الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}${it._retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>
-    <div class="wcard">${g.stop?'<span class="stopb">✋ قِفْ عَلَيْهَا · Stop on it</span>':''}<div class="w ${plain(it.t).length>12?'long':''}" id="wd">${wordHTML(it.t,'q')}</div>
-      <div class="meta">${it.pic||''} (${it.ref}) <span class="en">— ${it.en||''}</span></div></div>
-    <div class="look">① اقْرَأْهَا بِصَوْتٍ عَالٍ ② ${g.look} ③ اخْتَرْ <span class="en blk">① Read it aloud ② ${g.lookEn} ③ Choose</span></div>
+  S0.innerHTML=`<div class="prog"><span>${U(`الكَلِمَة ${ar(done+1)} مِنْ ${ar(goal)}`,`Word ${done+1} of ${goal}`)}${it._retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>
+    <div class="wcard">${g.stop?`<span class="stopb">${U('✋ قِفْ عَلَيْهَا','✋ Stop on it')}</span>`:''}<div class="w ${plain(it.t).length>12?'long':''}" id="wd">${wordHTML(it.t,'q')}</div>
+      <div class="meta">${it.pic||''} (${RF(it.ref)}) <span class="en">— ${it.en||''}</span></div></div>
+    <div class="look">${U(`① اقْرَأْهَا بِصَوْتٍ عَالٍ ② ${g.look} ③ اخْتَرْ`,`① Read it aloud. ② ${g.lookEn} ③ Choose.`)}</div>
     <div class="choices">
       <button class="ch fat" data-k="fat"><span class="emo">🐡</span><span class="nm">${KINDS.fat.ar}</span><span class="ds">${KINDS.fat.ds}</span><span class="en">${KINDS.fat.en}</span></button>
       <button class="ch thin" data-k="thin"><span class="emo">🐭</span><span class="nm">${KINDS.thin.ar}</span><span class="ds">${KINDS.thin.ds}</span><span class="en">${KINDS.thin.en}</span></button>
@@ -454,13 +462,13 @@ function sortShow(){if(!queue.length){end();return}
       if(!it._retry)queue.splice(Math.min(RETRY_GAP,queue.length),0,{...it,_retry:1});setTimeout(reveal,400)}}
   function reveal(){bs.forEach(x=>x.disabled=true);(r.k==='fat'?sfx.fat:sfx.thin)();
     $('#wd').innerHTML=wordHTML(it.t,r.k);const K=KINDS[r.k],W=WHY[r.why];
-    $('#after').innerHTML=`<div class="mouth ${r.k}"><span class="who">${K.emo}</span><div><div class="lbl" style="color:${kc(r.k)}">${r.k==='fat'?'الفَمُ مُمْتَلِئ!':'الفَمُ فَارِغ تَقْرِيبًا'} <span class="en">${K.dsEn}</span></div><div class="meter"><i></i></div></div></div>
-      <div class="tpr" style="--hc:${kc(r.k)}"><span class="emo">${K.emo}</span><span>${K.move}<span class="en blk">${K.moveEn}</span></span>
-        <button class="big-btn green" id="bonusB">✓ عَمِلَ الحَرَكَة وَقَرَأَ صَحِيحًا (+١)</button></div>
-      ${info(`لِمَاذَا ${K.ar}؟ ${K.emo} <span class="en">Why?</span>`,W.kid,W.kidEn,W.bq,W.pg,kc(r.k))}
-      ${r.itbaq&&r.why==='istila'?info('⭐ أَسْمَنُ الحُرُوف',ITBAQ_NOTE.kid,'Ṣ Ḍ Ṭ Ẓ are the puffiest of all.',ITBAQ_NOTE.bq,ITBAQ_NOTE.pg,'var(--fat)'):''}
+    $('#after').innerHTML=`<div class="mouth ${r.k}"><span class="who">${K.emo}</span><div><div class="lbl" style="color:${kc(r.k)}">${U(r.k==='fat'?'الفَمُ مُمْتَلِئ!':'الفَمُ فَارِغ تَقْرِيبًا',r.k==='fat'?'The mouth fills with sound!':'The mouth stays almost empty')}</div><div class="meter"><i></i></div></div></div>
+      <div class="tpr" style="--hc:${kc(r.k)}"><span class="emo">${K.emo}</span><span>${U(K.move,K.moveEn)}</span>
+        <button class="big-btn green" id="bonusB">${U('✓ عَمِلَ الحَرَكَة وَقَرَأَ صَحِيحًا (+١)','✓ Did the movement and read it correctly (+1)')}</button></div>
+      ${info(U(`لِمَاذَا ${K.ar}؟ ${K.emo}`,`Why ${K.en.split(' (')[0].toLowerCase()}? ${K.emo}`),W.kid,W.kidEn,W.bq,W.pg,kc(r.k),W.bqEn)}
+      ${r.itbaq&&r.why==='istila'?info(U('⭐ أَسْمَنُ الحُرُوف','⭐ The puffiest letters'),ITBAQ_NOTE.kid,'It is one of the iṭbāq letters (ṣ ḍ ṭ ẓ): the puffiest of all!',ITBAQ_NOTE.bq,ITBAQ_NOTE.pg,'var(--fat)',ITBAQ_NOTE.bqEn):''}
       ${it.note?`<div class="look">💡 ${it.note}</div>`:''}
-      <div class="row"><button class="big-btn ghost" id="again">🔊 ${K.ar}</button><button class="big-btn" id="nextB">التَّالِي ← <span class="en">Next</span></button></div>`;
+      <div class="row"><button class="big-btn ghost" id="again">🔊 ${U(K.ar,K.en.split(' (')[0])}</button><button class="big-btn" id="nextB">${U('التَّالِي ←','Next →')}</button></div>`;
     $('#bonusB').onclick=()=>{$('#bonusB').remove();award(1)};
     $('#again').onclick=()=>(r.k==='fat'?sfx.fat:sfx.thin)();
     $('#nextB').onclick=()=>{if(!it._retry)done++;nextTurn();sortShow()};$('#nextB').focus({preventScroll:true})}
@@ -472,9 +480,9 @@ let cards=[],open=[],lock=false,found=0,nPairs=4;
 function memoStart(){nPairs=+$('#setSel').value||4;const ps=shuffle(PAIRS).slice(0,nPairs);found=0;open=[];lock=false;
   cards=shuffle(ps.flatMap((p,i)=>[{pi:i,side:'thin',...p.thin,p},{pi:i,side:'fat',...p.fat,p}]));
   const cols=nPairs<=3?3:4;
-  S0.innerHTML=`<div class="q">🃏 ابْحَثْ عَنِ «التَّوْأَم»: كَلِمَتَانِ مُتَشَابِهَتَان، وَاحِدَةٌ نَحِيفَة 🐭 وَوَاحِدَةٌ سَمِينَة 🐡 <span class="en blk">Find the twins: two look-alike words, one skinny and one puffy.</span></div>
-    <div class="tip">اقْلِبْ بِطَاقَتَيْن، وَقُلْ كُلَّ كَلِمَةٍ بِصَوْتٍ عَالٍ عِنْدَمَا تَقْلِبُهَا 🗣️ <span class="en blk">Flip two cards and say each word aloud.</span></div>
-    <div class="grid" style="--cols:${cols}">${cards.map((c,i)=>`<button class="card" data-i="${i}" aria-label="بطاقة ${ar(i+1)}"><span class="in"><span class="bk">${ar(i+1)}</span><span class="fc"><span class="p">${c.pic}</span><span class="wd">${plain(c.t)}</span><span class="me en">${c.en}</span></span></span></button>`).join('')}</div>
+  S0.innerHTML=`<div class="q">${U('🃏 ابْحَثْ عَنِ «التَّوْأَم»: كَلِمَتَانِ مُتَشَابِهَتَان، وَاحِدَةٌ نَحِيفَة 🐭 وَوَاحِدَةٌ سَمِينَة 🐡','🃏 Find the “twins”: two look-alike words, one skinny 🐭 and one puffy 🐡')}</div>
+    <div class="tip">${U('اقْلِبْ بِطَاقَتَيْن، وَقُلْ كُلَّ كَلِمَةٍ بِصَوْتٍ عَالٍ عِنْدَمَا تَقْلِبُهَا 🗣️','Flip two cards and say each word aloud as you flip it 🗣️')}</div>
+    <div class="grid" style="--cols:${cols}">${cards.map((c,i)=>`<button class="card" data-i="${i}" aria-label="Card ${i+1} · بطاقة ${ar(i+1)}"><span class="in"><span class="bk">${U(ar(i+1),i+1)}</span><span class="fc"><span class="p">${c.pic}</span><span class="wd">${plain(c.t)}</span><span class="me en">${c.en}</span></span></span></button>`).join('')}</div>
     <div id="after"></div>`;
   S0.querySelectorAll('.card').forEach(b=>b.onclick=()=>flip(+b.dataset.i));stage()}
 function flip(i){if(lock)return;const el=S0.querySelector(`.card[data-i="${i}"]`);if(el.classList.contains('up')||el.classList.contains('done'))return;ac();sfx.flip();
@@ -485,12 +493,12 @@ function flip(i){if(lock)return;const el=S0.querySelector(`.card[data-i="${i}"]`
     setTimeout(()=>{open.forEach(j=>{const e=S0.querySelector(`.card[data-i="${j}"]`);e.classList.remove('up','nope')});open=[];lock=false;nextTurn()},1500)}}
 function matched(p){open.forEach(j=>{const e=S0.querySelector(`.card[data-i="${j}"]`);e.classList.remove('up');e.classList.add('done')});open=[];found++;award(1);
   $('#after').innerHTML=`<div class="pairbox">
-      <div class="side thin"><div class="tag">🐭 نَحِيف</div><div class="wd">${wordHTML(p.thin.t,'thin')}</div><div>${p.thin.pic} <span class="en">${p.thin.en}</span></div><button class="big-btn" data-s="thin">🔊</button></div>
+      <div class="side thin"><div class="tag">${U('🐭 نَحِيف','🐭 Skinny')}</div><div class="wd">${wordHTML(p.thin.t,'thin')}</div><div>${p.thin.pic} <span class="en">${p.thin.en}</span></div><button class="big-btn" data-s="thin">🔊</button></div>
       <div class="vs">↔️</div>
-      <div class="side fat"><div class="tag">🐡 سَمِين</div><div class="wd">${wordHTML(p.fat.t,'fat')}</div><div>${p.fat.pic} <span class="en">${p.fat.en}</span></div><button class="big-btn orange" data-s="fat">🔊</button></div></div>
-    <div class="tpr" style="--hc:var(--fat)"><span class="emo">🐭➡️🐡</span><span>قُلِ النَّحِيفَةَ بِابْتِسَامَة، ثُمَّ السَّمِينَةَ وَأَنْتَ تَنْفُخُ خَدَّيْك — حَرْفٌ وَاحِدٌ يُغَيِّرُ المَعْنَى!<span class="en blk">Say the skinny word smiling, then the puffy one with puffed cheeks: one letter changes the meaning!</span></span>
-      <button class="big-btn green" id="bonusB">✓ قَالَ الكَلِمَتَيْنِ صَحِيحًا (+١)</button></div>
-    <div class="row"><button class="big-btn" id="nextB">${found>=nPairs?'🏆 النِّهَايَة':'تَابِعِ اللَّعِب ←'} <span class="en">Continue</span></button></div>`;
+      <div class="side fat"><div class="tag">${U('🐡 سَمِين','🐡 Puffy')}</div><div class="wd">${wordHTML(p.fat.t,'fat')}</div><div>${p.fat.pic} <span class="en">${p.fat.en}</span></div><button class="big-btn orange" data-s="fat">🔊</button></div></div>
+    <div class="tpr" style="--hc:var(--fat)"><span class="emo">🐭➡️🐡</span><span>${U('قُلِ النَّحِيفَةَ بِابْتِسَامَة، ثُمَّ السَّمِينَةَ وَأَنْتَ تَنْفُخُ خَدَّيْك — حَرْفٌ وَاحِدٌ يُغَيِّرُ المَعْنَى!','Say the skinny word with a smile, then the puffy one with puffed cheeks — one letter changes the meaning!')}</span>
+      <button class="big-btn green" id="bonusB">${U('✓ قَالَ الكَلِمَتَيْنِ صَحِيحًا (+١)','✓ Said both words correctly (+1)')}</button></div>
+    <div class="row"><button class="big-btn" id="nextB">${found>=nPairs?U('🏆 النِّهَايَة','🏆 Finish'):U('تَابِعِ اللَّعِب ←','Keep playing →')}</button></div>`;
   $('#after').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>sfx[b.dataset.s]());
   $('#bonusB').onclick=()=>{$('#bonusB').remove();award(1)};
   $('#nextB').onclick=()=>{$('#after').innerHTML='';lock=false;nextTurn();if(found>=nPairs)end()};
@@ -500,16 +508,16 @@ function matched(p){open.forEach(j=>{const e=S0.querySelector(`.card[data-i="${j
 let bLetters=[],bi=0;
 function ballStart(){const v=$('#setSel').value;bLetters=v==='mix'?shuffle(BALLOON_LETTERS.split(' ')).slice(0,BALLOON_ROUND):[v,v];bi=0;ballIntro()}
 function ballIntro(){
-  S0.innerHTML=`<div class="q">🎈 الحَرْفُ السَّمِين لَيْسَ سَمِينًا بِنَفْسِ الدَّرَجَةِ دَائِمًا! <span class="en blk">A puffy letter is not always equally puffy!</span></div>
-    <div class="tip">الحَرَكَةُ تَنْفُخُ البَالُون: فَتْحَة + أَلِف = أَكْبَرُ بَالُون 🎈، وَالكَسْرَة = أَصْغَرُ بَالُون. رَتِّبِ البَالُونَاتِ مِنَ الأَسْمَنِ إِلَى الأَقَلّ.<span class="en blk">The vowel blows up the balloon: fatḥah + alif = the biggest, kasrah = the smallest. Order them from puffiest to least puffy.</span></div>
-    ${info('مَرَاتِبُ التَّفْخِيمِ الخَمْس 🎈',null,null,LEVEL_BQ.bq,LEVEL_BQ.pg,'var(--fat)')}
-    <div class="row"><button class="big-btn green" id="goB">ابْدَأْ 🎈 <span class="en">Start</span></button></div>`;
+  S0.innerHTML=`<div class="q">${U('🎈 الحَرْفُ السَّمِين لَيْسَ سَمِينًا بِنَفْسِ الدَّرَجَةِ دَائِمًا!','🎈 A puffy letter is not always equally puffy!')}</div>
+    <div class="tip">${U('الحَرَكَةُ تَنْفُخُ البَالُون: فَتْحَة + أَلِف = أَكْبَرُ بَالُون 🎈، وَالكَسْرَة = أَصْغَرُ بَالُون. رَتِّبِ البَالُونَاتِ مِنَ الأَسْمَنِ إِلَى الأَقَلّ.','The vowel blows up the balloon: fatḥah + alif = the biggest balloon 🎈, kasrah = the smallest. Put the balloons in order from the puffiest to the least puffy.')}</div>
+    ${info(U('مَرَاتِبُ التَّفْخِيمِ الخَمْس 🎈','The five levels of tafkhīm 🎈'),null,null,LEVEL_BQ.bq,LEVEL_BQ.pg,'var(--fat)',LEVEL_BQ.bqEn)}
+    <div class="row"><button class="big-btn green" id="goB">${U('ابْدَأْ 🎈','Start 🎈')}</button></div>`;
   $('#goB').onclick=()=>{ac();ballRound()};stage()}
 function ballRound(){if(bi>=bLetters.length){end();return}
   const l=bLetters[bi],order=LEVELS.map((L,i)=>({i,txt:L.f(l)}));let step=0,errs=0;
-  S0.innerHTML=`<div class="prog"><span>الحَرْف ${ar(bi+1)} مِنْ ${ar(bLetters.length)}</span><span>${teams[turn].nm}</span></div>
-    <div class="q">🎈 حَرْفُ «${l}»: اقْرَأْ كُلَّ بَالُونٍ وَأَنْتَ تَنْفُخُ خَدَّيْك، ثُمَّ اضْغَطِ <b>الأَسْمَن</b> أَوَّلًا <span class="en blk">Read each one with puffed cheeks, then tap the PUFFIEST first</span></div>
-    <div class="ladder">${LEVELS.map((L,i)=>`<div class="slot" id="sl${i}"><span class="rk">${ar(i+1)} · ${L.ar}<span class="en blk">${L.en}</span></span></div>`).join('')}</div>
+  S0.innerHTML=`<div class="prog"><span>${U(`الحَرْف ${ar(bi+1)} مِنْ ${ar(bLetters.length)}`,`Letter ${bi+1} of ${bLetters.length}`)}</span><span>${teams[turn].nm}</span></div>
+    <div class="q">${U(`🎈 حَرْفُ «${l}»: اقْرَأْ كُلَّ بَالُونٍ وَأَنْتَ تَنْفُخُ خَدَّيْك، ثُمَّ اضْغَطِ <b>الأَسْمَن</b> أَوَّلًا`,`🎈 The letter “${l}”: read each balloon with puffed cheeks, then tap the <b>puffiest</b> one first.`)}</div>
+    <div class="ladder">${LEVELS.map((L,i)=>`<div class="slot" id="sl${i}"><span class="rk">${U(`${ar(i+1)} · ${L.ar}`,`${i+1} · ${L.en}`)}</span></div>`).join('')}</div>
     <div class="pick">${shuffle(order).map(o=>`<button class="pk" data-i="${o.i}">${o.txt}</button>`).join('')}</div>
     <div id="after"></div>`;
   S0.querySelectorAll('.pk').forEach(b=>b.onclick=()=>{ac();const i=+b.dataset.i;
@@ -517,11 +525,11 @@ function ballRound(){if(bi>=bLetters.length){end();return}
       if(step===5)finish()}
     else{errs++;b.classList.remove('bad');void b.offsetWidth;b.classList.add('bad');sfx.bad()}});
   function finish(){const p=errs?1:2;setTimeout(()=>award(p),300);if(errs)missed.push(LEVELS.map(L=>L.f(l)).join(' ‹ '));
-    $('#after').innerHTML=`<div class="tpr" style="--hc:var(--fat)"><span class="emo">🗣️</span><span>اقْرَأِ الخَمْسَةَ بِالتَّرْتِيب: ${LEVELS.map(L=>L.f(l)).join(' ← ')} — وَالخَدَّانِ يَصْغُرَانِ شَيْئًا فَشَيْئًا<span class="en blk">Read all five in order: your cheeks get smaller each time</span></span>
-        <button class="big-btn green" id="bonusB">✓ قَرَأَهَا بِالتَّدَرُّج (+١)</button></div>
-      <div class="info" style="--hc:var(--fat)"><div class="t">📚 أَمْثِلَةُ الكِتَابِ لِلطَّاء <span class="en">The book's examples</span></div>
-        <div class="bq">${LEVEL_BQ.ex.map(e=>`${wordHTML(e.t,'fat')} <small style="display:inline">(${e.ref})</small>`).join(' · ')}</div><small>${cite(LEVEL_BQ.pg)}</small></div>
-      <div class="row"><button class="big-btn ghost" id="playB">🔊 اسْمَعِ السُّلَّم</button><button class="big-btn" id="nextB">التَّالِي ← <span class="en">Next</span></button></div>`;
+    $('#after').innerHTML=`<div class="tpr" style="--hc:var(--fat)"><span class="emo">🗣️</span><span>${U(`اقْرَأِ الخَمْسَةَ بِالتَّرْتِيب: ${LEVELS.map(L=>L.f(l)).join(' ← ')} — وَالخَدَّانِ يَصْغُرَانِ شَيْئًا فَشَيْئًا`,`Read all five in order: ${LEVELS.map(L=>L.f(l)).join(' ← ')} — your cheeks get smaller little by little.`)}</span>
+        <button class="big-btn green" id="bonusB">${U('✓ قَرَأَهَا بِالتَّدَرُّج (+١)','✓ Read them step by step (+1)')}</button></div>
+      <div class="info" style="--hc:var(--fat)"><div class="t">${U('📚 أَمْثِلَةُ الكِتَابِ لِلطَّاء','📚 The book’s examples for the ṭā’')}</div>
+        <div class="bq">${LEVEL_BQ.ex.map(e=>`${wordHTML(e.t,'fat')} <small style="display:inline">(${RF(e.ref)})</small>`).join(' · ')}</div><small>${cite(LEVEL_BQ.pg)}</small></div>
+      <div class="row"><button class="big-btn ghost" id="playB">${U('🔊 اسْمَعِ السُّلَّم','🔊 Hear the ladder')}</button><button class="big-btn" id="nextB">${U('التَّالِي ←','Next →')}</button></div>`;
     $('#bonusB').onclick=()=>{$('#bonusB').remove();award(1)};
     $('#playB').onclick=()=>[0,1,2,3,4].forEach(k=>tone(196-k*16+k*90,.35,'triangle',.22-k*.03,k*.4));
     $('#nextB').onclick=()=>{bi++;nextTurn();ballRound()};$('#nextB').focus({preventScroll:true})}
@@ -529,21 +537,20 @@ function ballRound(){if(bi>=bLetters.length){end();return}
 
 /* ---------- end ---------- */
 function end(){const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمْ','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
   const ms=[...new Set(missed)];
   S0.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
-    ${ms.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${ms.join(' · ')}</div>`:'<div>لَا أَخْطَاء — مَا شَاءَ الله! 🌟</div>'}
-    <div class="info"><div class="t">🏠 تَحَدِّي البَيْت <span class="en">Home challenge</span></div>
-      افْتَحْ سُورَتَكَ وَابْحَثْ عَنْ ٣ كَلِمَاتٍ فِيهَا حَرْفٌ سَمِين 🐡 وَ٣ كَلِمَاتٍ فِيهَا رَاءٌ نَحِيفَة 🐭 — نُضِيفُهَا لِلُّعْبَةِ فِي الحِصَّةِ القَادِمَة!
-      <span class="en blk">Find 3 words with a puffy letter and 3 with a skinny Rā in your surah: we'll add them next class!</span></div>
-    <div class="row"><button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div></div>`;
+    ${ms.length?`<div>${U('رَاجِعْ هَذِهِ أَوَّلًا:','Review these first:')}</div><div class="miss">${ms.join(' · ')}</div>`:`<div>${U('لَا أَخْطَاء — مَا شَاءَ الله! 🌟','No mistakes — Masha Allah! 🌟')}</div>`}
+    <div class="info"><div class="t">${U('🏠 تَحَدِّي البَيْت','🏠 Home challenge')}</div>
+      ${U('افْتَحْ سُورَتَكَ وَابْحَثْ عَنْ ٣ كَلِمَاتٍ فِيهَا حَرْفٌ سَمِين 🐡 وَ٣ كَلِمَاتٍ فِيهَا رَاءٌ نَحِيفَة 🐭 — نُضِيفُهَا لِلُّعْبَةِ فِي الحِصَّةِ القَادِمَة!','Open the surah you are learning and find 3 words with a puffy letter 🐡 and 3 words with a skinny rā’ 🐭. We will add them to the game next class!')}</div>
+    <div class="row"><button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);stage()}
 
 /* ---------- controls ---------- */
 document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',x===b));fillSetSel();newGame()});
 $('#setSel').onchange=newGame;$('#teamSel').onchange=newGame;$('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;
   if(e.key==='Enter'&&$('#nextB')&&e.target.id!=='nextB'){e.preventDefault();$('#nextB').click()}});
 window.__t={SETS,ruleOf,parse,PAIRS};

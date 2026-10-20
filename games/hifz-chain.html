@@ -1,5 +1,6 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}body.show-en .mb .en{display:block;font-size:.85em;font-weight:600}
+</style></head><body class="tq-i18n">
 <title>سلسلة الحفاظ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -181,25 +182,25 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">سِلْسِلَةُ <b>الحُفَّاظ</b> 🔗 <span class="en">The Golden Chain of Huffāẓ</span><small>ترتيل القرآن · Tarteel Al-Quran — من «كيف تحفظ القرآن الكريم» لعبد الرب نواب الدين (ص ٢٦–٤٢)</small></h1>
+    <h1 class="brand">سِلْسِلَةُ <b>الحُفَّاظ</b> 🔗 <span class="en">The Golden Chain of Huffāẓ</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — من «كيف تحفظ القرآن الكريم» لعبد الرب نواب الدين (ص ٢٦–٤٢)</span><span class="ui-en">Tarteel Al-Quran — from <i>How to Memorise the Noble Qur’an</i> by Abd ar-Rabb Nawab ad-Din (pp. 26–42)</span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
   <div class="bar">
-    <label for="modeSel">اللعبة:</label>
+    <label for="modeSel"><span class="ui-ar">اللعبة:</span><span class="ui-en">Game:</span></label>
     <select id="modeSel">
-      <option value="chain">🔗 اِرْبِطِ السِّلْسِلَة (مِنْ جِبْرِيلَ إِلَيْك)</option>
-      <option value="who">🕵️ مَنْ أَنَا؟ (حُفَّاظٌ فِي التَّارِيخ)</option>
-      <option value="muarada">🎙️ المُعَارَضَة (اقْرَأْ وَاسْمَعْ ثُمَّ تَبَادَلَا)</option>
-      <option value="khuluq">🌙 أَخْلَاقُ حَامِلِ القُرْآن (قَوْلُ ابْنِ مَسْعُود)</option>
+      <option value="chain" data-en="🔗 Link the chain (from Jibrīl to you)">🔗 اِرْبِطِ السِّلْسِلَة (مِنْ جِبْرِيلَ إِلَيْك)</option>
+      <option value="who" data-en="🕵️ Who am I? (memorisers in history)">🕵️ مَنْ أَنَا؟ (حُفَّاظٌ فِي التَّارِيخ)</option>
+      <option value="muarada" data-en="🎙️ Al-Muʿāraḍah (recite, listen, then swap)">🎙️ المُعَارَضَة (اقْرَأْ وَاسْمَعْ ثُمَّ تَبَادَلَا)</option>
+      <option value="khuluq" data-en="🌙 The manners of the Qur’an’s carrier (the saying of Ibn Masʿūd)">🌙 أَخْلَاقُ حَامِلِ القُرْآن (قَوْلُ ابْنِ مَسْعُود)</option>
     </select>
-    <label for="setSel">السورة:</label>
+    <label for="setSel"><span class="ui-ar">السورة:</span><span class="ui-en">Surah:</span></label>
     <select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان / طالبان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
-    <button class="tbtn" id="blindB" aria-pressed="false" title="في «المعارضة»: تختفي كلمات الآية، والمستمع يكشف موضع الخطأ فقط">🙈 غَيْبًا</button>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams / two students">فريقان / طالبان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
+    <button class="tbtn" id="blindB" aria-pressed="false" title="في «المعارضة»: تختفي كلمات الآية، والمستمع يكشف موضع الخطأ فقط" data-en-title="In “Muʿāraḍah”: the words of the āyah are hidden, and the listener only reveals where the mistake is"><span class="ui-ar">🙈 غَيْبًا</span><span class="ui-en">🙈 From memory</span></button>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0">
@@ -207,12 +208,12 @@ body.ink-laser .ink-cv{cursor:none!important}
     <div class="panel side">
       <h2>🏔️ اِقْرَأْ وَارْتَقِ <span class="en blk">Recite and rise — every point is a step up</span></h2>
       <div class="climb" id="climb"></div>
-      <div class="hadith"><div class="bq">«يقال لصاحب القرآن اقرأ وارتق ورتل كما كنت ترتل في الدنيا، فإن منزلتك عند آخر آية تقرؤها»</div>
-        <small>كما أورده المؤلف (ص ٣٥)، وعزاه في الحاشية لأبي داود والترمذي وابن ماجه عن عبد الله بن عمرو ﵄.</small></div>
+      <div class="hadith"><div class="bq">«يقال لصاحب القرآن اقرأ وارتق ورتل كما كنت ترتل في الدنيا، فإن منزلتك عند آخر آية تقرؤها»<span class="tr">“It will be said to the companion of the Qur’an: ‘Recite and rise, and recite slowly as you used to recite in the world, for your rank is at the last verse you recite.’”</span></div>
+        <small><span class="ui-ar">كما أورده المؤلف (ص ٣٥)، وعزاه في الحاشية لأبي داود والترمذي وابن ماجه عن عبد الله بن عمرو ﵄.</span><span class="ui-en">As quoted by the author (p. 35), credited in the footnote to Abū Dāwūd, at-Tirmidhī and Ibn Mājah from ʿAbdullāh ibn ʿAmr, may Allah be pleased with them both.</span></small></div>
       <details class="why2"><summary>📜 حُكْمُ الحِفْظ <span class="en">Is memorising required?</span></summary>
-        <div class="bq">«أما حفظ بعضه كالفاتحة ونحوها فهو فرض عين على كل فرد، إذ لا تصح الصلاة بغير الفاتحة»، وحفظه كاملًا «يصبح فرض كفاية في حق سواد الأمة»، و«أما من أتم حفظ القرآن أو أتم حفظ بعضه فيجب عليه المداومة على حفظه وعدم تعريضه للنسيان» (ص ٣٨).</div></details>
+        <div class="bq">«أما حفظ بعضه كالفاتحة ونحوها فهو فرض عين على كل فرد، إذ لا تصح الصلاة بغير الفاتحة»، وحفظه كاملًا «يصبح فرض كفاية في حق سواد الأمة»، و«أما من أتم حفظ القرآن أو أتم حفظ بعضه فيجب عليه المداومة على حفظه وعدم تعريضه للنسيان» (ص ٣٨).<span class="tr">“As for memorising part of it, such as al-Fātiḥah and the like, it is an individual obligation on every person, since prayer is not valid without al-Fātiḥah”; memorising all of it “becomes a communal obligation on the mass of the Ummah”; and “whoever has completed memorising the Qur’an, or part of it, must keep on reviewing it and not expose it to being forgotten” (p. 38).</span></div></details>
       <details class="why2"><summary>🎁 لِمَاذَا نَحْفَظ؟ <span class="en">Benefits</span></summary>
-        <div class="bq">من «أهم فوائد حفظ القرآن» عند المؤلف: «شحذ الذاكرة والذهن»، و«سعة العلم»، و«السمت الحسن والسلوك القويم»، و«الفصاحة والنطق السليم وإخراج الحروف العربية من مخارجها الطبيعية» (ص ٤١–٤٢) — وَهَذِهِ لَكَ أَنْتَ يَا مَنْ تَتَعَلَّمُ العَرَبِيَّة! 🗣️</div></details>
+        <div class="bq">من «أهم فوائد حفظ القرآن» عند المؤلف: «شحذ الذاكرة والذهن»، و«سعة العلم»، و«السمت الحسن والسلوك القويم»، و«الفصاحة والنطق السليم وإخراج الحروف العربية من مخارجها الطبيعية» (ص ٤١–٤٢) — وَهَذِهِ لَكَ أَنْتَ يَا مَنْ تَتَعَلَّمُ العَرَبِيَّة! 🗣️<span class="tr">From “the most important benefits of memorising the Qur’an” according to the author: “sharpening the memory and the mind”, “breadth of knowledge”, “good conduct and upright behaviour”, and “eloquence, sound speech and pronouncing the Arabic letters from their natural points of articulation” (pp. 41–42) — and this last one is for you, who are learning Arabic! 🗣️</span></div></details>
       <div class="book" id="bookRef"></div>
     </div>
   </section>
@@ -227,7 +228,10 @@ body.ink-laser .ink-cv{cursor:none!important}
    ERR    = أنواع الأخطاء التي يعلّمها المستمع: {k, ar, en, emo, c}
    KHULUQ = قول ابن مسعود أزواجًا: {a:'بِلَيْلِه', b:'إِذِ النَّاسُ نَائِمُون', talk, talkEn}
    ============================================================ */
-const BOOK = {ar:'كيف تحفظ القرآن الكريم — عبد الرب نواب الدين', ref:'التمهيد: حفظة الكتاب في التاريخ الإسلامي، فضل حافظ القرآن، حكم حفظه، أخلاق حملته، فوائد حفظه (ص ٢٦–٤٢، ترقيم مطبوع)'};
+const BOOK = {ar:'كيف تحفظ القرآن الكريم — عبد الرب نواب الدين', ref:'التمهيد: حفظة الكتاب في التاريخ الإسلامي، فضل حافظ القرآن، حكم حفظه، أخلاق حملته، فوائد حفظه (ص ٢٦–٤٢، ترقيم مطبوع)',
+  en:'How to Memorise the Noble Qur’an — Abd ar-Rabb Nawab ad-Din', refEn:'the preface: the memorisers of the Book in Islamic history, the virtue of the one who memorises the Qur’an, the ruling on memorising it, the manners of its carriers, the benefits of memorising it (pp. 26–42, printed numbering)'};
+const pgEn=pg=>String(pg).replace(/ص /g,'p. ').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const BOOKU=pg=>U(BOOK.ar+'، '+pg,BOOK.en+', '+pgEn(pg));
 const CHAIN = [
   {ar:'جِبْرِيلُ ﵇',en:'Jibrīl',emo:'🕊️',pg:'ص ٢٦',bq:'رسول الله ﷺ «تلقى هذا القرآن حرفا حرفا عن جبريل ﵊ عن الله ـ تقدست أسماؤه ـ».'},
   {ar:'النَّبِيُّ ﷺ',en:'The Prophet ﷺ',emo:'🌙',pg:'ص ٢٦',bq:'«أول الحافظين، وإمام المقرئين، وقدوة المسلمين»، و«كان رسول الله ﷺ يعرض على جبريل القرآن حين يلقاه في كل ليلة في شهر رمضان حتى ينسلخ» (البخاري ومسلم كما في الحاشية)، وعارضه في العام الأخير مرتين.'},
@@ -237,6 +241,8 @@ const CHAIN = [
   {ar:'شَيْخُكَ / مُعَلِّمُك',en:'Your teacher',emo:'👨‍🏫',pg:'ص ٢٦',bq:'قال ابن حجر كما نقله المؤلف: «والمعارضة مفاعلة من الجانبين، كأن كلا منهما كان تارة يقرأ والآخر يستمع» — هكذا يأخذ الطالب عن شيخه: يقرأ ويسمع.'},
   {ar:'أَنْت!',en:'YOU!',emo:'🧑‍🎓',pg:'ص ٣٤',you:1,bq:'«خيركم من تعلم القرآن وعلمه» (البخاري كما في الحاشية) — أَنْتَ الحَلْقَةُ الجَدِيدَة، وَيَوْمًا مَا سَتُعَلِّمُ غَيْرَك 🌱'},
 ];
+const CHAIN_EN = ["“Allah’s Messenger ﷺ received this Qur’an letter by letter from Jibrīl (peace be upon him), from Allah — sanctified be His names.”", "“The first of the memorisers, the leader of the reciters, and the example of the Muslims”; and “Allah’s Messenger ﷺ used to review the Qur’an with Jibrīl every night in the month of Ramadan until it ended” (al-Bukhārī and Muslim, per the footnote), and he reviewed it with him twice in the last year.", "“Some of the Companions received it from Allah’s Messenger, and among those who recited to him were: ʿUthmān, ʿAlī, Ubayy, Ibn Masʿūd, Zayd ibn Thābit, Abū Mūsā and Abū al-Dardāʾ”; and al-Dhahabī said, as quoted by the author: “The chains of recitation of the ten imams revolve around them.”", "“Then a group of the Successors and the Successors of the Successors devoted their lives and limited their efforts to reciting the Qur’an, having it recited, dictating it and teaching it” (quoted by the author, with the footnote crediting a lecture by Shaykh ʿAbd al-Fattāḥ al-Qāḍī). Such as Abū al-ʿĀliyah, “who recited to Ubayy”.", "“And so the later generations transmitted from the earlier ones, generation after generation, and reciters became famous in the cities and across the ages” — such as ʿĀṣim, to whom “the leadership of teaching recitation in Kufa came”, Nāfiʿ and Qālūn in Madinah, and Warsh in Egypt.", "Ibn Ḥajar said, as quoted by the author: “Al-muʿāraḍah is a mutual act: it is as if each of them at times recited while the other listened” — this is how a student learns from their teacher: reciting and listening.", "“The best of you are those who learn the Qur’an and teach it” (al-Bukhārī, per the footnote) — you are the new link in the chain, and one day you will teach someone else 🌱"];
+CHAIN.forEach((c,i)=>{c.bqEn=CHAIN_EN[i]});
 const WHO = [
   {ar:'زَيْدُ بْنُ ثَابِت',en:'Zayd ibn Thābit',emo:'🖋️',era:'صحابي',pg:'ص ٢٧، ٣٠',
    clues:['كُنْتُ صَبِيًّا عُمْرِي ١١ سَنَةً لَمَّا قَدِمَ النَّبِيُّ ﷺ المَدِينَة.','أَمَرَنِي النَّبِيُّ ﷺ أَنْ أَتَعَلَّمَ خَطَّ اليَهُود، فَأَتْقَنْتُ الكِتَابَة.','كُنْتُ كَاتِبَ الوَحْي.','أَبُو بَكْرٍ اخْتَارَنِي لِجَمْعِ القُرْآن، وَعُثْمَانُ لِكِتَابَةِ المُصْحَف.'],
@@ -304,6 +310,11 @@ const SETS = {
     {ar:'وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ',ref:'الإخلاص: ٤'},
   ]},
 };
+const WHO_EN = [{"cluesEn": ["I was a boy of 11 when the Prophet ﷺ arrived in Madinah.", "The Prophet ﷺ told me to learn the script of the Jews, and I mastered writing.", "I was a scribe of the revelation.", "Abū Bakr chose me to collect the Qur’an, and ʿUthmān chose me to write the muṣḥaf."], "bqEn": "“Zayd ibn Thābit al-Anṣārī, the reciter and inheritance-expert, scribe of the Prophet’s revelation, was a clever, bright boy of eleven when the Prophet arrived in Madinah… he memorised the Qur’an and mastered it… Abū Bakr assigned him to collect the Qur’an, and then ʿUthmān appointed him to write the muṣḥaf” — Ibn ʿAbbās and Abū ʿAbd ar-Raḥmān as-Sulamī recited to him."}, {"cluesEn": ["I am an Anṣārī who fought at Badr.", "My title is “the master of the reciters”.", "The Prophet ﷺ said to me: “I have been commanded to recite the Qur’an to you.”", "I said: “Did Allah name me?” He said: “Yes” — and I wept."], "bqEn": "“Ubayy ibn Kaʿb al-Anṣārī, the Badr veteran, master of the reciters… The Prophet ﷺ said to him: ‘I have been commanded to recite the Qur’an to you.’ He said: ‘Did Allah name me?’ He said: ‘Yes.’ So Ubayy wept… Abū Hurayrah, Ibn ʿAbbās and others recited to him” (the ḥadīth is in al-Bukhārī 4960 and Muslim 799, per the footnote)."}, {"cluesEn": ["I am one of the seven who recited the Qur’an to the Prophet ﷺ.", "Al-Dhahabī said: “The best of those who recited the Qur’an to the Prophet ﷺ.”", "Ibn ʿAbbās, Ibn ʿUmar and Anas ibn Mālik recited to me.", "I am the caliph who ordered Zayd to write the muṣḥaf."], "bqEn": "“ʿUthmān ibn ʿAffān, may Allah be pleased with him, who is the best of those who recited the Qur’an to the Prophet ﷺ as al-Dhahabī says; al-Mughīrah ibn Abī Shihāb, Ibn ʿAbbās, ʿAbdullāh ibn ʿUmar, Anas ibn Mālik… and a great many others recited to him” (p. 29)."}, {"cluesEn": ["I am one of the seven who recited the Qur’an to the Prophet ﷺ.", "The Prophet ﷺ said: “Take the Qur’an from four”, and he began with my name.", "I said: “The carrier of the Qur’an should be known by his night, when people are asleep.”"], "bqEn": "“Take the Qur’an from four: from ʿAbdullāh ibn Masʿūd, Sālim, Muʿādh ibn Jabal and Ubayy ibn Kaʿb” (al-Bukhārī, per the footnote) — “these became famous for memorising the Qur’an and taking on its teaching” (p. 28)."}, {"cluesEn": ["I am a female Companion.", "I collected the Qur’an (I memorised all of it).", "Al-Suyūṭī said that none of those who wrote about the memorisers had counted me.", "The Prophet ﷺ used to visit me and call me “the martyr”."], "bqEn": "“Women, too, had a share in memorising the Qur’an. Al-Suyūṭī said: I found a woman among the female Companions who collected the Qur’an, whom none of those who spoke on this subject had counted… Umm Waraqah bint al-Ḥārith, whom Allah’s Messenger ﷺ used to visit and call ‘the martyr’, had collected the Qur’an” (p. 31)."}, {"cluesEn": ["My name is ʿUwaymir ibn Zayd.", "I am one of the seven who recited the Qur’an to the Prophet ﷺ.", "I was the scholar of the people of Syria.", "I was the reciter, the jurist and the judge of the people of Damascus."], "bqEn": "“Abū al-Dardāʾ, ʿUwaymir ibn Zayd, was the scholar of the people of Syria and the reciter, jurist and judge of the people of Damascus, may Allah be pleased with him” (p. 30)."}, {"cluesEn": ["I am not a Companion… I am one of the Successors.", "My name is Rufayʿ ibn Mihrān.", "I recited to “the master of the reciters”, Ubayy ibn Kaʿb."], "bqEn": "“Among the memorisers of the Successors whose names history has preserved: Abū al-ʿĀliyah ar-Riyāḥī, Rufayʿ ibn Mihrān, who recited to Ubayy and others” (p. 31)."}, {"cluesEn": ["I am one of the reciters of Madinah.", "I was the reciter and the grammarian of the people of Madinah in my time.", "My title is a Roman (Greek) word.", "The meaning of my title: “good”! 👍"], "bqEn": "“Qālūn, Abū Mūsā, the reciter of the people of Madinah in his time and their grammarian; Qālūn is his title, a Roman word meaning ‘good’” (p. 32)."}, {"cluesEn": ["My name is ʿUthmān ibn Saʿīd (I am not ʿUthmān ibn ʿAffān 😉).", "I am one of the reciters of Egypt.", "The leadership of teaching recitation in the Egyptian lands came to me."], "bqEn": "“ʿUthmān ibn Saʿīd, nicknamed ‘Warsh’, to whom the leadership of teaching recitation in the Egyptian lands came in his time” (p. 33)."}, {"cluesEn": ["I am one of the reciters of Iraq.", "The leadership of teaching recitation in Kufa came to me.", "💡 General knowledge (not from the book): most Muslims today recite with the transmission of Ḥafṣ from me."], "bqEn": "“ʿĀṣim ibn Abī an-Najūd al-Asadī, to whom the leadership of teaching recitation in Kufa came” (p. 33)."}, {"cluesEn": ["I am one of the reciters of Makkah.", "My name resembles that of a famous exegete… but I am not him!", "I am the imam of the people of Makkah in recitation and in mastering the Qur’an."], "bqEn": "“ʿAbdullāh ibn Kathīr al-Makkī, the imam of the people of Makkah among the reciters and in mastering the Qur’an” (p. 32)."}, {"cluesEn": ["My name is Ḥafṣ ibn ʿUmar… but I am not “Ḥafṣ”, the transmitter of ʿĀṣim!", "I lived in Sāmarrā’.", "“The reciter of Islam and the shaykh of Iraq in his time.”", "It is said that I was the first to collect the recitations and write about them."], "bqEn": "“Abū ʿAmr ad-Dūrī, who settled in Sāmarrā’, Ḥafṣ ibn ʿUmar ibn ʿAbd al-ʿAzīz ibn Ṣuhbān, the reciter of Islam and the shaykh of Iraq in his time; it is said that he was the first to collect the recitations and write about them” (p. 33)."}];
+WHO.forEach((w,i)=>Object.assign(w,WHO_EN[i]));
+const ERA_EN = {"صحابي": "Companion", "صحابية": "Female Companion", "تابعي": "Successor", "إمام قراءة": "Imam of recitation"};
+const AYAH_EN = {"fatiha": ["In the name of Allah, the Entirely Merciful, the Especially Merciful.", "[All] praise is [due] to Allah, Lord of the worlds —", "The Entirely Merciful, the Especially Merciful,", "Sovereign of the Day of Recompense.", "It is You we worship and You we ask for help.", "Guide us to the straight path —", "The path of those upon whom You have bestowed favor, not of those who have earned [Your] anger or of those who are astray."], "mulk": ["Blessed is He in whose hand is dominion, and He is over all things competent —", "[He] who created death and life to test you [as to] which of you is best in deed — and He is the Exalted in Might, the Forgiving,", "[And] who created seven heavens in layers. You do not see in the creation of the Most Merciful any inconsistency; so return [your] vision [to the sky]; do you see any breaks?", "Then return [your] vision twice again. [Your] vision will return to you humbled while it is fatigued.", "And We have certainly beautified the nearest heaven with lamps and have made [from] them what is thrown at the devils and have prepared for them the punishment of the Blaze."], "asr": ["By time,", "Indeed, mankind is in loss,", "Except for those who have believed and done righteous deeds and advised each other to truth and advised each other to patience."], "ikhlas": ["Say, “He is Allah, [who is] One,", "Allah, the Eternal Refuge.", "He neither begets nor is born,", "Nor is there to Him any equivalent.”"]};
+Object.entries(AYAH_EN).forEach(([k,a])=>SETS[k].items.forEach((it,i)=>{it.en=a[i]}));
 const ERR = [
   {k:'harf',ar:'حَرْف / حَرَكَة',en:'Letter / vowel',emo:'🔤',c:'var(--red)'},
   {k:'madd',ar:'مَدّ',en:'Madd length',emo:'〰️',c:'var(--orange)'},
@@ -311,6 +322,7 @@ const ERR = [
   {k:'waqf',ar:'وَقْف / اِبْتِدَاء',en:'Stop / restart',emo:'🚦',c:'var(--blue)'},
   {k:'nasi',ar:'نَسِيَ (لُقِّن)',en:'Forgot (prompted)',emo:'💭',c:'var(--gold)'},
 ];
+const KHULUQ_EN = [['by his night','when people are asleep'],['by his day','when people are not fasting'],['by his sadness','when people are joyful'],['by his weeping','when people laugh'],['by his silence','when people talk carelessly'],['by his humility','when people are arrogant']];
 const KHULUQ = [
   {a:'بِلَيْلِهِ',b:'إِذِ النَّاسُ نَائِمُونَ',talk:'مَاذَا يَفْعَلُ الشَّابُّ فِي آخِرِ اللَّيْل: الهَاتِفُ أَمْ وِرْدُهُ؟',talkEn:'Late at night: phone or your daily portion?'},
   {a:'وَبِنَهَارِهِ',b:'إِذِ النَّاسُ مُفْطِرُونَ',talk:'هَلْ جَرَّبْتَ صِيَامَ يَوْمِ الاثْنَيْنِ أَوِ الخَمِيس؟',talkEn:'Have you tried a voluntary fast?'},
@@ -320,6 +332,9 @@ const KHULUQ = [
   {a:'وَبِخُشُوعِهِ',b:'إِذِ النَّاسُ يَخْتَالُونَ',talk:'التَّوَاضُعُ مَعَ الحِفْظ: لَا تَتَكَبَّرْ عَلَى مَنْ لَا يَحْفَظ.',talkEn:'Humility: never look down on those who memorise less.'},
 ];
 const KHULUQ_BQ = '«ينبغي لحامل القرآن أن يعرف بليله إذ الناس نائمون، وبنهاره إذ الناس مفطرون، وبحزنه إذ الناس فرحون، وببكائه إذ الناس يضحكون، وبصمته إذ الناس يخلطون، وبخشوعه إذ الناس يختالون… ولا ينبغي لحامل القرآن أن يكون جافيا ولا غافلا ولا سخابا ولا صياحا ولا حديدا» — قول عبد الله بن مسعود ﵁ كما أورده المؤلف (ص ٤٠–٤١)، والعزو في الحاشية: صفة الصفوة ١/٤١٢–٤١٣، و«الحدة: الغضب».';
+KHULUQ.forEach((k,i)=>{k.aEn=KHULUQ_EN[i][0];k.bEn=KHULUQ_EN[i][1]});
+const KHULUQ_BQ_EN = '“The carrier of the Qur’an should be known by his night when people sleep, by his day when people are not fasting, by his sadness when people are joyful, by his weeping when people laugh, by his silence when people talk carelessly, and by his humility when people are arrogant… and the carrier of the Qur’an should not be harsh, nor heedless, nor loud-voiced, nor a shouter, nor quick-tempered” — the saying of ʿAbdullāh ibn Masʿūd, may Allah be pleased with him, as quoted by the author (pp. 40–41); the footnote source: Ṣifat aṣ-Ṣafwah 1/412–413, and “ḥiddah” means anger.';
+const KHULUQ2_EN = 'The author also quotes the narration of aṭ-Ṭabarānī from Ibn ʿAmr, may Allah be pleased with them both: “…it is not fitting for the carrier of the Qur’an to behave foolishly with those who behave foolishly, or to get angry with those who get angry, or to be hot-tempered with those who are hot-tempered, but to pardon and overlook out of respect for the Qur’an” (p. 40; the footnote source: Faḍā’il al-Qur’ān by Ibn Kathīr, p. 187).';
 const WHO_ROUND = 8;     // عدد بطاقات «من أنا؟» في الجولة
 const RETRY_GAP = 3;     // البطاقة الخطأ ترجع بعد ٣
 const TOWER_STEPS = 18;  // ارتفاع البرج
@@ -327,6 +342,9 @@ const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَك�
 /* ============================================================ */
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const {U,tr}=TQI;
+const REF=r=>{const e=TQI.ref(r);return U('﴿'+r+'﴾',e===r?'﴿'+r+'﴾':e)};
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const words=t=>t.trim().split(/\s+/).map(w=>w.replace(/\+/g,' '));
@@ -344,16 +362,16 @@ const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i
   win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#E2B85C','#2ECC71','#F5C33B','#E74C3C','#5DADE2','#AF7AC5'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- state ---------- */
 let teams=[],turn=0,mode='chain',stats={},missed=[];
 const qa=$('#qa');
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1'&&mode!=='muarada')return [{nm:'⭐ أَنَا',en:'Me',c:'var(--gold)',emo:'🧗'}];
-  if(v==='2')return [{nm:'🔵 الأَزْرَق',en:'Blue',c:'var(--teamA)',emo:'🧗'},{nm:'🔴 الأَحْمَر',en:'Red',c:'var(--teamB)',emo:'🧗‍♀️'}];
-  return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)',emo:'🧗'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)',emo:'🧗‍♂️'}]}
-function renderTeams(roles){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span>${roles?`<span class="role">${roles[i]}</span>`:''}<span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('');renderClimb()}
+  if(v==='1'&&mode!=='muarada')return [{nm:U('⭐ أَنَا','⭐ Me'),c:'var(--gold)',emo:'🧗'}];
+  if(v==='2')return [{nm:U('🔵 الأَزْرَق','🔵 Blue'),c:'var(--teamA)',emo:'🧗'},{nm:U('🔴 الأَحْمَر','🔴 Red'),c:'var(--teamB)',emo:'🧗‍♀️'}];
+  return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)',emo:'🧗'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)',emo:'🧗‍♂️'}]}
+function renderTeams(roles){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span>${roles?`<span class="role">${roles[i]}</span>`:''}<span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('');renderClimb()}
 function renderClimb(){$('#climb').innerHTML=teams.map(t=>{const n=Math.min(t.pts,TOWER_STEPS);
   return `<div class="tower" style="--tc:${t.c}"><div class="who2">${t.nm}</div>${Array.from({length:TOWER_STEPS},(_,i)=>`<div class="st ${i<n?'on':''}"></div>`).join('')}</div>`}).join('');
   // climber emoji sits on top of the lit steps
@@ -361,37 +379,37 @@ function renderClimb(){$('#climb').innerHTML=teams.map(t=>{const n=Math.min(t.pt
 function award(p,who=turn,quiet){if(p<=0)return;teams[who].pts+=p;renderTeams(curRoles);sfx.climb(Math.min(p,4));if(!quiet){setTimeout(sfx.good,350);praise(p);confetti()}}
 function stat(k,ok){const s=stats[k]||(stats[k]={ok:0,n:0});s.n++;if(ok)s.ok++}
 let curRoles=null;
-function nextBtn(label='التَّالِي ←',en='Next'){return `<div class="row"><button class="big-btn" id="nextB">${label} <span class="en" style="color:#10263A">${en}</span></button></div>`}
+function nextBtn(label='التَّالِي ←',en='Next →'){return `<div class="row"><button class="big-btn" id="nextB">${U(label,en)}</button></div>`}
 function setOptions(){mode=$('#modeSel').value;const sel=$('#setSel');sel.disabled=mode!=='muarada';
-  sel.innerHTML=mode==='muarada'?Object.entries(SETS).map(([k,s])=>`<option value="${k}">${s.ar}</option>`).join(''):'<option>—</option>';
+  sel.innerHTML=mode==='muarada'?Object.entries(SETS).map(([k,s])=>`<option value="${k}" data-en="${s.en}">${s.ar}</option>`).join(''):'<option>—</option>';TQI.relabel();
   $('#blindB').style.display=mode==='muarada'?'':'none'}
 function newGame(){mode=$('#modeSel').value;teams=teamDefs().map(t=>({...t,pts:0}));turn=0;stats={};missed=[];curRoles=null;renderTeams();
-  $('#bookRef').textContent='📚 المصدر: '+BOOK.ar+' — '+BOOK.ref+'. ما بين «» نص الكتاب؛ والتخريج من حاشيته.';
+  $('#bookRef').innerHTML=U('📚 المصدر: '+BOOK.ar+' — '+BOOK.ref+'. ما بين «» نص الكتاب؛ والتخريج من حاشيته.','📚 Source: '+BOOK.en+' — '+BOOK.refEn+'. Text between « » is the book’s own text; the references come from its footnotes.');
   ({chain:startChain,who:startWho,muarada:startMuarada,khuluq:startKhuluq})[mode]();
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
 
 /* ---------- ① build the chain ---------- */
 function startChain(){let next=0,errs=0;
-  const ringHTML=()=>`<div class="link"><div class="ring head"><span class="e">✨</span>مِنَ اللهِ ﷻ</div></div>`+CHAIN.map((c,i)=>`<div class="link"><span class="cn" id="cn${i}"></span><div class="ring ${c.you?'you':''}" id="rg${i}">${ar(i+1)}</div></div>`).join('');
-  qa.innerHTML=`<div class="q">🔗 كَيْفَ وَصَلَ القُرْآنُ إِلَيْكَ؟ رَتِّبِ الحَلَقَاتِ مِنَ الأَوَّلِ إِلَى الآخِر <span class="en blk">How did the Qur'an reach you? Put the links in order.</span></div>
+  const ringHTML=()=>`<div class="link"><div class="ring head"><span class="e">✨</span>${U('مِنَ اللهِ ﷻ','From Allah ﷻ')}</div></div>`+CHAIN.map((c,i)=>`<div class="link"><span class="cn" id="cn${i}"></span><div class="ring ${c.you?'you':''}" id="rg${i}">${U(ar(i+1),i+1)}</div></div>`).join('');
+  qa.innerHTML=`<div class="q">${U('🔗 كَيْفَ وَصَلَ القُرْآنُ إِلَيْكَ؟ رَتِّبِ الحَلَقَاتِ مِنَ الأَوَّلِ إِلَى الآخِر','🔗 How did the Qur’an reach you? Put the links in order, from the first to the last.')}</div>
     <div class="chain" id="chain">${ringHTML()}</div>
     <div class="pool" id="pool">${shuffle(CHAIN.map((c,i)=>i)).map(i=>`<button class="tile" data-i="${i}"><span>${CHAIN[i].emo}</span>${CHAIN[i].ar}<span class="en">${CHAIN[i].en}</span></button>`).join('')}</div>
     <div id="out" style="display:contents"></div>`;
   $$('#pool .tile').forEach(b=>b.onclick=()=>{ac();const i=+b.dataset.i;
-    if(i===next){const c=CHAIN[i];b.remove();const r=$('#rg'+i);r.classList.add('f');r.innerHTML=`<span class="e">${c.emo}</span>${c.ar}`;$('#cn'+i).classList.add('f');sfx.clink();
-      $('#out').innerHTML=`<div class="info" style="--ac:${c.you?'var(--green)':'var(--gold)'}"><div class="t">${c.emo} ${c.ar}</div><div class="bq">${c.bq}</div><small>${BOOK.ar}، ${c.pg}</small></div>`;
+    if(i===next){const c=CHAIN[i];b.remove();const r=$('#rg'+i);r.classList.add('f');r.innerHTML=`<span class="e">${c.emo}</span>${U(c.ar,c.en)}`;$('#cn'+i).classList.add('f');sfx.clink();
+      $('#out').innerHTML=`<div class="info" style="--ac:${c.you?'var(--green)':'var(--gold)'}"><div class="t">${c.emo} ${U(c.ar,c.en)}</div><div class="bq">${c.bq}${tr(c.bqEn)}</div><small>${BOOKU(c.pg)}</small></div>`;
       next++;stat('chain',true);turn=(turn+1)%teams.length;renderTeams();
       if(next===CHAIN.length)finishChain(errs)}
     else{errs++;stat('chain',false);b.classList.add('bad');sfx.bad();setTimeout(()=>b.classList.remove('bad'),400);
       if(errs%2===0){const h=$(`#pool .tile[data-i="${next}"]`);if(h){h.classList.add('hint');setTimeout(()=>h.classList.remove('hint'),2000)}}}});
 }
 function finishChain(errs){const pts=errs===0?3:errs<=2?2:1;award(pts,0);
-  $('#out').insertAdjacentHTML('beforeend',`<div class="info" style="--ac:var(--green)"><div class="t">🌱 وَالحَلْقَةُ التَّالِيَة؟ مَنْ تُعَلِّمُهُ أَنْت!</div>
-    <div class="bq">«خيركم من تعلم القرآن وعلمه» — أورده المؤلف (ص ٣٤)، وعزاه في الحاشية للبخاري وأبي داود والترمذي وابن ماجه عن عثمان ﵁.</div>
-    <div class="why">💬 سُؤَالُ نِقَاش: مَنْ يُمْكِنُ أَنْ تُعَلِّمَهُ آيَةً هَذَا الأُسْبُوع؟ (أَخٌ صَغِير؟ صَدِيق؟) <span class="en blk">Who could you teach one āyah to this week?</span></div></div>
-    <div class="tip">${errs===0?'🔗 سِلْسِلَةٌ كَامِلَةٌ بِلَا خَطَأ!':`🔗 ${ar(errs)} خَطَأ — جَرِّبْ مَرَّةً أُخْرَى أَسْرَع!`}</div>
-    <div class="row"><button class="big-btn" id="toWho">🕵️ الآن: مَنْ أَنَا؟</button><button class="big-btn ghost" id="again1">↻ مِنْ جَدِيد</button></div>`);
+  $('#out').insertAdjacentHTML('beforeend',`<div class="info" style="--ac:var(--green)"><div class="t">${U('🌱 وَالحَلْقَةُ التَّالِيَة؟ مَنْ تُعَلِّمُهُ أَنْت!','🌱 And the next link? Whoever you teach!')}</div>
+    <div class="bq">«خيركم من تعلم القرآن وعلمه» — أورده المؤلف (ص ٣٤)، وعزاه في الحاشية للبخاري وأبي داود والترمذي وابن ماجه عن عثمان ﵁.<span class="tr">“The best of you are those who learn the Qur’an and teach it” — quoted by the author (p. 34), credited in the footnote to al-Bukhārī, Abū Dāwūd, at-Tirmidhī and Ibn Mājah from ʿUthmān, may Allah be pleased with him.</span></div>
+    <div class="why">${U('💬 سُؤَالُ نِقَاش: مَنْ يُمْكِنُ أَنْ تُعَلِّمَهُ آيَةً هَذَا الأُسْبُوع؟ (أَخٌ صَغِير؟ صَدِيق؟)','💬 Discussion: who could you teach one āyah to this week? (a little brother or sister? a friend?)')}</div></div>
+    <div class="tip">${errs===0?U('🔗 سِلْسِلَةٌ كَامِلَةٌ بِلَا خَطَأ!','🔗 A perfect chain, with no mistakes!'):U(`🔗 ${ar(errs)} خَطَأ — جَرِّبْ مَرَّةً أُخْرَى أَسْرَع!`,`🔗 ${errs} mistake${errs>1?'s':''} — try again, faster!`)}</div>
+    <div class="row"><button class="big-btn" id="toWho">${U('🕵️ الآن: مَنْ أَنَا؟','🕵️ Next: who am I?')}</button><button class="big-btn ghost" id="again1">${U('↻ مِنْ جَدِيد','↻ Start over')}</button></div>`);
   $('#toWho').onclick=()=>{$('#modeSel').value='who';setOptions();newGame()};$('#again1').onclick=newGame;sfx.win();confetti(80)}
 
 /* ---------- ② who am I? (clue reveal) ---------- */
@@ -401,14 +419,14 @@ function showWho(){if(wi>=wq.length)return endGame('who');
   const {it,retry}=wq[wi];let shown=1,tries=2,done=false;
   const opts=shuffle([it,...shuffle(WHO.filter(x=>x!==it)).slice(0,3)]);
   const ptsNow=()=>Math.max(1,4-shown);
-  qa.innerHTML=`<div class="prog"><span>${ar(wi+1)} مِنْ ${ar(wq.length)}${retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>
-    <div class="q">🕵️ مَنْ أَنَا؟ اِقْرَأِ الدَّلِيلَ بِصَوْتٍ عَالٍ ثُمَّ خَمِّن <span class="en blk">Who am I? Read the clue aloud, then guess.</span></div>
+  qa.innerHTML=`<div class="prog"><span>${U(`${ar(wi+1)} مِنْ ${ar(wq.length)}`,`${wi+1} of ${wq.length}`)}${retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>
+    <div class="q">${U('🕵️ مَنْ أَنَا؟ اِقْرَأِ الدَّلِيلَ بِصَوْتٍ عَالٍ ثُمَّ خَمِّن','🕵️ Who am I? Read the clue aloud, then guess.')}</div>
     <div class="who"><div class="mask" id="mask">❓</div><div class="clues" id="clues"></div></div>
-    <div class="row"><span class="ptsbadge" id="pb"></span><button class="big-btn ghost" id="moreB">🔎 دَلِيلٌ آخَر (−١)</button></div>
-    <div class="opts" id="wopts">${opts.map((o,i)=>`<button class="ob" data-i="${i}">${o.ar}<small>${o.era}</small><span class="en">${o.en}</span></button>`).join('')}</div>
+    <div class="row"><span class="ptsbadge" id="pb"></span><button class="big-btn ghost" id="moreB">${U('🔎 دَلِيلٌ آخَر (−١)','🔎 Another clue (−1)')}</button></div>
+    <div class="opts" id="wopts">${opts.map((o,i)=>`<button class="ob" data-i="${i}">${o.ar}<small>${U(o.era,ERA_EN[o.era]||o.era)}</small><span class="en">${o.en}</span></button>`).join('')}</div>
     <div id="out" style="display:contents"></div>`;
-  const draw=()=>{$('#clues').innerHTML=it.clues.map((c,i)=>i<shown?`<div class="clue ${it.gen&&it.gen.includes(i)?'gen':''}"><i>${ar(i+1)}</i>${c}</div>`:`<div class="clue hidden"><i>${ar(i+1)}</i>🔒</div>`).join('');
-    $('#pb').textContent=`الآن: +${ar(ptsNow())}`;$('#moreB').disabled=shown>=it.clues.length||done};
+  const draw=()=>{$('#clues').innerHTML=it.clues.map((c,i)=>i<shown?`<div class="clue ${it.gen&&it.gen.includes(i)?'gen':''}"><i>${U(ar(i+1),i+1)}</i>${U(c,it.cluesEn[i])}</div>`:`<div class="clue hidden"><i>${U(ar(i+1),i+1)}</i>🔒</div>`).join('');
+    $('#pb').innerHTML=U(`الآن: +${ar(ptsNow())}`,`Now: +${ptsNow()}`);$('#moreB').disabled=shown>=it.clues.length||done};
   draw();
   $('#moreB').onclick=()=>{ac();if(shown<it.clues.length){shown++;sfx.reveal();draw()}};
   $$('#wopts .ob').forEach(b=>b.onclick=()=>{if(done||b.classList.contains('bad'))return;ac();const o=opts[+b.dataset.i];
@@ -418,34 +436,34 @@ function showWho(){if(wi>=wq.length)return endGame('who');
   function fin(ok){$$('#wopts .ob').forEach(x=>x.disabled=true);const p=ok?ptsNow():0;shown=it.clues.length;
     draw();$('#mask').textContent=it.emo;stat(it.era,ok);
     if(ok)setTimeout(()=>award(p),150);else{sfx.pop();missed.push(it.ar);if(!wq[wi].retry)wq.splice(Math.min(wi+1+RETRY_GAP,wq.length),0,{it,retry:true})}
-    $('#out').innerHTML=`<div class="info"><div class="t">${it.emo} ${it.ar} <span class="en">${it.en}</span></div><div class="bq">${it.bq}</div><small>${BOOK.ar}، ${it.pg}</small></div>
-      <div class="tip">🎙️ قُلْ جُمْلَةً وَاحِدَةً عَنْهُ بِالعَرَبِيَّة: «${it.ar.replace(/ .*/,'')}…» <span class="en blk">Say one sentence about this person in Arabic.</span></div>${nextBtn()}`;
+    $('#out').innerHTML=`<div class="info"><div class="t">${it.emo} ${U(it.ar,it.en)}</div><div class="bq">${it.bq}${tr(it.bqEn)}</div><small>${BOOKU(it.pg)}</small></div>
+      <div class="tip">${U(`🎙️ قُلْ جُمْلَةً وَاحِدَةً عَنْهُ بِالعَرَبِيَّة: «${it.ar.replace(/ .*/,'')}…»`,`🎙️ Say one sentence about this person in Arabic: “${it.ar.replace(/ .*/,'')}…”`)}</div>${nextBtn()}`;
     $('#nextB').onclick=()=>{wi++;turn=(turn+1)%teams.length;renderTeams();showWho()};$('#nextB').focus({preventScroll:true})}
 }
 
 /* ---------- ③ al-muʿāraḍah: one recites, one listens, then swap ---------- */
 let mq=[],mi=0,marksLog=[],blind=false;
-function startMuarada(){const S=SETS[$('#setSel').value];mq=S.items.map(it=>({...it,set:S.ar}));mi=0;marksLog=[];
-  if(teams.length<2)teams=[{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)',emo:'🧗',pts:0},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)',emo:'🧗‍♂️',pts:0}];
+function startMuarada(){const S=SETS[$('#setSel').value];mq=S.items.map(it=>({...it,set:S.ar,setEn:S.en}));mi=0;marksLog=[];
+  if(teams.length<2)teams=[{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)',emo:'🧗',pts:0},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)',emo:'🧗‍♂️',pts:0}];
   showAyah()}
 function showAyah(){if(mi>=mq.length)return endGame('muarada');
   const it=mq[mi],R=turn,Lt=(turn+1)%teams.length,W=words(it.ar);const marks={};let fixedAll=false;
-  curRoles=teams.map((_,i)=>i===R?'🎙️ يَقْرَأ':'👂 يَسْمَع');renderTeams(curRoles);
-  qa.innerHTML=`<div class="prog"><span>آيَة ${ar(mi+1)} مِنْ ${ar(mq.length)} · ${it.set}</span><span>${it.ref}</span></div>
-    <div class="roles"><div class="rolec" style="--rc:${teams[R].c}"><span class="big">🎙️</span>${teams[R].nm}<small>يَقْرَأُ الآيَة (مِنْ حِفْظِهِ إِنِ اسْتَطَاع)</small></div><div class="swap">⇄</div>
-      <div class="rolec" style="--rc:${teams[Lt].c}"><span class="big">👂</span>${teams[Lt].nm}<small>يَسْتَمِعُ وَيَضْغَطُ عَلَى الكَلِمَةِ الَّتِي فِيهَا خَطَأ</small></div></div>
+  curRoles=teams.map((_,i)=>i===R?U('🎙️ يَقْرَأ','🎙️ recites'):U('👂 يَسْمَع','👂 listens'));renderTeams(curRoles);
+  qa.innerHTML=`<div class="prog"><span>${U(`آيَة ${ar(mi+1)} مِنْ ${ar(mq.length)} · ${it.set}`,`Āyah ${mi+1} of ${mq.length} · ${it.setEn}`)}</span><span>${RF(it.ref)}</span></div>
+    <div class="roles"><div class="rolec" style="--rc:${teams[R].c}"><span class="big">🎙️</span>${teams[R].nm}<small>${U('يَقْرَأُ الآيَة (مِنْ حِفْظِهِ إِنِ اسْتَطَاع)','recites the āyah (from memory if possible)')}</small></div><div class="swap">⇄</div>
+      <div class="rolec" style="--rc:${teams[Lt].c}"><span class="big">👂</span>${teams[Lt].nm}<small>${U('يَسْتَمِعُ وَيَضْغَطُ عَلَى الكَلِمَةِ الَّتِي فِيهَا خَطَأ','listens and taps the word that has a mistake')}</small></div></div>
     <div class="verse ${blind?'blind':''}" id="verse">${W.map((w,i)=>`<button class="w" data-i="${i}">${w}</button>`).join('')}</div>
-    <div class="ref">﴿${it.ref}﴾</div>
+    <div class="ref">${REF(it.ref)}</div>${it.en?tr('“'+it.en+'”'):''}
     <div id="typeBox" style="display:contents"></div>
-    <div class="marks" id="mk">👂 لَا أَخْطَاءَ حَتَّى الآن</div>
-    <div class="row"><button class="big-btn green" id="cleanB">✅ قَرَأَهَا صَحِيحَة</button><button class="big-btn" id="fixB" disabled>🔁 صَحَّحَ وَأَعَاد</button>${blind?'<button class="big-btn ghost" id="peekB">👀 أَظْهِرِ الآيَة</button>':''}</div>
+    <div class="marks" id="mk">${U('👂 لَا أَخْطَاءَ حَتَّى الآن','👂 No mistakes so far')}</div>
+    <div class="row"><button class="big-btn green" id="cleanB">${U('✅ قَرَأَهَا صَحِيحَة','✅ Recited it correctly')}</button><button class="big-btn" id="fixB" disabled>${U('🔁 صَحَّحَ وَأَعَاد','🔁 Corrected and repeated')}</button>${blind?`<button class="big-btn ghost" id="peekB">${U('👀 أَظْهِرِ الآيَة','👀 Show the āyah')}</button>`:''}</div>
     <div id="out" style="display:contents"></div>`;
-  const upd=()=>{const n=Object.keys(marks).length;$('#mk').textContent=n?`👂 ${ar(n)} مَوْضِع — الآن يُعِيدُ القَارِئُ الكَلِمَةَ صَحِيحَةً ثُمَّ «صَحَّحَ وَأَعَاد»`:'👂 لَا أَخْطَاءَ حَتَّى الآن';
+  const upd=()=>{const n=Object.keys(marks).length;$('#mk').innerHTML=n?U(`👂 ${ar(n)} مَوْضِع — الآن يُعِيدُ القَارِئُ الكَلِمَةَ صَحِيحَةً ثُمَّ «صَحَّحَ وَأَعَاد»`,`👂 ${n} place${n>1?'s':''} marked — now the reciter repeats the word correctly, then tap “Corrected and repeated”`):U('👂 لَا أَخْطَاءَ حَتَّى الآن','👂 No mistakes so far');
     $('#cleanB').disabled=n>0;$('#fixB').disabled=n===0};
   $$('#verse .w').forEach(b=>b.onclick=()=>{ac();const i=+b.dataset.i;
     if(marks[i]){delete marks[i];b.classList.remove('mk');b.querySelector('sup')?.remove();$('#typeBox').innerHTML='';upd();return}
     sfx.mark();$$('#verse .w').forEach(x=>x.style.outline='');b.style.outline='3px solid var(--gold)';
-    $('#typeBox').innerHTML=`<div class="step"><div class="q">مَا نَوْعُ الخَطَأِ فِي «${W[i]}»؟ <span class="en">What kind of slip?</span></div><div class="types">${ERR.map(e=>`<button class="ty" data-k="${e.k}" style="--tc:${e.c}">${e.emo} ${e.ar}<span class="en"> ${e.en}</span></button>`).join('')}</div></div>`;
+    $('#typeBox').innerHTML=`<div class="step"><div class="q">${U(`مَا نَوْعُ الخَطَأِ فِي «${W[i]}»؟`,`What kind of mistake is in “${W[i]}”?`)}</div><div class="types">${ERR.map(e=>`<button class="ty" data-k="${e.k}" style="--tc:${e.c}">${e.emo} ${e.ar}<span class="en"> ${e.en}</span></button>`).join('')}</div></div>`;
     $$('#typeBox .ty').forEach(t=>t.onclick=()=>{const E=ERR.find(e=>e.k===t.dataset.k);marks[i]=E.k;b.classList.add('mk');b.style.outline='';b.querySelector('sup')?.remove();b.insertAdjacentHTML('beforeend',`<sup>${E.emo}</sup>`);$('#typeBox').innerHTML='';sfx.pop();upd()})});
   if(blind)$('#peekB').onclick=()=>{$('#verse').classList.toggle('blind')};
   const finish=clean=>{if(fixedAll)return;fixedAll=true;$$('#verse .w').forEach(x=>{x.disabled=true;x.style.outline=''});$('#verse').classList.remove('blind');$('#typeBox').innerHTML='';
@@ -453,50 +471,50 @@ function showAyah(){if(mi>=mq.length)return endGame('muarada');
     const n=Object.keys(marks).length;Object.entries(marks).forEach(([i,k])=>{marksLog.push({w:W[i],k,ref:it.ref,who:R});$(`#verse .w[data-i="${i}"]`).classList.add('fixed')});
     stat('clean',clean);
     const rp=clean?2:1,lp=n?1:0;award(rp,R,true);if(lp)setTimeout(()=>award(lp,Lt,true),450);setTimeout(()=>{sfx.good();praise(rp);if(clean)confetti()},300);
-    $('#out').innerHTML=`<div class="info" style="--ac:${clean?'var(--green)':'var(--gold)'}"><div class="t">${clean?'✅ قِرَاءَةٌ نَظِيفَة: القَارِئُ +٢ دَرَجَة':'🔁 صَحَّحَ وَأَعَاد: القَارِئُ +١ دَرَجَة'}${lp?' · 👂 المُسْتَمِعُ الأَمِينُ +١':''}</div>
-      <div class="bq">«والمعارضة مفاعلة من الجانبين، كأن كلا منهما كان تارة يقرأ والآخر يستمع» — ابن حجر كما نقله المؤلف (ص ٢٦).</div>
-      <div class="why">⇄ الآنَ تَبَادَلَا: ${teams[Lt].nm} يَقْرَأُ الآيَةَ التَّالِيَة، وَ${teams[R].nm} يَسْتَمِع. <span class="en blk">Now swap roles for the next āyah.</span></div></div>${nextBtn('⇄ تَبَادَلَا وَالتَّالِي','Swap & next')}`;
+    $('#out').innerHTML=`<div class="info" style="--ac:${clean?'var(--green)':'var(--gold)'}"><div class="t">${U((clean?'✅ قِرَاءَةٌ نَظِيفَة: القَارِئُ +٢ دَرَجَة':'🔁 صَحَّحَ وَأَعَاد: القَارِئُ +١ دَرَجَة')+(lp?' · 👂 المُسْتَمِعُ الأَمِينُ +١':''),(clean?'✅ A clean recitation: the reciter +2 steps':'🔁 Corrected and repeated: the reciter +1 step')+(lp?' · 👂 the faithful listener +1':''))}</div>
+      <div class="bq">«والمعارضة مفاعلة من الجانبين، كأن كلا منهما كان تارة يقرأ والآخر يستمع» — ابن حجر كما نقله المؤلف (ص ٢٦).<span class="tr">“Al-muʿāraḍah is a mutual act: it is as if each of them at times recited while the other listened” — Ibn Ḥajar, as quoted by the author (p. 26).</span></div>
+      <div class="why">${U(`⇄ الآنَ تَبَادَلَا: ${teams[Lt].nm} يَقْرَأُ الآيَةَ التَّالِيَة، وَ${teams[R].nm} يَسْتَمِع.`,`⇄ Now swap roles: ${teams[Lt].nm} recites the next āyah, and ${teams[R].nm} listens.`)}</div></div>${nextBtn('⇄ تَبَادَلَا وَالتَّالِي','⇄ Swap & next')}`;
     $('#nextB').onclick=()=>{mi++;turn=Lt;sfx.swap();showAyah()};$('#nextB').focus({preventScroll:true})};
   $('#cleanB').onclick=()=>{ac();finish(true)};$('#fixB').onclick=()=>{ac();finish(false)};
 }
 
 /* ---------- ④ the manners of the Qur'an carrier (Ibn Masʿūd) ---------- */
 function startKhuluq(){let sel=null,done=0,errs=0;const order=shuffle(KHULUQ.map((_,i)=>i));
-  qa.innerHTML=`<div class="q">🌙 «يَنْبَغِي لِحَامِلِ القُرْآنِ أَنْ يُعْرَفَ…» — صِلْ كُلَّ صِفَةٍ بِوَقْتِهَا <span class="en blk">"The carrier of the Qur'an should be known…" — match each half.</span></div>
-    <div class="match"><div class="col">${KHULUQ.map((k,i)=>`<button class="mb" data-a="${i}">${k.a}</button>`).join('')}</div>
-    <div class="col">${order.map(i=>`<button class="mb" data-b="${i}">${KHULUQ[i].b}</button>`).join('')}</div></div>
+  qa.innerHTML=`<div class="q">${U('🌙 «يَنْبَغِي لِحَامِلِ القُرْآنِ أَنْ يُعْرَفَ…» — صِلْ كُلَّ صِفَةٍ بِوَقْتِهَا','🌙 “The carrier of the Qur’an should be known…” — match each half.')}</div>
+    <div class="match"><div class="col">${KHULUQ.map((k,i)=>`<button class="mb" data-a="${i}">${k.a}<span class="en">${k.aEn}</span></button>`).join('')}</div>
+    <div class="col">${order.map(i=>`<button class="mb" data-b="${i}">${KHULUQ[i].b}<span class="en">${KHULUQ[i].bEn}</span></button>`).join('')}</div></div>
     <div id="out" style="display:contents"></div>`;
   $$('[data-a]').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;ac();$$('[data-a]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=+b.dataset.a;sfx.pop()});
   $$('[data-b]').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;ac();if(sel===null){b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),400);return}
     const i=+b.dataset.b,a=$(`[data-a="${sel}"]`);
     if(i===sel){a.classList.remove('sel');a.classList.add('done');b.classList.add('done');a.disabled=b.disabled=true;done++;stat('khuluq',true);award(1,turn,true);sfx.clink();
-      const K=KHULUQ[i];$('#out').innerHTML=`<div class="info"><div class="t">«${K.a} ${K.b}»</div><div class="why">💬 ${K.talk} <span class="en blk">${K.talkEn}</span></div></div>`;
+      const K=KHULUQ[i];$('#out').innerHTML=`<div class="info"><div class="t">«${K.a} ${K.b}»<span class="tr">“${K.aEn}, ${K.bEn}”</span></div><div class="why">${U('💬 '+K.talk,'💬 '+K.talkEn)}</div></div>`;
       turn=(turn+1)%teams.length;renderTeams();sel=null;
       if(done===KHULUQ.length)setTimeout(endKhuluq,600)}
     else{errs++;stat('khuluq',false);b.classList.add('bad');sfx.bad();setTimeout(()=>b.classList.remove('bad'),400);turn=(turn+1)%teams.length;renderTeams()}});
-  function endKhuluq(){$('#out').innerHTML=`<div class="info"><div class="t">🌙 قَوْلُ ابْنِ مَسْعُودٍ كَامِلًا</div><div class="bq">${KHULUQ_BQ}</div>
-      <div class="bq" style="margin-top:6px">وأورد المؤلف من رواية الطبراني عن ابن عمرو ﵄: «…وليس ينبغي لحامل القرآن أن يسفه فيمن يسفه، أو يغضب فيمن يغضب، أو يحتد فيمن يحتد، ولكن يعفو ويصفح لفضل القرآن» (ص ٤٠؛ العزو في الحاشية: فضائل القرآن لابن كثير ص ١٨٧).</div>
-      <div class="why">✍️ تَحَدِّي الأُسْبُوع: اخْتَرْ صِفَةً وَاحِدَةً، وَاكْتُبْهَا بِالقَلَمِ عَلَى السَّبُّورَة، وَطَبِّقْهَا ٧ أَيَّام. <span class="en blk">Pick one trait, write it on the board, live it for 7 days.</span></div></div>
-      <div class="tip">${errs===0?'🌟 بِلَا خَطَأ!':`${ar(errs)} مُحَاوَلَة خَطَأ`}</div><div class="row"><button class="big-btn green" id="againB">↻ مِنْ جَدِيد</button></div>`;
+  function endKhuluq(){$('#out').innerHTML=`<div class="info"><div class="t">${U('🌙 قَوْلُ ابْنِ مَسْعُودٍ كَامِلًا','🌙 The full saying of Ibn Masʿūd')}</div><div class="bq">${KHULUQ_BQ}<span class="tr">${KHULUQ_BQ_EN}</span></div>
+      <div class="bq" style="margin-top:6px">وأورد المؤلف من رواية الطبراني عن ابن عمرو ﵄: «…وليس ينبغي لحامل القرآن أن يسفه فيمن يسفه، أو يغضب فيمن يغضب، أو يحتد فيمن يحتد، ولكن يعفو ويصفح لفضل القرآن» (ص ٤٠؛ العزو في الحاشية: فضائل القرآن لابن كثير ص ١٨٧).<span class="tr">${KHULUQ2_EN}</span></div>
+      <div class="why">${U('✍️ تَحَدِّي الأُسْبُوع: اخْتَرْ صِفَةً وَاحِدَةً، وَاكْتُبْهَا بِالقَلَمِ عَلَى السَّبُّورَة، وَطَبِّقْهَا ٧ أَيَّام.','✍️ The weekly challenge: pick one trait, write it on the board with the pen, and practise it for 7 days.')}</div></div>
+      <div class="tip">${errs===0?U('🌟 بِلَا خَطَأ!','🌟 No mistakes!'):U(`${ar(errs)} مُحَاوَلَة خَطَأ`,`${errs} wrong attempt${errs>1?'s':''}`)}</div><div class="row"><button class="big-btn green" id="againB">${U('↻ مِنْ جَدِيد','↻ Start over')}</button></div>`;
     $('#againB').onclick=newGame;sfx.win();confetti(80)}
 }
 
 /* ---------- end ---------- */
-const ST_NAMES={'صحابي':{ar:'⭐ الصَّحَابَة',c:'var(--gold)'},'صحابية':{ar:'🌷 الصَّحَابِيَّات',c:'var(--purple)'},'تابعي':{ar:'📜 التَّابِعُون',c:'var(--blue)'},'إمام قراءة':{ar:'🏛️ أَئِمَّةُ القِرَاءَة',c:'var(--green)'},clean:{ar:'✅ آيَاتٌ بِلَا خَطَأ',c:'var(--green)'}};
+const ST_NAMES={'صحابي':{ar:'⭐ الصَّحَابَة',en:'⭐ Companions',c:'var(--gold)'},'صحابية':{ar:'🌷 الصَّحَابِيَّات',en:'🌷 Female Companions',c:'var(--purple)'},'تابعي':{ar:'📜 التَّابِعُون',en:'📜 Successors',c:'var(--blue)'},'إمام قراءة':{ar:'🏛️ أَئِمَّةُ القِرَاءَة',en:'🏛️ Imams of recitation',c:'var(--green)'},clean:{ar:'✅ آيَاتٌ بِلَا خَطَأ',en:'✅ Āyāt with no mistakes',c:'var(--green)'}};
 function endGame(kind){curRoles=null;renderTeams();
   const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`صَعِدْتَ ${ar(max)} دَرَجَة!`:win.length>1?'تَعَادُل! أَحْسَنْتُمَا':`${win[0].nm} أَعْلَى دَرَجَة!`;
+  const msg=teams.length===1?U(`صَعِدْتَ ${ar(max)} دَرَجَة!`,`You climbed ${max} steps!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمَا','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' أَعْلَى دَرَجَة!',' climbed the highest!')}`;
   let rows='',rev='';
   if(kind==='muarada'){const by={};marksLog.forEach(m=>by[m.k]=(by[m.k]||0)+1);const tot=marksLog.length||1;
-    rows=(stats.clean?`<div class="r" style="--ac:var(--green)"><span>${ST_NAMES.clean.ar}</span><span class="bar2"><i style="width:${Math.round(100*stats.clean.ok/stats.clean.n)}%"></i></span><span>${ar(stats.clean.ok)}/${ar(stats.clean.n)}</span></div>`:'')
-      +ERR.filter(e=>by[e.k]).map(e=>`<div class="r" style="--ac:${e.c}"><span>${e.emo} ${e.ar}</span><span class="bar2"><i style="width:${Math.round(100*by[e.k]/tot)}%"></i></span><span>${ar(by[e.k])}</span></div>`).join('');
-    rev=marksLog.length?`<div>رَاجِعْ هَذِهِ الكَلِمَاتِ أَوَّلًا: <span class="en">Review these words first:</span></div><div class="miss">${marksLog.map(m=>`${m.w} <small style="font-size:.6em">${ERR.find(e=>e.k===m.k).emo} ${m.ref} · ${teams[m.who]?.nm||''}</small>`).join(' ۞ ')}</div>`:'<div>لَا أَخْطَاءَ فِي الجَوْلَة — مَا شَاءَ الله! 🌟</div>'}
-  else{rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${ST_NAMES[k]?.c||'var(--gold)'}"><span>${ST_NAMES[k]?.ar||k}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${ar(s.ok)}/${ar(s.n)}</span></div>`).join('');
-    const u=[...new Set(missed)];rev=u.length?`<div>رَاجِعْ هَؤُلَاءِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${u.join(' ۞ ')}</div>`:'<div>كُلُّهَا صَحِيحَة — مَا شَاءَ الله! 🌟</div>'}
+    rows=(stats.clean?`<div class="r" style="--ac:var(--green)"><span>${U(ST_NAMES.clean.ar,ST_NAMES.clean.en)}</span><span class="bar2"><i style="width:${Math.round(100*stats.clean.ok/stats.clean.n)}%"></i></span><span>${U(`${ar(stats.clean.ok)}/${ar(stats.clean.n)}`,`${stats.clean.ok}/${stats.clean.n}`)}</span></div>`:'')
+      +ERR.filter(e=>by[e.k]).map(e=>`<div class="r" style="--ac:${e.c}"><span>${e.emo} ${U(e.ar,e.en)}</span><span class="bar2"><i style="width:${Math.round(100*by[e.k]/tot)}%"></i></span><span>${U(ar(by[e.k]),by[e.k])}</span></div>`).join('');
+    rev=marksLog.length?`<div>${U('رَاجِعْ هَذِهِ الكَلِمَاتِ أَوَّلًا:','Review these words first:')}</div><div class="miss">${marksLog.map(m=>`${m.w} <small style="font-size:.6em">${ERR.find(e=>e.k===m.k).emo} ${RF(m.ref)} · ${teams[m.who]?.nm||''}</small>`).join(' ۞ ')}</div>`:`<div>${U('لَا أَخْطَاءَ فِي الجَوْلَة — مَا شَاءَ الله! 🌟','No mistakes this round — Masha Allah! 🌟')}</div>`}
+  else{rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${ST_NAMES[k]?.c||'var(--gold)'}"><span>${ST_NAMES[k]?U(ST_NAMES[k].ar,ST_NAMES[k].en):k}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${U(`${ar(s.ok)}/${ar(s.n)}`,`${s.ok}/${s.n}`)}</span></div>`).join('');
+    const u=[...new Set(missed)];rev=u.length?`<div>${U('رَاجِعْ هَؤُلَاءِ أَوَّلًا:','Review these first:')}</div><div class="miss">${u.join(' ۞ ')}</div>`:`<div>${U('كُلُّهَا صَحِيحَة — مَا شَاءَ الله! 🌟','All correct — Masha Allah! 🌟')}</div>`}
   qa.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏔️</div><h2>${msg}</h2>
-    <div class="q">📊 ${kind==='muarada'?'تَقْرِيرُ المُعَارَضَة':'التَّقْرِير'} (صَحّ مِنْ أَوَّلِ مَرَّة) <span class="en">Report</span></div><div class="report">${rows}</div>${rev}
-    <div class="tip">${kind==='muarada'?'💡 وَاجِبُ البَيْت: «عَارِضْ» نَفْسَ الآيَاتِ مَعَ أَحَدِ أَهْلِكَ: أَنْتَ تَقْرَأُ وَهُوَ يَنْظُرُ فِي المُصْحَف، ثُمَّ تَبَادَلَا. <span class="en blk">Homework: do the same swap with a family member — you recite, they follow in the muṣḥaf, then swap.</span>':'💡 تَحَدِّي الخِتَام: اِبْحَثْ عَنْ سَنَدِ شَيْخِكَ — مِمَّنْ أَخَذَ القِرَاءَة؟ وَمِمَّنْ أَخَذَ شَيْخُه؟ <span class="en blk">Closing challenge: ask your teacher about his own chain — who did he learn from?</span>'}</div>
-    <button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div>`;
+    <div class="q">${U(`📊 ${kind==='muarada'?'تَقْرِيرُ المُعَارَضَة':'التَّقْرِير'} (صَحّ مِنْ أَوَّلِ مَرَّة)`,`📊 ${kind==='muarada'?'Muʿāraḍah report':'Report'} (correct on the first try)`)}</div><div class="report">${rows}</div>${rev}
+    <div class="tip">${kind==='muarada'?U('💡 وَاجِبُ البَيْت: «عَارِضْ» نَفْسَ الآيَاتِ مَعَ أَحَدِ أَهْلِكَ: أَنْتَ تَقْرَأُ وَهُوَ يَنْظُرُ فِي المُصْحَف، ثُمَّ تَبَادَلَا.','💡 Homework: do the same “muʿāraḍah” with a family member — you recite while they follow in the muṣḥaf, then swap.'):U('💡 تَحَدِّي الخِتَام: اِبْحَثْ عَنْ سَنَدِ شَيْخِكَ — مِمَّنْ أَخَذَ القِرَاءَة؟ وَمِمَّنْ أَخَذَ شَيْخُه؟','💡 Closing challenge: ask your teacher about their own chain — who did they learn recitation from, and who did their teacher learn from?')}</div>
+    <button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
@@ -506,9 +524,10 @@ $('#modeSel').onchange=()=>{setOptions();newGame()};['#setSel','#teamSel'].forEa
 $('#newB').onclick=newGame;
 $('#blindB').onclick=()=>{blind=!blind;$('#blindB').setAttribute('aria-pressed',blind);newGame()};
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'&&$('#nextB')){e.preventDefault();$('#nextB').click()}});
 newGame();
+TQI.auto('.verse,.w,.miss,.mb,.ring,.tower,.who2');
 </script>
 
 <script>

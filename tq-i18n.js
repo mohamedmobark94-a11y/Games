@@ -67,7 +67,7 @@
   /* Auto-pairing: where a page already writes  Arabic <span class="en">English</span>, English mode hides the Arabic text node
      and promotes the English span. Learning content (letters, words, verses…) is excluded via a selector. */
   var AR_RE=/[\u0600-\u06FF]/;
-  var CONTENT='.phrase,.letter,.word,.glyph,.tile,[lang=ar],.ar,.qar,.bq,.poem,.miss,.ref,#tqBar,#tools,#wbBoard,option,select,script,style';
+  var CONTENT='.phrase,.letter,.word,.glyph,.tile,[lang=ar]:not(html),.ar,.qar,.bq,.poem,.miss,.ref,#tqBar,#tools,#wbBoard,option,select,script,style';
   var autoSel=null;
   function autoRoot(root,en){
     if(!autoSel||!root)return;

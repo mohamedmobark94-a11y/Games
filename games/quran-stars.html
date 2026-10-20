@@ -1,5 +1,7 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}body.show-en .bdg .nm,body.show-en .reveal .nm{display:none}
+body.show-en .bdg .en{font-size:1em;font-weight:700}
+</style></head><body>
 <!doctype html><html lang="ar"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>نجوم القرآن</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -149,24 +151,24 @@ body.ink-laser .ink-cv{cursor:none!important}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:640px){#s0{padding:10px}.brand{font-size:1.3rem}.st{padding:6px 14px 8px;min-height:56px}.sky{gap:10px}.slot,.wd{padding:0 8px;min-width:44px}.badges{grid-template-columns:repeat(2,1fr)}}
 </style>
-</head><body>
+</head><body class="tq-i18n">
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">⭐ نُجُومُ القُرْآن <span class="en">Quran Stars</span><small>ترتيل القرآن · Tarteel Al-Quran — من كتاب «كيف تحفظ القرآن الكريم»</small></h1>
+    <h1 class="brand">⭐ نُجُومُ القُرْآن <span class="en">Quran Stars</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — من كتاب «كيف تحفظ القرآن الكريم»</span><span class="ui-en">Tarteel Al-Quran — from the book <i>How to Memorise the Noble Qur’an</i></span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
-  <div class="modes" role="group" aria-label="اللعبة">
+  <div class="modes" role="group" aria-label="Game · اللعبة">
     <button class="mode" data-m="build" aria-pressed="true">🌟 رَتِّبِ النُّجُوم <span class="en">Build the āyah</span></button>
     <button class="mode" data-m="hide" aria-pressed="false">☁️ النُّجُومُ تَخْتَفِي <span class="en">Vanishing stars</span></button>
   </div>
   <div class="bar">
-    <label for="setSel">الدرس:</label>
+    <label for="setSel"><span class="ui-ar">الدرس:</span><span class="ui-en">Lesson:</span></label>
     <select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams">فريقان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0" aria-live="polite"></section>
@@ -183,7 +185,8 @@ body.ink-laser .ink-cv{cursor:none!important}
    BADGES: «أوصاف القرآن» — اسم + إيموجي + حركة جسم (TPR) + نص الكتاب.
    REPEAT: كم مرة يقرأ الطالب الآية بعد ترتيبها. HIDE_ORDER: 'end' (تختفي من الآخر) أو 'random'.
    ============================================================ */
-const BOOK = {ar:'كيف تحفظ القرآن الكريم — د. عبد الرب نواب الدين', ref:'المقدمة + التمهيد «نبذة من فضائل القرآن الكريم»، ص ٢٠–٢٥ (ترقيم الطبعة المطبوعة)'};
+const BOOK = {ar:'كيف تحفظ القرآن الكريم — د. عبد الرب نواب الدين', ref:'المقدمة + التمهيد «نبذة من فضائل القرآن الكريم»، ص ٢٠–٢٥ (ترقيم الطبعة المطبوعة)',
+  en:'How to Memorise the Noble Qur’an — Dr. Abd ar-Rabb Nawab ad-Din', refEn:'the introduction and the preface “A glimpse of the virtues of the Noble Qur’an”, pp. 20–25 (page numbers of the printed edition)'};
 const BADGES = {
   majid:{ar:'مَجِيد',en:'Glorious',emo:'👑',c:'#E0A100',move:'ضَعْ يَدَيْكَ فَوْقَ رَأْسِكَ مِثْلَ التَّاج 👑',moveEn:'Put your hands on your head like a crown',
     bq:'ولقد وصف كتابه بأوصاف الجلال والكمال',pg:'٢٠'},
@@ -235,6 +238,8 @@ const SPECIALS = {
     bq:'قرأ رجل سورة الكهف وإلى جانبه حصان مربوط بشطنين "أي: حبلين" فتغشته سحابة "أحاطت به" فجعلت تدنو وتدنو، وجعل فرسه ينفر فلما أصبح أتى النبي ﷺ، فذكر ذلك له، فقال: تلك السكينة تنزلت بالقرآن',
     pg:'٢٣',src:'متفق عليه عن البراء بن عازب رضي الله عنه (البخاري ومسلم، والتخريج في حاشية الكتاب)'},
 };
+Object.entries({"majid": "He described His Book with attributes of majesty and perfection.", "hakim": "He described His Book with attributes of majesty and perfection.", "karim": "He described His Book with attributes of majesty and perfection.", "mubin": "He described His Book with attributes of majesty and perfection.", "ajab": "And He said, narrating about the jinn: “Indeed, we have heard an amazing Qur’an” (72:1).", "yusr": "Among the distinguishing features of the Noble Qur’an is that it is made easy to recite, to memorise and to reflect upon.", "mahfuz": "Allah, glory be to Him, took upon Himself to protect it from distortion and alteration, unlike the other heavenly books."}).forEach(([k,v])=>{BADGES[k].bqEn=v});
+Object.entries({"tikrar": {"tEn": "🔁 The secret of memorising", "bqEn": "Memorising the Noble Qur’an is in practice based on the principle of abundant recitation, and on repeating what is memorised in the hours of the night and the hours of the day, for a lifetime."}, "yusr": {"tEn": "👍 The Qur’an is easy to memorise", "bqEn": "It is preserved in the chests, made easy on the tongues, and dominant over the hearts.", "whoEn": "The saying of Ibn Kathīr as quoted by the author (source in the footnote: Tafsīr Ibn Kathīr 3/417)"}, "hadith": {"tEn": "🤝 The Qur’an is your friend on the Day of Resurrection", "srcEn": "Narrated by Muslim (804) from Abū Umāmah al-Bāhilī, may Allah be pleased with him — quoted by the author, p. 24 (the takhrīj is in the book’s footnote)"}, "story": {"tEn": "☁️ The story of the cloud (the sakīnah)", "bqEn": "A man recited Sūrat al-Kahf with a horse tied beside him by two ropes; a cloud covered him and kept coming closer and closer, and his horse began to shy away. When morning came he went to the Prophet ﷺ and told him, and he said: “That was the sakīnah (tranquillity) that descended with the Qur’an.”", "srcEn": "Agreed upon (al-Bukhārī and Muslim), from al-Barā’ ibn ʿĀzib, may Allah be pleased with him (the takhrīj is in the book’s footnote)"}}).forEach(([k,v])=>Object.assign(SPECIALS[k],v));
 const REPEAT = 3;            // اقرأ الآية ٣ مرات بعد ترتيبها
 const HIDE_ORDER = 'end';    // 'end' = تختفي الكلمات من آخر الآية · 'random' = عشوائيًّا
 const PEEK_MS = 1600;        // مدة «النظرة» عند الضغط على سحابة
@@ -242,6 +247,11 @@ const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَك�
 /* ============================================================ */
 
 const $=s=>document.querySelector(s);
+const {U,tr}=TQI;
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
+const REF=r=>{const e=TQI.ref(r);return U('﴿'+r+'﴾',e===r?'﴿'+r+'﴾':e)};
+const west=s=>String(s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const bqH=(a,e)=>`<div class="bq">«${a}»${tr('“'+e+'”')}</div>`;
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const words=t=>t.trim().split(/\s+/).map(w=>w.replace(/\+/g,' '));
@@ -263,26 +273,26 @@ const sfx={
   good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#FFD84D','#FFF3B0','#3A86FF','#22A45D','#8E5CF7','#EF476F'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- state ---------- */
 const S0=$('#s0');
 let mode='build',teams=[],turn=0,missed=[],gotBadges=[],setK='sifat';
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ نُجُومِي',en:'My stars',c:'var(--gold2)'}];
-  if(v==='tv')return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}];
-  return [{nm:'🔵 الفَرِيقُ الأَزْرَق',en:'Blue team',c:'var(--teamA)'},{nm:'🔴 الفَرِيقُ الأَحْمَر',en:'Red team',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ نُجُومِي','⭐ My stars'),c:'var(--gold2)'}];
+  if(v==='tv')return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}];
+  return [{nm:U('🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'),c:'var(--teamA)'},{nm:U('🔴 الفَرِيقُ الأَحْمَر','🔴 Red team'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 function award(p){teams[turn].pts+=p;renderTeams();sfx.good();praise(p);confetti()}
 function nextTurn(){turn=(turn+1)%teams.length;renderTeams()}
 function stage(){document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}))}
-function cite(pg){return `${BOOK.ar}، ص ${pg}`}
-function bookCard(t,bq,pg,kid,kidEn,hc,who){return `<div class="card" style="--hc:${hc||'var(--gold)'}"><div class="t">${t}</div>${kid?`<div>${kid}${kidEn?`<span class="en blk">${kidEn}</span>`:''}</div>`:''}<div class="bq">«${bq}»</div><small>${who?who+' — ':''}${cite(pg)}</small></div>`}
-function hadithCard(){const h=SPECIALS.hadith;return `<div class="card" style="--hc:#8E5CF7"><div class="t">${h.t}</div><div class="hd">${h.hd}</div><span class="en blk">${h.en}</span><small>${h.src}</small></div>`}
-function storyCard(open){const s=SPECIALS.story;return `<details class="card" style="--hc:#3A86FF" ${open?'open':''}><summary>${s.t} <span class="en">Story</span></summary><div>${s.kid}<span class="en blk">${s.kidEn}</span></div><div class="bq">«${s.bq}»</div><small>${s.src} — ${cite(s.pg)}</small></details>`}
+function cite(pg){return U(`${BOOK.ar}، ص ${pg}`,`${BOOK.en}, p. ${west(pg)}`)}
+function bookCard(t,bq,pg,kid,kidEn,hc,who,bqEn,tEn,whoEn){return `<div class="card" style="--hc:${hc||'var(--gold)'}"><div class="t">${tEn?U(t,tEn):t}</div>${kid?`<div>${kidEn?U(kid,kidEn):kid}</div>`:''}${bqEn?bqH(bq,bqEn):`<div class="bq">«${bq}»</div>`}<small>${who?(whoEn?U(who,whoEn):who)+' — ':''}${cite(pg)}</small></div>`}
+function hadithCard(){const h=SPECIALS.hadith;return `<div class="card" style="--hc:#8E5CF7"><div class="t">${U(h.t,h.tEn)}</div><div class="hd">${h.hd}</div><span class="en blk">${h.en}</span><small>${U(h.src,h.srcEn)}</small></div>`}
+function storyCard(open){const s=SPECIALS.story;return `<details class="card" style="--hc:#3A86FF" ${open?'open':''}><summary>${U(s.t,s.tEn)}</summary><div>${U(s.kid,s.kidEn)}</div>${bqH(s.bq,s.bqEn)}<small>${U(s.src,s.srcEn)} — ${cite(s.pg)}</small></details>`}
 
-$('#setSel').innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}">${g.ar}</option>`).join('');
-$('#bookLine').textContent=`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الآيات من القرآن الكريم (رواية حفص) بمواضعها، وآيات «أوصاف القرآن» كلها من أمثلة الكتاب نفسه.`;
+$('#setSel').innerHTML=Object.entries(SETS).map(([k,g])=>`<option value="${k}" data-en="${g.en}">${g.ar}</option>`).join('');TQI.relabel();
+$('#bookLine').innerHTML=U(`📚 المصدر: ${BOOK.ar}، ${BOOK.ref}. الآيات من القرآن الكريم (رواية حفص) بمواضعها، وآيات «أوصاف القرآن» كلها من أمثلة الكتاب نفسه.`,`📚 Source: ${BOOK.en}, ${BOOK.refEn}. The verses are from the Qur’an (Ḥafṣ recitation) in their places, and all the verses about “what the Qur’an is like” are examples from the book itself.`);
 
 function newGame(){teams=teamDefs().map(t=>({...t,pts:0}));turn=0;missed=[];gotBadges=[];setK=$('#setSel').value;renderTeams();intro()}
 
@@ -290,10 +300,10 @@ function newGame(){teams=teamDefs().map(t=>({...t,pts:0}));turn=0;missed=[];gotB
 function intro(){const g=SETS[setK];const hasB=g.items.some(i=>i.badge);
   S0.innerHTML=`<div class="q">🌙 القُرْآنُ مِثْلُ سَمَاءٍ مَلِيئَةٍ بِالنُّجُوم، وَكُلُّ كَلِمَةٍ نَجْمَة ⭐ <span class="en blk">The Quran is like a sky full of stars: every word is a star!</span></div>
     ${hasB?`<div class="tip">🎵 قَابِلْ أَوْصَافَ القُرْآن! اضْغَطْ عَلَى كُلِّ وَصْف، وَاعْمَلْ حَرَكَتَهُ مَعَ المُعَلِّم <span class="en blk">Meet what the Quran is like: tap each one and do its move.</span></div>
-    <div class="badges">${Object.entries(BADGES).map(([k,b])=>`<button class="bdg" data-b="${k}" style="--bc:${b.c}"><span class="emo">${b.emo}</span><span class="nm">${b.ar}</span><span class="en">${b.en}</span><span class="mv">${b.move}</span></button>`).join('')}</div>`:''}
-    ${bookCard(SPECIALS.tikrar.t,SPECIALS.tikrar.bq,SPECIALS.tikrar.pg,SPECIALS.tikrar.kid,SPECIALS.tikrar.kidEn,'#E36414')}
-    ${mode==='build'?`<div class="tip">🌟 <b>رَتِّبِ النُّجُوم:</b> اسْمَعِ الآيَةَ مِنَ المُعَلِّم ← اضْغَطِ النُّجُومَ بِالتَّرْتِيب ← اقْرَأْهَا ${ar(REPEAT)} مَرَّات ← اعْمَلْ حَرَكَةَ الوَصْف <span class="en blk">Listen → tap the stars in order → read it ${REPEAT} times → do the move</span></div>`
-     :`<div class="tip">☁️ <b>النُّجُومُ تَخْتَفِي:</b> اقْرَأِ الآيَة ← تَخْتَفِي نَجْمَة خَلْفَ سَحَابَة ← اقْرَأْهَا مَرَّةً أُخْرَى… حَتَّى تَقْرَأَهَا كُلَّهَا غَيْبًا! (اضْغَطْ عَلَى السَّحَابَةِ لِتَنْظُرَ قَلِيلًا 👀) <span class="en blk">Read it → one star hides behind a cloud → read again… until you say it all from memory! Tap a cloud to peek.</span></div>`}
+    <div class="badges">${Object.entries(BADGES).map(([k,b])=>`<button class="bdg" data-b="${k}" style="--bc:${b.c}"><span class="emo">${b.emo}</span><span class="nm">${b.ar}</span><span class="en">${b.en}</span><span class="mv">${U(b.move,b.moveEn)}</span></button>`).join('')}</div>`:''}
+    ${bookCard(SPECIALS.tikrar.t,SPECIALS.tikrar.bq,SPECIALS.tikrar.pg,SPECIALS.tikrar.kid,SPECIALS.tikrar.kidEn,'#E36414',null,SPECIALS.tikrar.bqEn,SPECIALS.tikrar.tEn)}
+    ${mode==='build'?`<div class="tip">${U(`🌟 <b>رَتِّبِ النُّجُوم:</b> اسْمَعِ الآيَةَ مِنَ المُعَلِّم ← اضْغَطِ النُّجُومَ بِالتَّرْتِيب ← اقْرَأْهَا ${ar(REPEAT)} مَرَّات ← اعْمَلْ حَرَكَةَ الوَصْف`,`🌟 <b>Build the stars:</b> listen to the āyah from the teacher → tap the stars in order → read it ${REPEAT} times → do the movement`)}</div>`
+     :`<div class="tip">${U('☁️ <b>النُّجُومُ تَخْتَفِي:</b> اقْرَأِ الآيَة ← تَخْتَفِي نَجْمَة خَلْفَ سَحَابَة ← اقْرَأْهَا مَرَّةً أُخْرَى… حَتَّى تَقْرَأَهَا كُلَّهَا غَيْبًا! (اضْغَطْ عَلَى السَّحَابَةِ لِتَنْظُرَ قَلِيلًا 👀)','☁️ <b>Vanishing stars:</b> read the āyah → one star hides behind a cloud → read it again… until you can say it all from memory! (Tap a cloud to peek 👀)')}</div>`}
     <div class="row"><button class="big-btn green" id="goB">ابْدَأْ: ${g.ar.split(' (')[0].split(' — ')[0]} ▶ <span class="en">Start</span></button></div>
     ${storyCard(false)}`;
   S0.querySelectorAll('.bdg').forEach(b=>b.onclick=()=>{ac();sfx.badge();b.classList.remove('got');void b.offsetWidth;b.classList.add('got')});
@@ -302,8 +312,8 @@ function intro(){const g=SETS[setK];const hasB=g.items.some(i=>i.badge);
 
 /* ================= ① رتّب النجوم ================= */
 let queue=[],done=0,goal=0;
-function head(it){return `<div class="prog"><span>الآيَة ${ar(done+1)} مِنْ ${ar(goal)}</span><span>${teams[turn].nm}</span></div>
-  <div class="meaning"><span class="p">${it.pic||'⭐'}</span> ${it.en?`<span class="en">${it.en}</span>`:''} <span class="ref">(${it.ref})</span></div>`}
+function head(it){return `<div class="prog"><span>${U(`الآيَة ${ar(done+1)} مِنْ ${ar(goal)}`,`Āyah ${done+1} of ${goal}`)}</span><span>${teams[turn].nm}</span></div>
+  <div class="meaning"><span class="p">${it.pic||'⭐'}</span> ${it.en?`<span class="en">${it.en}</span>`:''} <span class="ref">(${RF(it.ref)})</span></div>`}
 function buildShow(){if(!queue.length){end();return}
   const it=queue.shift(),ws=words(it.ar);let next=0,errs=0;
   S0.innerHTML=`${head(it)}
@@ -322,9 +332,9 @@ function buildShow(){if(!queue.length){end();return}
     setTimeout(()=>award(errs?1:2),300);
     $('#after').innerHTML=`<div class="tip">🔁 الآنَ اقْرَأِ الآيَةَ ${ar(REPEAT)} مَرَّات — المُعَلِّمُ يَضْغَطُ نَجْمَةً بَعْدَ كُلِّ قِرَاءَة <span class="en blk">Now read it ${REPEAT} times; the teacher taps a star after each one.</span></div>
       <div class="counter" id="cnt">${Array.from({length:REPEAT},()=>'<span>⭐</span>').join('')}</div>
-      <div class="row"><button class="big-btn gold" id="repB">✓ قَرَأَهَا (١)</button></div><div id="after2"></div>`;
+      <div class="row"><button class="big-btn gold" id="repB">${U('✓ قَرَأَهَا (١)','✓ Read it (1)')}</button></div><div id="after2"></div>`;
     let r=0;$('#repB').onclick=()=>{ac();const c=$('#cnt').children;c[r].classList.add('on');sfx.rep(r);r++;
-      if(r<REPEAT){$('#repB').textContent=`✓ قَرَأَهَا (${ar(r+1)})`;return}
+      if(r<REPEAT){$('#repB').innerHTML=U(`✓ قَرَأَهَا (${ar(r+1)})`,`✓ Read it (${r+1})`);return}
       $('#repB').remove();afterAyah(it,$('#after2'))};
     $('#after').scrollIntoView({behavior:'smooth',block:'nearest'})}
   stage()}
@@ -333,8 +343,8 @@ function afterAyah(it,host,hideMode){const b=it.badge&&BADGES[it.badge];
   if(b&&!gotBadges.includes(it.badge))gotBadges.push(it.badge);
   if(b)sfx.badge();
   host.innerHTML=`${b?`<div class="reveal" style="--bc:${b.c}"><span class="emo">${b.emo}</span><div><div class="nm">القُرْآنُ ${b.ar}!</div><span class="en">The Quran is ${b.en}!</span><div class="mv">🤸 ${b.move}<span class="en blk">${b.moveEn}</span></div></div>
-      <button class="big-btn green" id="bonusB">✓ عَمِلَ الحَرَكَة (+١)</button></div>
-      ${bookCard('📚 مِنَ الكِتَاب',b.bq,b.pg,null,null,b.c,it.badge==='yusr'?null:null)}${it.badge==='yusr'?bookCard(SPECIALS.yusr.t,SPECIALS.yusr.bq,SPECIALS.yusr.pg,null,null,'#E36414',SPECIALS.yusr.who):''}`:''}
+      <button class="big-btn green" id="bonusB">${U('✓ عَمِلَ الحَرَكَة (+١)','✓ Did the movement (+1)')}</button></div>
+      ${bookCard('📚 مِنَ الكِتَاب',b.bq,b.pg,null,null,b.c,null,b.bqEn,'📚 From the book')}${it.badge==='yusr'?bookCard(SPECIALS.yusr.t,SPECIALS.yusr.bq,SPECIALS.yusr.pg,null,null,'#E36414',SPECIALS.yusr.who,SPECIALS.yusr.bqEn,SPECIALS.yusr.tEn,SPECIALS.yusr.whoEn):''}`:''}
     <div class="row">${hideMode?'':`<button class="big-btn ghost" id="hideNow">☁️ الآنَ غَيْبًا! <span class="en">Now from memory</span></button>`}<button class="big-btn" id="nextB">${queue.length?'الآيَةُ التَّالِيَة ←':'🏆 النِّهَايَة'} <span class="en">Next</span></button></div>`;
   const bb=$('#bonusB');if(bb)bb.onclick=()=>{bb.remove();award(1)};
   const hn=$('#hideNow');if(hn)hn.onclick=()=>{queue.unshift(it);done=done;mode='hide';document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m==='hide'));hideShow()};
@@ -367,18 +377,18 @@ function hideShow(){if(!queue.length){end();return}
 
 /* ---------- end ---------- */
 function end(){const g=SETS[setK],max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ':`فَازَ ${win[0].nm}!`;
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمْ','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
   const ms=[...new Set(missed)];
   S0.innerHTML=`<div class="endmsg"><div class="trophy" aria-hidden="true">🏆</div><h2>${msg}</h2>
     ${gotBadges.length?`<div>👑 تَاجُ القُرْآن: القُرْآنُ… <span class="en">The Quran is…</span></div><div class="crown">${gotBadges.map(k=>`<span style="--bc:${BADGES[k].c}">${BADGES[k].emo} ${BADGES[k].ar}</span>`).join('')}</div>`:''}
-    ${ms.length?`<div>رَاجِعْ هَذِهِ أَوَّلًا: <span class="en">Review these first:</span></div><div class="miss">${ms.join(' · ')}</div>`:'<div>مَا شَاءَ الله! كُلُّ النُّجُومِ فِي مَكَانِهَا 🌟</div>'}
-    ${g.seq?`<div class="card" style="--hc:var(--gold)"><div class="t">🌌 التَّحَدِّي الكَبِير <span class="en">Big challenge</span></div>اقْرَأِ السُّورَةَ كُلَّهَا غَيْبًا، آيَةً بَعْدَ آيَة! <span class="en blk">Recite the whole sūrah from memory!</span><div class="row" style="margin-top:6px"><button class="big-btn green" id="bigB">✓ قَرَأَهَا كُلَّهَا (+٣)</button></div></div>`:''}
+    ${ms.length?`<div>${U('رَاجِعْ هَذِهِ أَوَّلًا:','Review these first:')}</div><div class="miss">${ms.join(' · ')}</div>`:`<div>${U('مَا شَاءَ الله! كُلُّ النُّجُومِ فِي مَكَانِهَا 🌟','Masha Allah! Every star is in its place 🌟')}</div>`}
+    ${g.seq?`<div class="card" style="--hc:var(--gold)"><div class="t">🌌 التَّحَدِّي الكَبِير <span class="en">Big challenge</span></div>اقْرَأِ السُّورَةَ كُلَّهَا غَيْبًا، آيَةً بَعْدَ آيَة! <span class="en blk">Recite the whole sūrah from memory!</span><div class="row" style="margin-top:6px"><button class="big-btn green" id="bigB">${U('✓ قَرَأَهَا كُلَّهَا (+٣)','✓ Recited it all (+3)')}</button></div></div>`:''}
     ${hadithCard()}
     <div class="card" style="--hc:var(--good)"><div class="t">🏠 تَحَدِّي البَيْت <span class="en">Home challenge</span></div>
       اقْرَأْ آيَةَ اليَوْمِ ${ar(REPEAT)} مَرَّاتٍ لِأَهْلِكَ قَبْلَ النَّوْم 🌙، وَاعْمَلْ حَرَكَةَ الوَصْفِ مَعَهُم! وَفِي الحِصَّةِ القَادِمَةِ نَبْدَأُ بِهَا: «النُّجُومُ تَخْتَفِي».
       <span class="en blk">Read today's āyah ${REPEAT} times to your family before sleeping and teach them its move. Next class we start with "Vanishing stars".</span></div>
     ${storyCard(false)}
-    <div class="row"><button class="big-btn green" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div></div>`;
+    <div class="row"><button class="big-btn green" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div></div>`;
   const bg=$('#bigB');if(bg)bg.onclick=()=>{bg.remove();award(3)};
   $('#againB').onclick=newGame;sfx.win();confetti(90);stage()}
 
@@ -386,12 +396,13 @@ function end(){const g=SETS[setK],max=Math.max(...teams.map(t=>t.pts)),win=teams
 document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',x===b));newGame()});
 $('#setSel').onchange=newGame;$('#teamSel').onchange=newGame;$('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;
   if(e.key==='Enter'){const b=$('#nextB')||$('#okB')||$('#repB');if(b&&e.target!==b){e.preventDefault();b.click()}}});
 window.__t={SETS,BADGES,words};
 newGame();
 </script>
+<script>TQI.auto('.wd,.st,.slot,.crown,.hd,.strip,.sky');</script>
 <script>
 (function(){
 // Pen tools + whiteboard (claude/lesson-engine/wb.js)
