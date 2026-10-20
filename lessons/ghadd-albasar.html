@@ -304,6 +304,136 @@ init:({$$})=>{
   $$('#chk input').forEach(c=>{c.checked=!!saved[c.id];c.onchange=()=>{saved[c.id]=c.checked;try{localStorage.setItem('gaze-challenge',JSON.stringify(saved))}catch(e){}}});
 }
 };
+/* ---------- English version of every station (same widgets, answers and keys as the Arabic one) ---------- */
+const ref=t=>`<span class="ref">${t}</span>`;
+const LESSON_EN=[
+{title:'Welcome, champion',
+ guide:'Today we talk about the <b>eye</b>: a great blessing from Allah, and how to protect it.',
+ note:'The student is about 14 and his Arabic is weak: read each sentence slowly and give the English wording where needed.',
+ html:`${eye}
+ <h3>By the end of the lesson I will know:</h3>
+ <ul class="clean">
+  <li>What “lowering the gaze” means</li>
+  <li>The proof from the Qur’an and the Sunnah</li>
+  <li>Why Allah commanded it</li>
+  <li>What to do if I see something haram</li>
+  <li>How to protect my eyes with the phone and the internet</li>
+ </ul>`},
+
+{title:'A question to begin',
+ guide:'A quick question. There is no wrong answer here — tell the truth!',
+ note:'Listen to the student without blame. The aim is for him to see for himself how many images pass before his eyes each day.',
+ html:`
+ <div class="widget w-poll"><div class="q">How many hours a day do you use a phone or screen?</div>
+  <div class="opts"><button>Less than 1 hour</button><button>1–3 hours</button><button>3–5 hours</button><button>More than 5</button></div>
+  <div class="why">Every hour, <b>hundreds of images</b> pass before your eyes. Some are beautiful, and some do not please Allah. The eye is the <b>door of the heart</b>: what enters through it stays in the heart.</div></div>
+ ${mcq('g1','What enters through the eye reaches…?',['The hand','The heart','The foot'],1,'The heart. That is why we guard the door, so that we guard the house.')}`},
+
+{title:'Words of the lesson',
+ guide:'Tap each card to see its meaning.',
+ note:'Ask the student to repeat each word twice after you.',
+ html:`<div class="words">
+  <div class="card flip"><div class="front">غَضُّ<div class="hint">Tap</div></div><div class="back gloss"><p>To lower your eyes and turn them away.</p></div></div>
+  <div class="card flip"><div class="front">البَصَر<div class="hint">Tap</div></div><div class="back gloss"><p>Sight; looking with the eye.</p></div></div>
+  <div class="card flip"><div class="front">أَزْكَى<div class="hint">Tap</div></div><div class="back gloss"><p>Purer and cleaner for the heart.</p></div></div>
+  <div class="card flip"><div class="front">الفُجَاءَة<div class="hint">Tap</div></div><div class="back gloss"><p>Something that comes suddenly, without intending it.</p></div></div>
+  <div class="card flip"><div class="front">الحَرَام<div class="hint">Tap</div></div><div class="back gloss"><p>What Allah has forbidden.</p></div></div>
+  <div class="card flip"><div class="front">مَسْئُول<div class="hint">Tap</div></div><div class="back gloss"><p>Something Allah will ask you about on the Day of Resurrection.</p></div></div>
+ </div>
+ <div class="card" style="margin-top:14px"><h4>Lowering the gaze</h4><p>Turning your eyes away from <b>everything Allah has forbidden us to look at</b>.</p></div>`},
+
+{title:'The verse: a command from Allah',
+ guide:'These are the words of Allah. Read them slowly with your teacher.',
+ note:'Focus on three words: yaghuddū (lower), abṣārihim (their eyes), azkā (purer). Do not explain “guarding the private parts” in detail in this lesson; it is enough to say: “they protect themselves from the haram.”',
+ html:`
+ <div class="quran">قُل لِّلْمُؤْمِنِينَ يَغُضُّوا مِنْ أَبْصَارِهِمْ وَيَحْفَظُوا فُرُوجَهُمْ ۚ ذَٰلِكَ أَزْكَىٰ لَهُمْ ۗ إِنَّ اللَّهَ خَبِيرٌ بِمَا يَصْنَعُونَ${ref('An-Nur 24:30')}</div>
+ <div class="word-line"><span><b>قُلْ</b> = say (O Muhammad ﷺ)</span><span><b>يَغُضُّوا</b> = they lower</span><span><b>أَبْصَارِهِمْ</b> = their eyes</span><span><b>أَزْكَىٰ</b> = purer</span><span><b>خَبِيرٌ</b> = knows everything</span></div>
+ <h3>The meaning, simply</h3>
+ <ul class="clean">
+  <li>Allah commands the <b>believers</b> to turn their eyes away from the haram.</li>
+  <li>And to protect themselves from the haram.</li>
+  <li>This is <b>purer</b> for their hearts.</li>
+  <li>Allah <b>knows</b> everything we do, even if nobody sees us.</li>
+ </ul>
+ <p>In the next verse (An-Nur 24:31) Allah commands the <b>believing women</b> to lower their gaze too. So it is a command for everyone.</p>
+ ${mcq('g2','Who commanded us to lower our gaze?',['My friends','Allah, glory be to Him','The school'],1,'Allah Himself commanded us, in Surat An-Nur.')}
+ ${mcq('g3','What happens to my heart when I lower my gaze?',['It becomes purer','It becomes sad','Nothing'],0,'“That is purer for them”: purer for their hearts.')}`},
+
+{title:'Why did Allah command us?',
+ guide:'A big sin starts with a small step: a <b>look</b>. Put the steps in the right order.',
+ note:'After the game ask: “Where is the easiest place to stop the road?” The answer: at the first step.',
+ html:`
+ <div class="widget w-order" data-key="g4"><div class="q">Put in order: how does the road to the haram begin?</div>
+  <div class="order-slots"></div>
+  <div class="order-pool opts"><button data-i="0">A look</button><button data-i="1">A thought</button><button data-i="2">A desire</button><button data-i="3">An act</button></div>
+  <div class="done-msg">Correct! And the easiest place to stop the road is the first step: the look.</div></div>
+ <h3>Your eye is a trust</h3>
+ <div class="quran">إِنَّ السَّمْعَ وَالْبَصَرَ وَالْفُؤَادَ كُلُّ أُولَٰئِكَ كَانَ عَنْهُ مَسْئُولًا${ref('Al-Isra 17:36')}</div>
+ <p>Allah gave you the eye, and on the Day of Resurrection He will ask you: <b>what did you look at with it?</b></p>
+ <div class="quran">يَعْلَمُ خَائِنَةَ الْأَعْيُنِ وَمَا تُخْفِي الصُّدُورُ${ref('Ghafir 40:19 — Allah knows the secret glance')}</div>`},
+
+{title:'The first look',
+ guide:'If you see something haram <b>without meaning to</b>, you have no sin. But do not look a <b>second time</b>.',
+ note:'This is the most important practical rule in the lesson. Have the student say it in his own words: “The first is for me, the second is against me.”',
+ html:`
+ <div class="hadith">The Messenger of Allah ﷺ said to Ali, may Allah be pleased with him: “يَا عَلِيُّ، لَا تُتْبِعِ النَّظْرَةَ النَّظْرَةَ، فَإِنَّ لَكَ الْأُولَى وَلَيْسَتْ لَكَ الْآخِرَةُ”${ref('“O Ali, do not follow one look with another; the first is for you, but the second is not.” Narrated by Abu Dawud (2149) and at-Tirmidhi (2777); graded hasan by al-Albani')}</div>
+ <p><b>Meaning:</b> The first look, without intending it, is allowed. The second look you chose yourself, so its sin is on you.</p>
+ <div class="hadith">Jarir ibn Abdullah, may Allah be pleased with him, said: “سَأَلْتُ رَسُولَ اللَّهِ ﷺ عَنْ نَظَرِ الْفُجَاءَةِ، فَأَمَرَنِي أَنْ أَصْرِفَ بَصَرِي”${ref('“I asked the Messenger of Allah ﷺ about a sudden glance, and he told me to turn my eyes away.” Narrated by Muslim (2159)')}</div>
+ <p><b>Meaning:</b> If you see something suddenly, <b>turn your eyes away immediately</b>.</p>
+ ${mcq('g5','True or false? The first look, without intending it, is a sin for me.',['True','False'],1,'False. “The first is for you”: there is no sin in it, but turn your eyes away immediately.')}
+ ${mcq('g6','True or false? If I see a haram picture by mistake, I may keep looking because it came by mistake.',['True','False'],1,'False. Continuing is a second look, and “the second is not for you”.')}`},
+
+{title:'What would you do?',
+ guide:'Situations from real life. Choose the best action.',
+ note:'Discuss each situation for a minute. Do not let the student feel accused; talk about “a young man”, not about him.',
+ html:`
+ ${scene('g7','In the street','You are walking in the market and suddenly see a huge advertisement with an immodest picture.',['Look for a moment, then walk on','Turn my eyes away immediately and carry on walking','Take a photo to show my friends'],1,'This is exactly the Prophet’s ﷺ instruction: “turn my eyes away”.')}
+ ${scene('g8','In a game','You are playing a game on your phone and an advert with an inappropriate picture appears.',['Close it immediately and do not open it','Watch it until it ends','Tap on it to see more'],0,'Close the advert immediately. If it keeps happening, ask your father to change the settings or delete the game.')}
+ ${scene('g9','A message from a friend','Your friend sends a link and says: “Watch this video!” and you suspect it is bad.',['Open it, just to know','Do not open it, and advise him with a kind word','Forward it to another friend'],1,'Do not open what you doubt. And giving your friend gentle advice is his right over you.')}
+ ${scene('g10','After a mistake','You looked at something haram, and now your heart feels sad.',['I say: that is it, I am a bad person','I ask Allah for forgiveness, repent, and do not repeat it','It does not matter, everyone does it'],1,'Allah loves those who repent. The door of repentance is always open, and sorrow over a sin is a sign of faith.')}`},
+
+{title:'Your tools for protecting your eyes',
+ guide:'Six tools that help you every day.',
+ note:'Ask the student: which tool will you use this week? And write it in his notes.',
+ html:`<div class="grid">
+  <div class="card weapon"><span class="num">1</span><div><h4>Remember that Allah sees you</h4><p class="ex" style="font-family:var(--f-quran);font-size:1.25rem">﴿أَلَمْ يَعْلَم بِأَنَّ اللَّهَ يَرَىٰ﴾</p><p style="font-size:.85rem;color:var(--muted)">Al-‘Alaq 96:14 — “Does he not know that Allah sees?”</p></div></div>
+  <div class="card weapon"><span class="num">2</span><div><h4>Turn your eyes away at once</h4><p>Do not wait even a second.</p></div></div>
+  <div class="card weapon"><span class="num">3</span><div><h4>Keep your phone in a shared place</h4><p>Use it in a room where your family is, not alone at night.</p></div></div>
+  <div class="card weapon"><span class="num">4</span><div><h4>Fill your time</h4><p>Sport, the Qur’an, righteous friends.</p></div></div>
+  <div class="card weapon"><span class="num">5</span><div><h4>Lowering the gaze is a right of the road</h4><p>The Prophet ﷺ listed the rights of the road: “lowering the gaze…” <span style="font-size:.85rem;color:var(--muted)">(Bukhari 2465, Muslim 2121)</span></p></div></div>
+  <div class="card weapon"><span class="num">6</span><div><h4>Dua</h4><p class="ex" style="font-family:var(--f-quran);font-size:1.2rem">«اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى»</p><p style="font-size:.85rem;color:var(--muted)">“O Allah, I ask You for guidance, piety, chastity and self-sufficiency.” Narrated by Muslim (2721)</p></div></div>
+ </div>
+ <div class="hadith">Among the seven whom Allah will shade in His shade on the day when there is no shade but His: “وَشَابٌّ نَشَأَ فِي عِبَادَةِ اللَّهِ”${ref('“a young man who grew up in the worship of Allah.” Narrated by al-Bukhari (660) and Muslim (1031)')}</div>`},
+
+{title:'Quick quiz',
+ guide:'Four questions. A star for each correct answer on the first try!',
+ note:'',
+ html:`
+ ${mcq('q1','1. The main verse on lowering the gaze is in Surah:',['Al-Baqarah','An-Nur','Al-Fatihah'],1,'Surat An-Nur, verse 30.')}
+ ${mcq('q2','2. What do I do at a sudden glance?',['Turn my eyes away immediately','Look a second time','Close my eyes for a whole day'],0,'“He told me to turn my eyes away” — narrated by Muslim.')}
+ ${mcq('q3','3. Lowering the gaze is a command for:',['Men only','Women only','Men and women'],2,'An-Nur 30 is for the believing men, and An-Nur 31 for the believing women.')}
+ ${mcq('q4','4. The first step on the road to the haram is:',['The act','The look','The desire'],1,'The look — that is why we guard the eye first.')}`},
+
+{title:'Your result and the week’s challenge',
+ html:`
+ <div class="result"><div>Your stars</div><div class="score" id="res"></div><p id="resMsg" style="margin-inline:auto"></p></div>
+ <h3>7-day challenge</h3>
+ <p>Tick each day you protect your eyes. Allah sees your effort.</p>
+ <div class="card check" id="chk">${['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'].map((d,i)=>`<label><input type="checkbox" id="d${i}"> ${d}</label>`).join('')}</div>
+ <h3>Homework</h3>
+ <ul class="clean">
+  <li>Memorise the verse <b>An-Nur 24:30</b>.</li>
+  <li>Memorise the dua: “اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى”.</li>
+  <li>Write down three things you will do to protect your eyes on the phone.</li>
+ </ul>`,
+ onEnter:({earned,total,ar,$})=>{
+  $('#res').textContent=earned+' / '+total;
+  const r=earned/total;
+  $('#resMsg').textContent=r>=.85?'Masha Allah! Barak Allahu feek, champion.':r>=.6?'Well done! Review the points you got wrong.':'A good start. We will review together in the next class, in sha Allah.';
+ }}
+];
+LESSON.titleEn='Lowering the Gaze';LESSON.subEn='Youth fiqh in questions and answers · Tarteel Al-Quran';
+LESSON.stages.forEach((s,i)=>s.en=LESSON_EN[i]);
 })();
 
 </script>
