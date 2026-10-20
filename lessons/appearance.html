@@ -711,6 +711,13 @@ function setLang(m){document.body.classList.remove('m-ar','m-both','m-en');docum
 document.querySelectorAll('.lang3 button').forEach(b=>b.onclick=()=>{setLang(b.dataset.m);tone('tap')});
 let lang0='ar';try{lang0=localStorage.getItem('mobark-lesson-lang')||'ar'}catch(e){}
 setLang(['ar','both','en'].includes(lang0)?lang0:'ar');
+/* keep the shared top bar (tq-nav.js) and this deck's own ع / ع+EN / EN switch in step */
+(function(){const sync=()=>document.body.classList.toggle('show-en',document.body.classList.contains('m-en'));
+ const _sl=setLang;setLang=function(m){_sl(m);sync()};
+ window.addEventListener('tq-lang',e=>{const en=document.body.classList.contains('m-en');if(e.detail==='en'&&!en)setLang('en');else if(e.detail!=='en'&&en)setLang('ar')});
+ sync();
+ TQI.dict({'س':'Q','؟':'?','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6'});
+ window.addEventListener('tq-lang',e=>{const en=e.detail==='en';[['t0n','فريق الصبر','Team Patience'],['t1n','فريق التقوى','Team Taqwa']].forEach(([id,a,b])=>{const i=document.getElementById(id);if(i&&(i.value===a||i.value===b))i.value=en?b:a})})})();
 let muted=false;document.getElementById('soundB').onclick=e=>{muted=!muted;e.currentTarget.innerHTML=t('الصوت: '+(muted?'مغلق':'يعمل'),'Sound: '+(muted?'off':'on'))};
 document.getElementById('fsB').onclick=()=>{const d=document,el=d.documentElement;try{const on=d.fullscreenElement||d.webkitFullscreenElement;if(on){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const r=(el.requestFullscreen||el.webkitRequestFullscreen);if(r){const p=r.call(el);if(p&&p.catch)p.catch(()=>{})}}}catch(e){}};
 
@@ -815,6 +822,7 @@ setTimeout(fit,300);
 @media (max-height:820px) and (min-height:641px){#tools{display:grid;grid-template-columns:36px 36px;align-content:start}#tools .sep{grid-column:1/-1;width:auto;height:1px}}
 
 @media (max-height:640px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:8px;transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+body.m-en #bar,body.m-en #notes{direction:ltr}
 </style>
 <script>
 (function(){
