@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
 <title>خريطة الصفحة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
@@ -160,46 +160,46 @@ body.ink-laser .ink-cv{cursor:none!important}
 
 <div class="wrap">
   <header class="top-row">
-    <h1 class="brand">خَرِيطَةُ <b>الصَّفْحَة</b> 🗺️ <span class="en">The Page Map — the 3 memories of a ḥāfiẓ</span><small>ترتيل القرآن · Tarteel Al-Quran — من «كيف تحفظ القرآن الكريم» لعبد الرب نواب الدين (ص ٦١–٧٤)</small></h1>
+    <h1 class="brand">خَرِيطَةُ <b>الصَّفْحَة</b> 🗺️ <span class="en">The Page Map — the 3 memories of a ḥāfiẓ</span><small><span class="ui-ar">ترتيل القرآن · Tarteel Al-Quran — من «كيف تحفظ القرآن الكريم» لعبد الرب نواب الدين (ص ٦١–٧٤)</span><span class="ui-en">Tarteel Al-Quran — from <i>How to Memorise the Noble Qur’an</i> by Abd ar-Rabb Nawab ad-Din (pp. 61–74)</span></small></h1>
     <button class="tbtn" id="enB" aria-pressed="false">English</button>
-    <button class="tbtn" id="sndB" aria-pressed="true">🔊 صوت</button>
+    <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
   </header>
   <div class="bar">
-    <label for="modeSel">اللعبة:</label>
+    <label for="modeSel"><span class="ui-ar">اللعبة:</span><span class="ui-en">Game:</span></label>
     <select id="modeSel">
-      <option value="snap">📸 صَوِّرِ الصَّفْحَة (أَيْنَ مَكَانُهَا؟)</option>
-      <option value="keys">🔦 مَفَاتِيحُ الأَسْطُر (اقْرَأْ وَالمَفَاتِيحُ تَخْتَفِي)</option>
-      <option value="three">🧠 الذَّوَاكِرُ الثَّلَاث (👂 🧠 👁️ فَحْصٌ وَتَقْرِير)</option>
+      <option value="snap" data-en="📸 Snapshot the page (where is it?)">📸 صَوِّرِ الصَّفْحَة (أَيْنَ مَكَانُهَا؟)</option>
+      <option value="keys" data-en="🔦 Line keys (recite while the cues fade)">🔦 مَفَاتِيحُ الأَسْطُر (اقْرَأْ وَالمَفَاتِيحُ تَخْتَفِي)</option>
+      <option value="three" data-en="🧠 The three memories (👂 🧠 👁️ check-up and report)">🧠 الذَّوَاكِرُ الثَّلَاث (👂 🧠 👁️ فَحْصٌ وَتَقْرِير)</option>
     </select>
-    <label for="setSel">الصفحة:</label>
+    <label for="setSel"><span class="ui-ar">الصفحة:</span><span class="ui-en">Page:</span></label>
     <select id="setSel"></select>
-    <label for="teamSel">اللاعبون:</label>
-    <select id="teamSel"><option value="1">طالب واحد</option><option value="2">فريقان / طالبان</option><option value="tv" selected>الطالب ضد المعلم</option></select>
-    <label for="studySel">وقت التصوير:</label>
-    <select id="studySel"><option value="20">٢٠ ث</option><option value="40" selected>٤٠ ث</option><option value="60">٦٠ ث</option><option value="0">بلا وقت</option></select>
+    <label for="teamSel"><span class="ui-ar">اللاعبون:</span><span class="ui-en">Players:</span></label>
+    <select id="teamSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" data-en="Two teams / two students">فريقان / طالبان</option><option value="tv" selected data-en="Student vs. teacher">الطالب ضد المعلم</option></select>
+    <label for="studySel"><span class="ui-ar">وقت التصوير:</span><span class="ui-en">Study time:</span></label>
+    <select id="studySel"><option value="20" data-en="20 s">٢٠ ث</option><option value="40" selected data-en="40 s">٤٠ ث</option><option value="60" data-en="60 s">٦٠ ث</option><option value="0" data-en="No timer">بلا وقت</option></select>
     <span class="grow"></span>
-    <button class="tbtn" id="newB">↻ جولة جديدة</button>
+    <button class="tbtn" id="newB"><span class="ui-ar">↻ جولة جديدة</span><span class="ui-en">↻ New round</span></button>
   </div>
   <div class="teams" id="teams"></div>
   <section id="s0">
     <div class="pagewrap">
-      <div class="page" id="page" aria-label="صفحة المصحف للتدريب"></div>
+      <div class="page" id="page" aria-label="Practice muṣḥaf page · صفحة المصحف للتدريب"></div>
       <div class="note" id="pageNote"></div>
     </div>
     <div>
       <div class="panel card" id="qa" aria-live="polite"></div>
       <div class="side">
         <details class="bk"><summary>📖 الذَّوَاكِرُ الثَّلَاث <span class="en">The three memories</span></summary>
-          <div class="bq">«والاستظهار يعتمد على ثلاثة ذواكر»: 👂 «الذاكرة السمعية، ويقوم المقرئ بدوره في التلقين، والتقويم مما ينمي هذه الذاكرة ويصقلها»، 🧠 «الذاكرة الذهنية، وجل اعتمادها على تدبر المعاني، والنظر في القرائن، ومعرفة المتشابه ومواضعه»، 👁️ «الذاكرة البصرية: واعتمادها إنما يكون على رسم المصحف الشريف بمعرفة مفتتح الآيات والسور في مواضعها من الصفحة، وكذا مختتمها، بحيث أن الطالب حينما يقرأ من حفظه تتراءى له الصفحات وكأنما ينظر إليها».</div><small>ص ٦٣–٦٤</small></details>
+          <div class="bq">«والاستظهار يعتمد على ثلاثة ذواكر»: 👂 «الذاكرة السمعية، ويقوم المقرئ بدوره في التلقين، والتقويم مما ينمي هذه الذاكرة ويصقلها»، 🧠 «الذاكرة الذهنية، وجل اعتمادها على تدبر المعاني، والنظر في القرائن، ومعرفة المتشابه ومواضعه»، 👁️ «الذاكرة البصرية: واعتمادها إنما يكون على رسم المصحف الشريف بمعرفة مفتتح الآيات والسور في مواضعها من الصفحة، وكذا مختتمها، بحيث أن الطالب حينما يقرأ من حفظه تتراءى له الصفحات وكأنما ينظر إليها».<span class="tr">“Reciting from memory relies on three memories”: 👂 “the auditory memory, in which the reciter plays his role of prompting and correcting, which develops and refines this memory”; 🧠 “the mental memory, which relies mostly on reflecting on the meanings, looking at the clues, and knowing the look-alike verses and their places”; 👁️ “the visual memory, which relies on the script of the noble muṣḥaf, by knowing the openings of verses and surahs in their places on the page, and likewise their endings, so that when the student recites from memory the pages appear to them as if they were looking at them.”</span></div><small><span class="ui-ar">ص ٦٣–٦٤</span><span class="ui-en">pp. 63–64</span></small></details>
         <details class="bk"><summary>📗 مُصْحَفٌ وَاحِد <span class="en">One muṣḥaf only</span></summary>
-          <div class="bq">«الالتزام بنسخة واحدة من المصحف الشريف: لأن ذلك أثبت للحفظ، وهو ما تنضبط به الذاكرة البصرية… ولهذا إذا غير الطالب نسخة المصحف الذي حفظ منه ودرج عليه لقي عناء ومشقة، فاتخذ أيها الطالب لنفسك طبعة من المصحف الشريف لا تحيد عنها».</div><small>ص ٦٣–٦٤</small></details>
+          <div class="bq">«الالتزام بنسخة واحدة من المصحف الشريف: لأن ذلك أثبت للحفظ، وهو ما تنضبط به الذاكرة البصرية… ولهذا إذا غير الطالب نسخة المصحف الذي حفظ منه ودرج عليه لقي عناء ومشقة، فاتخذ أيها الطالب لنفسك طبعة من المصحف الشريف لا تحيد عنها».<span class="tr">“Sticking to a single copy of the noble muṣḥaf: because that is more secure for memorisation, and it is what the visual memory is organised by… so if a student changes the copy of the muṣḥaf from which they memorised and became accustomed, they meet with difficulty and hardship; so, student, take for yourself one edition of the noble muṣḥaf that you do not deviate from.”</span></div><small><span class="ui-ar">ص ٦٣–٦٤</span><span class="ui-en">pp. 63–64</span></small></details>
         <details class="bk"><summary>⏰ مَتَى أَحْفَظ؟ <span class="en">When to memorise</span></summary>
-          <div class="bq">«ينبغي اختيار أنسب الأوقات لحفظ القرآن أو استذكاره، وقت يكون الإنسان فيه مرتاح البال غير مجهد عقليا»: «فيما قبل الفجر… وبعد الفجر إلى طلوع الشمس… وبعد العصر إثر القيلولة»، و«ينصح الأطباء ألا يجهد الإنسان نفسه وعقله بعد الطعام مباشرة». و«يراعي الطالب توزيع أوقات للحفظ وأخرى لاستذكار المحفوظ على ألا تكون متتابعة… فمن يحفظ نصا ما في شهر يكون حفظه أتقن وأبقى ممن يحفظ النص نفسه في أسبوع»، و«فلا تربط نفسك بجدول أوقات جامد».</div><small>ص ٦١–٦٢ (والعزو في الحاشية: المدخل إلى علم النفس ص ٢٥٤)</small>
-          <div class="bq" style="margin-top:6px">وحديث ابن عمر: «إذا قام صاحب القرآن فقرأه بالليل والنهار ذكره، وإذا لم يقرأه نسيه».</div><small>كما أورده المؤلف (ص ٦٣)، وعزاه في الحاشية لمسلم في صحيحه (صلاة المسافرين، باب فضائل القرآن).</small></details>
+          <div class="bq">«ينبغي اختيار أنسب الأوقات لحفظ القرآن أو استذكاره، وقت يكون الإنسان فيه مرتاح البال غير مجهد عقليا»: «فيما قبل الفجر… وبعد الفجر إلى طلوع الشمس… وبعد العصر إثر القيلولة»، و«ينصح الأطباء ألا يجهد الإنسان نفسه وعقله بعد الطعام مباشرة». و«يراعي الطالب توزيع أوقات للحفظ وأخرى لاستذكار المحفوظ على ألا تكون متتابعة… فمن يحفظ نصا ما في شهر يكون حفظه أتقن وأبقى ممن يحفظ النص نفسه في أسبوع»، و«فلا تربط نفسك بجدول أوقات جامد».<span class="tr">“The most suitable times should be chosen for memorising or reviewing the Qur’an: a time when a person is at ease and not mentally tired”: “before dawn… and after dawn until sunrise… and after ʿaṣr following the midday nap”; and “doctors advise that a person should not strain themselves and their mind directly after eating.” And “the student should distribute times for memorising and other times for reviewing what is memorised, so that they are not consecutive… for whoever memorises a text over a month memorises it more firmly and lastingly than whoever memorises the same text in a week”; and “so do not tie yourself to a rigid timetable.”</span></div><small><span class="ui-ar">ص ٦١–٦٢ (والعزو في الحاشية: المدخل إلى علم النفس ص ٢٥٤)</span><span class="ui-en">pp. 61–62 (the footnote source: al-Madkhal ilā ʿilm an-nafs, p. 254)</span></small>
+          <div class="bq" style="margin-top:6px">وحديث ابن عمر: «إذا قام صاحب القرآن فقرأه بالليل والنهار ذكره، وإذا لم يقرأه نسيه».<span class="tr">The ḥadīth of Ibn ʿUmar: “When the companion of the Qur’an stands and recites it by night and by day, he remembers it, and when he does not recite it, he forgets it.”</span></div><small><span class="ui-ar">كما أورده المؤلف (ص ٦٣)، وعزاه في الحاشية لمسلم في صحيحه (صلاة المسافرين، باب فضائل القرآن).</span><span class="ui-en">As quoted by the author (p. 63), credited in the footnote to Muslim in his Ṣaḥīḥ (Ṣalāt al-Musāfirīn, chapter on the virtues of the Qur’an).</span></small></details>
         <details class="bk"><summary>👥 حَلْقَةُ أَبِي الدَّرْدَاء <span class="en">Group classes</span></summary>
-          <div class="bq">«فكان يجعلهم عشرة عشرة، وعلى كل عشرة عريفا ويقف هو في المحراب يرمقهم ببصره، فإذا غلط أحدهم رجع إلى عريفه فإذا غلط عريفه رجع إلى أبي الدرداء يسأله عن ذلك».</div><small>ص ٦٩ — في الحلقة الجماعية: اجعل طالبًا «عريفًا» يضغط ✓/🔁 في «مفاتيح الأسطر».</small></details>
+          <div class="bq">«فكان يجعلهم عشرة عشرة، وعلى كل عشرة عريفا ويقف هو في المحراب يرمقهم ببصره، فإذا غلط أحدهم رجع إلى عريفه فإذا غلط عريفه رجع إلى أبي الدرداء يسأله عن ذلك».<span class="tr">“He would put them in groups of ten, with a leader over each ten, and he himself would stand in the miḥrāb watching them. If one of them made a mistake he would go back to his leader, and if the leader made a mistake he would go back to Abū al-Dardāʾ and ask him about it.”</span></div><small><span class="ui-ar">ص ٦٩ — في الحلقة الجماعية: اجعل طالبًا «عريفًا» يضغط ✓/🔁 في «مفاتيح الأسطر».</span><span class="ui-en">p. 69 — in a group class: make one student the “ʿarīf” who presses ✓/🔁 in “Line keys”.</span></small></details>
         <details class="bk"><summary>👀 قَالُون يَقْرَأُ الشِّفَاه <span class="en">Qālūn's eyes</span></summary>
-          <div class="bq">قالون «كان شديد الصمم، بحيث لو رفع إنسان صوته إلى غايته لم يسمع، فكان ينظر إلى شفتي القارئ فيرد عليه اللحن والخطأ!!» — والمقرئ يقوم على «الصبر، والدأب، وسعة الصدر وطول البال».</div><small>ص ٦٩–٧٠ (والعزو في الحاشية: معرفة القراء الكبار)</small></details>
+          <div class="bq">قالون «كان شديد الصمم، بحيث لو رفع إنسان صوته إلى غايته لم يسمع، فكان ينظر إلى شفتي القارئ فيرد عليه اللحن والخطأ!!» — والمقرئ يقوم على «الصبر، والدأب، وسعة الصدر وطول البال».<span class="tr">Qālūn “was very deaf, so that if someone raised their voice to the utmost he would not hear; so he would look at the lips of the reciter and correct the melodic error and the mistake!!” — and the teacher stands on “patience, perseverance, a broad chest and a long temper”.</span></div><small><span class="ui-ar">ص ٦٩–٧٠ (والعزو في الحاشية: معرفة القراء الكبار)</span><span class="ui-en">pp. 69–70 (the footnote source: Maʿrifat al-Qurrāʾ al-Kibār)</span></small></details>
         <div class="book" id="bookRef"></div>
       </div>
     </div>
@@ -218,7 +218,8 @@ body.ink-laser .ink-cv{cursor:none!important}
    MUTASHABIH = «المتشابه» لاختبار الذاكرة الذهنية: {sets:[مفاتيح], before:{t,ref}, right:{t,ref}, wrong:{t,ref}, note}
    MEMS = الذواكر الثلاث (نصوص الكتاب ونصيحة كل ذاكرة)
    ============================================================ */
-const BOOK = {ar:'كيف تحفظ القرآن الكريم — عبد الرب نواب الدين', ref:'المبحث الثاني (العوامل الضرورية): تنظيم الوقت، الالتزام بنسخة واحدة من المصحف، التلقي عن مقرئ، الحوافز (ص ٦١–٧٤، ترقيم مطبوع)'};
+const BOOK = {ar:'كيف تحفظ القرآن الكريم — عبد الرب نواب الدين', ref:'المبحث الثاني (العوامل الضرورية): تنظيم الوقت، الالتزام بنسخة واحدة من المصحف، التلقي عن مقرئ، الحوافز (ص ٦١–٧٤، ترقيم مطبوع)',
+  en:'How to Memorise the Noble Qur’an — Abd ar-Rabb Nawab ad-Din', refEn:'the second section (the necessary factors): organising time, sticking to a single muṣḥaf, receiving from a reciter, motivations (pp. 61–74, printed numbering)'};
 const SETS = {
   aala:{ar:'سُورَةُ الأَعْلَى',en:'Al-Aʿlā',items:[
     {sura:'الأَعْلَى',ar:'سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى',ref:'الأعلى: ١'},
@@ -281,11 +282,16 @@ const MUTASHABIH = [
   {sets:['aala'],before:{t:'قَدْ أَفْلَحَ مَنْ تَزَكَّى',ref:'الأعلى: ١٤'},right:{t:'وَذَكَرَ اسْمَ رَبِّهِ فَصَلَّى',ref:'الأعلى: ١٥'},wrong:{t:'سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى',ref:'الأعلى: ١'},note:'«اسْمَ رَبِّ…» مَرَّتَيْن فِي السُّورَة: «رَبِّكَ» فِي أَوَّلِهَا، وَ«رَبِّهِ فَصَلَّى» فِي آخِرِهَا.'},
   {sets:['fatiha'],before:{t:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',ref:'الفاتحة: ٢'},right:{t:'الرَّحْمَنِ الرَّحِيمِ',ref:'الفاتحة: ٣'},wrong:{t:'مَالِكِ يَوْمِ الدِّينِ',ref:'الفاتحة: ٤'},note:'«الرَّحْمَنِ الرَّحِيمِ» مَرَّتَيْن: فِي البَسْمَلَة وَبَعْدَ «الْعَالَمِينَ».'},
 ];
+const MUT_EN = ["“‘The Hereafter is better’ occurs in two surahs: in al-Aʿlā ‘and more lasting’, and in aḍ-Ḍuḥā ‘And the Hereafter is better for you than the first (life)’.”", "“In aḍ-Ḍuḥā: ‘wa-la-l-ākhirah’ with two lāms, and the address is ‘for you’.”", "“‘Fa-hadā’ ends two verses: al-Aʿlā 3 (qaddara fa-hadā) and aḍ-Ḍuḥā 7 (ḍāllan fa-hadā).”", "“The first has the fā’: ‘fa-inna’ (5); the second has no fā’: ‘inna’ (6).”", "“‘Fa-ammā… taqhar’ then ‘wa-ammā… tanhar’ — the fā’ first, then the wāw.”", "“‘Ism rabbi…’ occurs twice in the surah: ‘rabbika’ at its beginning, and ‘rabbihi fa-ṣallā’ near its end.”", "“‘Ar-Raḥmān ar-Raḥīm’ occurs twice: in the basmalah and after ‘al-ʿālamīn’.”"];
+MUTASHABIH.forEach((m,i)=>{m.noteEn=MUT_EN[i]});
 const MEMS = {
   ear:{ar:'👂 السَّمْعِيَّة',en:'Hearing',c:'var(--ear)',bq:'«الذاكرة السمعية، ويقوم المقرئ بدوره في التلقين، والتقويم مما ينمي هذه الذاكرة ويصقلها»',tip:'اِسْتَمِعْ لِلْقَارِئِ كَثِيرًا، وَاقْرَأْ عَلَى مُعَلِّمِكَ لِيُقَوِّمَك — «ضرورة التلقي عن مقرئ» (ص ٦٤).',tipEn:'Listen a lot and recite to your teacher so he corrects you.'},
   mind:{ar:'🧠 الذِّهْنِيَّة',en:'Meaning',c:'var(--mind)',bq:'«الذاكرة الذهنية، وجل اعتمادها على تدبر المعاني، والنظر في القرائن، ومعرفة المتشابه ومواضعه»',tip:'قَبْلَ الحِفْظِ: اِفْهَمْ مَعْنَى الآيَاتِ وَتَرْتِيبَ أَفْكَارِهَا، وَاكْتُبِ «المُتَشَابِهَ» فِي دَفْتَرٍ مَعَ الفَرْق.',tipEn:'Understand the flow of ideas; keep a notebook of look-alike verses.'},
   eye:{ar:'👁️ البَصَرِيَّة',en:'Sight',c:'var(--eye)',bq:'«الذاكرة البصرية: واعتمادها إنما يكون على رسم المصحف الشريف بمعرفة مفتتح الآيات والسور في مواضعها من الصفحة، وكذا مختتمها»',tip:'اِحْفَظْ مِنْ مُصْحَفٍ وَاحِدٍ «لا تحيد عنه»، وَلَاحِظْ أَوَّلَ كُلِّ سَطْرٍ وَأَيْنَ تَبْدَأُ كُلُّ آيَة (ص ٦٤).',tipEn:'Use one muṣḥaf only; notice each line\'s first word and where each āyah starts.'},
 };
+MEMS.ear.bqEn='The auditory memory, in which the reciter plays his role of prompting and correcting, which develops and refines this memory';
+MEMS.mind.bqEn='The mental memory, which relies mostly on reflecting on the meanings, looking at the clues, and knowing the look-alike verses and their places';
+MEMS.eye.bqEn='The visual memory: it relies on the script of the noble muṣḥaf, by knowing the openings of verses and surahs in their places on the page, and likewise their endings';
 const CHARS_PER_LINE = 40;   // طول السطر التقريبي (حروف بلا تشكيل) عند الترتيب التلقائي
 const ROUND = 8;             // أسئلة «صوّر الصفحة»
 const RETRY_GAP = 3;         // السؤال الخطأ يرجع بعد ٣
@@ -297,6 +303,10 @@ const PRAISE=['أَحْسَنْت!','مَا شَاءَ الله!','بَارَك�
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const {U,tr}=TQI;
+const REF=r=>{const e=TQI.ref(r);return U('﴿'+r+'﴾',e===r?'﴿'+r+'﴾':e)};
+const RF=r=>{const e=TQI.ref(r);return e===r?r:U(r,e)};
+const BOOKU=()=>U(BOOK.ar+' — '+BOOK.ref,BOOK.en+' — '+BOOK.refEn);
 const en=n=>String(n).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const bare=t=>t.replace(/[ً-ٰٟۖ-ۭ]/g,'');
@@ -317,7 +327,7 @@ const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i
   win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#2E8B5A','#B08A3E','#C2453A','#2F6FB3','#7D4E9E','#D9822B'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${ar(p)} ${PRAISE[k]} <span class="en">${PRAISE_EN[k]}</span>`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
+function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
 
 /* ---------- page layout: SETS → lines ----------
    line = {kind:'title'|'bas'|'text', toks:[{w,a(ayah idx),wi(word idx)} | {mk:ayahNo,a}], fill} */
@@ -337,7 +347,7 @@ function layout(S){const L=[];
 function rebuild(){const S=SETS[$('#setSel').value];LINES=layout(S);
   AYAHS=S.items.map((it,a)=>{let li=-1,pos=0;LINES.some((l,i)=>{if(l.kind!=='text')return false;let off=0;for(const t of l.toks){if(t.w&&t.a===a&&t.wi===0){li=i;pos=(off+bare(t.w).length/2)/l.chars;return true}off+=t.w?bare(t.w).length+1:3}return false});
     return {...it,a,li,pos,first:it.ar.trim().split(/\s+/)[0],no:ayahNo(it.ref)}});
-  $('#pageNote').textContent=S.lines?'📗 هذه أسطر مصحف الطالب كما كتبها المعلم.':'📄 صفحة تدريب مرتّبة تلقائيًا (ليست صفحة مصحف المدينة) — لمطابقة مصحف طالبك اكتب أسطره في lines أعلى الكود.';
+  $('#pageNote').innerHTML=S.lines?U('📗 هذه أسطر مصحف الطالب كما كتبها المعلم.','📗 These are the lines of the student’s muṣḥaf as written by the teacher.'):U('📄 صفحة تدريب مرتّبة تلقائيًا (ليست صفحة مصحف المدينة) — لمطابقة مصحف طالبك اكتب أسطره في lines أعلى الكود.','📄 An automatically arranged practice page (not a Madinah muṣḥaf page) — to match your student’s muṣḥaf, write its lines into “lines” at the top of the code.');
 }
 const textLines=()=>LINES.map((l,i)=>({l,i})).filter(x=>x.l.kind==='text');
 const isMiddle=i=>{const T=textLines().map(x=>x.i),k=T.indexOf(i),n=T.length;return k>=Math.floor(n*.3)&&k<Math.ceil(n*.7)};
@@ -352,7 +362,7 @@ function renderPage(opt={}){const P=$('#page');
     if(l.kind==='title')return `<div class="ln title" data-l="${i}">${l.text}</div>`;
     if(l.kind==='bas')return `<div class="ln bas" data-l="${i}"><span class="w">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span></div>`;
     n++;
-    return `<div class="ln${l.fill<.7?' short':''}" data-l="${i}">${l.toks.map(t=>t.w?`<span class="w${opt.cue&&opt.cue(t,l,i)?' cue':''}">${t.w}</span>`:`<span class="mk${opt.hideNo?' hid':''}">${ar(t.mk)}</span>`).join('')}</div>`}).join('')+`<div class="pno">— ${ar(n)} سَطْرًا —</div>`;
+    return `<div class="ln${l.fill<.7?' short':''}" data-l="${i}">${l.toks.map(t=>t.w?`<span class="w${opt.cue&&opt.cue(t,l,i)?' cue':''}">${t.w}</span>`:`<span class="mk${opt.hideNo?' hid':''}">${ar(t.mk)}</span>`).join('')}</div>`}).join('')+`<div class="pno">${U(`— ${ar(n)} سَطْرًا —`,`— ${n} lines —`)}</div>`;
 }
 function flash(){const f=document.createElement('div');f.className='flash';$('#page').appendChild(f);setTimeout(()=>f.remove(),520)}
 function revealLine(i,ms=REVEAL_MS,cls){const el=$(`#page .ln[data-l="${i}"]`);if(!el)return;el.classList.add('rev');if(cls)el.classList.add(cls);if(ms)setTimeout(()=>el&&el.classList.remove('rev',cls||'x'),ms)}
@@ -361,30 +371,30 @@ function revealLine(i,ms=REVEAL_MS,cls){const el=$(`#page .ln[data-l="${i}"]`);i
 let teams=[],turn=0,mode='snap',stats={},missed=[],timers=[];
 const qa=$('#qa');
 function teamDefs(){const v=$('#teamSel').value;
-  if(v==='1')return [{nm:'⭐ أَنَا',en:'Me',c:'var(--gold)'}];
-  if(v==='2')return [{nm:'🔵 الأَزْرَق',en:'Blue',c:'var(--teamA)'},{nm:'🔴 الأَحْمَر',en:'Red',c:'var(--teamB)'}];
-  return [{nm:'🧑‍🎓 الطَّالِب',en:'Student',c:'var(--teamA)'},{nm:'👨‍🏫 المُعَلِّم',en:'Teacher',c:'var(--teamB)'}]}
-function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm} <span class="en">${t.en}</span></span><span class="turn">دَوْرُك</span><span class="pts">★ ${ar(t.pts)}</span></div>`).join('')}
+  if(v==='1')return [{nm:U('⭐ أَنَا','⭐ Me'),c:'var(--gold)'}];
+  if(v==='2')return [{nm:U('🔵 الأَزْرَق','🔵 Blue'),c:'var(--teamA)'},{nm:U('🔴 الأَحْمَر','🔴 Red'),c:'var(--teamB)'}];
+  return [{nm:U('🧑‍🎓 الطَّالِب','🧑‍🎓 Student'),c:'var(--teamA)'},{nm:U('👨‍🏫 المُعَلِّم','👨‍🏫 Teacher'),c:'var(--teamB)'}]}
+function renderTeams(){$('#teams').innerHTML=teams.map((t,i)=>`<div class="team ${i===turn?'now':''}" style="--tc:${t.c}"><span class="nm">${t.nm}</span><span class="turn">${U('دَوْرُك','Your turn')}</span><span class="pts">★ ${U(ar(t.pts),t.pts)}</span></div>`).join('')}
 function award(p,who=turn,quiet){if(p<=0)return;teams[who].pts+=p;renderTeams();if(!quiet){sfx.good();praise(p);confetti()}}
 function stat(k,ok){const s=stats[k]||(stats[k]={ok:0,n:0});s.n++;if(ok)s.ok++}
 const nextTurn=()=>{turn=(turn+1)%teams.length;renderTeams()};
-function nextBtn(label='التَّالِي ←',enl='Next'){return `<div class="row"><button class="big-btn" id="nextB">${label} <span class="en" style="color:#fff">${enl}</span></button></div>`}
+function nextBtn(label='التَّالِي ←',enl='Next →'){return `<div class="row"><button class="big-btn" id="nextB">${U(label,enl)}</button></div>`}
 function clearTimers(){timers.forEach(t=>{clearTimeout(t);clearInterval(t)});timers=[]}
 function newGame(){clearTimers();mode=$('#modeSel').value;teams=teamDefs().map(t=>({...t,pts:0}));turn=0;stats={};missed=[];rebuild();renderTeams();
-  $('#bookRef').textContent='📚 المصدر: '+BOOK.ar+' — '+BOOK.ref+'. ما بين «» نص الكتاب؛ والتخريج من حاشيته. نص الآيات من المكتبة الشاملة (حفص، الرسم الإملائي).';
+  $('#bookRef').innerHTML=U('📚 المصدر: '+BOOK.ar+' — '+BOOK.ref+'. ما بين «» نص الكتاب؛ والتخريج من حاشيته. نص الآيات من المكتبة الشاملة (حفص، الرسم الإملائي).','📚 Source: '+BOOK.en+' — '+BOOK.refEn+'. Text between « » is the book’s own text; the references come from its footnotes. The verse texts are from al-Maktaba al-Shāmila (Ḥafṣ, standard spelling).');
   ({snap:startSnap,keys:startKeys,three:startThree})[mode]();
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
 
 /* ---------- study phase (shared): look at the page, then "snap" it ---------- */
 function study(title,titleEn,onDone){pageMode='show';renderPage();const secs=+$('#studySel').value;let left=secs;
-  qa.innerHTML=`<div class="q">📸 ${title} <span class="en blk">${titleEn}</span></div>
-    <div class="tip">👁️ لَاحِظْ: <b>أَوَّلَ كَلِمَةٍ فِي كُلِّ سَطْر</b>، وَ<b>أَيْنَ تَبْدَأُ كُلُّ آيَة</b> (أَوَّلَ السَّطْرِ؟ وَسَطَهُ؟ آخِرَهُ؟)، وَ<b>آخِرَ الصَّفْحَة</b>. اقْرَأِ الصَّفْحَةَ مَرَّةً بِصَوْتٍ عَالٍ وَإِصْبَعُكَ عَلَى السَّطْر. <span class="en blk">Notice the first word of each line, where each āyah starts, and how the page ends. Read it aloud once with your finger on the line.</span></div>
-    ${secs?`<div class="studybar" style="align-self:stretch"><i id="sb"></i></div><div class="ptsbadge" id="sl">${ar(left)} ث</div>`:''}
-    <div class="row"><button class="big-btn gold" id="snapB">📸 صَوَّرْتُهَا! <span class="en" style="color:#fff">Got it!</span></button></div>`;
+  qa.innerHTML=`<div class="q">${U('📸 '+title,'📸 '+titleEn)}</div>
+    <div class="tip">${U('👁️ لَاحِظْ: <b>أَوَّلَ كَلِمَةٍ فِي كُلِّ سَطْر</b>، وَ<b>أَيْنَ تَبْدَأُ كُلُّ آيَة</b> (أَوَّلَ السَّطْرِ؟ وَسَطَهُ؟ آخِرَهُ؟)، وَ<b>آخِرَ الصَّفْحَة</b>. اقْرَأِ الصَّفْحَةَ مَرَّةً بِصَوْتٍ عَالٍ وَإِصْبَعُكَ عَلَى السَّطْر.','👁️ Notice: <b>the first word of each line</b>, <b>where each āyah starts</b> (at the start of the line? the middle? the end?), and <b>how the page ends</b>. Read the page aloud once with your finger on the line.')}</div>
+    ${secs?`<div class="studybar" style="align-self:stretch"><i id="sb"></i></div><div class="ptsbadge" id="sl">${U(`${ar(left)} ث`,`${left} s`)}</div>`:''}
+    <div class="row"><button class="big-btn gold" id="snapB">${U('📸 صَوَّرْتُهَا!','📸 Got it!')}</button></div>`;
   const go=()=>{clearTimers();ac();sfx.shutter();flash();onDone()};
   $('#snapB').onclick=go;
-  if(secs){const t=setInterval(()=>{left--;const sb=$('#sb'),sl=$('#sl');if(!sb){clearInterval(t);return}sb.style.width=(100*left/secs)+'%';sl.textContent=ar(left)+' ث';if(left<=5&&left>0)sfx.tick();if(left<=0){clearInterval(t);go()}},1000);timers.push(t)}
+  if(secs){const t=setInterval(()=>{left--;const sb=$('#sb'),sl=$('#sl');if(!sb){clearInterval(t);return}sb.style.width=(100*left/secs)+'%';sl.innerHTML=U(ar(left)+' ث',left+' s');if(left<=5&&left>0)sfx.tick();if(left<=0){clearInterval(t);go()}},1000);timers.push(t)}
 }
 
 /* ---------- ① snapshot: where is it on the page? ---------- */
@@ -398,37 +408,37 @@ function makeSnapQs(){const T=textLines(),qs=[],A=AYAHS.filter(a=>a.li>=0),w=x=>
     else if(kind==='first'||kind==='last'){const x=pick(T,w);if(T.length>=3)tryAdd({kind,i:x.i})}
     else if(kind==='edge'){tryAdd({kind,i:Math.random()<.5?'top':'end'})}}
   return shuffle(qs).map(q=>({q,retry:false}))}
-function startSnap(){study('صَوِّرِ الصَّفْحَةَ بِعَيْنَيْك','Snapshot the page with your eyes',()=>{pageMode='ghost';renderPage({hideNo:true});sq=makeSnapQs();si=0;showSnap()})}
+function startSnap(){study('صَوِّرِ الصَّفْحَةَ بِعَيْنَيْك','Take a snapshot of the page with your eyes',()=>{pageMode='ghost';renderPage({hideNo:true});sq=makeSnapQs();si=0;showSnap()})}
 function showSnap(){if(si>=sq.length)return endGame('snap');
   const {q,retry}=sq[si];let tries=2,done=false,peeks=0;const T=textLines();
   pageMode='ghost';renderPage({hideNo:true});
   let prompt='',opts=null,answer=null,tapLines=false,focusLine=null,ayahBox='';
-  if(q.kind==='start'){const A=AYAHS[q.a];prompt='👆 فِي أَيِّ سَطْرٍ تَبْدَأُ هَذِهِ الآيَة؟ اضْغَطْ عَلَى السَّطْرِ فِي الصَّفْحَة';ayahBox=`<div class="ayah">${A.ar}<small>﴿${A.ref}﴾</small></div>`;tapLines=true;answer=A.li;focusLine=A.li}
-  else if(q.kind==='where'){const A=AYAHS[q.a];prompt='↔️ أَيْنَ تَبْدَأُ هَذِهِ الآيَةُ فِي سَطْرِهَا؟';ayahBox=`<div class="ayah">${A.ar}<small>﴿${A.ref}﴾</small></div>`;
-    answer=A.pos<.25?0:A.pos>.75?2:1;focusLine=A.li;opts=[{t:'➡️ أَوَّلَ السَّطْر',s:'يَمِين · right'},{t:'⏺️ وَسَطَ السَّطْر',s:'middle'},{t:'⬅️ آخِرَ السَّطْر',s:'يَسَار · left'}].map((o,i)=>({...o,i,ui:1}))}
+  if(q.kind==='start'){const A=AYAHS[q.a];prompt=U('👆 فِي أَيِّ سَطْرٍ تَبْدَأُ هَذِهِ الآيَة؟ اضْغَطْ عَلَى السَّطْرِ فِي الصَّفْحَة','👆 On which line does this āyah start? Tap the line on the page.');ayahBox=`<div class="ayah">${A.ar}<small>${REF(A.ref)}</small></div>`;tapLines=true;answer=A.li;focusLine=A.li}
+  else if(q.kind==='where'){const A=AYAHS[q.a];prompt=U('↔️ أَيْنَ تَبْدَأُ هَذِهِ الآيَةُ فِي سَطْرِهَا؟','↔️ Where in its line does this āyah start?');ayahBox=`<div class="ayah">${A.ar}<small>${REF(A.ref)}</small></div>`;
+    answer=A.pos<.25?0:A.pos>.75?2:1;focusLine=A.li;opts=[{t:U('➡️ أَوَّلَ السَّطْر','➡️ At the start of the line'),s:U('يَمِين','right side')},{t:U('⏺️ وَسَطَ السَّطْر','⏺️ In the middle of the line'),s:U('وَسَط','middle')},{t:U('⬅️ آخِرَ السَّطْر','⬅️ At the end of the line'),s:U('يَسَار','left side')}].map((o,i)=>({...o,i,ui:1}))}
   else if(q.kind==='first'||q.kind==='last'){const f=q.kind==='first'?lineFirst:lineLast;const right=f(q.i);
     const others=shuffle([...new Set(T.filter(x=>x.i!==q.i).map(x=>f(x.i)))].filter(w=>w!==right)).slice(0,2);
-    prompt=q.kind==='first'?'🔦 بِأَيِّ كَلِمَةٍ يَبْدَأُ السَّطْرُ المُضِيء؟':'🔚 بِأَيِّ كَلِمَةٍ يَنْتَهِي السَّطْرُ المُضِيء؟';focusLine=q.i;
+    prompt=q.kind==='first'?U('🔦 بِأَيِّ كَلِمَةٍ يَبْدَأُ السَّطْرُ المُضِيء؟','🔦 Which word does the lit line start with?'):U('🔚 بِأَيِّ كَلِمَةٍ يَنْتَهِي السَّطْرُ المُضِيء؟','🔚 Which word does the lit line end with?');focusLine=q.i;
     opts=shuffle([right,...others]).map((t,i)=>({t,i,ok:t===right}));answer=opts.findIndex(o=>o.ok)}
   else if(q.kind==='edge'){const top=q.i==='top';const right=top?lineFirst(T[0].i):lineLast(T[T.length-1].i);focusLine=top?T[0].i:T[T.length-1].i;
     const pool=[...new Set(T.map(x=>top?lineFirst(x.i):lineLast(x.i)))].filter(w=>w!==right);
-    prompt=top?'📄 بِأَيِّ كَلِمَةٍ تَبْدَأُ الصَّفْحَة؟':'📄 مَا آخِرُ كَلِمَةٍ فِي الصَّفْحَة؟';
+    prompt=top?U('📄 بِأَيِّ كَلِمَةٍ تَبْدَأُ الصَّفْحَة؟','📄 Which word does the page start with?'):U('📄 مَا آخِرُ كَلِمَةٍ فِي الصَّفْحَة؟','📄 What is the last word on the page?');
     opts=shuffle([right,...shuffle(pool).slice(0,2)]).map((t,i)=>({t,i,ok:t===right}));answer=opts.findIndex(o=>o.ok)}
   if(q.kind==='first'||q.kind==='last')$(`#page .ln[data-l="${q.i}"]`).classList.add('hl');
   const ptsNow=()=>Math.max(1,(tries===2?2:1)-(peeks?1:0)+(peeks&&tries===2?0:0));
-  qa.innerHTML=`<div class="prog"><span>${ar(si+1)} مِنْ ${ar(sq.length)}${retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>
+  qa.innerHTML=`<div class="prog"><span>${U(`${ar(si+1)} مِنْ ${ar(sq.length)}`,`${si+1} of ${sq.length}`)}${retry?' 🔁':''}</span><span>${teams[turn].nm}</span></div>
     <div class="q">${prompt}</div>${ayahBox}
     ${opts?`<div class="opts" id="opts">${opts.map(o=>`<button class="ob ${o.ui?'ui':''}" data-i="${o.i}">${o.t}${o.s?`<small>${o.s}</small>`:''}</button>`).join('')}</div>`:''}
-    <div class="row"><button class="big-btn ghost" id="peekB">👀 نَظْرَة (−١)</button></div>
+    <div class="row"><button class="big-btn ghost" id="peekB">${U('👀 نَظْرَة (−١)','👀 Peek (−1)')}</button></div>
     <div id="out" style="display:contents"></div>`;
   if(tapLines)$$('#page .ln').forEach(el=>{if(LINES[+el.dataset.l].kind==='text')el.classList.add('tap')});
   const finish=ok=>{done=true;$$('#page .ln').forEach(el=>el.classList.remove('tap'));$$('#opts .ob').forEach(b=>b.disabled=true);$('#peekB').disabled=true;
     stat(q.kind,ok);if(focusLine!=null){revealLine(focusLine,0);if(q.a!=null){const el=$(`#page .ln[data-l="${focusLine}"]`);const A=AYAHS[q.a];el&&[...el.querySelectorAll('.w')].forEach(s=>{if(s.textContent===A.first)s.classList.add('tgt')})}}
     if(ok)award(ptsNow());else{sfx.pop();missed.push(q);if(!sq[si].retry)sq.splice(Math.min(si+1+RETRY_GAP,sq.length),0,{q,retry:true})}
     const mid=focusLine!=null&&isMiddle(focusLine);
-    $('#out').innerHTML=`<div class="info" style="--ac:${ok?'var(--green)':'var(--orange)'}"><div class="t">${ok?'✅ صُورَتُكَ وَاضِحَة!':'🔎 انْظُرْ إِلَى السَّطْرِ المُضِيءِ جَيِّدًا — سَيَرْجِعُ السُّؤَال'}</div>
-      ${mid?'<div class="why">🎯 هَذَا سَطْرٌ فِي <b>وَسَطِ</b> الصَّفْحَة — الوَسَطُ يُنْسَى أَكْثَرَ مِنَ الأَوَّلِ وَالآخِر، فَأَعْطِهِ نَظْرَةً زَائِدَة. <span class="en blk">Middle lines are forgotten most — give them an extra look.</span></div>':''}
-      <div class="why">🗣️ اقْرَأِ السَّطْرَ كُلَّهُ الآنَ بِصَوْتٍ عَالٍ. <span class="en blk">Now read the whole line aloud.</span></div></div>${nextBtn()}`;
+    $('#out').innerHTML=`<div class="info" style="--ac:${ok?'var(--green)':'var(--orange)'}"><div class="t">${ok?U('✅ صُورَتُكَ وَاضِحَة!','✅ Your picture is clear!'):U('🔎 انْظُرْ إِلَى السَّطْرِ المُضِيءِ جَيِّدًا — سَيَرْجِعُ السُّؤَال','🔎 Look carefully at the lit line — this question will come back')}</div>
+      ${mid?`<div class="why">${U('🎯 هَذَا سَطْرٌ فِي <b>وَسَطِ</b> الصَّفْحَة — الوَسَطُ يُنْسَى أَكْثَرَ مِنَ الأَوَّلِ وَالآخِر، فَأَعْطِهِ نَظْرَةً زَائِدَة.','🎯 This line is in the <b>middle</b> of the page — the middle is forgotten more than the beginning and the end, so give it an extra look.')}</div>`:''}
+      <div class="why">${U('🗣️ اقْرَأِ السَّطْرَ كُلَّهُ الآنَ بِصَوْتٍ عَالٍ.','🗣️ Now read the whole line aloud.')}</div></div>${nextBtn()}`;
     $('#nextB').onclick=()=>{si++;nextTurn();showSnap()};$('#nextB').focus({preventScroll:true})};
   const wrongTry=(el)=>{tries--;sfx.bad();if(el){el.classList.add('bad','wrong');setTimeout(()=>el.classList.remove('wrong'),400)}if(tries<=0){if(opts)$(`#opts .ob[data-i="${answer}"]`)?.classList.add('right');finish(false)}};
   if(tapLines)$$('#page .ln.tap').forEach(el=>el.onclick=()=>{if(done)return;ac();const i=+el.dataset.l;if(i===answer){el.classList.add('okl');finish(true)}else wrongTry(el)});
@@ -443,29 +453,31 @@ const LV=[
   {k:'marks',ar:'٣ العَلَامَاتُ فَقَط',en:'Āyah markers only',cue:()=>false,tip:'لَا كَلِمَات — شَكْلُ الصَّفْحَةِ وَأَرْقَامُ الآيَاتِ فَقَط.'},
   {k:'blank',ar:'٤ صَفْحَةٌ فَارِغَة',en:'Blank page',cue:()=>false,blank:1,tip:'الصَّفْحَةُ فِي ذِهْنِكَ فَقَط: «تتراءى له الصفحات وكأنما ينظر إليها» (ص ٦٤).'},
 ];
+const LV_TIP_EN=['The first word of each āyah appears (“the openings of the verses”).','Only the first word of each line appears.','No words — only the shape of the page and the verse numbers.','The page is only in your mind: “the pages appear to them as if they were looking at them” (p. 64).'];
+LV.forEach((x,i)=>{x.tipEn=LV_TIP_EN[i]});
 let lv=0,heat={};
 function startKeys(){lv=0;heat={};study('انْظُرْ إِلَى الصَّفْحَةِ قَبْلَ أَنْ تَقْرَأَهَا غَيْبًا','Look at the page before reciting it from memory',()=>keysLevel())}
 function keysLevel(){const L=LV[lv],T=textLines();let k=0,clean=0;
   pageMode=L.blank?'blank':'ghost';renderPage({cue:L.cue,noMarks:!!L.blank});
   const mark=()=>{$$('#page .ln').forEach(e=>e.classList.remove('cur'));if(k<T.length){const el=$(`#page .ln[data-l="${T[k].i}"]`);el.classList.add('cur');el.scrollIntoView({block:'nearest',behavior:'smooth'})}};
-  qa.innerHTML=`<div class="lvls">${LV.map((x,i)=>`<span class="lv ${i===lv?'on':i<lv?'done':''}">${x.ar}</span>`).join('')}</div>
-    <div class="prog"><span>${teams[turn].nm} يَقْرَأ</span><span id="kc">سَطْر ${ar(1)} مِنْ ${ar(T.length)}</span></div>
-    <div class="q">🔦 ${L.ar} <span class="en blk">${L.en}</span></div>
-    <div class="tip">${L.tip} الطَّالِبُ يَقْرَأُ السَّطْرَ الأَزْرَقَ مِنْ حِفْظِه، وَالمُعَلِّمُ (أَوِ «العَرِيف») يَضْغَط. <span class="en blk">The student recites the blue line from memory; the teacher (or a class "ʿarīf") presses.</span></div>
-    <div class="row"><button class="big-btn" id="okB">✓ قَرَأَهُ صَحِيحًا</button><button class="big-btn red" id="stB">🔁 تَعَثَّرَ / لُقِّن</button></div>
-    <div class="row"><button class="big-btn ghost" id="backB">↩️ السَّطْرُ السَّابِق</button></div>
+  qa.innerHTML=`<div class="lvls">${LV.map((x,i)=>`<span class="lv ${i===lv?'on':i<lv?'done':''}">${U(x.ar,x.en)}</span>`).join('')}</div>
+    <div class="prog"><span>${teams[turn].nm}${U(' يَقْرَأ',' recites')}</span><span id="kc">${U(`سَطْر ${ar(1)} مِنْ ${ar(T.length)}`,`Line 1 of ${T.length}`)}</span></div>
+    <div class="q">🔦 ${U(L.ar,L.en)}</div>
+    <div class="tip">${U(L.tip+' الطَّالِبُ يَقْرَأُ السَّطْرَ الأَزْرَقَ مِنْ حِفْظِه، وَالمُعَلِّمُ (أَوِ «العَرِيف») يَضْغَط.',L.tipEn+' The student recites the blue line from memory; the teacher (or a class “ʿarīf”) presses the buttons.')}</div>
+    <div class="row"><button class="big-btn" id="okB">${U('✓ قَرَأَهُ صَحِيحًا','✓ Recited it correctly')}</button><button class="big-btn red" id="stB">${U('🔁 تَعَثَّرَ / لُقِّن','🔁 Stumbled / was prompted')}</button></div>
+    <div class="row"><button class="big-btn ghost" id="backB">${U('↩️ السَّطْرُ السَّابِق','↩️ Previous line')}</button></div>
     <div id="out" style="display:contents"></div>`;
   const log=[];mark();
   const step=ok=>{if(k>=T.length)return;ac();const i=T[k].i;log.push({i,ok});if(ok){clean++;sfx.line()}else{heat[i]=(heat[i]||0)+1;sfx.stumble()}
-    const el=$(`#page .ln[data-l="${i}"]`);el.classList.add('rev',ok?'okl':'stl');k++;$('#kc').textContent=`سَطْر ${ar(Math.min(k+1,T.length))} مِنْ ${ar(T.length)}`;mark();if(k>=T.length)done()};
+    const el=$(`#page .ln[data-l="${i}"]`);el.classList.add('rev',ok?'okl':'stl');k++;$('#kc').innerHTML=U(`سَطْر ${ar(Math.min(k+1,T.length))} مِنْ ${ar(T.length)}`,`Line ${Math.min(k+1,T.length)} of ${T.length}`);mark();if(k>=T.length)done()};
   $('#okB').onclick=()=>step(true);$('#stB').onclick=()=>step(false);
-  $('#backB').onclick=()=>{if(!k||k>=T.length)return;k--;const x=log.pop();if(x.ok)clean--;else heat[x.i]--;const el=$(`#page .ln[data-l="${x.i}"]`);el.classList.remove('rev','okl','stl');$('#kc').textContent=`سَطْر ${ar(k+1)} مِنْ ${ar(T.length)}`;mark()};
+  $('#backB').onclick=()=>{if(!k||k>=T.length)return;k--;const x=log.pop();if(x.ok)clean--;else heat[x.i]--;const el=$(`#page .ln[data-l="${x.i}"]`);el.classList.remove('rev','okl','stl');$('#kc').innerHTML=U(`سَطْر ${ar(k+1)} مِنْ ${ar(T.length)}`,`Line ${k+1} of ${T.length}`);mark()};
   function done(){$('#okB').disabled=$('#stB').disabled=$('#backB').disabled=true;stat('lv'+lv,clean===T.length);
     const p=clean===T.length?3:clean>=T.length*.7?2:1;award(p);
     const last=lv===LV.length-1;
-    $('#out').innerHTML=`<div class="info" style="--ac:${clean===T.length?'var(--green)':'var(--orange)'}"><div class="t">${ar(clean)} مِنْ ${ar(T.length)} أَسْطُر بِلَا تَعَثُّر</div>
-      <div class="why">${clean===T.length?'🌟 صَفْحَةٌ نَظِيفَة! جَاهِزٌ لِلْمُسْتَوَى التَّالِي.':'🟧 الأَسْطُرُ البُرْتُقَالِيَّةُ تَحْتَاجُ مُرَاجَعَة — يُمْكِنُكَ إِعَادَةُ نَفْسِ المُسْتَوَى.'}</div></div>
-      <div class="row">${last?'<button class="big-btn gold" id="mapB">🗺️ خَرِيطَةُ الضَّعْف</button>':'<button class="big-btn" id="upB">⬆️ المُسْتَوَى التَّالِي</button>'}<button class="big-btn ghost" id="redoB">↻ أَعِدْ هَذَا المُسْتَوَى</button></div>`;
+    $('#out').innerHTML=`<div class="info" style="--ac:${clean===T.length?'var(--green)':'var(--orange)'}"><div class="t">${U(`${ar(clean)} مِنْ ${ar(T.length)} أَسْطُر بِلَا تَعَثُّر`,`${clean} of ${T.length} lines with no stumbling`)}</div>
+      <div class="why">${clean===T.length?U('🌟 صَفْحَةٌ نَظِيفَة! جَاهِزٌ لِلْمُسْتَوَى التَّالِي.','🌟 A clean page! Ready for the next level.'):U('🟧 الأَسْطُرُ البُرْتُقَالِيَّةُ تَحْتَاجُ مُرَاجَعَة — يُمْكِنُكَ إِعَادَةُ نَفْسِ المُسْتَوَى.','🟧 The orange lines need review — you can repeat the same level.')}</div></div>
+      <div class="row">${last?`<button class="big-btn gold" id="mapB">${U('🗺️ خَرِيطَةُ الضَّعْف','🗺️ The weakness map')}</button>`:`<button class="big-btn" id="upB">${U('⬆️ المُسْتَوَى التَّالِي','⬆️ Next level')}</button>`}<button class="big-btn ghost" id="redoB">${U('↻ أَعِدْ هَذَا المُسْتَوَى','↻ Repeat this level')}</button></div>`;
     if(clean===T.length)sfx.win();
     $('#redoB').onclick=()=>{nextTurn();keysLevel()};
     if(last)$('#mapB').onclick=heatMap;else $('#upB').onclick=()=>{lv++;nextTurn();sfx.page();keysLevel()}}
@@ -473,12 +485,12 @@ function keysLevel(){const L=LV[lv],T=textLines();let k=0,clean=0;
 function heatMap(){pageMode='show';renderPage();const T=textLines();let any=0;
   T.forEach(({i})=>{const h=heat[i]||0;if(h){any++;$(`#page .ln[data-l="${i}"]`).classList.add('heat'+Math.min(h,3))}});
   const weak=T.filter(x=>heat[x.i]).sort((a,b)=>heat[b.i]-heat[a.i]).slice(0,3);
-  qa.innerHTML=`<div class="endmsg"><div class="trophy">🗺️</div><h2>خَرِيطَةُ الضَّعْف</h2>
-    <div class="tip">كُلَّمَا كَانَ السَّطْرُ أَغْمَقَ = تَعَثَّرْتَ فِيهِ أَكْثَر. <span class="en blk">Darker line = more stumbles.</span></div>
-    ${any?`<div class="info" style="--ac:var(--orange)"><div class="t">🎯 ابْدَأْ مُرَاجَعَةَ الغَدِ مِنْ هُنَا:</div><div class="bq">${weak.map(x=>`«${lineFirst(x.i)}…» (×${ar(heat[x.i])})`).join(' ۞ ')}</div></div>`:'<div class="info" style="--ac:var(--green)"><div class="t">🌟 لَا تَعَثُّرَ فِي أَيِّ سَطْر — مَا شَاءَ الله!</div></div>'}
-    <div class="info"><div class="t">⏰ وَاجِبُ البَيْت</div><div class="why">اِقْرَأْ هَذِهِ الصَّفْحَةَ مِنْ <b>نَفْسِ المُصْحَف</b> فِي وَقْتَيْنِ مُنْفَصِلَيْن (مَثَلًا بَعْدَ الفَجْرِ وَبَعْدَ العَصْر)، وَالأَسْطُرُ الغَامِقَةُ ٣ مَرَّاتٍ زِيَادَة. <span class="en blk">Homework: read this page from the same muṣḥaf at two separate times (e.g. after Fajr and after ʿAṣr); dark lines 3 extra times.</span></div>
-      <div class="bq">«على ألا تكون متتابعة… فمن يحفظ نصا ما في شهر يكون حفظه أتقن وأبقى ممن يحفظ النص نفسه في أسبوع» (ص ٦٢).</div></div>
-    <button class="big-btn" id="againB">↻ مِنْ جَدِيد</button></div>`;
+  qa.innerHTML=`<div class="endmsg"><div class="trophy">🗺️</div><h2>${U('خَرِيطَةُ الضَّعْف','The weakness map')}</h2>
+    <div class="tip">${U('كُلَّمَا كَانَ السَّطْرُ أَغْمَقَ = تَعَثَّرْتَ فِيهِ أَكْثَر.','The darker the line, the more you stumbled on it.')}</div>
+    ${any?`<div class="info" style="--ac:var(--orange)"><div class="t">${U('🎯 ابْدَأْ مُرَاجَعَةَ الغَدِ مِنْ هُنَا:','🎯 Start tomorrow’s review from here:')}</div><div class="bq">${weak.map(x=>`«${lineFirst(x.i)}…» (×${U(ar(heat[x.i]),heat[x.i])})`).join(' ۞ ')}</div></div>`:`<div class="info" style="--ac:var(--green)"><div class="t">${U('🌟 لَا تَعَثُّرَ فِي أَيِّ سَطْر — مَا شَاءَ الله!','🌟 No stumbling on any line — Masha Allah!')}</div></div>`}
+    <div class="info"><div class="t">${U('⏰ وَاجِبُ البَيْت','⏰ Homework')}</div><div class="why">${U('اِقْرَأْ هَذِهِ الصَّفْحَةَ مِنْ <b>نَفْسِ المُصْحَف</b> فِي وَقْتَيْنِ مُنْفَصِلَيْن (مَثَلًا بَعْدَ الفَجْرِ وَبَعْدَ العَصْر)، وَالأَسْطُرُ الغَامِقَةُ ٣ مَرَّاتٍ زِيَادَة.','Read this page from the <b>same muṣḥaf</b> at two separate times (for example after Fajr and after ʿAṣr), and the dark lines 3 extra times.')}</div>
+      <div class="bq">«على ألا تكون متتابعة… فمن يحفظ نصا ما في شهر يكون حفظه أتقن وأبقى ممن يحفظ النص نفسه في أسبوع» (ص ٦٢).${tr('“…so that they are not consecutive… for whoever memorises a text over a month memorises it more firmly and lastingly than whoever memorises the same text in a week” (p. 62).')}</div></div>
+    <button class="big-btn" id="againB">${U('↻ مِنْ جَدِيد','↻ Start over')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(80)}
 
 /* ---------- ③ the three memories: a quick check-up + profile ---------- */
@@ -492,70 +504,71 @@ function startThree(){mem={ear:{ok:0,n:0},mind:{ok:0,n:0},eye:{ok:0,n:0}};const 
   study('انْظُرْ إِلَى الصَّفْحَةِ ثُمَّ نَفْحَصُ ذَوَاكِرَكَ الثَّلَاث','Look at the page, then we check your three memories',()=>{pageMode='ghost';renderPage({hideNo:true});showThree()})}
 function showThree(){if(ti>=tq.length)return endThree();
   const x=tq[ti],M=MEMS[x.m];let done=false,tries=2;pageMode='ghost';renderPage({hideNo:true});
-  const head=`<div class="prog"><span>${ar(ti+1)} مِنْ ${ar(tq.length)}</span><span>${teams[turn].nm}</span></div><div><span class="memtag" style="--mc:${M.c}">${M.ar} <span class="en" style="color:#fff">${M.en}</span></span></div>`;
+  const head=`<div class="prog"><span>${U(`${ar(ti+1)} مِنْ ${ar(tq.length)}`,`${ti+1} of ${tq.length}`)}</span><span>${teams[turn].nm}</span></div><div><span class="memtag" style="--mc:${M.c}">${U(M.ar,M.ar.split(' ')[0]+' '+M.en)}</span></div>`;
   const after=(ok,html)=>{done=true;mem[x.m].n++;if(ok){mem[x.m].ok++;award(x.m==='ear'?1:2)}else sfx.pop();
     $('#out').innerHTML=`<div class="info" style="--ac:${M.c}">${html}</div>${nextBtn()}`;$('#nextB').onclick=()=>{ti++;nextTurn();showThree()};$('#nextB').focus({preventScroll:true})};
   if(x.m==='ear'){const A=AYAHS[x.a];
-    qa.innerHTML=`${head}<div class="q">👂 المُعَلِّمُ يَقْرَأُ الآيَةَ ﴿${A.ref}﴾ مِنْ حِفْظِهِ — وَقَدْ يُغَيِّرُ كَلِمَةً وَاحِدَةً عَمْدًا! <span class="en blk">The teacher recites this āyah — maybe changing one word on purpose!</span></div>
-      <div class="tip">الطَّالِبُ يَسْمَعُ (بِلَا نَظَر) ثُمَّ يَقُول: «صَحِيحَة» أَوْ «تَغَيَّرَتْ كَلِمَة: …» وَيَقُولُ الصَّوَاب. <span class="en blk">Student listens (no looking), then says "correct" or "this word changed" and gives the right word.</span></div>
-      <div class="row"><button class="big-btn" id="yB">✅ أَصَابَ</button><button class="big-btn red" id="nB">❌ لَمْ يُصِبْ</button></div><div id="out" style="display:contents"></div>`;
-    const fin=ok=>{if(done)return;ac();$('#yB').disabled=$('#nB').disabled=true;revealLine(A.li,0);after(ok,`<div class="t">${ok?'👂 أُذُنٌ حَافِظَة!':'👂 اسْمَعْهَا مَرَّةً أُخْرَى صَحِيحَة'}</div><div class="bq">${A.ar} ﴿${A.ref}﴾</div><small>${M.bq} (ص ٦٤)</small>`)};
+    qa.innerHTML=`${head}<div class="q">${U(`👂 المُعَلِّمُ يَقْرَأُ الآيَةَ ﴿${A.ref}﴾ مِنْ حِفْظِهِ — وَقَدْ يُغَيِّرُ كَلِمَةً وَاحِدَةً عَمْدًا!`,`👂 The teacher recites the āyah (${TQI.ref(A.ref)}) from memory — and may change one word on purpose!`)}</div>
+      <div class="tip">${U('الطَّالِبُ يَسْمَعُ (بِلَا نَظَر) ثُمَّ يَقُول: «صَحِيحَة» أَوْ «تَغَيَّرَتْ كَلِمَة: …» وَيَقُولُ الصَّوَاب.','The student listens (without looking), then says “correct” or “a word changed: …” and says the right word.')}</div>
+      <div class="row"><button class="big-btn" id="yB">${U('✅ أَصَابَ','✅ Got it right')}</button><button class="big-btn red" id="nB">${U('❌ لَمْ يُصِبْ','❌ Got it wrong')}</button></div><div id="out" style="display:contents"></div>`;
+    const fin=ok=>{if(done)return;ac();$('#yB').disabled=$('#nB').disabled=true;revealLine(A.li,0);after(ok,`<div class="t">${ok?U('👂 أُذُنٌ حَافِظَة!','👂 A memorising ear!'):U('👂 اسْمَعْهَا مَرَّةً أُخْرَى صَحِيحَة','👂 Listen to it once more, correctly')}</div><div class="bq">${A.ar} ${REF(A.ref)}</div><small>${U(M.bq+' (ص ٦٤)','“'+M.bqEn+'” (p. 64)')}</small>`)};
     $('#yB').onclick=()=>fin(true);$('#nB').onclick=()=>fin(false);return}
   if(x.m==='mind'){let before,right,wrong,note='';
     if(x.mut){before=x.mut.before;right=x.mut.right;wrong=[x.mut.wrong];note=x.mut.note}
     else{const A=AYAHS[x.a],B=AYAHS[x.a+1];before={t:A.ar,ref:A.ref};right={t:B.ar,ref:B.ref};wrong=shuffle(AYAHS.filter(y=>y.a!==x.a+1&&y.a!==x.a)).slice(0,2).map(y=>({t:y.ar,ref:y.ref}))}
     const opts=shuffle([right,...wrong]);
-    qa.innerHTML=`${head}<div class="q">🧠 ${x.mut?'آيَتَانِ مُتَشَابِهَتَان! أَيُّهُمَا تَأْتِي بَعْدَ هَذِهِ الآيَة؟':'مَا الآيَةُ الَّتِي بَعْدَهَا؟'} <span class="en blk">${x.mut?'Look-alike verses! Which one comes next?':'Which āyah comes next?'}</span></div>
-      <div class="ayah">${before.t}<small>﴿${before.ref}﴾</small></div>
+    qa.innerHTML=`${head}<div class="q">${U('🧠 '+(x.mut?'آيَتَانِ مُتَشَابِهَتَان! أَيُّهُمَا تَأْتِي بَعْدَ هَذِهِ الآيَة؟':'مَا الآيَةُ الَّتِي بَعْدَهَا؟'),'🧠 '+(x.mut?'Look-alike verses! Which one comes next?':'Which āyah comes next?'))}</div>
+      <div class="ayah">${before.t}<small>${REF(before.ref)}</small></div>
       <div class="opts" id="opts" style="grid-template-columns:1fr">${opts.map((o,i)=>`<button class="ob" data-i="${i}">${o.t}</button>`).join('')}</div><div id="out" style="display:contents"></div>`;
     $$('#opts .ob').forEach(b=>b.onclick=()=>{if(done||b.classList.contains('bad'))return;ac();const o=opts[+b.dataset.i];
       const fin=ok=>{$$('#opts .ob').forEach(z=>z.disabled=true);$$('#opts .ob')[opts.indexOf(right)].classList.add('right');
-        after(ok,`<div class="t">${ok?'🧠 فَهِمْتَ تَرْتِيبَ المَعَانِي!':'🧠 تَذَكَّرِ التَّرْتِيب'}</div><div class="bq">${before.t} ۝ ${right.t} ﴿${right.ref}﴾</div>${note?`<div class="why">🔍 ${note}</div>`:''}<small>${M.bq} (ص ٦٤)</small>`)};
+        after(ok,`<div class="t">${ok?U('🧠 فَهِمْتَ تَرْتِيبَ المَعَانِي!','🧠 You understood the order of the meanings!'):U('🧠 تَذَكَّرِ التَّرْتِيب','🧠 Remember the order')}</div><div class="bq">${before.t} ۝ ${right.t} ${REF(right.ref)}</div>${note?`<div class="why">🔍 ${note}${x.mut?tr(x.mut.noteEn):''}</div>`:''}<small>${U(M.bq+' (ص ٦٤)','“'+M.bqEn+'” (p. 64)')}</small>`)};
       if(o===right){b.classList.add('right');fin(tries===2)}else{tries--;b.classList.add('bad');sfx.bad();if(tries<=0||opts.length===2)fin(false)}});return}
   // eye
   const A=AYAHS[x.a];
-  qa.innerHTML=`${head}<div class="q">👁️ أَيْنَ تَبْدَأُ هَذِهِ الآيَةُ فِي الصَّفْحَة؟ اضْغَطْ عَلَى سَطْرِهَا <span class="en blk">Where does this āyah start on the page? Tap its line.</span></div>
-    <div class="ayah">${A.ar}<small>﴿${A.ref}﴾</small></div><div id="out" style="display:contents"></div>`;
+  qa.innerHTML=`${head}<div class="q">${U('👁️ أَيْنَ تَبْدَأُ هَذِهِ الآيَةُ فِي الصَّفْحَة؟ اضْغَطْ عَلَى سَطْرِهَا','👁️ Where does this āyah start on the page? Tap its line.')}</div>
+    <div class="ayah">${A.ar}<small>${REF(A.ref)}</small></div><div id="out" style="display:contents"></div>`;
   $$('#page .ln').forEach(el=>{if(LINES[+el.dataset.l].kind==='text')el.classList.add('tap')});
   $$('#page .ln.tap').forEach(el=>el.onclick=()=>{if(done)return;ac();const i=+el.dataset.l;
     if(i===A.li||tries<=1){const ok=i===A.li&&tries===2;$$('#page .ln').forEach(e=>e.classList.remove('tap'));if(i===A.li)el.classList.add('okl');else{sfx.bad();el.classList.add('wrong')}revealLine(A.li,0);
-      after(ok,`<div class="t">${i===A.li?'👁️ عَيْنٌ حَافِظَة!':'👁️ هُنَا مَكَانُهَا — انْظُرْ إِلَى السَّطْرِ المُضِيء'}</div><small>${M.bq} (ص ٦٤)</small>`)}
+      after(ok,`<div class="t">${i===A.li?U('👁️ عَيْنٌ حَافِظَة!','👁️ A memorising eye!'):U('👁️ هُنَا مَكَانُهَا — انْظُرْ إِلَى السَّطْرِ المُضِيء','👁️ Here is its place — look at the lit line')}</div><small>${U(M.bq+' (ص ٦٤)','“'+M.bqEn+'” (p. 64)')}</small>`)}
     else{tries--;sfx.bad();el.classList.add('wrong');setTimeout(()=>el.classList.remove('wrong'),400)}})}
 function endThree(){pageMode='show';renderPage();
   const keys=['ear','mind','eye'],pct=k=>mem[k].n?Math.round(100*mem[k].ok/mem[k].n):0;
   const weakest=keys.slice().sort((a,b)=>pct(a)-pct(b))[0],W=MEMS[weakest],allFull=keys.every(k=>pct(k)===100);
-  qa.innerHTML=`<div class="endmsg"><div class="trophy">🧠</div><h2>مَلَفُّ ذَاكِرَتِك</h2>
-    <div class="q">📊 الذَّوَاكِرُ الثَّلَاث <span class="en">Your memory profile</span></div>
-    <div class="report">${keys.map(k=>`<div class="r" style="--ac:${MEMS[k].c}"><span>${MEMS[k].ar}</span><span class="bar2"><i style="width:${pct(k)}%"></i></span><span>${ar(mem[k].ok)}/${ar(mem[k].n)}</span></div>`).join('')}</div>
-    <div class="info" style="--ac:${W.c}"><div class="t">${allFull?'🌟 ذَوَاكِرُكَ الثَّلَاثُ قَوِيَّة — اخْتَبِرْ صَفْحَةً أَصْعَب!':`💪 قَوِّ ذَاكِرَتَكَ ${W.ar}:`}</div>${allFull?'':`<div class="why">${W.tip} <span class="en blk">${W.tipEn}</span></div><div class="bq">${W.bq}</div><small>ص ٦٣–٦٤</small>`}</div>
-    <div class="tip">💡 الحَافِظُ القَوِيُّ يَسْتَعْمِلُ الثَّلَاثَ مَعًا: يَسْمَعُ، وَيَفْهَمُ، وَيَرَى الصَّفْحَة. <span class="en blk">A strong ḥāfiẓ uses all three: hear, understand, see.</span></div>
-    <button class="big-btn" id="againB">↻ مِنْ جَدِيد</button></div>`;
+  qa.innerHTML=`<div class="endmsg"><div class="trophy">🧠</div><h2>${U('مَلَفُّ ذَاكِرَتِك','Your memory profile')}</h2>
+    <div class="q">${U('📊 الذَّوَاكِرُ الثَّلَاث','📊 The three memories')}</div>
+    <div class="report">${keys.map(k=>`<div class="r" style="--ac:${MEMS[k].c}"><span>${U(MEMS[k].ar,MEMS[k].ar.split(' ')[0]+' '+MEMS[k].en)}</span><span class="bar2"><i style="width:${pct(k)}%"></i></span><span>${U(`${ar(mem[k].ok)}/${ar(mem[k].n)}`,`${mem[k].ok}/${mem[k].n}`)}</span></div>`).join('')}</div>
+    <div class="info" style="--ac:${W.c}"><div class="t">${allFull?U('🌟 ذَوَاكِرُكَ الثَّلَاثُ قَوِيَّة — اخْتَبِرْ صَفْحَةً أَصْعَب!','🌟 All three memories are strong — try a harder page!'):U(`💪 قَوِّ ذَاكِرَتَكَ ${W.ar}:`,`💪 Strengthen your ${W.en.toLowerCase()} memory:`)}</div>${allFull?'':`<div class="why">${U(W.tip,W.tipEn)}</div><div class="bq">${W.bq}${tr('“'+W.bqEn+'”')}</div><small>${U('ص ٦٣–٦٤','pp. 63–64')}</small>`}</div>
+    <div class="tip">${U('💡 الحَافِظُ القَوِيُّ يَسْتَعْمِلُ الثَّلَاثَ مَعًا: يَسْمَعُ، وَيَفْهَمُ، وَيَرَى الصَّفْحَة.','💡 A strong ḥāfiẓ uses all three together: hearing, understanding and seeing the page.')}</div>
+    <button class="big-btn" id="againB">${U('↻ مِنْ جَدِيد','↻ Start over')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90)}
 
 /* ---------- end of ① ---------- */
-const KIND_NAMES={start:{ar:'👆 أَيُّ سَطْر؟',c:'var(--eye)'},where:{ar:'↔️ أَيْنَ فِي السَّطْر؟',c:'var(--blue)'},first:{ar:'🔦 أَوَّلُ السَّطْر',c:'var(--gold)'},last:{ar:'🔚 آخِرُ السَّطْر',c:'var(--purple)'},edge:{ar:'📄 أَوَّلُ/آخِرُ الصَّفْحَة',c:'var(--orange)'}};
+const KIND_NAMES={start:{ar:'👆 أَيُّ سَطْر؟',en:'👆 Which line?',c:'var(--eye)'},where:{ar:'↔️ أَيْنَ فِي السَّطْر؟',en:'↔️ Where in the line?',c:'var(--blue)'},first:{ar:'🔦 أَوَّلُ السَّطْر',en:'🔦 First word of the line',c:'var(--gold)'},last:{ar:'🔚 آخِرُ السَّطْر',en:'🔚 Last word of the line',c:'var(--purple)'},edge:{ar:'📄 أَوَّلُ/آخِرُ الصَّفْحَة',en:'📄 First / last of the page',c:'var(--orange)'}};
 function endGame(){pageMode='show';renderPage();
   const max=Math.max(...teams.map(t=>t.pts)),win=teams.filter(t=>t.pts===max);
-  const msg=teams.length===1?`جَمَعْتَ ${ar(max)} نُجُوم!`:win.length>1?'تَعَادُل! أَحْسَنْتُمَا':`${win[0].nm} فَازَ!`;
-  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${KIND_NAMES[k].c}"><span>${KIND_NAMES[k].ar}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${ar(s.ok)}/${ar(s.n)}</span></div>`).join('');
+  const msg=teams.length===1?U(`جَمَعْتَ ${ar(max)} نُجُوم!`,`You collected ${max} stars!`):win.length>1?U('تَعَادُل! أَحْسَنْتُمَا','It’s a tie! Well done, both of you!'):`${win[0].nm}${U(' فَازَ!',' wins!')}`;
+  const rows=Object.entries(stats).map(([k,s])=>`<div class="r" style="--ac:${KIND_NAMES[k].c}"><span>${U(KIND_NAMES[k].ar,KIND_NAMES[k].en)}</span><span class="bar2"><i style="width:${Math.round(100*s.ok/s.n)}%"></i></span><span>${U(`${ar(s.ok)}/${ar(s.n)}`,`${s.ok}/${s.n}`)}</span></div>`).join('');
   const ml=[...new Set(missed.map(q=>q.a!=null?AYAHS[q.a].li:typeof q.i==='number'?q.i:null).filter(x=>x!=null&&x>=0))];
   ml.forEach(i=>$(`#page .ln[data-l="${i}"]`)?.classList.add('heat2'));
   qa.innerHTML=`<div class="endmsg"><div class="trophy">🏆</div><h2>${msg}</h2>
-    <div class="q">📊 التَّقْرِير (صَحّ) <span class="en">Report</span></div><div class="report">${rows}</div>
-    <div>${ml.length?'🟧 الأَسْطُرُ المُلَوَّنَةُ فِي الصَّفْحَةِ = صُورَتُهَا ضَعِيفَة: اقْرَأْهَا وَأَصْبُعُكَ عَلَيْهَا ٣ مَرَّات. <span class="en blk">Coloured lines = weak picture: read each 3× with your finger on it.</span>':'🌟 صُورَةٌ كَامِلَة لِلصَّفْحَة!'}</div>
-    <div class="tip">💡 تَحَدِّي البَيْت: أَغْمِضْ عَيْنَيْكَ وَصِفِ الصَّفْحَةَ لِأَهْلِك: «السَّطْرُ الأَوَّلُ يَبْدَأُ بِـ… وَالآيَةُ … فِي وَسَطِ السَّطْرِ الرَّابِع…». <span class="en blk">Home challenge: close your eyes and describe the page to your family.</span></div>
-    <button class="big-btn" id="againB">↻ جَوْلَةٌ جَدِيدَة</button></div>`;
+    <div class="q">${U('📊 التَّقْرِير (صَحّ)','📊 Report (correct)')}</div><div class="report">${rows}</div>
+    <div>${ml.length?U('🟧 الأَسْطُرُ المُلَوَّنَةُ فِي الصَّفْحَةِ = صُورَتُهَا ضَعِيفَة: اقْرَأْهَا وَأَصْبُعُكَ عَلَيْهَا ٣ مَرَّات.','🟧 The coloured lines on the page = a weak picture: read each one 3 times with your finger on it.'):U('🌟 صُورَةٌ كَامِلَة لِلصَّفْحَة!','🌟 A perfect picture of the page!')}</div>
+    <div class="tip">${U('💡 تَحَدِّي البَيْت: أَغْمِضْ عَيْنَيْكَ وَصِفِ الصَّفْحَةَ لِأَهْلِك: «السَّطْرُ الأَوَّلُ يَبْدَأُ بِـ… وَالآيَةُ … فِي وَسَطِ السَّطْرِ الرَّابِع…».','💡 Home challenge: close your eyes and describe the page to your family: “The first line starts with… and the āyah … is in the middle of the fourth line…”.')}</div>
+    <button class="big-btn" id="againB">${U('↻ جَوْلَةٌ جَدِيدَة','↻ New round')}</button></div>`;
   $('#againB').onclick=newGame;sfx.win();confetti(90);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 }
 
-$('#setSel').innerHTML=Object.entries(SETS).map(([k,s])=>`<option value="${k}">${s.ar}</option>`).join('');
+$('#setSel').innerHTML=Object.entries(SETS).map(([k,s])=>`<option value="${k}" data-en="${s.en}">${s.ar}</option>`).join('');TQI.relabel();
 ['#modeSel','#setSel','#teamSel'].forEach(s=>$(s).onchange=newGame);
 $('#newB').onclick=newGame;
 $('#enB').onclick=()=>{const on=document.body.classList.toggle('show-en');$('#enB').setAttribute('aria-pressed',on)};
-$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').textContent=soundOn?'🔊 صوت':'🔇 بدون صوت';$('#sndB').setAttribute('aria-pressed',soundOn)};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Sound off');$('#sndB').setAttribute('aria-pressed',soundOn)};
 document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||document.body.classList.contains('ink-on'))return;if(e.key==='Enter'){const b=$('#nextB')||$('#snapB');if(b&&!b.disabled){e.preventDefault();b.click()}}});
 newGame();
+TQI.auto('.page,.ln,.w,.mk,.ayah,.pno,.bas,.lv,.ob.ui');
 </script>
 
 <script>
