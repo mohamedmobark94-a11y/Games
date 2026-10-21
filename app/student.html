@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>صفحتي · My page — Tarteel</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif;--f-en:"Inter","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.6 var(--f-ui);min-height:100vh}
+html[lang=en] body{font-family:var(--f-en)}
+a{color:var(--gold)}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px 60px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.brand{font:700 1.3rem var(--f-ar);color:var(--gold);margin-inline-end:auto}
+.lang{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:2px 14px;min-height:40px;cursor:pointer}
+.hd{background:linear-gradient(150deg,#1F4E73,#163A57);border:1px solid var(--line);border-radius:22px;padding:20px}
+.hd h1{margin:0;font-size:1.7rem;line-height:1.25}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat{background:var(--card2);border-radius:14px;padding:8px;text-align:center}.stat b{display:block;font-size:1.5rem;color:var(--gold)}
+h2{font-size:1.25rem;margin:22px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-top:10px}
+.card.todo{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-weight:800;border:0;border-radius:12px;padding:6px 16px;min-height:44px;cursor:pointer;background:var(--gold);color:#10263A;text-decoration:none;display:inline-flex;align-items:center}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.st{display:inline-block;border-radius:99px;padding:0 10px;font-size:.85rem;font-weight:800}
+.st.todo{background:var(--gold);color:#10263A}.st.submitted{background:#5DADE2;color:#10263A}.st.reviewed{background:var(--ok);color:#10263A}.st.redo{background:var(--bad);color:#10263A}
+.muted{color:var(--muted)}.small{font-size:.9rem}
+.fb{margin-top:8px;background:var(--card2);border-inline-start:4px solid var(--ok);border-radius:10px;padding:8px 12px}
+ul{margin:6px 0;padding-inline-start:22px}
+.date{color:var(--muted);font-size:.85rem;margin-inline-start:auto}
+.msg{text-align:center;padding:50px 10px;color:var(--muted)}
+.foot{text-align:center;margin-top:28px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">ترتيل القرآن</div><button class="lang" id="langBtn" type="button">English</button></div>
+  <div id="app"><div class="msg">…</div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+(function(){
+  const esc = TQ.esc, app = document.getElementById('app'), lb = document.getElementById('langBtn');
+  const k = new URLSearchParams(location.search).get('k') || '';
+  const db = supabase.createClient(TQ.url, TQ.key);
+  let P = null, lang = null;
+  const T = (ar, en) => lang === 'en' ? en : ar;
+  const ls = (key, v) => { try{ if(v === undefined) return localStorage.getItem(key); localStorage.setItem(key, v); }catch(_){ return null; } };
+  const fmt = d => { if(!d) return ''; const m = String(d).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); const x = m ? new Date(+m[3], m[2] - 1, +m[1]) : new Date(d);
+    return isNaN(x) ? String(d) : x.toLocaleDateString(lang === 'en' ? 'en-GB' : 'ar-EG', {weekday: 'short', day: 'numeric', month: 'short'}); };
+  lb.onclick = () => { lang = lang === 'en' ? 'ar' : 'en'; ls('tq-lang', lang); draw(); };
+
+  function draw(){
+    document.documentElement.lang = lang; document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl'; lb.textContent = lang === 'en' ? 'عربي' : 'English';
+    const s = P.student, name = lang === 'en' ? (s.name_en || s.name_ar) : s.name_ar;
+    const hw = P.homework || [], L = P.lessons || [], r = P.report;
+    const todo = hw.filter(h => !h.last || h.last.status === 'redo');
+    const scored = hw.filter(h => h.last && h.last.max_score), avg = scored.length ? Math.round(100 * scored.reduce((a, h) => a + h.last.score / h.last.max_score, 0) / scored.length) : null;
+    const hwUrl = t => new URL('app/hw.html?t=' + t, TQ.site).href;
+    const stLabel = h => !h.last ? ['todo', T('لسه', 'To do')] : h.last.status === 'redo' ? ['redo', T('أعِد المحاولة', 'Try again')] : h.last.status === 'reviewed' ? ['reviewed', T('المعلم راجعه ✓', 'Checked ✓')] : ['submitted', T('اتبعت', 'Sent')];
+    let h = '<div class="hd"><div class="muted">' + T('صفحة', 'The page of') + '</div><h1>' + esc(name) + ' 🌱</h1><div class="stats">' +
+      '<div class="stat"><b>' + L.length + '</b>' + T('درس', 'lessons') + '</div><div class="stat"><b>' + todo.length + '</b>' + T('واجب مستني', 'homework to do') + '</div><div class="stat"><b>' + (avg != null ? avg + '%' : '—') + '</b>' + T('متوسط الدرجات', 'average score') + '</div></div></div>';
+    h += '<h2>📝 ' + T('الواجبات', 'Homework') + '</h2>' + (hw.length ? hw.map(x => { const st = stLabel(x);
+      return '<div class="card' + (st[0] === 'todo' || st[0] === 'redo' ? ' todo' : '') + '"><div class="row"><b>' + esc(x.title) + '</b><span class="st ' + st[0] + '">' + st[1] + '</span><span class="date">' + fmt(x.sent_at) + '</span></div>' +
+        (x.due_date ? '<div class="small muted">' + T('آخر ميعاد: ', 'Due: ') + fmt(x.due_date) + '</div>' : '') +
+        (x.last && x.last.max_score ? '<div><b style="color:var(--ok);font-size:1.2rem">' + x.last.score + ' / ' + x.last.max_score + '</b></div>' : '') +
+        (x.last && x.last.feedback ? '<div class="fb">💬 ' + esc(x.last.feedback) + '</div>' : '') +
+        '<div class="row" style="margin-top:8px"><a class="btn' + (st[0] === 'todo' || st[0] === 'redo' ? '' : ' ghost') + '" href="' + hwUrl(x.token) + '">' + (st[0] === 'todo' ? T('ابدأ الواجب ▶', 'Start ▶') : T('افتح', 'Open')) + '</a></div></div>'; }).join('')
+      : '<div class="card muted">' + T('مفيش واجبات لسه.', 'No homework yet.') + '</div>');
+    if(r){
+      const sec = (ic, ar, en, a) => Array.isArray(a) && a.length ? '<div style="margin-top:6px"><b>' + ic + ' ' + T(ar, en) + '</b><ul>' + a.map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul></div>' : '';
+      h += '<h2>📄 ' + T('آخر تقرير', 'Latest report') + '</h2><div class="card"><div class="row"><b>' + esc(r.subject || '') + '</b>' + (r.session ? '<span class="muted small">' + T('الحصة ', 'Session ') + esc(r.session) + '</span>' : '') + '<span class="date">' + fmt(r.date) + '</span></div>' +
+        (r.rating ? '<div class="small">⭐ ' + esc(r.rating) + '</div>' : '') + sec('📖', 'الدرس', 'Lesson', r.lesson) + sec('🎵', 'التجويد', 'Tajweed', r.tajwid) + sec('🔤', 'العربي', 'Arabic', r.arabic) + sec('🕌', 'الإسلاميات', 'Islamic studies', r.islamic) +
+        sec('📝', 'الواجب', 'Homework', [].concat(r.hw || [], r.arabichw || [], r.islamichw || [])) + (r.encourage ? '<div class="fb">🌟 ' + esc(r.encourage) + '</div>' : '') + '</div>';
+    }
+    h += '<h2>📚 ' + T('دروسي', 'My lessons') + '</h2>' + (L.length ? L.map(l => '<div class="card"><div class="row"><b>' + esc(l.title || '') + '</b><span class="date">' + fmt(l.date) + '</span></div>' +
+        (Array.isArray(l.summary) && l.summary.length ? '<ul class="small">' + l.summary.map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul>' : '') +
+        (l.homework ? '<div class="small muted" dir="auto">📝 ' + esc(l.homework) + '</div>' : '') +
+        '<div class="row" style="margin-top:8px">' + (l.url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.url) + '">🎓 ' + T('الدرس', 'Lesson') + '</a>' : '') + (l.hw ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.hw) + '">🎨 ' + T('صفحة الواجب', 'Homework page') + '</a>' : '') + '</div></div>').join('')
+      : '<div class="card muted">' + T('لسه مفيش دروس متسجلة هنا.', 'No lessons here yet.') + '</div>');
+    h += '<h2>🎮 ' + T('العب وراجع', 'Play and review') + '</h2><div class="card"><div>' + T('ألعاب القرآن والتجويد والعربي — كلها مجانية.', 'Qur’an, tajweed and Arabic games — all free.') + '</div><div class="row" style="margin-top:8px"><a class="btn" href="' + TQ.site + '" target="_blank" rel="noopener">' + T('افتح الألعاب ↗', 'Open the games ↗') + '</a></div></div>';
+    h += '<div class="foot">Tarteel Al-Quran · ' + T('المعلم محمد مبارك', 'Teacher Mohamed Mobark') + '</div>';
+    app.innerHTML = h;
+  }
+
+  (async () => {
+    if(k.length < 24){ app.innerHTML = '<div class="msg">' + 'اللينك ناقص — اطلب اللينك من المعلم.<br>This link is incomplete — ask your teacher for the link.' + '</div>'; return; }
+    const r = await db.rpc('get_portal', {p_token: k});
+    if(r.error || !r.data){ app.innerHTML = '<div class="msg">' + 'اللينك ده مش شغال — اطلب لينك جديد من المعلم.<br>This link does not work — ask your teacher for a new one.' + '</div>'; return; }
+    P = r.data; lang = ls('tq-lang') || (P.student.lang === 'ar' ? 'ar' : 'en'); draw();
+  })();
+})();
+</script>
+</body>
+</html>

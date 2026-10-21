@@ -5,7 +5,7 @@
   if(window.__tqNav)return;window.__tqNav=1;
   var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
   var lang=store.get('tq-lang')||((navigator.language||'').toLowerCase().indexOf('ar')===0?'ar':'en');
-  var T={home:['الرئيسية','Home'],back:['رجوع','Back'],next:['التالية','Next'],other:['English','عربي'],nav:['التنقل','Site navigation'],book:['احجز','Book'],teacher:['المعلم','Teacher'],site:['الموقع','Website']};
+  var T={home:['الرئيسية','Home'],back:['رجوع','Back'],next:['التالية','Next'],other:['English','عربي'],nav:['التنقل','Site navigation'],book:['احجز','Book'],teacher:['أدوات الحلقة','Class toolkit'],site:['الموقع','Website']};
   var t=function(k){return T[k][lang==='ar'?0:1]};
 
   var css=document.createElement('style');

@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>لوحة المعلم · ترتيل</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;--wa:#25D366;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.6 var(--f-ui);min-height:100vh}
+a{color:var(--gold)}
+.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 92%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.top .in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px 16px;flex-wrap:wrap}
+.brand{font:700 1.3rem var(--f-ar);color:var(--gold);margin-inline-end:auto}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:2px 14px;min-height:40px;cursor:pointer}
+.tab.on{background:var(--gold);border-color:var(--gold);color:#10263A}
+.badge{display:inline-block;min-width:20px;padding:0 6px;border-radius:99px;background:var(--bad);color:#10263A;font-size:.8rem;margin-inline-start:4px}
+.wrap{max-width:1000px;margin:0 auto;padding:16px 16px 80px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.card.new{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+h2{margin:4px 0 12px;font-size:1.3rem}
+label{display:block;font-weight:700;color:var(--muted);font-size:.9rem;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;background:var(--card2);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:8px 12px}
+textarea{min-height:70px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:620px){.grid2{grid-template-columns:1fr}}
+.btn{font:inherit;font-weight:800;border:0;border-radius:12px;padding:6px 16px;min-height:44px;cursor:pointer;background:var(--gold);color:#10263A}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn.ok{background:var(--ok)}.btn.bad{background:var(--bad)}.btn.wa{background:var(--wa);color:#06331A}
+.btn.sm{min-height:36px;padding:2px 12px;font-size:.9rem}
+.chip{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:2px 12px;min-height:38px;cursor:pointer}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#10263A}
+.muted{color:var(--muted)}.small{font-size:.88rem}
+.ayah{font:700 1.4rem/2 var(--f-ar);background:#FFFDF7;color:#1f2a27;border-radius:12px;padding:6px 12px;text-align:center}
+.item{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:10px}
+.score{font-size:1.4rem;font-weight:800;color:var(--ok)}
+.st{display:inline-block;border-radius:99px;padding:0 10px;font-size:.8rem;font-weight:800}
+.st.submitted{background:var(--gold);color:#10263A}.st.reviewed{background:var(--ok);color:#10263A}.st.redo{background:var(--bad);color:#10263A}
+audio{width:100%;margin-top:6px}
+table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:start;vertical-align:top}
+.link{direction:ltr;unicode-bidi:isolate;font-size:.85rem;word-break:break-all;color:var(--muted)}
+.full .wrap{max-width:none;padding:0}
+#genFrame{display:block;width:100%;height:calc(100vh - 58px);border:0;background:#fff}
+.md h2,.md h3,.md h4,.md h5{margin:14px 0 6px;color:var(--gold)}.md p{margin:4px 0}.md .mdq{border-inline-start:3px solid var(--gold);padding:2px 10px;color:var(--muted);margin:6px 0}
+.mdt{margin:8px 0;font-size:.9rem;background:var(--card2);border-radius:10px;overflow:hidden}.mdt th{color:var(--gold)}.md code{background:var(--card2);padding:0 4px;border-radius:4px}
+.flash{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#10263A;font-weight:800;border-radius:99px;padding:8px 18px;z-index:99}
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <div class="brand">📖 لوحة المعلم · ترتيل</div>
+  <div class="tabs" id="tabs" hidden>
+    <button class="tab" data-v="report">📝 تقرير الحصة</button>
+    <button class="tab on" data-v="inbox">📥 التسليمات<span class="badge" id="nNew" hidden></span></button>
+    <button class="tab" data-v="new">✏️ واجب جديد</button>
+    <button class="tab" data-v="list">📋 الواجبات</button>
+    <button class="tab" data-v="students">👥 الطلاب</button>
+    <button class="tab" data-v="lessons">📚 الدروس</button>
+    <button class="tab" data-v="plans">🗂️ الخطط</button>
+    <button class="tab" data-v="mushaf">📖 المصحف</button>
+    <button class="tab" data-v="games">🎮 الألعاب</button>
+    <button class="tab" id="out">خروج</button>
+  </div>
+</div></div>
+<div class="wrap" id="app"><div class="card muted">…</div></div>
+<div class="flash" id="flash" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+(function(){
+  const esc = TQ.esc, $ = id => document.getElementById(id), app = $('app');
+  const db = supabase.createClient(TQ.url, TQ.key);
+  const HW = new URL('app/hw.html', TQ.site).href;
+  let view = 'inbox', students = [], draft = null;
+  const flash = t => { const f = $('flash'); f.textContent = t; f.hidden = false; clearTimeout(flash.t); flash.t = setTimeout(() => f.hidden = true, 1800); };
+  const nm = s => s ? (s.name_ar + (s.name_en ? ' · ' + s.name_en : '')) : '';
+  const day = d => d ? new Date(d).toLocaleString('ar-EG', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) : '';
+  const linkOf = tok => HW + '?t=' + tok;
+  const copy = async t => { try{ await navigator.clipboard.writeText(t); flash('اتنسخ ✓'); }catch(_){ prompt('انسخ:', t); } };
+
+  /* ---------- sign in ---------- */
+  function loginView(msg){
+    $('tabs').hidden = true;
+    app.innerHTML = '<div class="card" style="max-width:440px;margin:40px auto"><h2>تسجيل الدخول</h2>' +
+      (msg ? '<p class="muted">' + msg + '</p>' : '') +
+      '<label>الإيميل</label><input id="em" type="email" autocomplete="username">' +
+      '<label>الباسورد</label><input id="pw" type="password" autocomplete="current-password">' +
+      '<div class="row" style="margin-top:14px"><button class="btn" id="go">دخول</button><button class="btn ghost" id="mk">أول مرة؟ اعمل حساب</button></div>' +
+      '<p class="small muted" id="lm"></p></div>';
+    const em = $('em'), pw = $('pw'), lm = $('lm');
+    $('go').onclick = async () => { lm.textContent = '…'; const r = await db.auth.signInWithPassword({email: em.value.trim(), password: pw.value}); lm.textContent = r.error ? ('معرفتش أدخل: ' + r.error.message) : ''; if(!r.error) start(); };
+    $('mk').onclick = async () => {
+      if(pw.value.length < 8){ lm.textContent = 'الباسورد لازم 8 حروف أو أكتر.'; return; }
+      lm.textContent = '…';
+      const r = await db.auth.signUp({email: em.value.trim(), password: pw.value, options: {emailRedirectTo: TQ.site + 'app/'}});
+      lm.textContent = r.error ? ('معرفتش أعمل الحساب: ' + r.error.message) : 'اتعمل ✓ — قول لـ Claude «فعّل حسابي» عشان يديك صلاحية المعلم، وبعدها ادخل.';
+    };
+    pw.addEventListener('keydown', e => { if(e.key === 'Enter') $('go').click(); });
+  }
+  $('out').onclick = async () => { await db.auth.signOut(); loginView(); };
+
+  async function start(){
+    const s = await db.auth.getSession();
+    if(!s.data.session) return loginView();
+    const t = await db.rpc('is_teacher');
+    if(!t.data) return loginView('الحساب ده لسه ما اتفعّلش كحساب معلم — قول لـ Claude «فعّل حسابي».');
+    $('tabs').hidden = false;
+    const r = await db.from('students').select('*').order('name_ar');
+    students = r.data || [];
+    go(view);
+  }
+  document.querySelectorAll('.tab[data-v]').forEach(b => b.onclick = () => go(b.dataset.v));
+  function go(v){
+    view = v; document.querySelectorAll('.tab[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+    document.body.classList.toggle('full', v === 'report' || v === 'mushaf');
+    ({inbox, new: newView, list: listView, students: studentsView, report: reportView, lessons: lessonsView, plans: plansView, games: gamesView, mushaf: mushafView})[v]();
+  }
+
+  /* ---------- 📝 the report generator (kept private: it carries student names) ---------- */
+  let genUrl = null;
+  async function reportView(){
+    if(genUrl){ app.innerHTML = '<iframe id="genFrame" src="' + genUrl + '" title="تقرير الحصة"></iframe>'; return; }
+    app.innerHTML = '<div class="card muted" style="margin:16px">بيفتح المولّد…</div>';
+    const r = await db.storage.from('private').download('generator.html');
+    if(r.error){ app.innerHTML = '<div class="card" style="margin:16px">معرفتش أفتح المولّد: ' + esc(r.error.message) + '</div>'; return; }
+    genUrl = URL.createObjectURL(new Blob([await r.data.arrayBuffer()], {type: 'text/html;charset=utf-8'}));
+    if(view === 'report') reportView();
+  }
+
+  /* ---------- 📥 submissions ---------- */
+  async function inbox(){
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    const r = await db.from('submissions').select('*, assignment_targets(token, students(id,name_ar,name_en), assignments(id,title,kind,content))').order('submitted_at', {ascending: false}).limit(80);
+    if(r.error){ app.innerHTML = '<div class="card">' + esc(r.error.message) + '</div>'; return; }
+    const list = r.data || [], waiting = list.filter(x => x.status === 'submitted').length;
+    $('nNew').hidden = !waiting; $('nNew').textContent = waiting;
+    if(!list.length){ app.innerHTML = '<div class="card"><h2>📥 التسليمات</h2><p class="muted">لسه مفيش حد سلّم. اعمل واجب جديد وابعت اللينك للطالب.</p></div>'; return; }
+    const paths = list.flatMap(x => x.audio_paths || []);
+    const urls = {};
+    if(paths.length){ const u = await db.storage.from('recordings').createSignedUrls(paths, 3600); (u.data || []).forEach(x => { if(x.signedUrl) urls[x.path] = x.signedUrl; }); }
+    app.innerHTML = '<h2>📥 التسليمات' + (waiting ? ' <span class="muted small">(' + waiting + ' مستنيين ردّك)</span>' : '') + '</h2>' + list.map(x => {
+      const t = x.assignment_targets || {}, a = t.assignments || {}, s = t.students || {}, items = (a.content && a.content.items) || [];
+      const wrong = ((x.answers && x.answers.mcq) || []).filter(m => !m.right);
+      const rec = ((x.answers && x.answers.recite) || []);
+      return '<div class="card' + (x.status === 'submitted' ? ' new' : '') + '" data-id="' + x.id + '">' +
+        '<div class="row"><b style="font-size:1.1rem">' + esc(nm(s)) + '</b><span class="muted">· ' + esc(a.title) + '</span><span class="st ' + x.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[x.status] + '</span><span class="muted small" style="margin-inline-start:auto">' + day(x.submitted_at) + '</span></div>' +
+        (x.max_score ? '<div class="score">' + x.score + ' / ' + x.max_score + '</div>' : '') +
+        (wrong.length ? '<div class="small muted">غلط في: ' + wrong.map(m => { const it = items[m.i] || {}; const o = (it.options || [])[m.chose]; return 'س' + (m.i + 1) + (o != null ? ' (اختار «' + esc(typeof o === 'object' ? o.ar : o) + '»)' : ' (ما جاوبش)'); }).join('، ') + '</div>' : '') +
+        rec.map(p => { const it = items[p.i] || {}; return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (it.say ? ' · ' + esc(it.say) : '') + '</div>' + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') + (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') + '</div>'; }).join('') +
+        '<label>ردّك للطالب</label><textarea data-fb>' + esc(x.feedback || '') + '</textarea>' +
+        '<div class="row" style="margin-top:8px"><button class="btn ok sm" data-act="reviewed">✅ تمام</button><button class="btn bad sm" data-act="redo">🔁 يعيد</button><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">🔗 لينك الطالب</button></div></div>';
+    }).join('');
+    app.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
+      const c = b.closest('[data-id]'), fb = c.querySelector('[data-fb]').value.trim();
+      const r = await db.from('submissions').update({status: b.dataset.act, feedback: fb || null, reviewed_at: new Date().toISOString()}).eq('id', c.dataset.id);
+      if(r.error) return alert(r.error.message); flash('اتحفظ ✓'); inbox();
+    });
+    app.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));
+  }
+
+  /* ---------- ✏️ new homework / test ---------- */
+  function blank(){ return {title: '', kind: 'homework', subject: '', page_url: '', due_date: '', intro: '', items: [], who: []}; }
+  function newView(){
+    draft = draft || blank();
+    const d = draft;
+    app.innerHTML = '<div class="card"><h2>✏️ واجب أو اختبار جديد</h2>' +
+      '<div class="grid2"><div><label>العنوان</label><input id="f_title" value="' + esc(d.title) + '" placeholder="مثلاً: مراجعة أحكام النون الساكنة"></div>' +
+      '<div><label>النوع</label><select id="f_kind"><option value="homework"' + (d.kind === 'homework' ? ' selected' : '') + '>واجب</option><option value="test"' + (d.kind === 'test' ? ' selected' : '') + '>اختبار</option></select></div>' +
+      '<div><label>المادة</label><input id="f_subject" value="' + esc(d.subject) + '" placeholder="تجويد / عربي / قرآن / إسلاميات"></div>' +
+      '<div><label>آخر ميعاد (اختياري)</label><input id="f_due" type="date" value="' + esc(d.due_date) + '"></div></div>' +
+      '<label>لينك درس أو لعبة يفتحها الطالب (اختياري)</label><input id="f_url" dir="ltr" value="' + esc(d.page_url) + '" placeholder="https://…">' +
+      '<label>رسالة للطالب في الأول (اختياري)</label><textarea id="f_intro">' + esc(d.intro) + '</textarea></div>' +
+      '<div class="card"><h2>الأسئلة والتسميع</h2><div id="items">' + d.items.map(itemForm).join('') + '</div>' +
+      '<div class="row" style="margin-top:10px"><button class="btn ghost" id="addQ">➕ سؤال اختيارات</button><button class="btn ghost" id="addR">🎙️ تسميع بالصوت</button></div></div>' +
+      '<div class="card"><h2>لمين؟</h2><div class="row" id="who">' + students.filter(s => s.active).map(s => '<button class="chip' + (d.who.includes(s.id) ? ' on' : '') + '" data-s="' + s.id + '">' + esc(s.name_ar) + '</button>').join('') + '</div>' +
+      '<div class="row" style="margin-top:14px"><button class="btn" id="save">💾 احفظ وطلّع اللينكات</button><button class="btn ghost" id="reset">ابدأ من الأول</button></div><div id="out2"></div></div>';
+    const sync = () => {
+      d.title = $('f_title').value; d.kind = $('f_kind').value; d.subject = $('f_subject').value; d.due_date = $('f_due').value; d.page_url = $('f_url').value.trim(); d.intro = $('f_intro').value;
+      app.querySelectorAll('[data-it]').forEach(el => {
+        const it = d.items[+el.dataset.it];
+        if(it.type === 'mcq'){ it.q = el.querySelector('[data-k=q]').value; it.ayah = el.querySelector('[data-k=ayah]').value;
+          it.options = [...el.querySelectorAll('[data-k=o]')].map(x => x.value); const c = el.querySelector('input[type=radio]:checked'); it.answer = c ? +c.value : 0; }
+        else { it.say = el.querySelector('[data-k=say]').value; it.text = el.querySelector('[data-k=text]').value; it.ref_audio = el.querySelector('[data-k=ref]').value.trim(); }
+      });
+    };
+    $('addQ').onclick = () => { sync(); d.items.push({type: 'mcq', q: '', ayah: '', options: ['', '', ''], answer: 0}); newView(); };
+    $('addR').onclick = () => { sync(); d.items.push({type: 'recite', say: 'سمّع الآيات دي', text: '', ref_audio: ''}); newView(); };
+    $('reset').onclick = () => { if(confirm('تمسح اللي كتبته؟')){ draft = blank(); newView(); } };
+    app.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { sync(); d.items.splice(+b.dataset.del, 1); newView(); });
+    app.querySelectorAll('[data-addo]').forEach(b => b.onclick = () => { sync(); d.items[+b.dataset.addo].options.push(''); newView(); });
+    app.querySelectorAll('[data-s]').forEach(b => b.onclick = () => { sync(); const id = b.dataset.s; d.who = d.who.includes(id) ? d.who.filter(x => x !== id) : d.who.concat(id); b.classList.toggle('on'); });
+    $('save').onclick = async () => {
+      sync();
+      if(!d.title.trim()) return alert('اكتب عنوان الواجب.');
+      if(!d.items.length && !d.page_url) return alert('ضيف سؤال أو تسميع أو لينك درس.');
+      if(!d.who.length) return alert('اختار طالب واحد على الأقل.');
+      const items = d.items.map(it => it.type === 'mcq' ? {type: 'mcq', q: it.q, ayah: it.ayah || undefined, options: it.options.filter(o => o.trim()), answer: it.answer} : {type: 'recite', say: it.say || undefined, text: it.text || undefined, ref_audio: it.ref_audio || undefined});
+      const mcqN = items.filter(i => i.type === 'mcq').length;
+      const a = await db.from('assignments').insert({title: d.title.trim(), kind: d.kind, subject: d.subject || null, page_url: d.page_url || null, due_date: d.due_date || null,
+        content: {intro: d.intro ? {ar: d.intro} : undefined, items}, max_score: mcqN || null}).select().single();
+      if(a.error) return alert(a.error.message);
+      const t = await db.from('assignment_targets').insert(d.who.map(id => ({assignment_id: a.data.id, student_id: id}))).select('token, students(name_ar,name_en)');
+      if(t.error) return alert(t.error.message);
+      $('out2').innerHTML = '<h2 style="margin-top:16px">✅ اتحفظ — ابعت لكل طالب لينكه</h2>' + linksTable(t.data, a.data.title);
+      bindLinks(); draft = blank();
+    };
+  }
+  function itemForm(it, i){
+    if(it.type === 'mcq') return '<div class="item" data-it="' + i + '"><div class="row"><b>' + (i + 1) + ' · سؤال اختيارات</b><button class="btn ghost sm" style="margin-inline-start:auto" data-del="' + i + '">🗑</button></div>' +
+      '<label>السؤال</label><input data-k="q" value="' + esc(it.q) + '">' +
+      '<label>آية أو كلمة تظهر فوق الاختيارات (اختياري)</label><input data-k="ayah" value="' + esc(it.ayah || '') + '">' +
+      '<label>الاختيارات (علّم على الصح)</label>' + it.options.map((o, j) => '<div class="row" style="margin-top:6px"><input type="radio" name="r' + i + '" value="' + j + '"' + (it.answer === j ? ' checked' : '') + ' style="width:auto"><input data-k="o" value="' + esc(o) + '" style="flex:1"></div>').join('') +
+      '<button class="btn ghost sm" style="margin-top:6px" data-addo="' + i + '">➕ اختيار</button></div>';
+    return '<div class="item" data-it="' + i + '"><div class="row"><b>' + (i + 1) + ' · تسميع بالصوت</b><button class="btn ghost sm" style="margin-inline-start:auto" data-del="' + i + '">🗑</button></div>' +
+      '<label>المطلوب</label><input data-k="say" value="' + esc(it.say || '') + '">' +
+      '<label>النص اللي يقراه (آية / كلمات) — انسخه من مصدر موثوق</label><textarea data-k="text" style="font-family:var(--f-ar);font-size:1.3rem">' + esc(it.text || '') + '</textarea>' +
+      '<label>صوت قدوة (لينك mp3، اختياري)</label><input data-k="ref" dir="ltr" value="' + esc(it.ref_audio || '') + '"></div>';
+  }
+  function linksTable(rows, title){
+    return '<table>' + rows.map(r => { const s = r.students || {}, url = linkOf(r.token);
+      const msg = 'السلام عليكم ' + (s.name_ar || '') + ' 🌱\n' + title + '\n' + url + '\n\nAssalamu alaikum ' + (s.name_en || '') + ', here is your homework: ' + url;
+      return '<tr><td><b>' + esc(nm(s)) + '</b><div class="link">' + esc(url) + '</div></td><td style="white-space:nowrap"><button class="btn ghost sm" data-copy="' + esc(url) + '">📋 نسخ</button> <a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">واتساب</a></td></tr>'; }).join('') + '</table>';
+  }
+  const bindLinks = () => app.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));
+
+  /* ---------- 📚 all assignments ---------- */
+  async function listView(){
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    const r = await db.from('assignments').select('id,title,kind,subject,due_date,created_at, assignment_targets(token, students(name_ar,name_en), submissions(score,max_score,status,submitted_at))').order('created_at', {ascending: false}).limit(60);
+    if(r.error){ app.innerHTML = '<div class="card">' + esc(r.error.message) + '</div>'; return; }
+    app.innerHTML = '<h2>📚 الواجبات والاختبارات</h2>' + ((r.data || []).map(a => '<div class="card"><div class="row"><b style="font-size:1.1rem">' + esc(a.title) + '</b><span class="muted small">' + (a.kind === 'test' ? 'اختبار' : 'واجب') + (a.subject ? ' · ' + esc(a.subject) : '') + ' · ' + day(a.created_at) + '</span></div>' +
+      '<table>' + a.assignment_targets.map(t => { const subs = (t.submissions || []).sort((x, y) => y.submitted_at.localeCompare(x.submitted_at)), last = subs[0];
+        return '<tr><td>' + esc(nm(t.students)) + '</td><td>' + (last ? (last.max_score ? last.score + '/' + last.max_score + ' ' : '') + '<span class="st ' + last.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[last.status] + '</span>' + (subs.length > 1 ? ' <span class="small muted">(' + subs.length + ' محاولات)</span>' : '') : '<span class="muted">لسه ما سلّمش</span>') + '</td><td style="white-space:nowrap"><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">📋 اللينك</button></td></tr>'; }).join('') + '</table></div>').join('') || '<div class="card muted">لسه مفيش واجبات.</div>');
+    bindLinks();
+  }
+
+  /* ---------- 👥 students ---------- */
+  async function studentsView(sel){
+    const s = students.find(x => x.id === sel);
+    let h = '<h2>👥 الطلاب</h2><div class="row" style="margin-bottom:12px">' + students.map(x => '<button class="chip' + (x.id === sel ? ' on' : '') + (x.active ? '' : ' muted') + '" data-st="' + x.id + '">' + esc(x.name_ar) + '</button>').join('') + '<button class="chip" data-st="new">➕ طالب جديد</button></div>';
+    if(sel === 'new' || s){
+      const v = s || {name_ar: '', name_en: '', slug: '', age: '', lang: 'en', notes: '', active: true};
+      h += '<div class="card"><div class="grid2"><div><label>الاسم بالعربي</label><input id="s_ar" value="' + esc(v.name_ar) + '"></div><div><label>الاسم بالإنجليزي</label><input id="s_en" dir="ltr" value="' + esc(v.name_en || '') + '"></div>' +
+        '<div><label>السن</label><input id="s_age" type="number" value="' + esc(v.age || '') + '"></div><div><label>لغة صفحته</label><select id="s_lang">' + [['en', 'English'], ['ar', 'عربي'], ['both', 'الاتنين']].map(o => '<option value="' + o[0] + '"' + (v.lang === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></div></div>' +
+        '<label>ملاحظات</label><textarea id="s_notes">' + esc(v.notes || '') + '</textarea>' +
+        '<label class="row" style="color:var(--ink)"><input type="checkbox" id="s_act" style="width:auto"' + (v.active ? ' checked' : '') + '> طالب حالي</label>' +
+        '<div class="row" style="margin-top:10px"><button class="btn" id="s_save">💾 احفظ</button></div></div>';
+      if(s){
+        const r = await db.from('assignment_targets').select('token, assignments(title,kind,created_at), submissions(score,max_score,status,submitted_at)').eq('student_id', s.id).order('sent_at', {ascending: false});
+        const rows = r.data || [], scored = rows.flatMap(t => (t.submissions || []).filter(x => x.max_score)), avg = scored.length ? Math.round(100 * scored.reduce((a, x) => a + x.score / x.max_score, 0) / scored.length) : null;
+        h += '<div class="card"><h2>سجل ' + esc(s.name_ar) + '</h2><p class="muted">' + rows.length + ' واجب · ' + rows.filter(t => (t.submissions || []).length).length + ' اتسلّم' + (avg != null ? ' · متوسط الدرجات ' + avg + '%' : '') + '</p><table>' +
+          rows.map(t => { const subs = (t.submissions || []).sort((x, y) => y.submitted_at.localeCompare(x.submitted_at)), last = subs[0];
+            return '<tr><td>' + esc(t.assignments.title) + '<div class="small muted">' + day(t.assignments.created_at) + '</div></td><td>' + (last ? (last.max_score ? last.score + '/' + last.max_score + ' ' : '') + '<span class="st ' + last.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[last.status] + '</span>' : '<span class="muted">لسه</span>') + '</td><td><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">📋</button></td></tr>'; }).join('') + '</table></div>';
+        const portal = PORTAL + '?k=' + s.portal_token;
+        const pmsg = 'السلام عليكم 🌱\nصفحة ' + s.name_ar + ': الدروس والواجبات والتقارير في مكان واحد\n' + portal + '\n\nAssalamu alaikum, this is ' + (s.name_en || '') + '’s page: lessons, homework and reports in one place:\n' + portal;
+        h = h.replace('<div class="card"><h2>سجل ', '<div class="card"><h2>🔗 صفحة ' + esc(s.name_ar) + ' (للطالب وولي الأمر)</h2><p class="small muted">لينك ثابت: كل دروسه وواجباته ودرجاته وآخر تقرير. من غير تسجيل دخول، ومن غير الخطة أو ملاحظاتك.</p><div class="link">' + esc(portal) + '</div><div class="row" style="margin-top:8px"><button class="btn ghost sm" data-copy="' + esc(portal) + '">📋 نسخ</button><a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(pmsg) + '">واتساب</a><a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(portal) + '">👁️ افتحها</a><button class="btn ghost sm" data-golessons="' + s.id + '">📚 دروسه</button><button class="btn ghost sm" data-goplan="' + esc(s.slug) + '">🗂️ خطته</button></div></div><div class="card"><h2>سجل ');
+        h += await lessonsHtml(s.keys || [s.slug], 12);
+      }
+    }
+    app.innerHTML = h;
+    app.querySelectorAll('[data-st]').forEach(b => b.onclick = () => studentsView(b.dataset.st));
+    app.querySelectorAll('[data-golessons]').forEach(b => b.onclick = () => { lessonFilter = b.dataset.golessons; go('lessons'); });
+    app.querySelectorAll('[data-goplan]').forEach(b => b.onclick = () => { planSel = b.dataset.goplan; go('plans'); });
+    bindLinks();
+    if($('s_save')) $('s_save').onclick = async () => {
+      const row = {name_ar: $('s_ar').value.trim(), name_en: $('s_en').value.trim() || null, age: +$('s_age').value || null, lang: $('s_lang').value, notes: $('s_notes').value || null, active: $('s_act').checked};
+      if(!row.name_ar) return alert('اكتب الاسم بالعربي.');
+      let r;
+      if(s) r = await db.from('students').update(row).eq('id', s.id).select().single();
+      else { row.slug = (row.name_en || row.name_ar).toLowerCase().replace(/[^a-z0-9؀-ۿ]+/g, '-') + '-' + Math.random().toString(36).slice(2, 6); r = await db.from('students').insert(row).select().single(); }
+      if(r.error) return alert(r.error.message);
+      const rr = await db.from('students').select('*').order('name_ar'); students = rr.data || [];
+      flash('اتحفظ ✓'); studentsView(r.data.id);
+    };
+  }
+
+  /* ---------- 📚 lessons library (from the generator's «lessons» records) ---------- */
+  const PORTAL = new URL('app/student.html', TQ.site).href;
+  let lessonFilter = 'all', planSel = null, allLessons = null;
+  const keyOf = id => String(id).slice(11);
+  const studentOfKey = k => students.find(s => (s.keys || [s.slug]).includes(k));
+  async function loadLessons(force){
+    if(allLessons && !force) return allLessons;
+    const r = await db.from('docs').select('id,data').eq('collection', 'lessons').order('id', {ascending: false}).limit(2000);
+    allLessons = (r.data || []).map(x => Object.assign({id: x.id, key: keyOf(x.id)}, x.data));
+    return allLessons;
+  }
+  function lessonCard(l, showName){
+    const A = v => Array.isArray(v) ? v : (v ? [String(v)] : []); const s = studentOfKey(l.key), lines = A(l.summary).length ? A(l.summary) : A(l.headlines);
+    return '<div class="card"><div class="row"><b style="font-size:1.1rem">' + esc(l.title || '') + '</b>' + (showName ? '<span class="chip on" style="min-height:28px;padding:0 10px">' + esc(s ? s.name_ar : (l.student || l.key)) + '</span>' : '') +
+      '<span class="muted small" style="margin-inline-start:auto">' + esc(l.date || '') + (l.subject ? ' · ' + esc(l.subject) : '') + '</span></div>' +
+      (lines.length ? '<ul class="small" style="margin:6px 0">' + lines.slice(0, 5).map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul>' : '') +
+      (l.homework ? '<div class="small muted" dir="auto">📝 ' + esc(l.homework) + '</div>' : '') +
+      '<div class="row" style="margin-top:8px">' + (l.url ? '<a class="btn sm" target="_blank" rel="noopener" href="' + esc(l.url) + '">🎓 الدرس</a>' : '') + (l.hw ? '<a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(l.hw) + '">📝 الواجب</a><button class="btn ghost sm" data-copy="' + esc(l.hw) + '">📋 لينك الواجب</button>' : '') + '</div></div>';
+  }
+  async function lessonsHtml(keys, max){
+    const L = (await loadLessons()).filter(l => keys.includes(l.key)).slice(0, max || 999);
+    return '<div class="card"><h2>📚 آخر الدروس</h2>' + (L.length ? '' : '<p class="muted">مفيش دروس متسجلة لسه.</p>') + '</div>' + L.map(l => lessonCard(l, false)).join('');
+  }
+  async function lessonsView(){
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    const L = await loadLessons(true);
+    const withL = students.filter(s => L.some(l => (s.keys || [s.slug]).includes(l.key)));
+    const sel = students.find(s => s.id === lessonFilter);
+    const shown = sel ? L.filter(l => (sel.keys || [sel.slug]).includes(l.key)) : L;
+    app.innerHTML = '<h2>📚 مكتبة الدروس <span class="muted small">(' + L.length + ' درس)</span></h2>' +
+      '<div class="row" style="margin-bottom:10px"><button class="chip' + (sel ? '' : ' on') + '" data-lf="all">الكل</button>' + withL.map(s => '<button class="chip' + (sel && sel.id === s.id ? ' on' : '') + '" data-lf="' + s.id + '">' + esc(s.name_ar) + '</button>').join('') + '</div>' +
+      '<input id="lq" placeholder="🔎 دوّر في الدروس (سورة، قاعدة، كتاب…)" style="margin-bottom:12px"><div id="ll"></div>';
+    const draw = () => { const q = $('lq').value.trim().toLowerCase(); const f = q ? shown.filter(l => JSON.stringify(l).toLowerCase().includes(q)) : shown;
+      $('ll').innerHTML = f.map(l => lessonCard(l, !sel)).join('') || '<div class="card muted">مفيش نتايج.</div>'; bindLinks(); };
+    $('lq').oninput = draw; draw();
+    app.querySelectorAll('[data-lf]').forEach(b => b.onclick = () => { lessonFilter = b.dataset.lf; lessonsView(); });
+  }
+
+  /* ---------- 🗂️ plans & logs (copied from OneDrive\تدريس\طلابي) ---------- */
+  function md(src){
+    const inl = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/(https?:\/\/[^\s)<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    const out = []; const lines = String(src || '').split(/\r?\n/); let i = 0;
+    while(i < lines.length){
+      const l = lines[i];
+      if(/^\|/.test(l)){ const rows = []; while(i < lines.length && /^\|/.test(lines[i])){ if(!/^\|[\s:|-]+\|?\s*$/.test(lines[i])) rows.push(lines[i].replace(/^\||\|\s*$/g, '').split('|')); i++; }
+        out.push('<table class="mdt">' + rows.map((r, k) => '<tr>' + r.map(c => k ? '<td>' + inl(c.trim()) + '</td>' : '<th>' + inl(c.trim()) + '</th>').join('') + '</tr>').join('') + '</table>'); continue; }
+      let m;
+      if((m = l.match(/^(#{1,4})\s+(.*)/))) out.push('<h' + (m[1].length + 1) + '>' + inl(m[2]) + '</h' + (m[1].length + 1) + '>');
+      else if((m = l.match(/^(\s*)[-*]\s+(.*)/))) out.push('<div class="mdli" style="padding-inline-start:' + (12 + m[1].length * 8) + 'px">• ' + inl(m[2]) + '</div>');
+      else if((m = l.match(/^>\s?(.*)/))) out.push('<div class="mdq">' + inl(m[1]) + '</div>');
+      else if(l.trim()) out.push('<p>' + inl(l) + '</p>');
+      i++;
+    }
+    return out.join('');
+  }
+  async function plansView(){
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    const r = await db.from('docs').select('id,data,updated_at').eq('collection', 'plans');
+    const P = (r.data || []).sort((a, b) => a.data.folder.localeCompare(b.data.folder, 'ar'));
+    if(!P.length){ app.innerHTML = '<div class="card muted">مفيش خطط لسه.</div>'; return; }
+    const cur = P.find(p => p.id === planSel) || P[0]; planSel = cur.id;
+    let mode = plansView.mode || 'plan';
+    const d = cur.data, txt = mode === 'plan' ? d.plan : d.log;
+    app.innerHTML = '<h2>🗂️ خطط الطلاب وسجل الدروس</h2><div class="row" style="margin-bottom:10px">' + P.map(p => '<button class="chip' + (p.id === cur.id ? ' on' : '') + '" data-p="' + esc(p.id) + '">' + esc(p.data.folder) + '</button>').join('') + '</div>' +
+      '<div class="card"><div class="row"><button class="chip' + (mode === 'plan' ? ' on' : '') + '" data-m="plan">📋 الخطة</button><button class="chip' + (mode === 'log' ? ' on' : '') + '" data-m="log">🕘 سجل الدروس</button><button class="btn ghost sm" id="pedit" style="margin-inline-start:auto">✏️ تعديل</button></div>' +
+      '<p class="small muted">' + (d.editedOnSite ? '✏️ اتعدّلت هنا ' + day(d.siteEditedAt) + ' — هتتنسخ لـ OneDrive في المزامنة الجاية. ' : '') + 'آخر نسخ من OneDrive: ' + day(d.syncedAt) + (d.lessonFolders && d.lessonFolders.length ? ' · ' + d.lessonFolders.length + ' فولدر درس' : '') + '</p>' +
+      '<div id="pbody" class="md">' + md(txt) + '</div></div>';
+    app.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { planSel = b.dataset.p; plansView(); });
+    app.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { plansView.mode = b.dataset.m; plansView(); });
+    $('pedit').onclick = () => {
+      $('pbody').innerHTML = '<textarea id="ptxt" style="min-height:60vh;direction:rtl;font-size:.95rem">' + esc(txt || '') + '</textarea><div class="row" style="margin-top:8px"><button class="btn" id="psave">💾 احفظ</button><button class="btn ghost" id="pcancel">إلغاء</button></div>';
+      $('pcancel').onclick = plansView;
+      $('psave').onclick = async () => {
+        const nd = Object.assign({}, d, {[mode]: $('ptxt').value, editedOnSite: true, siteEditedAt: Date.now()});
+        const w = await db.from('docs').update({data: nd}).eq('collection', 'plans').eq('id', cur.id);
+        if(w.error) return alert(w.error.message); flash('اتحفظ ✓'); plansView();
+      };
+    };
+  }
+
+  /* ---------- 🎮 games & public lessons (the public site's list) ---------- */
+  let gamesLoaded = null;
+  function gamesView(){
+    const draw = () => {
+      const card = (g, dir) => '<div class="card" style="margin:0"><div style="font-size:2rem">' + esc(g.ico || '🎮') + '</div><b>' + esc(g.ar) + '</b><div class="small muted" dir="ltr">' + esc(g.en || '') + '</div><div class="small" style="margin:6px 0">' + esc(g.desc || '') + '</div>' +
+        (g.file ? '<div class="row"><a class="btn sm" target="_blank" rel="noopener" href="' + TQ.site + dir + esc(g.file) + '">▶ افتح</a><button class="btn ghost sm" data-copy="' + TQ.site + dir + esc(g.file) + '">📋 للطالب</button></div>' : '<span class="muted small">قريبًا</span>') + '</div>';
+      const grid = a => '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:18px">' + a + '</div>';
+      app.innerHTML = '<h2>🎮 الألعاب <span class="muted small">(' + (window.GAMES || []).length + ')</span> <a class="small" href="' + TQ.site + '" target="_blank" rel="noopener">الموقع العام ↗</a></h2>' + grid((window.GAMES || []).map(g => card(g, 'games/')).join('')) +
+        '<h2>📘 الدروس العامة <span class="muted small">(' + (window.LESSONS || []).length + ')</span></h2>' + grid((window.LESSONS || []).map(g => card(g, 'lessons/')).join(''));
+      bindLinks();
+    };
+    if(window.GAMES) return draw();
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    if(!gamesLoaded){ gamesLoaded = document.createElement('script'); gamesLoaded.src = TQ.site + 'games.js?v=' + Date.now(); document.head.appendChild(gamesLoaded); }
+    gamesLoaded.addEventListener('load', () => { if(view === 'games') draw(); });
+  }
+
+  /* ---------- 📖 Mushaf + recitation corrector ---------- */
+  function mushafView(){ app.innerHTML = '<iframe id="genFrame" src="mushaf/" title="المصحف" allow="microphone; clipboard-write; fullscreen"></iframe>'; }
+
+  db.auth.onAuthStateChange((ev) => { if(ev === 'SIGNED_OUT') loginView(); });
+  start();
+})();
+</script>
+</body>
+</html>
