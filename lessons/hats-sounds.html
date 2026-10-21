@@ -1028,7 +1028,7 @@ build(r){
 const pen=$('#pen'),pctx=pen.getContext('2d');let penOn=false,penMode='pen',penCol='#ffffff',drawing=false,lx=0,ly=0,penSeen=false;
 const PBTN=[['✎','pen'],['▮','hl'],['✦','laser'],['⌫','clear']];
 const pb=$('#penbar');
-['#ffffff','#ff7d6b','#5cc8ff','#ffc857','#5eead4'].forEach(c=>{const b=document.createElement('button');b.style.background=c;b.onclick=()=>{penCol=c;if(penMode==='clear')penMode='pen';selP()};b.dataset.c=c;pb.appendChild(b)});
+['#ffffff','#ff7d6b','#5cc8ff','#ffc857','#5eead4'].forEach(c=>{const b=document.createElement('button');b.style.background=c;b.onclick=()=>{penCol=c;if(penMode==='clear')penMode='pen';selP()};b.dataset.c=c;b.setAttribute('aria-label','Pen colour '+c);b.title='Pen colour';pb.appendChild(b)});
 PBTN.forEach(x=>{const b=document.createElement('button');b.textContent=x[0];b.dataset.m=x[1];b.onclick=()=>{if(x[1]==='clear'){pctx.clearRect(0,0,1600,900)}else penMode=x[1];selP()};pb.appendChild(b)});
 function selP(){pb.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',b.dataset.c===penCol||b.dataset.m===penMode))}selP();
 function pxy(e){const rc=pen.getBoundingClientRect();return[(e.clientX-rc.left)*1600/rc.width,(e.clientY-rc.top)*900/rc.height]}

@@ -48,6 +48,7 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .tbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 .progress{display:flex;gap:4px;margin-top:10px}
 .progress button{flex:1;height:8px;border:0;border-radius:4px;background:var(--line);cursor:pointer;padding:0}
+.progress button{position:relative}.progress button::after{content:"";position:absolute;inset:-14px -2px}
 .progress button.done{background:var(--accent-soft)}
 .progress button.on{background:var(--accent)}
 .stage{padding-block:24px 8px;animation:in .35s ease}
