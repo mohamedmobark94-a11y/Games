@@ -6,7 +6,7 @@
      ico   : إيموجي
      ar/en : الاسم بالعربي والإنجليزي
      age   : ['kids'] أطفال  /  ['teens'] مراهقين  /  ['adults'] كبار  (ممكن أكثر من واحد)
-     subj  : 'tajweed' تجويد / 'hifz' حفظ / 'arabic' عربي / 'islamic' إسلاميات / 'fun' تسلية
+     subj  : 'tajweed' تجويد / 'hifz' حفظ / 'arabic' لغة عربية / 'islamic' إسلاميات / 'nahw' نحو / 'class' للحلقة (ألعاب تسلية)
      desc  : جملة أو جملتان: ماذا يفعل الطالب
      book  : الكتاب المصدر (والصفحات)
    ===================================================================== */
@@ -19,13 +19,13 @@ window.SITE = {
 };
 
 window.GAMES = [
-  {file:'xo-showdown.html', date:'2026-10-21', ico:'⭕', ar:'إِكْس أُو: مُنَافَسَةُ الفَصْل', en:'XO: The Class Showdown', age:['kids','teens','adults'], subj:'fun',
+  {file:'xo-showdown.html', date:'2026-10-21', ico:'⭕', ar:'إِكْس أُو: مُنَافَسَةُ الفَصْل', en:'XO: The Class Showdown', age:['kids','teens','adults'], subj:'class',
    desc:'إكس أو للاستراحة: العبوا الكلاسيكية، أو اكسبوا كل خانة بسؤال سريع في الحروف والإسلاميات والعربية. فريقان أو ضد الكمبيوتر.', book:'لعبة تسلية'},
-  {file:'memory-match.html', date:'2026-10-21', ico:'🧠', ar:'لُعْبَةُ الذَّاكِرَة', en:'Memory Match', age:['kids','teens'], subj:'fun',
+  {file:'memory-match.html', date:'2026-10-21', ico:'🧠', ar:'لُعْبَةُ الذَّاكِرَة', en:'Memory Match', age:['kids','teens'], subj:['arabic','class'],
    desc:'اقلب بطاقتين: كلمة عربية وصورتها. فريقان يتنافسان على الأزواج، أو طالب واحد يحاول بأقل محاولات.', book:'لعبة تسلية (مفردات الحياة اليومية)'},
-  {file:'guess-the-word.html', date:'2026-10-21', ico:'🔤', ar:'خَمِّنِ الكَلِمَة', en:'Guess the Word', age:['kids','teens','adults'], subj:'fun',
+  {file:'guess-the-word.html', date:'2026-10-21', ico:'🔤', ar:'خَمِّنِ الكَلِمَة', en:'Guess the Word', age:['kids','teens','adults'], subj:['arabic','class'],
    desc:'كلمة عربية مخفية: اختر الحروف قبل أن تفقد قلوبك الستة، مع تلميح بالصورة والمعنى.', book:'لعبة تسلية (مفردات الحياة اليومية)'},
-  {file:'sentence-train.html', date:'2026-10-19', ico:'🚂', ar:'قِطَارُ الجُمْلَة', en:'The Sentence Train', age:['kids'], subj:'arabic',
+  {file:'sentence-train.html', date:'2026-10-19', ico:'🚂', ar:'قِطَارُ الجُمْلَة', en:'The Sentence Train', age:['kids'], subj:'nahw',
    desc:'الجملة قطار وكل كلمة عربة: ضع لافتة الاسم أو الفعل أو الحرف، واعرف المفيدة من الناقصة، واصنع جملك بنفسك.', book:'النحو الواضح ج١ (ص ١٧–٣٠)'},
   {file:'page-map.html', date:'2026-10-18', ico:'🗺️', ar:'خَرِيطَةُ الصَّفْحَة', en:'The Page Map', age:['teens','adults'], subj:'hifz',
    desc:'صوّر الصفحة بعينك ثم أجب: أين تبدأ الآية؟ مفاتيح الأسطر تختفي تدريجيًا، وخريطة الضعف لكل سطر.', book:'كيف تحفظ القرآن الكريم (ص ٦١–٧٤)'},

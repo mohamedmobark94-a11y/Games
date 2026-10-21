@@ -197,6 +197,11 @@ h2.sec::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(
 .confetti-bit{position:fixed;top:-12px;width:10px;height:14px;border-radius:3px;z-index:70;pointer-events:none;animation:cfall linear forwards}
 @keyframes cfall{to{transform:translateY(105vh) rotate(720deg)}}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.lt,.moon,.hero .orn,.sky .star,.btn.wa,.hero h1 em{animation:none!important}}
+
+/* topic group headings in the library */
+h3.grp{grid-column:1/-1;display:flex;flex-direction:column;gap:2px;margin:14px 0 0;padding:8px 14px;border-inline-start:6px solid var(--c);background:linear-gradient(90deg,color-mix(in srgb,var(--c) 14%,transparent),transparent);border-radius:10px;font-size:1.25rem;line-height:1.3}
+h3.grp em{font-style:normal;font-size:.8rem;background:var(--c);color:var(--btn-ink);border-radius:999px;padding:0 9px;margin-inline-start:6px;vertical-align:middle}
+h3.grp small{font-weight:500;font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -283,8 +288,20 @@ const AGE={kids:{ar:'أطفال',en:'Kids',ico:'👧',c:'var(--kids)',range:['٤
     d:['مواقف من حياتهم، ونقاش وتحديات، وربط العلم بالواقع.','Real-life situations, discussion and challenges that link knowledge to daily life.']},
   adults:{ar:'كبار',en:'Adults',ico:'🧔',c:'var(--adults)',range:['١٨ سنة فأكثر','Ages 18+'],
     d:['خطة مرنة تناسب وقتك، وفهم للمعنى مع الإتقان.','A flexible plan around your schedule, with meaning alongside accuracy.']}};
-const SUBJ={tajweed:{ar:'تجويد',en:'Tajweed',ico:'📖',c:'var(--tajweed)'},hifz:{ar:'حفظ',en:'Memorisation',ico:'🧠',c:'var(--hifz)'},
-  arabic:{ar:'عربية',en:'Arabic',ico:'✍️',c:'var(--arabic)'},islamic:{ar:'إسلاميات',en:'Islamic studies',ico:'🕌',c:'var(--islamic)'},fun:{ar:'تسلية',en:'Fun breaks',ico:'🎉',c:'#FF8FB1'}};
+/* one group per topic: a game's first subject is where it is listed; extra subjects only add tags and filters */
+const SUBJ={tajweed:{ar:'التجويد',en:'Tajweed',ico:'📖',c:'var(--tajweed)',
+    d:['أحكام التلاوة: المخارج والصفات والمد والنون والمد والوقف.','Rules of recitation: articulation points, characteristics, madd, nūn & mīm, stopping.']},
+  hifz:{ar:'الحفظ',en:'Memorisation',ico:'🧠',c:'var(--hifz)',
+    d:['طرق الحفظ والمراجعة والسند وإتقان الآيات.','Methods for memorising, reviewing and mastering verses.']},
+  arabic:{ar:'اللغة العربية',en:'Arabic language',ico:'✍️',c:'var(--arabic)',
+    d:['الحروف والمفردات والكلمات لمن يبدأ القراءة والكتابة.','Letters, vocabulary and words for those starting to read and write.']},
+  nahw:{ar:'النحو',en:'Grammar (Naḥw)',ico:'🧩',c:'#C39BD3',
+    d:['الجملة وأنواع الكلمة والفعل والفاعل والمبتدأ والخبر.','The sentence, kinds of words, verbs, subjects and predicates.']},
+  islamic:{ar:'الإسلاميات',en:'Islamic studies',ico:'🕌',c:'var(--islamic)',
+    d:['الفقه والأخلاق والعقيدة بالأدلة، ومواقف من الحياة.','Fiqh, character and belief with evidence, and real-life situations.']},
+  class:{ar:'للحلقة',en:'For the class',ico:'🎉',c:'#FF8FB1',
+    d:['ألعاب تسلية للاستراحة وتنشيط الحلقة بين الفقرات.','Fun games for a break and to keep the class lively between activities.']}};
+const subjs=g=>[].concat(g.subj||[]).filter(k=>SUBJ[k]);
 const MONTHS={ar:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
   en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
 const fmt=d=>{const [y,m,dd]=d.split('-').map(Number);return `${num(dd)} ${MONTHS[L.lang][m-1]} ${num(y)}`};
@@ -332,19 +349,27 @@ function drawStatic(){
 
 function render(){
   const q=strip(state.q.trim()),src=state.tab==='lessons'?lessons:games,dir=state.tab==='lessons'?'lessons/':'games/';
-  const list=src.filter(g=>(state.age==='all'||(g.age||[]).includes(state.age))&&(state.subj==='all'||g.subj===state.subj)&&
+  const list=src.filter(g=>(state.age==='all'||(g.age||[]).includes(state.age))&&(state.subj==='all'||subjs(g).includes(state.subj))&&
     (!q||strip([g.ar,g.en,g.desc,EN[g.file]||'',g.book].join(' ')).includes(q)));
   $('count').textContent=list.length===src.length?'':t(`${num(list.length)} من ${num(src.length)}`,`${list.length} of ${src.length}`);
-  $('grid').innerHTML=list.length?list.map(g=>{
-    const nw=g.file&&isNew(g.date),s=SUBJ[g.subj];
+  const card=g=>{
+    const nw=g.file&&isNew(g.date),ss=subjs(g),s=SUBJ[ss[0]];
     return `<article class="card ${nw?'new':''}" style="--sc:${s?s.c:'var(--accent)'}">${nw?`<span class="badge">${t('جديد','New')}</span>`:''}
     <div class="ico" aria-hidden="true">${g.ico}</div>
     <h3>${L.lang==='ar'?g.ar:esc(g.en)}<small>${L.lang==='ar'?esc(g.en):g.ar}</small></h3>
-    <div class="tags">${(g.age||[]).map(k=>AGE[k]?`<span class="tag" style="--c:${AGE[k].c}">${AGE[k].ico} ${t(AGE[k].ar,AGE[k].en)}</span>`:'').join('')}${s?`<span class="tag" style="--c:${s.c}">${s.ico} ${t(s.ar,s.en)}</span>`:''}</div>
+    <div class="tags">${(g.age||[]).map(k=>AGE[k]?`<span class="tag" style="--c:${AGE[k].c}">${AGE[k].ico} ${t(AGE[k].ar,AGE[k].en)}</span>`:'').join('')}${ss.map(k=>`<span class="tag" style="--c:${SUBJ[k].c}">${SUBJ[k].ico} ${t(SUBJ[k].ar,SUBJ[k].en)}</span>`).join('')}</div>
     <p>${esc(desc(g))}</p>
     <div class="meta"><span>📚 ${esc(g.book)}${g.min?` · ⏱️ ${num(g.min)} ${t('د','min')}`:''}</span>${g.date?`<time datetime="${g.date}">${fmt(g.date)}</time>`:''}</div>
-    ${g.file?`<div class="acts"><a class="btn" href="${dir}${g.file}">${state.tab==='lessons'?'📘 '+t('افتح الدرس','Open lesson'):'▶ '+t('العب الآن','Play now')}</a><button class="copy" data-f="${dir}${g.file}" title="${t('انسخ الرابط لإرساله للطالب','Copy link to send to the student')}" aria-label="${t('نسخ الرابط','Copy link')}">🔗</button></div>`:`<span class="soon">${t('قريبًا','Coming soon')}</span>`}</article>`}).join('')
-    :`<p class="empty">${t('لا توجد نتائج لهذا البحث، جرّب كلمة أخرى.','No results for this search. Try another word.')}</p>`;
+    ${g.file?`<div class="acts"><a class="btn" href="${dir}${g.file}">${state.tab==='lessons'?'📘 '+t('افتح الدرس','Open lesson'):'▶ '+t('العب الآن','Play now')}</a><button class="copy" data-f="${dir}${g.file}" title="${t('انسخ الرابط لإرساله للطالب','Copy link to send to the student')}" aria-label="${t('نسخ الرابط','Copy link')}">🔗</button></div>`:`<span class="soon">${t('قريبًا','Coming soon')}</span>`}</article>`};
+  let html;
+  if(!list.length)html=`<p class="empty">${t('لا توجد نتائج لهذا البحث، جرّب كلمة أخرى.','No results for this search. Try another word.')}</p>`;
+  else if(state.subj==='all'&&!q&&state.tab==='games'){
+    /* grouped by topic so a student knows at a glance what each game is about */
+    html=Object.keys(SUBJ).map(k=>{const items=list.filter(g=>subjs(g)[0]===k);
+      return items.length?`<h3 class="grp" style="--c:${SUBJ[k].c}"><span>${SUBJ[k].ico} ${t(SUBJ[k].ar,SUBJ[k].en)} <em>${num(items.length)}</em></span><small>${t(SUBJ[k].d[0],SUBJ[k].d[1])}</small></h3>`+items.map(card).join(''):''}).join('')
+      +list.filter(g=>!subjs(g).length).map(card).join('');
+  }else html=list.map(card).join('');
+  $('grid').innerHTML=html;
 }
 function all(){drawStatic();render()}
 
