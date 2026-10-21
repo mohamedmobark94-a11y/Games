@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>لوحة المعلم | Teacher dashboard — Tarteel Al-Quran</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0B1E2D">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👩‍🏫</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
+<style>
+/* Teacher dashboard: every game and lesson in one list, grouped by topic, with open / copy-link actions, a random break game and a class timer. */
+:root{--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--btn-ink:#10263A;--wa:#25D366;
+  --kids:#F0A35E;--teens:#5DADE2;--adults:#B48AD0;--tajweed:#2ECC71;--hifz:#E2B85C;--arabic:#F1948A;--islamic:#76D7C4;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif;--f-en:"Inter","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1000px 520px at 80% -10%,#1B4566 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:17px;line-height:1.6}
+html[lang=en] body{font-family:var(--f-en);font-size:16px}
+html[lang=ar] .en,html[lang=en] .ar{display:none!important}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+.bar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:2px solid var(--gold)}
+.bar .in{max-width:1100px;margin:0 auto;padding:8px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.brand{font-weight:800;font-size:1.3rem;color:var(--gold);margin-inline-end:auto;line-height:1.2}
+.brand small{display:block;font-size:.72rem;font-weight:600;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:inherit;font-weight:800;font-size:.92rem;text-decoration:none;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:2px 14px;min-height:42px;cursor:pointer}
+.btn:hover{border-color:var(--gold)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--btn-ink)}
+.btn.wa{background:var(--wa);border-color:var(--wa);color:#06331A}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 16px 80px;display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start}
+@media (max-width:860px){.wrap{grid-template-columns:1fr}}
+aside{position:sticky;top:76px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:860px){aside{position:static}}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px}
+.panel h2{margin:0 0 8px;font-size:1.05rem;color:var(--gold)}
+.jump{display:flex;flex-direction:column;gap:4px}
+.jump a{display:flex;justify-content:space-between;gap:8px;text-decoration:none;padding:4px 10px;border-radius:10px;border:1px solid transparent;font-weight:700}
+.jump a:hover{border-color:var(--c,var(--line));background:color-mix(in srgb,var(--c,var(--line)) 14%,transparent)}
+.jump em{font-style:normal;color:var(--muted);font-weight:600}
+.timer{display:flex;flex-direction:column;gap:8px;align-items:center}
+.timer output{font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.timer output.end{color:#FF6B6B;animation:blink .7s infinite}
+@keyframes blink{50%{opacity:.3}}
+.trow{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.trow .btn{min-height:36px;padding:0 12px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.search{flex:1 1 220px;font:inherit;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:4px 18px;min-height:44px}
+.chip{font:inherit;font-weight:700;font-size:.9rem;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:0 14px;min-height:38px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--btn-ink)}
+h3.grp{display:flex;flex-direction:column;gap:0;margin:20px 0 8px;padding:6px 14px;border-inline-start:6px solid var(--c);background:linear-gradient(90deg,color-mix(in srgb,var(--c) 14%,transparent),transparent);border-radius:10px;font-size:1.2rem;scroll-margin-top:84px}
+h3.grp em{font-style:normal;font-size:.78rem;background:var(--c);color:var(--btn-ink);border-radius:999px;padding:0 9px;margin-inline-start:6px}
+h3.grp small{font-weight:500;font-size:.82rem;color:var(--muted)}
+.kind{margin:22px 0 4px;font-size:1.5rem}
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px}
+.row:hover{border-color:var(--c,var(--gold))}
+.row .ico{font-size:1.9rem;line-height:1;width:46px;height:46px;display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,var(--c,var(--gold)) 18%,var(--card2))}
+.row b{font-family:var(--f-ar);font-size:1.2rem;line-height:1.3}
+html[lang=en] .row b{font-family:var(--f-en);font-size:1.05rem}
+.row p{margin:0;color:var(--muted);font-size:.85rem;line-height:1.45}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.tag{font-size:.72rem;font-weight:800;border-radius:999px;padding:0 8px;background:color-mix(in srgb,var(--c) 20%,transparent);color:var(--c);border:1px solid var(--c)}
+.acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.acts .btn{min-height:38px;font-size:.85rem}
+@media (max-width:560px){.row{grid-template-columns:auto 1fr}.acts{grid-column:1/-1;justify-content:stretch}.acts .btn{flex:1}}
+.empty{color:var(--muted);text-align:center;padding:20px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--btn-ink);font-weight:800;border-radius:999px;padding:6px 20px;z-index:60}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <div class="brand"><span class="ar">👩‍🏫 لوحة المعلم</span><span class="en">👩‍🏫 Teacher dashboard</span><small>Tarteel Al-Quran · ترتيل القرآن</small></div>
+  <a class="btn gold" href="./">🏠 <span class="ar">الموقع</span><span class="en">Website</span></a>
+  <a class="btn wa" href="about.html#book">🎁 <span class="ar">صفحة الحجز</span><span class="en">Booking page</span></a>
+  <a class="btn" href="about.html">ℹ️ <span class="ar">عن المعلم</span><span class="en">About</span></a>
+  <button class="btn" id="lang" type="button" aria-label="Language / اللغة"></button>
+</div></div>
+
+<div class="wrap">
+  <aside>
+    <div class="panel"><h2><span class="ar">🎲 استراحة سريعة</span><span class="en">🎲 Quick break</span></h2>
+      <button class="btn gold" id="rand" style="width:100%"><span class="ar">افتح لعبة تسلية عشوائية</span><span class="en">Open a random fun game</span></button></div>
+    <div class="panel"><h2><span class="ar">⏱️ مؤقت الحلقة</span><span class="en">⏱️ Class timer</span></h2>
+      <div class="timer"><output id="tout" aria-live="off">05:00</output>
+        <div class="trow"><button class="btn" data-m="1">1</button><button class="btn" data-m="3">3</button><button class="btn" data-m="5">5</button><button class="btn" data-m="10">10</button><button class="btn" data-m="15">15</button></div>
+        <div class="trow"><button class="btn gold" id="tgo"><span class="ar">ابدأ</span><span class="en">Start</span></button><button class="btn" id="trs"><span class="ar">إعادة</span><span class="en">Reset</span></button></div></div></div>
+    <div class="panel"><h2><span class="ar">🧭 الأقسام</span><span class="en">🧭 Topics</span></h2><nav class="jump" id="jump" aria-label="Topics"></nav></div>
+  </aside>
+  <main>
+    <div class="tools">
+      <input class="search" id="q" type="search" aria-label="Search">
+      <button class="chip" data-a="all" aria-pressed="true"><span class="ar">كل الأعمار</span><span class="en">All ages</span></button>
+      <button class="chip" data-a="kids" aria-pressed="false">👧 <span class="ar">أطفال</span><span class="en">Kids</span></button>
+      <button class="chip" data-a="teens" aria-pressed="false">🧑 <span class="ar">مراهقون</span><span class="en">Teens</span></button>
+      <button class="chip" data-a="adults" aria-pressed="false">🧔 <span class="ar">كبار</span><span class="en">Adults</span></button>
+    </div>
+    <div id="list"></div>
+  </main>
+</div>
+
+<script src="games.js"></script>
+<script>
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let lang=store.get('tq-lang')||((navigator.language||'').toLowerCase().startsWith('ar')?'ar':'en');
+const $=id=>document.getElementById(id),t=(a,e)=>lang==='ar'?a:e;
+const num=n=>lang==='ar'?String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]):String(n);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const AGE={kids:{ar:'أطفال',en:'Kids',ico:'👧',c:'var(--kids)'},teens:{ar:'مراهقون',en:'Teens',ico:'🧑',c:'var(--teens)'},adults:{ar:'كبار',en:'Adults',ico:'🧔',c:'var(--adults)'}};
+const SUBJ=window.SUBJECTS,EN=window.DESC_EN||{};
+const strip=s=>String(s).toLowerCase().replace(/[ً-ٰٟ]/g,'');
+const subjs=g=>[].concat(g.subj||[]).filter(k=>SUBJ[k]);
+const desc=g=>lang==='en'&&EN[g.file]?EN[g.file]:g.desc;
+let age='all';
+
+function row(g,dir){
+  const ss=subjs(g),s=SUBJ[ss[0]],href=dir+g.file;
+  return `<div class="row" style="--c:${s?s.c:'var(--gold)'}"><div class="ico" aria-hidden="true">${g.ico}</div>
+    <div><b>${lang==='ar'?g.ar:esc(g.en)}</b> <span style="color:var(--muted);font-size:.8rem">${lang==='ar'?esc(g.en):g.ar}</span>
+      <p>${esc(desc(g))}</p>
+      <div class="tags">${(g.age||[]).map(k=>AGE[k]?`<span class="tag" style="--c:${AGE[k].c}">${AGE[k].ico} ${t(AGE[k].ar,AGE[k].en)}</span>`:'').join('')}${ss.slice(1).map(k=>`<span class="tag" style="--c:${SUBJ[k].c}">${SUBJ[k].ico} ${t(SUBJ[k].ar,SUBJ[k].en)}</span>`).join('')}${g.min?`<span class="tag" style="--c:var(--muted)">⏱️ ${num(g.min)} ${t('د','min')}</span>`:''}</div></div>
+    <div class="acts">${g.file?`<a class="btn gold" href="${href}">${dir==='lessons/'?'📘':'▶'} ${t('افتح','Open')}</a><a class="btn" href="${href}" target="_blank" rel="noopener" title="${t('تبويب جديد','New tab')}">↗</a><button class="btn" data-copy="${href}" title="${t('انسخ الرابط للطالب','Copy the link for the student')}">🔗</button>`:`<span style="color:var(--muted)">${t('قريبًا','Soon')}</span>`}</div></div>`;
+}
+function render(){
+  const q=strip($('q').value.trim());
+  const ok=g=>(age==='all'||(g.age||[]).includes(age))&&(!q||strip([g.ar,g.en,g.desc,EN[g.file]||'',g.book].join(' ')).includes(q));
+  const G=(window.GAMES||[]).filter(ok),Ls=(window.LESSONS||[]).filter(ok);
+  let html='',jump='';
+  const block=(items,dir,icon,titleAr,titleEn,idp)=>{
+    if(!items.length)return;
+    html+=`<h2 class="kind" id="${idp}">${icon} ${t(titleAr,titleEn)} <em style="font-size:.9rem;color:var(--muted);font-style:normal">${num(items.length)}</em></h2>`;
+    jump+=`<a href="#${idp}" style="--c:var(--gold)"><span>${icon} ${t(titleAr,titleEn)}</span><em>${num(items.length)}</em></a>`;
+    Object.keys(SUBJ).forEach(k=>{const it=items.filter(g=>subjs(g)[0]===k);if(!it.length)return;
+      html+=`<h3 class="grp" id="${idp}-${k}" style="--c:${SUBJ[k].c}"><span>${SUBJ[k].ico} ${t(SUBJ[k].ar,SUBJ[k].en)} <em>${num(it.length)}</em></span><small>${t(SUBJ[k].d[0],SUBJ[k].d[1])}</small></h3><div class="rows">${it.map(g=>row(g,dir)).join('')}</div>`;
+      jump+=`<a href="#${idp}-${k}" style="--c:${SUBJ[k].c}"><span>&nbsp;&nbsp;${SUBJ[k].ico} ${t(SUBJ[k].ar,SUBJ[k].en)}</span><em>${num(it.length)}</em></a>`});
+    const rest=items.filter(g=>!subjs(g).length);if(rest.length)html+=`<div class="rows">${rest.map(g=>row(g,dir)).join('')}</div>`;
+  };
+  block(Ls,'lessons/','📘','الدروس','Lessons','l');
+  block(G,'games/','🎮','الألعاب','Games','g');
+  $('list').innerHTML=html||`<p class="empty">${t('لا توجد نتائج.','No results.')}</p>`;
+  $('jump').innerHTML=jump;
+}
+function draw(){
+  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  $('lang').textContent='🌐 '+(lang==='ar'?'English':'عربي');
+  $('q').placeholder=t('🔎 ابحث: مد، نون، حفظ، لعبة…','🔎 Search: madd, nun, hifz, game…');
+  render();
+}
+$('lang').onclick=()=>{lang=lang==='ar'?'en':'ar';store.set('tq-lang',lang);draw()};
+$('q').oninput=render;
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{age=c.dataset.a;document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===c));render()});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA/.test(e.target.tagName)){e.preventDefault();$('q').focus()}});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;
+  const url=new URL(b.dataset.copy,location.href).href,done=()=>{const x=document.createElement('div');x.className='toast';x.textContent=t('✓ تم نسخ الرابط','✓ Link copied');document.body.appendChild(x);setTimeout(()=>x.remove(),1500)};
+  (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(done,()=>{const i=document.createElement('input');i.value=url;document.body.appendChild(i);i.select();try{document.execCommand('copy')}catch(_){}i.remove();done()})});
+$('rand').onclick=()=>{const pool=(window.GAMES||[]).filter(g=>g.file&&subjs(g).includes('class'));if(pool.length)location.href='games/'+pool[Math.floor(Math.random()*pool.length)].file};
+
+/* class timer */
+let mins=5,left=300,iv=null;
+const show=()=>{const m=Math.floor(left/60),s=left%60;$('tout').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('tout').classList.toggle('end',left===0&&iv!==null)};
+function beep(){try{const a=new (window.AudioContext||window.webkitAudioContext)();[0,.3,.6].forEach(d=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=880;g.gain.setValueAtTime(.2,a.currentTime+d);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d+.25);o.connect(g).connect(a.destination);o.start(a.currentTime+d);o.stop(a.currentTime+d+.26)})}catch(e){}}
+function stop(){clearInterval(iv);iv=null;$('tgo').textContent=t('ابدأ','Start')}
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{mins=+b.dataset.m;left=mins*60;stop();show()});
+$('tgo').onclick=()=>{if(iv){stop();return}if(left<=0)left=mins*60;$('tgo').textContent=t('إيقاف مؤقت','Pause');
+  iv=setInterval(()=>{left--;if(left<=0){left=0;clearInterval(iv);beep();show();setTimeout(()=>{stop();show()},3000);return}show()},1000);show()};
+$('trs').onclick=()=>{stop();left=mins*60;show()};
+show();draw();
+</script>
+</body>
+</html>

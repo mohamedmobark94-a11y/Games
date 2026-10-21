@@ -18,6 +18,20 @@ window.SITE = {
                note:'أسبوع اللغة العربية: الجملة المفيدة، أنواع الكلمة، الفعل، الفاعل، المبتدأ والخبر…'}
 };
 
+/* التخصصات (تُستعمل في الصفحة الرئيسية ولوحة المعلم) — أول تخصص في كل لعبة هو القسم الذي تظهر فيه */
+window.SUBJECTS={tajweed:{ar:'التجويد',en:'Tajweed',ico:'📖',c:'var(--tajweed)',
+    d:['أحكام التلاوة: المخارج والصفات والمد والنون والمد والوقف.','Rules of recitation: articulation points, characteristics, madd, nūn & mīm, stopping.']},
+  hifz:{ar:'الحفظ',en:'Memorisation',ico:'🧠',c:'var(--hifz)',
+    d:['طرق الحفظ والمراجعة والسند وإتقان الآيات.','Methods for memorising, reviewing and mastering verses.']},
+  arabic:{ar:'اللغة العربية',en:'Arabic language',ico:'✍️',c:'var(--arabic)',
+    d:['الحروف والمفردات والكلمات لمن يبدأ القراءة والكتابة.','Letters, vocabulary and words for those starting to read and write.']},
+  nahw:{ar:'النحو',en:'Grammar (Naḥw)',ico:'🧩',c:'#C39BD3',
+    d:['الجملة وأنواع الكلمة والفعل والفاعل والمبتدأ والخبر.','The sentence, kinds of words, verbs, subjects and predicates.']},
+  islamic:{ar:'الإسلاميات',en:'Islamic studies',ico:'🕌',c:'var(--islamic)',
+    d:['الفقه والأخلاق والعقيدة بالأدلة، ومواقف من الحياة.','Fiqh, character and belief with evidence, and real-life situations.']},
+  class:{ar:'للحلقة',en:'For the class',ico:'🎉',c:'#FF8FB1',
+    d:['ألعاب تسلية للاستراحة وتنشيط الحلقة بين الفقرات.','Fun games for a break and to keep the class lively between activities.']}};
+
 window.GAMES = [
   {file:'xo-showdown.html', date:'2026-10-21', ico:'⭕', ar:'إِكْس أُو: مُنَافَسَةُ الفَصْل', en:'XO: The Class Showdown', age:['kids','teens','adults'], subj:'class',
    desc:'إكس أو للاستراحة: العبوا الكلاسيكية، أو اكسبوا كل خانة بسؤال سريع في الحروف والإسلاميات والعربية. فريقان أو ضد الكمبيوتر.', book:'لعبة تسلية'},

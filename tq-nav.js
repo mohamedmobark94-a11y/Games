@@ -5,7 +5,7 @@
   if(window.__tqNav)return;window.__tqNav=1;
   var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
   var lang=store.get('tq-lang')||((navigator.language||'').toLowerCase().indexOf('ar')===0?'ar':'en');
-  var T={home:['الرئيسية','Home'],back:['رجوع','Back'],next:['التالية','Next'],other:['English','عربي'],nav:['التنقل','Site navigation'],book:['احجز','Book']};
+  var T={home:['الرئيسية','Home'],back:['رجوع','Back'],next:['التالية','Next'],other:['English','عربي'],nav:['التنقل','Site navigation'],book:['احجز','Book'],teacher:['المعلم','Teacher'],site:['الموقع','Website']};
   var t=function(k){return T[k][lang==='ar'?0:1]};
 
   var css=document.createElement('style');
@@ -16,7 +16,10 @@
   '#tqBar .sp{flex:1}'+
   '#tqBar :focus-visible{outline:3px solid #E2B85C;outline-offset:2px}'+
   '@media (max-width:520px){#tqBar{gap:4px;padding-inline:6px}#tqBar a,#tqBar button{padding:0 10px}#tqBar .lbl{display:none}#tqBar .home .lbl{display:inline}}'+
-  '@media print{#tqBar{display:none}}';
+  '#tqFloat{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));inset-inline-start:8px;z-index:2147483000;display:none;gap:4px;padding:4px;border-radius:999px;background:rgba(11,30,45,.92);border:2px solid #E2B85C;box-shadow:0 2px 12px rgba(0,0,0,.35);font:700 14px/1 "Baloo Bhaijaan 2","Segoe UI",system-ui,sans-serif;direction:ltr}'+
+  '#tqFloat a{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 12px;border-radius:999px;color:#F4EBD6;text-decoration:none;white-space:nowrap}'+
+  '#tqFloat a:first-child{background:#E2B85C;color:#10263A}#tqFloat a:hover{outline:2px solid #fff}'+
+  '@media print{#tqBar,#tqFloat{display:none!important}}';
   document.head.appendChild(css);
 
   var bar=document.createElement('nav');bar.id='tqBar';bar.setAttribute('aria-label',t('nav'));
@@ -29,6 +32,7 @@
     bar.setAttribute('aria-label',t('nav'));
     bar.innerHTML='<a class="home" href="'+home+'">🏠 <span class="lbl">'+t('home')+'</span></a>'+
       '<button type="button" id="tqBack">← <span class="lbl">'+t('back')+'</span></button>'+
+      '<a class="tch" href="../teacher.html" title="'+t('teacher')+'">👩‍🏫 <span class="lbl">'+t('teacher')+'</span></a>'+
       '<span class="sp"></span>'+
       (nextHref?'<a href="'+nextHref+'" id="tqNext"><span class="lbl">'+t('next')+'</span> ▶</a>':'')+
       '<button type="button" id="tqLang" aria-label="Language / اللغة">🌐 '+t('other')+'</button>';
@@ -45,12 +49,18 @@
     b.dataset.lang=lang;document.documentElement.setAttribute('data-lang',lang);
     window.dispatchEvent(new CustomEvent('tq-lang',{detail:lang}));
   }
-  function setLang(l){lang=l;store.set('tq-lang',l);draw();applyToPage()}
-  new MutationObserver(function(){var on=document.body.classList.contains('show-en');if(on!==(lang==='en')){lang=on?'en':'ar';store.set('tq-lang',lang);draw();window.dispatchEvent(new CustomEvent('tq-lang',{detail:lang}))}})
+  function setLang(l){lang=l;store.set('tq-lang',l);draw();if(window.__tqFloat)window.__tqFloat();applyToPage()}
+  new MutationObserver(function(){var on=document.body.classList.contains('show-en');if(on!==(lang==='en')){lang=on?'en':'ar';store.set('tq-lang',lang);draw();if(window.__tqFloat)window.__tqFloat();window.dispatchEvent(new CustomEvent('tq-lang',{detail:lang}))}})
     .observe(document.body,{attributes:true,attributeFilter:['class']});
   window.TQ={get lang(){return lang},t:function(ar,en){return lang==='ar'?ar:en},onLang:function(f){window.addEventListener('tq-lang',function(e){f(e.detail)})}};
 
-  draw();
+  /* a small always-reachable "Website / Teacher" pill that appears whenever the top bar is scrolled away or the page is full screen */
+  var fl=document.createElement('div');fl.id='tqFloat';fl.setAttribute('role','navigation');document.body.appendChild(fl);
+  function drawFloat(){var home='../'+(dir==='lessons'?'#lessons':'');fl.innerHTML='<a href="'+home+'">🏠 '+t('site')+'</a><a href="../teacher.html" title="'+t('teacher')+'">👩‍🏫</a>'}
+  var barSeen=true;function upd(){fl.style.display=(!barSeen||document.fullscreenElement||document.webkitFullscreenElement)?'inline-flex':'none'}
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){barSeen=es[0].isIntersecting;upd()},{threshold:.2}).observe(bar);
+  document.addEventListener('fullscreenchange',upd);document.addEventListener('webkitfullscreenchange',upd);
+  window.__tqFloat=drawFloat;draw();drawFloat();
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyToPage);else applyToPage();
 
   /* "Next" = the following item in the same list on the home page */
