@@ -75,8 +75,7 @@ function confetti(n=60){if(matchMedia('(prefers-reduced-motion: reduce)').matche
 const WORDS=[['كِتَاب','Book','📖'],['قَمَر','Moon','🌙'],['شَمْس','Sun','☀️'],['بَيْت','House','🏠'],['قَلَم','Pen','✏️'],['سَمَكَة','Fish','🐟'],['تُفَّاحَة','Apple','🍎'],['نَجْمَة','Star','⭐'],['وَرْدَة','Rose','🌹'],['قِطَّة','Cat','🐱'],['سَيَّارَة','Car','🚗'],['مَسْجِد','Mosque','🕌'],['شَجَرَة','Tree','🌳'],['كُرَة','Ball','⚽'],['مَدْرَسَة','School','🏫'],['مُعَلِّم','Teacher','👨‍🏫'],['قُرْآن','Qur’an','📗'],['صَلَاة','Prayer','🕋'],['رَمَضَان','Ramadan','🌙'],['حَلِيب','Milk','🥛']];
 const LETTERS='ابتثجحخدذرزسشصضطظعغفقكلمنهوية'.split('');
 const norm=s=>s.replace(/[ً-ٰٟـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي');
-const MAX=6;let cur,letters,lives,used,over,turn,sc,rounds=0,order=[],played=0,won=0;
-window.TQHW_GET=()=>({score:won,max:played,detail:played+' words'});
+const MAX=6;let cur,letters,lives,used,over,turn,sc,rounds=0,order=[];
 const names=()=>$('#plSel').value==='2'?[['🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'],['🌸 الفَرِيقُ الوَرْدِيّ','🌸 Pink team']]:[['⭐ نِقَاطِي','⭐ My points']];
 function drawTeams(){const n=names();$('#teams').innerHTML=n.map((t,i)=>`<div class="team ${i===turn&&!over?'now':''}" style="--tc:${i?'var(--pink)':'var(--sky)'}"><span class="nm">${U(...t)}</span><span class="sc">${sc[i]}</span></div>`).join('')}
 function draw(){const w=norm(cur[0]).split('');
@@ -87,8 +86,8 @@ function draw(){const w=norm(cur[0]).split('');
   $('#hintB').hidden=over;drawTeams()}
 function newWord(){do{cur=WORDS[Math.floor(Math.random()*WORDS.length)]}while(order.includes(cur[0])&&order.length<WORDS.length);order.push(cur[0]);if(order.length>8)order.shift();
   lives=MAX;used=new Set();over=false;$('#again').hidden=true;$('#msg').innerHTML=U('اخْتَرْ حَرْفًا','Pick a letter');draw()}
-function end(wn){played++;if(wn)won++;over=true;const n=names();$('#again').hidden=false;
-  if(wn){sc[turn]++;sfx.win();confetti();$('#msg').innerHTML=U('🎉 أَحْسَنْتَ! الكَلِمَةُ: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span>','🎉 Well done! The word: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span> = '+cur[1])}
+function end(won){over=true;const n=names();$('#again').hidden=false;
+  if(won){sc[turn]++;sfx.win();confetti();$('#msg').innerHTML=U('🎉 أَحْسَنْتَ! الكَلِمَةُ: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span>','🎉 Well done! The word: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span> = '+cur[1])}
   else{sfx.bad();$('#msg').innerHTML=U('😔 الكَلِمَةُ كَانَتْ: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span>','😔 The word was: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span> = '+cur[1])}
   if(n.length>1)turn=1-turn;draw()}
 const solved=()=>norm(cur[0]).split('').every(c=>used.has(c));

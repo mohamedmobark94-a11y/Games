@@ -72,6 +72,4 @@
     if(i>=0){var n=live[(i+1)%live.length];if(n&&n.file!==here){nextHref=n.file;draw()}}
   };
   document.head.appendChild(s);
-  /* homework links (?hw=…) get a banner and a "send my result" button */
-  if(/[?&]hw=/.test(location.search)){var h=document.createElement('script');h.src='../tq-hw.js';document.head.appendChild(h)}
 })();
