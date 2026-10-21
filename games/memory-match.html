@@ -80,6 +80,7 @@ function confetti(n=60){if(matchMedia('(prefers-reduced-motion: reduce)').matche
 const WORDS=[['كِتَاب','Book','📖'],['قَمَر','Moon','🌙'],['شَمْس','Sun','☀️'],['بَيْت','House','🏠'],['قَلَم','Pen','✏️'],['سَمَكَة','Fish','🐟'],['تُفَّاحَة','Apple','🍎'],['نَجْمَة','Star','⭐'],['مَاء','Water','💧'],['وَرْدَة','Rose','🌹'],['قِطَّة','Cat','🐱'],['سَيَّارَة','Car','🚗'],['مَسْجِد','Mosque','🕌'],['شَجَرَة','Tree','🌳'],['بَاب','Door','🚪'],['كُرَة','Ball','⚽']];
 const num=n=>document.body.classList.contains('show-en')?n:String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 let cards,open,lock,turn,sc,moves,found,pairs;
+window.TQHW_GET=()=>({score:found||0,max:pairs||0,detail:(moves||0)+' moves'});
 const names=()=>$('#plSel').value==='2'?[['🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'],['🌸 الفَرِيقُ الوَرْدِيّ','🌸 Pink team']]:[['⭐ نِقَاطِي','⭐ My pairs']];
 function drawTeams(){const n=names();$('#teams').innerHTML=n.map((t,i)=>`<div class="team ${i===turn&&found<pairs?'now':''}" style="--tc:${i?'var(--pink)':'var(--sky)'}"><span class="nm">${U(...t)}</span><span class="sc">${sc[i]}</span></div>`).join('')+(n.length===1?`<div class="team" style="--tc:var(--muted)"><span class="nm">👆 ${U('المُحَاوَلَات','Moves')}</span><span class="sc">${moves}</span></div>`:'')}
 function newGame(){pairs=+$('#szSel').value;const pick=shuffle(WORDS).slice(0,pairs);

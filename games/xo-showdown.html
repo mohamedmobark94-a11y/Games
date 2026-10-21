@@ -132,6 +132,7 @@ function pickQuestion(){
   const idx=shuffle(q.o.map((_,i)=>i));return {q:q.q,o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a),x:q.x,raw:false};
 }
 let board,turn,starter='X',score={X:0,O:0,D:0},over,busy;
+window.TQHW_GET=()=>({score:score.X,max:score.X+score.O+score.D,detail:'W'+score.X+' L'+score.O+' D'+score.D});
 const names=()=>$('#oppSel').value==='ai'?{X:['👦 أَنْتَ','👦 You'],O:['🤖 الكُمْبِيُوتَر','🤖 Computer']}:{X:['🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'],O:['🌸 الفَرِيقُ الوَرْدِيّ','🌸 Pink team']};
 function drawTeams(){const n=names();$('#teams').innerHTML=['X','O'].map(k=>`<div class="team ${turn===k&&!over?'now':''}" style="--tc:${k==='X'?'var(--sky)':'var(--pink)'}"><span class="nm">${k==='X'?'❌':'⭕'} ${U(...n[k])}</span><span class="sc">${score[k]}</span></div>`).join('')+`<div class="team" style="--tc:var(--muted)"><span class="nm">🤝 ${U('تَعَادُل','Draws')}</span><span class="sc">${score.D}</span></div>`}
 function drawBoard(win){$('#board').innerHTML=board.map((v,i)=>`<button class="cell ${win&&win.includes(i)?'win':''}" data-i="${i}" aria-label="${i+1}" ${v||over||busy?'disabled':''}>${v==='X'?X_SVG:v==='O'?O_SVG:''}</button>`).join('')}

@@ -68,6 +68,16 @@ html[lang=en] .row b{font-family:var(--f-en);font-size:1.05rem}
 .empty{color:var(--muted);text-align:center;padding:20px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--btn-ink);font-weight:800;border-radius:999px;padding:6px 20px;z-index:60}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}.field label{font-weight:700;font-size:.85rem;color:var(--muted)}
+.field input,.field select,.field textarea{font:inherit;font-size:.95rem;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:12px;padding:6px 10px;min-height:40px;width:100%}
+.hwout{display:flex;flex-direction:column;gap:6px;margin-top:8px}.hwout input{font-size:.75rem;direction:ltr}
+table.res{width:100%;border-collapse:collapse;font-size:.9rem}table.res th,table.res td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:start;vertical-align:top}table.res th{color:var(--gold);font-size:.8rem}
+table.res tr.new{background:color-mix(in srgb,var(--wa) 16%,transparent)}
+.sc{font-weight:800;font-variant-numeric:tabular-nums}.sc.hi{color:#7BD88F}.sc.lo{color:#FF8A80}
+.resbox{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:14px}
+.resbox h2{margin:0 0 8px;font-size:1.3rem}
+.tw{overflow-x:auto}
 </style>
 </head>
 <body>
@@ -87,6 +97,12 @@ html[lang=en] .row b{font-family:var(--f-en);font-size:1.05rem}
       <div class="timer"><output id="tout" aria-live="off">05:00</output>
         <div class="trow"><button class="btn" data-m="1">1</button><button class="btn" data-m="3">3</button><button class="btn" data-m="5">5</button><button class="btn" data-m="10">10</button><button class="btn" data-m="15">15</button></div>
         <div class="trow"><button class="btn gold" id="tgo"><span class="ar">ابدأ</span><span class="en">Start</span></button><button class="btn" id="trs"><span class="ar">إعادة</span><span class="en">Reset</span></button></div></div></div>
+    <div class="panel" id="hwp"><h2><span class="ar">📚 رابط واجب</span><span class="en">📚 Homework link</span></h2>
+      <div class="field"><label for="hwItem"><span class="ar">الدرس أو اللعبة</span><span class="en">Lesson or game</span></label><select id="hwItem"></select></div>
+      <div class="field"><label for="hwName"><span class="ar">اسم الطالب</span><span class="en">Student name</span></label><input id="hwName" autocomplete="off"></div>
+      <div class="field"><label for="hwNote"><span class="ar">ملاحظة (اختياري)</span><span class="en">Note (optional)</span></label><input id="hwNote" autocomplete="off"></div>
+      <button class="btn gold" id="hwMake" style="width:100%"><span class="ar">إنشاء الرابط</span><span class="en">Create the link</span></button>
+      <div class="hwout" id="hwOut" hidden><input id="hwLink" readonly aria-label="link"><div class="trow"><button class="btn" id="hwCopy">🔗 <span class="ar">نسخ</span><span class="en">Copy</span></button><a class="btn wa" id="hwWa" target="_blank" rel="noopener">📲 <span class="ar">أرسل</span><span class="en">Send</span></a></div></div></div>
     <div class="panel"><h2><span class="ar">🧭 الأقسام</span><span class="en">🧭 Topics</span></h2><nav class="jump" id="jump" aria-label="Topics"></nav></div>
   </aside>
   <main>
@@ -97,11 +113,16 @@ html[lang=en] .row b{font-family:var(--f-en);font-size:1.05rem}
       <button class="chip" data-a="teens" aria-pressed="false">🧑 <span class="ar">مراهقون</span><span class="en">Teens</span></button>
       <button class="chip" data-a="adults" aria-pressed="false">🧔 <span class="ar">كبار</span><span class="en">Adults</span></button>
     </div>
+    <section class="resbox" id="results"><h2><span class="ar">📥 نتائج الواجبات</span><span class="en">📥 Homework results</span></h2>
+      <p style="margin:0 0 8px;color:var(--muted);font-size:.88rem"><span class="ar">الطالب يضغط «أنهيت: أرسل النتيجة» فتصلك رسالة واتساب برابط؛ افتح الرابط هنا وتتحفظ النتيجة تلقائيًا على جهازك.</span><span class="en">The student taps “Done: send my result” and you get a WhatsApp message with a link; open it here and the result is saved on this device.</span></p>
+      <div class="tools"><input class="search" id="paste" aria-label="paste"><button class="btn" id="imp"><span class="ar">إضافة نتيجة</span><span class="en">Add result</span></button><button class="btn" id="csv">⬇ CSV</button><button class="btn" id="clr">🗑</button></div>
+      <div class="tw"><table class="res" id="restab"></table></div></section>
     <div id="list"></div>
   </main>
 </div>
 
 <script src="games.js"></script>
+<script src="tq-hw.js"></script>
 <script>
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let lang=store.get('tq-lang')||((navigator.language||'').toLowerCase().startsWith('ar')?'ar':'en');
@@ -166,7 +187,37 @@ document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{mins=+b.dataset.
 $('tgo').onclick=()=>{if(iv){stop();return}if(left<=0)left=mins*60;$('tgo').textContent=t('إيقاف مؤقت','Pause');
   iv=setInterval(()=>{left--;if(left<=0){left=0;clearInterval(iv);beep();show();setTimeout(()=>{stop();show()},3000);return}show()},1000);show()};
 $('trs').onclick=()=>{stop();left=mins*60;show()};
-show();draw();
+
+/* ---------- homework links ---------- */
+function fillItems(){const o=(arr,dir,lab)=>`<optgroup label="${lab}">${(arr||[]).filter(g=>g.file).map(g=>`<option value="${dir}${g.file}" data-t="${esc(g.en)}">${esc(lang==='ar'?g.ar:g.en)}</option>`).join('')}</optgroup>`;
+  const cur=$('hwItem').value;$('hwItem').innerHTML=o(window.LESSONS,'lessons/',t('الدروس','Lessons'))+o(window.GAMES,'games/',t('الألعاب','Games'));if(cur)$('hwItem').value=cur}
+$('hwMake').onclick=()=>{const code=TQHWCodec.enc({s:$('hwName').value.trim(),n:$('hwNote').value.trim(),d:new Date().toISOString().slice(0,10)});
+  const url=new URL($('hwItem').value+'?hw='+code,location.href).href;$('hwLink').value=url;$('hwOut').hidden=false;
+  const nm=$('hwName').value.trim(),msg=(lang==='ar'?`السلام عليكم${nm?' '+nm:''}، هذا واجبك: `:`Assalamu alaikum${nm?' '+nm:''}, here is your homework: `)+url+(lang==='ar'?'\nعند الانتهاء اضغط «أنهيت: أرسل النتيجة».':'\nWhen you finish, tap “Done: send my result”.');
+  $('hwWa').href='https://wa.me/?text='+encodeURIComponent(msg)};
+$('hwCopy').onclick=()=>{$('hwLink').select();const u=$('hwLink').value;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast(),()=>{try{document.execCommand('copy')}catch(e){}toast()})};
+function toast(){const x=document.createElement('div');x.className='toast';x.textContent=t('✓ تم النسخ','✓ Copied');document.body.appendChild(x);setTimeout(()=>x.remove(),1500)}
+
+/* ---------- results (kept on this device) ---------- */
+let R=[];try{R=JSON.parse(store.get('tq-results')||'[]')}catch(e){}
+const saveR=()=>store.set('tq-results',JSON.stringify(R));
+function addResult(r,mark){if(!r||!r.f)return false;const key=r.d+'|'+r.s+'|'+r.f;if(R.some(x=>x.d+'|'+x.s+'|'+x.f===key))return false;r.new=!!mark;R.unshift(r);R.sort((a,b)=>(b.d||'').localeCompare(a.d||''));saveR();return true}
+function parseAny(txt){txt=String(txt).trim();const m=txt.match(/[#&?]r=([A-Za-z0-9_-]+)/)||txt.match(/^([A-Za-z0-9_-]{20,})$/);if(!m)return null;try{return TQHWCodec.dec(m[1])}catch(e){return null}}
+function drawResults(){
+  const dt=d=>{try{return new Date(d).toLocaleString(lang==='ar'?'ar-EG':'en-GB',{dateStyle:'medium',timeStyle:'short'})}catch(e){return d}};
+  const mm=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+  $('restab').innerHTML=R.length?`<thead><tr><th>${t('التاريخ','Date')}</th><th>${t('الطالب','Student')}</th><th>${t('الدرس/اللعبة','Item')}</th><th>${t('الدرجة','Score')}</th><th>${t('الوقت','Time')}</th><th>${t('ملاحظة','Note')}</th></tr></thead><tbody>`+R.map(r=>{const p=r.mx?r.sc/r.mx:null;
+    return `<tr class="${r.new?'new':''}"><td>${esc(dt(r.d))}</td><td>${esc(r.s||'-')}</td><td>${esc((lang==='en'&&r.te)||r.ti||r.f)}</td><td class="sc ${p==null?'':p>=.8?'hi':p<.5?'lo':''}">${r.mx!=null?esc(r.sc+' / '+r.mx)+(r.dt?`<br><small>${esc(r.dt)}</small>`:''):'—'}</td><td>${mm(r.t||0)}<br><small>${num(r.c||0)} ${t('نقرة','taps')}</small></td><td>${esc(r.n||'')}</td></tr>`}).join('')+'</tbody>'
+    :`<tbody><tr><td class="empty">${t('لا توجد نتائج بعد.','No results yet.')}</td></tr></tbody>`;
+  $('paste').placeholder=t('الصق رابط النتيجة أو الرمز هنا','Paste a result link or code here')}
+$('imp').onclick=()=>{const r=parseAny($('paste').value);if(r&&addResult(r,true)){$('paste').value='';drawResults()}else toast2(t('الرابط غير صالح أو مضاف من قبل','Invalid link, or already added'))};
+function toast2(m){const x=document.createElement('div');x.className='toast';x.textContent=m;document.body.appendChild(x);setTimeout(()=>x.remove(),2200)}
+$('clr').onclick=()=>{if(R.length&&confirm(t('حذف كل النتائج المحفوظة على هذا الجهاز؟','Delete all results saved on this device?'))){R=[];saveR();drawResults()}};
+$('csv').onclick=()=>{const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';const csv='\ufeffdate,student,item,score,max,time_sec,taps,note\n'+R.map(r=>[r.d,r.s,r.ti,r.sc,r.mx,r.t,r.c,r.n].map(q).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='homework-results.csv';a.click()};
+function fromHash(){const r=parseAny(location.hash);if(r){const added=addResult(r,true);history.replaceState(null,'',location.pathname);drawResults();$('results').scrollIntoView();toast2(added?t('✓ تمت إضافة النتيجة','✓ Result added'):t('هذه النتيجة موجودة مسبقًا','This result is already saved'))}}
+const _draw=draw;draw=function(){_draw();fillItems();drawResults()};
+show();draw();fromHash();window.addEventListener('hashchange',fromHash);
 </script>
 </body>
 </html>

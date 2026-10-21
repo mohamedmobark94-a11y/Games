@@ -465,6 +465,7 @@ function finish(){
  let total=Math.round(S.order.reduce((t,qi)=>t+g[qi]*PER,0)*2)/2;
  const pct=total;const used=Math.round((S.finishedAt-S.start)/60000);
  const secs=SECS.map((s,i)=>{const qs=Q.map((q,k)=>k).filter(k=>Q[k].s===i);const got=qs.reduce((t,k)=>t+g[k],0);return {name:secName(i),got,max:qs.length,p:Math.round(got/qs.length*100)}});
+ window.TQHW_GET=()=>({score:total,max:100,detail:secs.map(s=>s.name.replace(/[\u064B-\u0652]/g,'')+' '+s.p+'%').join(', ')});
  const date=new Date(S.finishedAt).toLocaleDateString(E()?'en-GB':'ar-EG',{year:'numeric',month:'long',day:'numeric'});
  const nOk=S.order.filter(x=>g[x]===1).length,nBad=S.order.filter(x=>g[x]===0).length,nPart=S.order.length-nOk-nBad;
  const summary=E()?`Youth Fiqh Exam result\nName: ${S.name}${S.group?'\nGroup: '+S.group:''}\nScore: ${total} / 100 (${label(pct)})\nDate: ${date} · Time: ${used} min\n`+secs.map(s=>`- ${s.name}: ${s.p}%`).join('\n'):`نتيجة اختبار فقه الشباب\nالاسم: ${S.name}${S.group?'\nالمجموعة: '+S.group:''}\nالدرجة: ${total} / 100 (${label(pct).replace(/[ً-ْ]/g,'')})\nالتاريخ: ${date} · الوقت: ${used} دقيقة\n`+secs.map(s=>`- ${s.name.replace(/[ً-ْ]/g,'')}: ${s.p}%`).join('\n');

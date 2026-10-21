@@ -393,6 +393,7 @@ function lockIn(){
 /* ---------- end + confidence report ---------- */
 function endGame(){
   renderProg();$('#progI').style.width='100%';$('#progT').innerHTML=U('انْتَهَتِ الجَوْلَة!','Round complete!');
+  window.TQHW_GET=()=>{const all=teams.flatMap(t=>t.log);return {score:all.filter(x=>x.ok).length,max:all.length,detail:teams.map(t=>t.coins+' coins').join(' / ')}};
   const max=Math.max(...teams.map(t=>t.coins)),win=teams.filter(t=>t.coins===max);
   const msg=teams.length===1?`رَصِيدُكَ النِّهَائِيّ: ${ar(max)} 🪙`:win.length>1?'تَعَادُل! أَحْسَنْتُمْ جَمِيعًا':`فَازَ ${win[0].nm}!`;
   const msgEn=teams.length===1?`Final balance: ${max} 🪙`:win.length>1?"It's a tie! Well done, everyone":`${win[0].en} wins!`;
