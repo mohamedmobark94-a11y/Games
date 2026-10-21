@@ -74,6 +74,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
+<script src="quran-data.js"></script>
 <script>
 (function(){
   const esc = TQ.esc, $ = id => document.getElementById(id), app = $('app');
@@ -149,10 +150,11 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     app.innerHTML = '<h2>📥 التسليمات' + (waiting ? ' <span class="muted small">(' + waiting + ' مستنيين ردّك)</span>' : '') + '</h2>' + list.map(x => {
       const t = x.assignment_targets || {}, a = t.assignments || {}, s = t.students || {}, items = (a.content && a.content.items) || [];
       const wrong = ((x.answers && x.answers.mcq) || []).filter(m => !m.right);
-      const rec = ((x.answers && x.answers.recite) || []);
+      const rec = ((x.answers && x.answers.recite) || []), lis = ((x.answers && x.answers.listen) || []);
       return '<div class="card' + (x.status === 'submitted' ? ' new' : '') + '" data-id="' + x.id + '">' +
         '<div class="row"><b style="font-size:1.1rem">' + esc(nm(s)) + '</b><span class="muted">· ' + esc(a.title) + '</span><span class="st ' + x.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[x.status] + '</span><span class="muted small" style="margin-inline-start:auto">' + day(x.submitted_at) + '</span></div>' +
         (x.max_score ? '<div class="score">' + x.score + ' / ' + x.max_score + '</div>' : '') +
+        (lis.length ? '<div class="small">' + lis.map(l => { const it = items[l.i] || {}; return '🎧 ' + esc(it.say || ('آية ' + (l.i + 1))) + ' — ' + (l.done ? '<b style="color:var(--ok)">خلّص ' + l.reps_done + '/' + l.reps + ' ✓</b>' : '<b style="color:var(--bad)">' + l.reps_done + '/' + l.reps + ' (ما خلّصش)</b>'); }).join('<br>') + '</div>' : '') +
         (wrong.length ? '<div class="small muted">غلط في: ' + wrong.map(m => { const it = items[m.i] || {}; const o = (it.options || [])[m.chose]; return 'س' + (m.i + 1) + (o != null ? ' (اختار «' + esc(typeof o === 'object' ? o.ar : o) + '»)' : ' (ما جاوبش)'); }).join('، ') + '</div>' : '') +
         rec.map(p => { const it = items[p.i] || {}; return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (it.say ? ' · ' + esc(it.say) : '') + '</div>' + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') + (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') + '</div>'; }).join('') +
         '<label>ردّك للطالب</label><textarea data-fb>' + esc(x.feedback || '') + '</textarea>' +
@@ -179,7 +181,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       '<label>لينك درس أو لعبة يفتحها الطالب (اختياري)</label><input id="f_url" dir="ltr" value="' + esc(d.page_url) + '" placeholder="https://…">' +
       '<label>رسالة للطالب في الأول (اختياري)</label><textarea id="f_intro">' + esc(d.intro) + '</textarea></div>' +
       '<div class="card"><h2>الأسئلة والتسميع</h2><div id="items">' + d.items.map(itemForm).join('') + '</div>' +
-      '<div class="row" style="margin-top:10px"><button class="btn ghost" id="addQ">➕ سؤال اختيارات</button><button class="btn ghost" id="addR">🎙️ تسميع بالصوت</button></div></div>' +
+      '<div class="row" style="margin-top:10px"><button class="btn ghost" id="addQ">➕ سؤال اختيارات</button><button class="btn ghost" id="addR">🎙️ تسميع بالصوت</button><button class="btn ghost" id="addL">🎧 واجب قرآن (استماع + تسميع)</button></div></div>' +
       '<div class="card"><h2>لمين؟</h2><div class="row" id="who">' + students.filter(s => s.active).map(s => '<button class="chip' + (d.who.includes(s.id) ? ' on' : '') + '" data-s="' + s.id + '">' + esc(s.name_ar) + '</button>').join('') + '</div>' +
       '<div class="row" style="margin-top:14px"><button class="btn" id="save">💾 احفظ وطلّع اللينكات</button><button class="btn ghost" id="reset">ابدأ من الأول</button></div><div id="out2"></div></div>';
     const sync = () => {
@@ -188,11 +190,20 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         const it = d.items[+el.dataset.it];
         if(it.type === 'mcq'){ it.q = el.querySelector('[data-k=q]').value; it.ayah = el.querySelector('[data-k=ayah]').value;
           it.options = [...el.querySelectorAll('[data-k=o]')].map(x => x.value); const c = el.querySelector('input[type=radio]:checked'); it.answer = c ? +c.value : 0; }
+        else if(it.type === 'quran'){ it.surah = +el.querySelector('[data-k=surah]').value; it.reciter = el.querySelector('[data-k=reciter]').value;
+          it.from = +el.querySelector('[data-k=from]').value; it.to = +el.querySelector('[data-k=to]').value;
+          it.record = el.querySelector('[data-k=record]').checked; it.showtext = el.querySelector('[data-k=showtext]').checked;
+          const n = TQQ.ayat[it.surah - 1]; it.from = Math.min(Math.max(it.from || 1, 1), n); it.to = Math.min(Math.max(it.to || it.from, it.from), n); }
         else { it.say = el.querySelector('[data-k=say]').value; it.text = el.querySelector('[data-k=text]').value; it.ref_audio = el.querySelector('[data-k=ref]').value.trim(); }
       });
     };
     $('addQ').onclick = () => { sync(); d.items.push({type: 'mcq', q: '', ayah: '', options: ['', '', ''], answer: 0}); newView(); };
     $('addR').onclick = () => { sync(); d.items.push({type: 'recite', say: 'سمّع الآيات دي', text: '', ref_audio: ''}); newView(); };
+    $('addL').onclick = () => { sync(); d.items.push({type: 'quran', surah: 1, from: 1, to: TQQ.ayat[0], reps: 3, reciter: TQQ.reciters[0].id, record: true, showtext: true}); newView(); };
+    app.querySelectorAll('[data-k=surah]').forEach(el => el.onchange = () => { const it = d.items[+el.closest('[data-it]').dataset.it]; sync(); it.from = 1; it.to = TQQ.ayat[it.surah - 1]; newView(); });
+    app.querySelectorAll('[data-reps]').forEach(b => b.onclick = () => { sync(); d.items[+b.dataset.reps].reps = +b.dataset.v; newView(); });
+    app.querySelectorAll('[data-prev]').forEach(b => b.onclick = () => { sync(); const it = d.items[+b.dataset.prev]; const a = new Audio(TQQ.audioUrl(it.reciter, it.surah, it.from));
+      a.onerror = () => alert('الصوت ما اشتغلش — جرّب قارئ تاني أو تأكد من النت.'); a.play().catch(() => {}); });
     $('reset').onclick = () => { if(confirm('تمسح اللي كتبته؟')){ draft = blank(); newView(); } };
     app.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { sync(); d.items.splice(+b.dataset.del, 1); newView(); });
     app.querySelectorAll('[data-addo]').forEach(b => b.onclick = () => { sync(); d.items[+b.dataset.addo].options.push(''); newView(); });
@@ -202,7 +213,9 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       if(!d.title.trim()) return alert('اكتب عنوان الواجب.');
       if(!d.items.length && !d.page_url) return alert('ضيف سؤال أو تسميع أو لينك درس.');
       if(!d.who.length) return alert('اختار طالب واحد على الأقل.');
-      const items = d.items.map(it => it.type === 'mcq' ? {type: 'mcq', q: it.q, ayah: it.ayah || undefined, options: it.options.filter(o => o.trim()), answer: it.answer} : {type: 'recite', say: it.say || undefined, text: it.text || undefined, ref_audio: it.ref_audio || undefined});
+      const bad = d.items.find(it => it.type === 'quran' && !(it.surah >= 1 && it.from >= 1 && it.to >= it.from && it.reps >= 1));
+      if(bad) return alert('راجع واجب القرآن: السورة والآيات والتكرار.');
+      const items = d.items.map(it => it.type === 'quran' ? quranItem(it) : it.type === 'mcq' ? {type: 'mcq', q: it.q, ayah: it.ayah || undefined, options: it.options.filter(o => o.trim()), answer: it.answer} : {type: 'recite', say: it.say || undefined, text: it.text || undefined, ref_audio: it.ref_audio || undefined});
       const mcqN = items.filter(i => i.type === 'mcq').length;
       const a = await db.from('assignments').insert({title: d.title.trim(), kind: d.kind, subject: d.subject || null, page_url: d.page_url || null, due_date: d.due_date || null,
         content: {intro: d.intro ? {ar: d.intro} : undefined, items}, max_score: mcqN || null}).select().single();
@@ -213,7 +226,25 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       bindLinks(); draft = blank();
     };
   }
+  /* what is stored for a Qur'an homework item: references only (no Qur'an text); the student's page fetches text and audio */
+  function quranItem(it){
+    const ar = TQQ.nameOf(it.surah, 'ar'), en = TQQ.nameOf(it.surah, 'en'), rng = it.from === it.to ? it.from : it.from + '–' + it.to;
+    return {type: 'quran', surah: it.surah, from: it.from, to: it.to, reps: it.reps, reciter: it.reciter, record: !!it.record, showtext: it.showtext !== false,
+      say: 'استمع ' + it.reps + ' مرات إلى سورة ' + ar + ' (' + rng + ')' + (it.record ? ' ثم سمّعها بصوتك' : ''),
+      say_en: 'Listen ' + it.reps + '× to Surah ' + en + ' (' + rng + ')' + (it.record ? ', then recite it' : '')};
+  }
   function itemForm(it, i){
+    if(it.type === 'quran'){
+      const n = TQQ.ayat[it.surah - 1], opts = (max, sel) => Array.from({length: max}, (_, k) => '<option value="' + (k + 1) + '"' + (sel === k + 1 ? ' selected' : '') + '>' + (k + 1) + '</option>').join('');
+      return '<div class="item" data-it="' + i + '"><div class="row"><b>' + (i + 1) + ' · 🎧 واجب قرآن (استماع + تسميع)</b><button class="btn ghost sm" style="margin-inline-start:auto" data-del="' + i + '">🗑</button></div>' +
+        '<div class="grid2"><div><label>السورة</label><select data-k="surah">' + TQQ.surahs.map((x, k) => '<option value="' + (k + 1) + '"' + (it.surah === k + 1 ? ' selected' : '') + '>' + (k + 1) + ' · ' + x[0] + ' (' + x[1] + ')</option>').join('') + '</select></div>' +
+        '<div><label>القارئ</label><select data-k="reciter">' + TQQ.reciters.map(r => '<option value="' + r.id + '"' + (it.reciter === r.id ? ' selected' : '') + '>' + r.ar + ' · ' + r.en + '</option>').join('') + '</select></div>' +
+        '<div><label>من آية</label><select data-k="from">' + opts(n, it.from) + '</select></div><div><label>إلى آية</label><select data-k="to">' + opts(n, it.to) + '</select></div></div>' +
+        '<label>التكرارات: كم مرة يسمع المقطع؟</label><div class="row">' + [1, 2, 3, 4, 5, 7, 10].map(r => '<button type="button" class="chip' + (it.reps === r ? ' on' : '') + '" data-reps="' + i + '" data-v="' + r + '">×' + r + '</button>').join('') + '</div>' +
+        '<label class="row" style="margin-top:8px"><input type="checkbox" data-k="record" style="width:auto"' + (it.record ? ' checked' : '') + '> بعد الاستماع الطالب يسمّع ويسجّل صوته</label>' +
+        '<label class="row"><input type="checkbox" data-k="showtext" style="width:auto"' + (it.showtext !== false ? ' checked' : '') + '> يعرض نص الآيات للطالب (من quran.com)</label>' +
+        '<div class="row" style="margin-top:6px"><button type="button" class="btn ghost sm" data-prev="' + i + '">🔊 جرّب صوت أول آية</button><span class="small muted">النص والصوت بيتحمّلوا عند الطالب من quran.com و everyayah.com.</span></div></div>';
+    }
     if(it.type === 'mcq') return '<div class="item" data-it="' + i + '"><div class="row"><b>' + (i + 1) + ' · سؤال اختيارات</b><button class="btn ghost sm" style="margin-inline-start:auto" data-del="' + i + '">🗑</button></div>' +
       '<label>السؤال</label><input data-k="q" value="' + esc(it.q) + '">' +
       '<label>آية أو كلمة تظهر فوق الاختيارات (اختياري)</label><input data-k="ayah" value="' + esc(it.ayah || '') + '">' +

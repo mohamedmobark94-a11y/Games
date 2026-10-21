@@ -67,6 +67,7 @@ ul{margin:6px 0;padding-inline-start:22px}
     const stLabel = h => !h.last ? ['todo', T('لسه', 'To do')] : h.last.status === 'redo' ? ['redo', T('أعِد المحاولة', 'Try again')] : h.last.status === 'reviewed' ? ['reviewed', T('المعلم راجعه ✓', 'Checked ✓')] : ['submitted', T('اتبعت', 'Sent')];
     let h = '<div class="hd"><div class="muted">' + T('صفحة', 'The page of') + '</div><h1>' + esc(name) + ' 🌱</h1><div class="stats">' +
       '<div class="stat"><b>' + L.length + '</b>' + T('درس', 'lessons') + '</div><div class="stat"><b>' + todo.length + '</b>' + T('واجب مستني', 'homework to do') + '</div><div class="stat"><b>' + (avg != null ? avg + '%' : '—') + '</b>' + T('متوسط الدرجات', 'average score') + '</div></div></div>';
+    if(todo.length) h += '<a class="btn" style="width:100%;justify-content:center;font-size:1.15rem;min-height:56px;margin-top:14px" href="' + hwUrl(todo[0].token) + '">▶ ' + T('ابدأ واجبك الحالي: ', 'Start your current homework: ') + esc(todo[0].title) + '</a>';
     h += '<h2>📝 ' + T('الواجبات', 'Homework') + '</h2>' + (hw.length ? hw.map(x => { const st = stLabel(x);
       return '<div class="card' + (st[0] === 'todo' || st[0] === 'redo' ? ' todo' : '') + '"><div class="row"><b>' + esc(x.title) + '</b><span class="st ' + st[0] + '">' + st[1] + '</span><span class="date">' + fmt(x.sent_at) + '</span></div>' +
         (x.due_date ? '<div class="small muted">' + T('آخر ميعاد: ', 'Due: ') + fmt(x.due_date) + '</div>' : '') +
