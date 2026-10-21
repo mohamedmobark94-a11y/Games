@@ -61,7 +61,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     <button class="tab on" data-v="inbox">📥 التسليمات<span class="badge" id="nNew" hidden></span></button>
     <button class="tab" data-v="new">✏️ واجب جديد</button>
     <button class="tab" data-v="list">📋 الواجبات</button>
-    <button class="tab" data-v="students">👥 الطلاب</button>
+    <button class="tab" data-v="students">👥 الطلاب<span class="badge" id="nSend" hidden></span></button>
     <button class="tab" data-v="lessons">📚 الدروس</button>
     <button class="tab" data-v="plans">🗂️ الخطط</button>
     <button class="tab" data-v="mushaf">📖 المصحف</button>
@@ -69,6 +69,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     <button class="tab" id="out">خروج</button>
   </div>
 </div></div>
+<div class="wrap" id="pend" style="padding-bottom:0"></div>
 <div class="wrap" id="app"><div class="card muted">…</div></div>
 <div class="flash" id="flash" hidden></div>
 
@@ -117,6 +118,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     const r = await db.from('students').select('*').order('name_ar');
     students = r.data || [];
     go(view);
+    checkPending(); setInterval(checkPending, 60000); document.addEventListener('visibilitychange', () => { if(!document.hidden) checkPending(); });
   }
   document.querySelectorAll('.tab[data-v]').forEach(b => b.onclick = () => go(b.dataset.v));
   function go(v){
@@ -311,6 +313,50 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       const rr = await db.from('students').select('*').order('name_ar'); students = rr.data || [];
       flash('اتحفظ ✓'); studentsView(r.data.id);
     };
+  }
+
+  /* ---------- 🔔 a new lesson was created → send the student's fixed link ----------
+     The site cannot send WhatsApp messages by itself, so: every minute (and when you come back to the tab) it looks for lessons created
+     after the last send for each student, and shows a banner with a ready message + the student's fixed page link (one tap opens WhatsApp). */
+  const kvGet = async k => { const r = await db.from('kv').select('value').eq('key', k).maybeSingle(); return r.data ? r.data.value : null; };
+  const kvSet = (k, v) => db.from('kv').upsert({key: k, value: String(v)});
+  const toMs = l => { const c = l.created; if(typeof c === 'number') return c; if(c && !isNaN(+c)) return +c; const d = Date.parse(c || l.date || ''); return isNaN(d) ? 0 : d; };
+  const pend = {stamp: null, base: 0, sent: {}, phone: {}, list: []};
+  async function checkPending(force){
+    try{
+      const probe = await db.from('docs').select('updated_at').eq('collection', 'lessons').order('updated_at', {ascending: false}).limit(1);
+      const stamp = probe.data && probe.data[0] ? probe.data[0].updated_at : '';
+      if(!force && stamp === pend.stamp && pend.stamp !== null) return;
+      pend.stamp = stamp;
+      let b = await kvGet('portal_baseline'); if(!b){ b = new Date().toISOString(); await kvSet('portal_baseline', b); }   // first run: only lessons created from now on count as new
+      pend.base = Date.parse(b);
+      const [a, c] = await Promise.all([db.from('kv').select('key,value').like('key', 'portal_sent:*'), db.from('kv').select('key,value').like('key', 'phone:*')]);
+      pend.sent = {}; (a.data || []).forEach(x => pend.sent[x.key.slice(12)] = x.value); pend.phone = {}; (c.data || []).forEach(x => pend.phone[x.key.slice(6)] = x.value);
+      const L = await loadLessons(true);
+      pend.list = students.filter(x => x.active).map(x => { const since = Math.max(pend.base, Date.parse(pend.sent[x.id] || '') || 0);
+        return {s: x, fresh: L.filter(l => (x.keys || [x.slug]).includes(l.key) && toMs(l) > since)}; }).filter(x => x.fresh.length);
+      drawPending();
+    }catch(e){ console.warn('pending check', e); }
+  }
+  function sendMsg(s, fresh){
+    const portal = PORTAL + '?k=' + s.portal_token, titles = fresh.slice(0, 3).map(l => l.title).filter(Boolean).join(' · ');
+    const ar = 'السلام عليكم ' + s.name_ar + ' 🌱\nدرس جديد: ' + titles + '\nكل دروسك وواجباتك في صفحتك:\n' + portal;
+    const en = 'Assalamu alaikum ' + (s.name_en || s.name_ar) + ' 🌱\nNew lesson: ' + titles + '\nAll your lessons and homework are on your page:\n' + portal;
+    return s.lang === 'ar' ? ar : s.lang === 'both' ? ar + '\n\n' + en : en;
+  }
+  function drawPending(){
+    const n = pend.list.length; $('nSend').hidden = !n; $('nSend').textContent = n;
+    $('pend').innerHTML = n ? '<div class="card" style="border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)"><h2>🔔 دروس جديدة — ابعت لينك صفحة الطالب (' + n + ')</h2>' +
+      pend.list.map(x => '<div class="item" data-pid="' + x.s.id + '"><div class="row"><b>' + esc(nm(x.s)) + '</b><span class="small muted">' + x.fresh.length + ' درس جديد: ' + esc(x.fresh.slice(0, 2).map(l => l.title).join(' · ')) + '</span></div>' +
+        '<div class="row" style="margin-top:8px"><input data-ph="' + x.s.id + '" dir="ltr" inputmode="tel" placeholder="رقم واتساب بكود الدولة (يتحفظ)" value="' + esc(pend.phone[x.s.id] || '') + '" style="max-width:240px">' +
+        '<button class="btn wa sm" data-send="' + x.s.id + '">📲 ابعت على واتساب</button><button class="btn ghost sm" data-mark="' + x.s.id + '">✓ اتبعت</button></div></div>').join('') +
+      '<p class="small muted">الموقع ما يقدرش يبعت واتساب لوحده: الزر بيفتح واتساب برسالة جاهزة فيها لينك صفحة الطالب، وإنت بتدوس إرسال.</p></div>' : '';
+    $('pend').querySelectorAll('[data-ph]').forEach(i => i.onchange = () => { const v = i.value.replace(/[^0-9]/g, ''); pend.phone[i.dataset.ph] = v; kvSet('phone:' + i.dataset.ph, v); });
+    $('pend').querySelectorAll('[data-send]').forEach(b => b.onclick = async () => {
+      const x = pend.list.find(y => y.s.id === b.dataset.send), ph = (pend.phone[x.s.id] || '').replace(/[^0-9]/g, '');
+      window.open('https://wa.me/' + ph + '?text=' + encodeURIComponent(sendMsg(x.s, x.fresh)), '_blank', 'noopener');
+      await kvSet('portal_sent:' + x.s.id, new Date().toISOString()); pend.sent[x.s.id] = new Date().toISOString(); checkPending(true); });
+    $('pend').querySelectorAll('[data-mark]').forEach(b => b.onclick = async () => { await kvSet('portal_sent:' + b.dataset.mark, new Date().toISOString()); checkPending(true); });
   }
 
   /* ---------- 📚 lessons library (from the generator's «lessons» records) ---------- */
