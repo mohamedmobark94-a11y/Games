@@ -1,0 +1,104 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
+<title>خمّن الكلمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0E1F2E;--bg2:#13293C;--card:#173450;--card2:#1D4062;--ink:#F3F6FA;--muted:#A9BBCC;--line:#2B5274;--gold:#F2C14E;--gold2:#C99A2E;--teal:#2EC4B6;--coral:#FF6B6B;--sky:#4DA8FF;--lime:#7BD88F;--violet:#A98BFF;--pink:#FF8FB1;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(ellipse at 50% -10%,#1F4A70 0,transparent 60%);color:var(--ink);font-family:var(--f-ui);font-size:18px;line-height:1.5;direction:rtl}
+.wrap{max-width:980px;margin:0 auto;padding:12px 16px 40px;display:flex;flex-direction:column;gap:12px}
+h1{margin:0;font-size:1.6rem;font-weight:800;line-height:1.2}h1 small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--bg2);border:2px solid var(--line);border-radius:18px;padding:8px 12px}
+.bar label{font-weight:700;font-size:.95rem}
+select,.tbtn,.big{font:inherit;color:var(--ink)}
+select{border:2px solid var(--line);border-radius:12px;padding:2px 8px;background:var(--card);min-height:40px;max-width:100%}
+.tbtn{font-weight:700;font-size:.92rem;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 14px;cursor:pointer;min-height:40px}
+.tbtn[aria-pressed=true],.tbtn.on{background:var(--gold);border-color:var(--gold);color:#1B1B1B}
+.big{font-weight:800;font-size:1.1rem;border:0;border-radius:16px;padding:8px 22px;min-height:52px;cursor:pointer;color:#0E1F2E;background:var(--gold);box-shadow:0 5px 0 var(--gold2)}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--gold2)}
+.big.teal{background:var(--teal);box-shadow:0 5px 0 #1B8F85}
+button:focus-visible,select:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+.teams{display:flex;gap:10px;flex-wrap:wrap}
+.team{flex:1 1 180px;display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--line);border-radius:20px;padding:6px 14px;transition:transform .2s,border-color .2s}
+.team .nm{font-weight:800;color:var(--tc)}.team .sc{margin-inline-start:auto;font-weight:800;font-size:1.8rem;color:var(--gold);font-variant-numeric:tabular-nums}
+.team.now{border-color:var(--tc);transform:scale(1.03)}
+.stage{background:var(--card);border:3px solid var(--line);border-radius:26px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:14px;min-height:300px}
+.msg{font-weight:800;font-size:1.25rem;text-align:center;min-height:1.6em}
+.cf{position:fixed;top:-20px;width:11px;height:15px;border-radius:3px;pointer-events:none;z-index:80;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.modal{position:fixed;inset:0;background:rgba(5,14,22,.78);display:grid;place-items:center;z-index:70;padding:16px}
+.mbox{background:var(--card);border:3px solid var(--gold);border-radius:24px;padding:18px;max-width:560px;width:100%;display:flex;flex-direction:column;gap:12px;animation:pop .3s cubic-bezier(.3,1.5,.6,1)}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
+.mbox .q{font-weight:800;font-size:1.3rem;text-align:center}
+.mbox .q .ar,.opt .ar{font-family:var(--f-ar);font-size:1.5em;font-weight:700}
+.opt{font:inherit;font-weight:700;font-size:1.15rem;color:var(--ink);text-align:start;border:3px solid var(--line);background:var(--bg2);border-radius:16px;padding:10px 14px;min-height:54px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--sky)}.opt.right{border-color:var(--lime);background:color-mix(in srgb,var(--lime) 22%,var(--bg2))}.opt.wrong{border-color:var(--coral);background:color-mix(in srgb,var(--coral) 20%,var(--bg2))}
+body.show-en .qar{font-family:var(--f-ar)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.word{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;direction:rtl}
+.slot{width:clamp(38px,12vw,58px);height:clamp(48px,14vw,70px);border-bottom:5px solid var(--gold);display:grid;place-items:center;font-family:var(--f-ar);font-size:clamp(1.8rem,7vw,2.8rem);font-weight:700;color:var(--ink)}
+.slot.lost{color:var(--coral)}
+.hearts{font-size:1.8rem;letter-spacing:4px}
+.pic{font-size:4.2rem;line-height:1}
+.kb{display:grid;grid-template-columns:repeat(auto-fit,minmax(46px,1fr));gap:8px;width:min(640px,96vw);direction:rtl}
+.k{font-family:var(--f-ar);font-size:1.7rem;font-weight:700;border:3px solid var(--line);background:var(--bg2);color:var(--ink);border-radius:14px;min-height:52px;cursor:pointer}
+.k:hover:not(:disabled){border-color:var(--sky)}.k.hit{background:color-mix(in srgb,var(--lime) 28%,var(--bg2));border-color:var(--lime)}.k.miss{background:color-mix(in srgb,var(--coral) 24%,var(--bg2));border-color:var(--coral);opacity:.6}
+.k:disabled{cursor:default}
+.hintline{color:var(--muted);font-weight:700}
+
+</style></head><body class="tq-i18n">
+<div class="wrap">
+<header style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+  <h1 style="flex:1 1 240px"><span class="ui-ar">خَمِّنِ الكَلِمَة</span><span class="ui-en">Guess the Word</span> 🔤<small><span class="ui-ar">كلمة عربية مخفية: اختر الحروف قبل أن تضيع قلوبك الستة</span><span class="ui-en">A hidden Arabic word: pick the letters before you lose your six hearts</span></small></h1>
+  <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
+</header>
+<div class="bar">
+  <label for="plSel" data-en="Players:">اللاعبون:</label>
+  <select id="plSel"><option value="1" data-en="One student">طالب واحد</option><option value="2" selected data-en="Two teams (take turns)">فريقان (بالتناوب)</option></select>
+  <button class="tbtn" id="newB" data-en="↻ New word">↻ كلمة جديدة</button>
+</div>
+<div class="teams" id="teams"></div>
+<section class="stage"><div class="pic" id="pic" aria-hidden="true"></div><div class="hintline" id="hint"></div><div class="hearts" id="hearts" aria-live="polite"></div><div class="word" id="word"></div><div class="msg" id="msg" aria-live="polite"></div><div class="kb" id="kb"></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="tbtn" id="hintB"><span class="ui-ar">💡 أَعْطِنِي حَرْفًا (يُكَلِّف قَلْبًا)</span><span class="ui-en">💡 Give me a letter (costs a heart)</span></button><button class="big teal" id="again" hidden><span class="ui-ar">كلمة أخرى ↻</span><span class="ui-en">Next word ↻</span></button></div></section>
+</div>
+<script>
+const $=s=>document.querySelector(s),{U}=TQI;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let AC=null,soundOn=true;
+function tone(f,d=.12,type='sine',v=.15,when=0){if(!soundOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const t=AC.currentTime+when,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
+const sfx={tap:()=>tone(520,.06),ok:()=>[659,880].forEach((f,i)=>tone(f,.14,'triangle',.18,i*.09)),bad:()=>{tone(220,.18,'sawtooth',.08);tone(165,.25,'sawtooth',.08,.12)},win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',.2,i*.11))};
+function confetti(n=60){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2C14E','#2EC4B6','#4DA8FF','#FF6B6B','#A98BFF'];for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=Math.random()*.3+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3300)}}
+
+const WORDS=[['كِتَاب','Book','📖'],['قَمَر','Moon','🌙'],['شَمْس','Sun','☀️'],['بَيْت','House','🏠'],['قَلَم','Pen','✏️'],['سَمَكَة','Fish','🐟'],['تُفَّاحَة','Apple','🍎'],['نَجْمَة','Star','⭐'],['وَرْدَة','Rose','🌹'],['قِطَّة','Cat','🐱'],['سَيَّارَة','Car','🚗'],['مَسْجِد','Mosque','🕌'],['شَجَرَة','Tree','🌳'],['كُرَة','Ball','⚽'],['مَدْرَسَة','School','🏫'],['مُعَلِّم','Teacher','👨‍🏫'],['قُرْآن','Qur’an','📗'],['صَلَاة','Prayer','🕋'],['رَمَضَان','Ramadan','🌙'],['حَلِيب','Milk','🥛']];
+const LETTERS='ابتثجحخدذرزسشصضطظعغفقكلمنهوية'.split('');
+const norm=s=>s.replace(/[ً-ٰٟـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي');
+const MAX=6;let cur,letters,lives,used,over,turn,sc,rounds=0,order=[];
+const names=()=>$('#plSel').value==='2'?[['🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'],['🌸 الفَرِيقُ الوَرْدِيّ','🌸 Pink team']]:[['⭐ نِقَاطِي','⭐ My points']];
+function drawTeams(){const n=names();$('#teams').innerHTML=n.map((t,i)=>`<div class="team ${i===turn&&!over?'now':''}" style="--tc:${i?'var(--pink)':'var(--sky)'}"><span class="nm">${U(...t)}</span><span class="sc">${sc[i]}</span></div>`).join('')}
+function draw(){const w=norm(cur[0]).split('');
+  $('#pic').textContent=cur[2];$('#hint').innerHTML=U('تَلْمِيح: '+w.length+' حُرُوف','Hint: '+w.length+' letters')+' · '+U('الكلمة بالإنجليزية','in English')+': <b>'+cur[1]+'</b>';
+  $('#hearts').textContent='❤️'.repeat(lives)+'🖤'.repeat(MAX-lives);
+  $('#word').innerHTML=w.map(ch=>`<span class="slot ${over&&!used.has(ch)?'lost':''}">${used.has(ch)||over?ch:''}</span>`).join('');
+  $('#kb').innerHTML=LETTERS.map(l=>{const hit=used.has(l)&&w.includes(l),miss=used.has(l)&&!w.includes(l);return `<button class="k ${hit?'hit':''} ${miss?'miss':''}" data-l="${l}" ${used.has(l)||over?'disabled':''}>${l}</button>`}).join('');
+  $('#hintB').hidden=over;drawTeams()}
+function newWord(){do{cur=WORDS[Math.floor(Math.random()*WORDS.length)]}while(order.includes(cur[0])&&order.length<WORDS.length);order.push(cur[0]);if(order.length>8)order.shift();
+  lives=MAX;used=new Set();over=false;$('#again').hidden=true;$('#msg').innerHTML=U('اخْتَرْ حَرْفًا','Pick a letter');draw()}
+function end(won){over=true;const n=names();$('#again').hidden=false;
+  if(won){sc[turn]++;sfx.win();confetti();$('#msg').innerHTML=U('🎉 أَحْسَنْتَ! الكَلِمَةُ: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span>','🎉 Well done! The word: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span> = '+cur[1])}
+  else{sfx.bad();$('#msg').innerHTML=U('😔 الكَلِمَةُ كَانَتْ: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span>','😔 The word was: <span style="font-family:var(--f-ar);font-size:1.4em">'+cur[0]+'</span> = '+cur[1])}
+  if(n.length>1)turn=1-turn;draw()}
+const solved=()=>norm(cur[0]).split('').every(c=>used.has(c));
+$('#kb').onclick=e=>{const b=e.target.closest('.k');if(!b||over)return;const l=b.dataset.l;used.add(l);
+  if(norm(cur[0]).includes(l)){sfx.ok();draw();if(solved())end(true)}else{lives--;sfx.bad();draw();if(lives<=0)end(false)}};
+$('#hintB').onclick=()=>{if(over||lives<=1)return;const w=norm(cur[0]).split('').filter(c=>!used.has(c));if(!w.length)return;used.add(w[0]);lives--;sfx.tap();draw();if(solved())end(true)};
+$('#again').onclick=newWord;$('#newB').onclick=()=>{sc=names().map(()=>0);turn=0;newWord()};$('#plSel').onchange=()=>{sc=names().map(()=>0);turn=0;newWord()};
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Muted');$('#sndB').setAttribute('aria-pressed',soundOn)};
+document.addEventListener('keydown',e=>{if(/SELECT|INPUT/.test(e.target.tagName)||over)return;const b=document.querySelector(`.k[data-l="${e.key}"]`);if(b&&!b.disabled)b.click()});
+TQI.relabel();sc=names().map(()=>0);turn=0;newWord();
+
+</script>
+<!--tq-nav--><script src="../tq-nav.js"></script>
+</body></html>

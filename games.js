@@ -6,7 +6,7 @@
      ico   : إيموجي
      ar/en : الاسم بالعربي والإنجليزي
      age   : ['kids'] أطفال  /  ['teens'] مراهقين  /  ['adults'] كبار  (ممكن أكثر من واحد)
-     subj  : 'tajweed' تجويد / 'hifz' حفظ / 'arabic' عربي / 'islamic' إسلاميات
+     subj  : 'tajweed' تجويد / 'hifz' حفظ / 'arabic' عربي / 'islamic' إسلاميات / 'fun' تسلية
      desc  : جملة أو جملتان: ماذا يفعل الطالب
      book  : الكتاب المصدر (والصفحات)
    ===================================================================== */
@@ -19,6 +19,12 @@ window.SITE = {
 };
 
 window.GAMES = [
+  {file:'xo-showdown.html', date:'2026-10-21', ico:'⭕', ar:'إِكْس أُو: مُنَافَسَةُ الفَصْل', en:'XO: The Class Showdown', age:['kids','teens','adults'], subj:'fun',
+   desc:'إكس أو للاستراحة: العبوا الكلاسيكية، أو اكسبوا كل خانة بسؤال سريع في الحروف والإسلاميات والعربية. فريقان أو ضد الكمبيوتر.', book:'لعبة تسلية'},
+  {file:'memory-match.html', date:'2026-10-21', ico:'🧠', ar:'لُعْبَةُ الذَّاكِرَة', en:'Memory Match', age:['kids','teens'], subj:'fun',
+   desc:'اقلب بطاقتين: كلمة عربية وصورتها. فريقان يتنافسان على الأزواج، أو طالب واحد يحاول بأقل محاولات.', book:'لعبة تسلية (مفردات الحياة اليومية)'},
+  {file:'guess-the-word.html', date:'2026-10-21', ico:'🔤', ar:'خَمِّنِ الكَلِمَة', en:'Guess the Word', age:['kids','teens','adults'], subj:'fun',
+   desc:'كلمة عربية مخفية: اختر الحروف قبل أن تفقد قلوبك الستة، مع تلميح بالصورة والمعنى.', book:'لعبة تسلية (مفردات الحياة اليومية)'},
   {file:'sentence-train.html', date:'2026-10-19', ico:'🚂', ar:'قِطَارُ الجُمْلَة', en:'The Sentence Train', age:['kids'], subj:'arabic',
    desc:'الجملة قطار وكل كلمة عربة: ضع لافتة الاسم أو الفعل أو الحرف، واعرف المفيدة من الناقصة، واصنع جملك بنفسك.', book:'النحو الواضح ج١ (ص ١٧–٣٠)'},
   {file:'page-map.html', date:'2026-10-18', ico:'🗺️', ar:'خَرِيطَةُ الصَّفْحَة', en:'The Page Map', age:['teens','adults'], subj:'hifz',
@@ -82,6 +88,9 @@ window.LESSONS = [
    🌐 English descriptions (optional) — key = file name. If a file is missing here the Arabic desc is shown.
    ===================================================================== */
 window.DESC_EN = {
+  'xo-showdown.html':'A fun break game: play classic XO, or win each square with a quick question on letters, Islam basics or Arabic. Two teams or against the computer.',
+  'memory-match.html':'Flip two cards: an Arabic word and its picture. Two teams compete for pairs, or one student tries to finish in the fewest moves.',
+  'guess-the-word.html':'A hidden Arabic word: pick the letters before you lose six hearts, with a picture and English hint.',
   'sentence-train.html':'The sentence is a train and each word is a carriage: label nouns, verbs and particles, tell complete sentences from incomplete ones, and build your own.',
   'page-map.html':'Photograph the page with your eyes, then answer: where does the verse start? Line cues fade away step by step, and a weakness map shows each line.',
   'dabt-keys.html':'Every verse is a chest with five locks: listen, understand, memorise from the end, consolidate, recite.',

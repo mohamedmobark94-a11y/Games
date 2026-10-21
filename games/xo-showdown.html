@@ -1,0 +1,173 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
+<title>إكس أو - منافسة الفصل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0E1F2E;--bg2:#13293C;--card:#173450;--card2:#1D4062;--ink:#F3F6FA;--muted:#A9BBCC;--line:#2B5274;--gold:#F2C14E;--gold2:#C99A2E;--teal:#2EC4B6;--coral:#FF6B6B;--sky:#4DA8FF;--lime:#7BD88F;--violet:#A98BFF;--pink:#FF8FB1;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(ellipse at 50% -10%,#1F4A70 0,transparent 60%);color:var(--ink);font-family:var(--f-ui);font-size:18px;line-height:1.5;direction:rtl}
+.wrap{max-width:980px;margin:0 auto;padding:12px 16px 40px;display:flex;flex-direction:column;gap:12px}
+h1{margin:0;font-size:1.6rem;font-weight:800;line-height:1.2}h1 small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--bg2);border:2px solid var(--line);border-radius:18px;padding:8px 12px}
+.bar label{font-weight:700;font-size:.95rem}
+select,.tbtn,.big{font:inherit;color:var(--ink)}
+select{border:2px solid var(--line);border-radius:12px;padding:2px 8px;background:var(--card);min-height:40px;max-width:100%}
+.tbtn{font-weight:700;font-size:.92rem;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 14px;cursor:pointer;min-height:40px}
+.tbtn[aria-pressed=true],.tbtn.on{background:var(--gold);border-color:var(--gold);color:#1B1B1B}
+.big{font-weight:800;font-size:1.1rem;border:0;border-radius:16px;padding:8px 22px;min-height:52px;cursor:pointer;color:#0E1F2E;background:var(--gold);box-shadow:0 5px 0 var(--gold2)}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--gold2)}
+.big.teal{background:var(--teal);box-shadow:0 5px 0 #1B8F85}
+button:focus-visible,select:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+.teams{display:flex;gap:10px;flex-wrap:wrap}
+.team{flex:1 1 180px;display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--line);border-radius:20px;padding:6px 14px;transition:transform .2s,border-color .2s}
+.team .nm{font-weight:800;color:var(--tc)}.team .sc{margin-inline-start:auto;font-weight:800;font-size:1.8rem;color:var(--gold);font-variant-numeric:tabular-nums}
+.team.now{border-color:var(--tc);transform:scale(1.03)}
+.stage{background:var(--card);border:3px solid var(--line);border-radius:26px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:14px;min-height:300px}
+.msg{font-weight:800;font-size:1.25rem;text-align:center;min-height:1.6em}
+.cf{position:fixed;top:-20px;width:11px;height:15px;border-radius:3px;pointer-events:none;z-index:80;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.modal{position:fixed;inset:0;background:rgba(5,14,22,.78);display:grid;place-items:center;z-index:70;padding:16px}
+.mbox{background:var(--card);border:3px solid var(--gold);border-radius:24px;padding:18px;max-width:560px;width:100%;display:flex;flex-direction:column;gap:12px;animation:pop .3s cubic-bezier(.3,1.5,.6,1)}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
+.mbox .q{font-weight:800;font-size:1.3rem;text-align:center}
+.mbox .q .ar,.opt .ar{font-family:var(--f-ar);font-size:1.5em;font-weight:700}
+.opt{font:inherit;font-weight:700;font-size:1.15rem;color:var(--ink);text-align:start;border:3px solid var(--line);background:var(--bg2);border-radius:16px;padding:10px 14px;min-height:54px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--sky)}.opt.right{border-color:var(--lime);background:color-mix(in srgb,var(--lime) 22%,var(--bg2))}.opt.wrong{border-color:var(--coral);background:color-mix(in srgb,var(--coral) 20%,var(--bg2))}
+body.show-en .qar{font-family:var(--f-ar)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(420px,92vw);aspect-ratio:1;direction:ltr}
+.cell{font:inherit;border:3px solid var(--line);background:var(--bg2);border-radius:20px;cursor:pointer;display:grid;place-items:center;padding:0;transition:transform .12s,border-color .15s,background .15s}
+.cell:hover:not(:disabled){transform:scale(1.04);border-color:var(--sky)}
+.cell:disabled{cursor:default}
+.cell svg{width:68%;height:68%;overflow:visible}
+.cell .mk{stroke-dasharray:120;stroke-dashoffset:120;animation:draw .35s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.cell.win{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 20%,var(--bg2));animation:wig .6s ease 2}
+@keyframes wig{50%{transform:scale(1.08)}}
+.cell.hint{border-color:var(--teal)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.tcol{--tc:var(--sky)}.ocol{--tc:var(--pink)}
+.opts{display:grid;gap:10px}
+.mbox .tag{align-self:center;background:var(--tc,var(--gold));color:#0E1F2E;font-weight:800;border-radius:999px;padding:0 14px}
+
+</style></head><body class="tq-i18n">
+<div class="wrap">
+<header style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+  <h1 style="flex:1 1 240px"><span class="ui-ar">إِكْس أُو · مُنَافَسَةُ الفَصْل</span><span class="ui-en">XO · The Class Showdown</span> ⭕❌<small><span class="ui-ar">لعبة تسلية للاستراحة: العبوا الكلاسيكية، أو اكسبوا الخانة بالإجابة الصحيحة</span><span class="ui-en">A fun break game: play the classic, or win each square by answering correctly</span></small></h1>
+  <button class="tbtn" id="sndB" aria-pressed="true"><span class="ui-ar">🔊 صوت</span><span class="ui-en">🔊 Sound</span></button>
+</header>
+<div class="bar">
+  <label for="modeSel" data-en="Mode:">النمط:</label>
+  <select id="modeSel"><option value="classic" data-en="Classic XO">إكس أو عادية</option><option value="quiz" selected data-en="Answer to play">أجب لتلعب</option></select>
+  <label for="oppSel" data-en="Players:">اللاعبون:</label>
+  <select id="oppSel"><option value="2" selected data-en="Two teams">فريقان</option><option value="ai" data-en="Against the computer">ضد الكمبيوتر</option></select>
+  <span id="lvlWrap" hidden><label for="lvlSel" data-en="Level:">المستوى:</label>
+  <select id="lvlSel"><option value="easy" data-en="Easy">سهل</option><option value="hard" selected data-en="Hard">صعب</option></select></span>
+  <button class="tbtn" id="newB" data-en="↻ New round">↻ جولة جديدة</button>
+</div>
+<div class="bar" id="topics"><label><span class="ui-ar">المواضيع:</span><span class="ui-en">Topics:</span></label><div class="chips" id="chips"></div></div>
+<div class="teams" id="teams"></div>
+<section class="stage"><div class="msg" id="msg" aria-live="polite"></div><div class="board" id="board"></div>
+<button class="big teal" id="again" hidden><span class="ui-ar">جولة أخرى ↻</span><span class="ui-en">Play again ↻</span></button></section>
+</div>
+<script>
+const $=s=>document.querySelector(s),{U}=TQI;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let AC=null,soundOn=true;
+function tone(f,d=.12,type='sine',v=.15,when=0){if(!soundOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const t=AC.currentTime+when,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
+const sfx={tap:()=>tone(520,.06),ok:()=>[659,880].forEach((f,i)=>tone(f,.14,'triangle',.18,i*.09)),bad:()=>{tone(220,.18,'sawtooth',.08);tone(165,.25,'sawtooth',.08,.12)},win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',.2,i*.11))};
+function confetti(n=60){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2C14E','#2EC4B6','#4DA8FF','#FF6B6B','#A98BFF'];for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=Math.random()*.3+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3300)}}
+
+const X_SVG='<svg viewBox="0 0 100 100"><path class="mk" d="M20 20 L80 80 M80 20 L20 80" stroke="#4DA8FF" stroke-width="14" stroke-linecap="round" fill="none"/></svg>';
+const O_SVG='<svg viewBox="0 0 100 100"><circle class="mk" cx="50" cy="50" r="31" stroke="#FF8FB1" stroke-width="14" fill="none"/></svg>';
+const LINES=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+const LET=[['ب','باء','Baa'],['ت','تاء','Taa'],['ث','ثاء','Thaa'],['ج','جيم','Jeem'],['ح','حاء','Haa'],['خ','خاء','Khaa'],['د','دال','Daal'],['ر','راء','Raa'],['س','سين','Seen'],['ش','شين','Sheen'],['ع','عين','‘Ayn'],['ف','فاء','Faa'],['ق','قاف','Qaaf'],['ك','كاف','Kaaf'],['ل','لام','Laam'],['م','ميم','Meem'],['ن','نون','Noon'],['و','واو','Waaw'],['ي','ياء','Yaa']];
+const B=(ar,en)=>({ar,en});
+/* topic bank: q = question, o = options, a = index of the right one */
+const BANK={
+ islam:[
+  {q:B('كَمْ عَدَدُ أَرْكَانِ الإِسْلَامِ؟','How many pillars does Islam have?'),o:[B('٣','3'),B('٥','5'),B('٦','6')],a:1},
+  {q:B('كَمْ صَلَاةً نُصَلِّي فِي اليَوْمِ؟','How many prayers do we pray each day?'),o:[B('٣','3'),B('٥','5'),B('٧','7')],a:1},
+  {q:B('فِي أَيِّ شَهْرٍ نَصُومُ؟','In which month do we fast?'),o:[B('رَمَضَان','Ramadan'),B('شَوَّال','Shawwal'),B('رَجَب','Rajab')],a:0},
+  {q:B('مَا أَوَّلُ سُورَةٍ فِي القُرْآنِ؟','Which surah opens the Qur’an?'),o:[B('البَقَرَة','Al-Baqarah'),B('الفَاتِحَة','Al-Fatihah'),B('الإِخْلَاص','Al-Ikhlas')],a:1},
+  {q:B('مَنِ المَلَكُ الَّذِي نَزَلَ بِالوَحْيِ؟','Which angel brought the revelation?'),o:[B('مِيكَائِيل','Mika’il'),B('جِبْرِيل','Jibril'),B('إِسْرَافِيل','Israfil')],a:1},
+  {q:B('إِلَى أَيْنَ نَتَوَجَّهُ فِي الصَّلَاةِ؟','Which way do we face in prayer?'),o:[B('الكَعْبَة','The Ka‘bah'),B('القُدْس','Jerusalem'),B('جَبَل عَرَفَة','Mount ‘Arafah')],a:0},
+  {q:B('مَا الكِتَابُ الَّذِي نَزَلَ عَلَى النَّبِيِّ مُحَمَّدٍ ﷺ؟','Which book was revealed to the Prophet Muhammad ﷺ?'),o:[B('التَّوْرَاة','The Torah'),B('القُرْآن','The Qur’an'),B('الإِنْجِيل','The Gospel')],a:1},
+  {q:B('كَمْ عَدَدُ أَرْكَانِ الإِيمَانِ؟','How many pillars does Iman (faith) have?'),o:[B('٤','4'),B('٦','6'),B('٨','8')],a:1},
+  {q:B('مَا أَوَّلُ أَرْكَانِ الإِسْلَامِ؟','What is the first pillar of Islam?'),o:[B('الصَّوْم','Fasting'),B('الشَّهَادَتَان','The two testimonies'),B('الحَجّ','Hajj')],a:1},
+  {q:B('فِي أَيِّ مَدِينَةٍ وُلِدَ النَّبِيُّ ﷺ؟','In which city was the Prophet ﷺ born?'),o:[B('المَدِينَة','Madinah'),B('مَكَّة','Makkah'),B('دِمَشْق','Damascus')],a:1},
+  {q:B('مَاذَا نَقُولُ قَبْلَ الأَكْلِ؟','What do we say before eating?'),o:[B('الحَمْدُ لِلَّه','Alhamdulillah'),B('بِسْمِ اللَّه','Bismillah'),B('سُبْحَانَ اللَّه','Subhanallah')],a:1},
+  {q:B('كَمْ عَدَدُ سُوَرِ القُرْآنِ؟','How many surahs are in the Qur’an?'),o:[B('١٠٠','100'),B('١١٤','114'),B('١٢٠','120')],a:1},
+  {q:B('مَا تَحِيَّةُ الإِسْلَامِ؟','What is the Islamic greeting?'),o:[B('السَّلَامُ عَلَيْكُمْ','As-salamu ‘alaykum'),B('صَبَاحُ الخَيْر','Good morning'),B('مَرْحَبًا','Hello')],a:0}],
+ arabic:[
+  {q:B('كَمْ حَرْفًا فِي الهِجَاءِ العَرَبِيِّ؟','How many letters are in the Arabic alphabet?'),o:[B('٢٦','26'),B('٢٨','28'),B('٣٠','30')],a:1},
+  {q:B('مَاذَا تَعْنِي «كِتَاب»؟','What does “كِتَاب” mean?'),o:[B('قَلَم','Pen'),B('كِتَاب','Book'),B('بَاب','Door')],a:1,x:1},
+  {q:B('مَاذَا تَعْنِي «شَمْس»؟','What does “شَمْس” mean?'),o:[B('قَمَر','Moon'),B('شَمْس','Sun'),B('نَجْم','Star')],a:1,x:1},
+  {q:B('مَاذَا تَعْنِي «مَاء»؟','What does “مَاء” mean?'),o:[B('نَار','Fire'),B('مَاء','Water'),B('شَجَرَة','Tree')],a:1,x:1},
+  {q:B('مَاذَا تَعْنِي «أُمّ»؟','What does “أُمّ” mean?'),o:[B('أَب','Father'),B('أُمّ','Mother'),B('أُخْت','Sister')],a:1,x:1},
+  {q:B('مَاذَا تَعْنِي «قَمَر»؟','What does “قَمَر” mean?'),o:[B('شَمْس','Sun'),B('قَمَر','Moon'),B('بَحْر','Sea')],a:1,x:1},
+  {q:B('عَكْسُ «كَبِير» هُوَ:','The opposite of “كَبِير” (big) is:'),o:[B('طَوِيل','Tall'),B('صَغِير','Small'),B('جَمِيل','Beautiful')],a:1},
+  {q:B('أَيُّ حَرْفٍ شَمْسِيٌّ؟','Which letter is a “sun letter” (for ال)?'),o:[B('ب','ب'),B('ش','ش'),B('ك','ك')],a:1,x:1}],
+ tajweed:[
+  {q:B('كَمْ حَرَكَةً فِي المَدِّ الطَّبِيعِيِّ؟','How many counts does natural madd last?'),o:[B('حَرَكَة','1 count'),B('حَرَكَتَان','2 counts'),B('سِتّ حَرَكَات','6 counts')],a:1},
+  {q:B('حُرُوفُ المَدِّ هِيَ:','The madd letters are:'),o:[B('ب ت ث','ب ت ث'),B('ا و ي','ا و ي'),B('م ن ل','م ن ل')],a:1,x:1},
+  {q:B('كَمْ حَرَكَةً فِي المَدِّ اللَّازِمِ؟','How many counts does compulsory (lazim) madd last?'),o:[B('٢','2'),B('٤','4'),B('٦','6')],a:2},
+  {q:B('مَاذَا تَعْنِي الشَّدَّةُ ( ّ )؟','What does the shadda ( ّ ) mean?'),o:[B('حَرْفٌ سَاكِن','A silent letter'),B('حَرْفٌ مُضَاعَف','A doubled letter'),B('مَدٌّ طَوِيل','A long stretch')],a:1},
+  {q:B('مَاذَا يَعْنِي السُّكُونُ ( ْ )؟','What does the sukoon ( ْ ) mean?'),o:[B('الحَرْفُ سَاكِنٌ بِلَا حَرَكَة','The letter has no vowel (it is “still”)'),B('الحَرْفُ مَفْتُوح','The letter has a fatha'),B('الحَرْفُ مُشَدَّد','The letter is doubled')],a:0}]
+};
+const TOPICS=[['letters','🔤','حُرُوف','Letters'],['islam','🕌','إِسْلَامِيَّات','Islam basics'],['arabic','✍️','عَرَبِيَّة','Arabic'],['tajweed','🎙️','تَجْوِيد','Tajweed']];
+const on={letters:true,islam:true,arabic:true,tajweed:false};
+$('#chips').innerHTML=TOPICS.map(t=>`<button class="tbtn" data-t="${t[0]}" aria-pressed="${!!on[t[0]]}">${t[1]} ${U(t[2],t[3])}</button>`).join('');
+$('#chips').onclick=e=>{const b=e.target.closest('button');if(!b)return;const t=b.dataset.t;const n=Object.values(on).filter(Boolean).length;if(on[t]&&n===1)return;on[t]=!on[t];b.setAttribute('aria-pressed',on[t]);sfx.tap()};
+let recent=[];
+function pickQuestion(){
+  const pool=TOPICS.map(t=>t[0]).filter(t=>on[t]);const t=pool[Math.floor(Math.random()*pool.length)];
+  if(t==='letters'){const L=LET[Math.floor(Math.random()*LET.length)];const others=shuffle(LET.filter(x=>x!==L)).slice(0,2);const opts=shuffle([L,...others]);
+    return {q:{ar:'مَا اسْمُ هَذَا الحَرْفِ؟ <span class="ar">'+L[0]+'</span>',en:'What is the name of this letter? <span class="ar">'+L[0]+'</span>'},o:opts.map(x=>B(x[1],x[2])),a:opts.indexOf(L),raw:true}}
+  let list=BANK[t].filter(q=>!recent.includes(q));if(!list.length){recent=[];list=BANK[t]}
+  const q=list[Math.floor(Math.random()*list.length)];recent.push(q);if(recent.length>10)recent.shift();
+  const idx=shuffle(q.o.map((_,i)=>i));return {q:q.q,o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a),x:q.x,raw:false};
+}
+let board,turn,starter='X',score={X:0,O:0,D:0},over,busy;
+const names=()=>$('#oppSel').value==='ai'?{X:['👦 أَنْتَ','👦 You'],O:['🤖 الكُمْبِيُوتَر','🤖 Computer']}:{X:['🔵 الفَرِيقُ الأَزْرَق','🔵 Blue team'],O:['🌸 الفَرِيقُ الوَرْدِيّ','🌸 Pink team']};
+function drawTeams(){const n=names();$('#teams').innerHTML=['X','O'].map(k=>`<div class="team ${turn===k&&!over?'now':''}" style="--tc:${k==='X'?'var(--sky)':'var(--pink)'}"><span class="nm">${k==='X'?'❌':'⭕'} ${U(...n[k])}</span><span class="sc">${score[k]}</span></div>`).join('')+`<div class="team" style="--tc:var(--muted)"><span class="nm">🤝 ${U('تَعَادُل','Draws')}</span><span class="sc">${score.D}</span></div>`}
+function drawBoard(win){$('#board').innerHTML=board.map((v,i)=>`<button class="cell ${win&&win.includes(i)?'win':''}" data-i="${i}" aria-label="${i+1}" ${v||over||busy?'disabled':''}>${v==='X'?X_SVG:v==='O'?O_SVG:''}</button>`).join('')}
+function say(ar,en){$('#msg').innerHTML=U(ar,en)}
+function newRound(){board=Array(9).fill(null);over=false;busy=false;turn=starter;$('#again').hidden=true;drawTeams();drawBoard();say(turn==='X'?'دَوْرُ الأَزْرَقِ ❌':'دَوْرُ الوَرْدِيِّ ⭕',turn==='X'?'Blue team’s turn ❌':'Pink team’s turn ⭕');if($('#oppSel').value==='ai'){say(turn==='X'?'دَوْرُكَ ❌':'دَوْرُ الكُمْبِيُوتَر ⭕',turn==='X'?'Your turn ❌':'Computer’s turn ⭕')}if(turn==='O'&&$('#oppSel').value==='ai')setTimeout(aiMove,700)}
+function winner(b){for(const l of LINES){if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]])return {p:b[l[0]],l}}return null}
+function place(i,p){board[i]=p;sfx.tap();const w=winner(board);
+  if(w){over=true;score[w.p]++;drawBoard(w.l);drawTeams();const ai=$('#oppSel').value==='ai';say(ai?(w.p==='X'?'🎉 فُزْتَ!':'🤖 فَازَ الكُمْبِيُوتَر!'):(w.p==='X'?'🎉 فَازَ الفَرِيقُ الأَزْرَق!':'🎉 فَازَ الفَرِيقُ الوَرْدِيّ!'),ai?(w.p==='X'?'🎉 You win!':'🤖 The computer wins!'):(w.p==='X'?'🎉 Blue team wins!':'🎉 Pink team wins!'));if(w.p==='X'||$('#oppSel').value!=='ai'){confetti();sfx.win()}else sfx.bad();finish();return}
+  if(board.every(Boolean)){over=true;score.D++;drawBoard();drawTeams();say('🤝 تَعَادُل! أَحْسَنْتُمْ','🤝 A draw! Well played');finish();return}
+  turn=p==='X'?'O':'X';drawBoard();drawTeams();
+  const ai=$('#oppSel').value==='ai';say(turn==='X'?(ai?'دَوْرُكَ ❌':'دَوْرُ الأَزْرَقِ ❌'):(ai?'دَوْرُ الكُمْبِيُوتَر ⭕':'دَوْرُ الوَرْدِيِّ ⭕'),turn==='X'?(ai?'Your turn ❌':'Blue team’s turn ❌'):(ai?'Computer’s turn ⭕':'Pink team’s turn ⭕'));
+  if(ai&&turn==='O')setTimeout(aiMove,700);
+}
+function finish(){starter=starter==='X'?'O':'X';$('#again').hidden=false}
+/* computer: easy = random with a block; hard = unbeatable minimax */
+function minimax(b,p,me){const w=winner(b);if(w)return w.p===me?10:-10;if(b.every(Boolean))return 0;let best=p===me?-99:99;
+  for(let i=0;i<9;i++)if(!b[i]){b[i]=p;const s=minimax(b,p==='X'?'O':'X',me);b[i]=null;best=p===me?Math.max(best,s):Math.min(best,s)}return best}
+function bestMove(){let best=-99,mv=[];for(let i=0;i<9;i++)if(!board[i]){board[i]='O';const s=minimax(board,'X','O');board[i]=null;if(s>best){best=s;mv=[i]}else if(s===best)mv.push(i)}return mv[Math.floor(Math.random()*mv.length)]}
+function easyMove(){const e=[];board.forEach((v,i)=>{if(!v)e.push(i)});for(const l of LINES){const c=l.map(i=>board[i]);if(c.filter(x=>x==='O').length===2&&c.includes(null))return l[c.indexOf(null)]}for(const l of LINES){const c=l.map(i=>board[i]);if(c.filter(x=>x==='X').length===2&&c.includes(null)&&Math.random()<.7)return l[c.indexOf(null)]}return e[Math.floor(Math.random()*e.length)]}
+function aiMove(){if(over)return;const quiz=$('#modeSel').value==='quiz',hard=$('#lvlSel').value==='hard';
+  if(quiz&&Math.random()>(hard?.85:.6)){say('🤖 الكُمْبِيُوتَر أَخْطَأَ فِي السُّؤَالِ! دَوْرُكَ ❌','🤖 The computer got the question wrong! Your turn ❌');sfx.bad();turn='X';drawTeams();return}
+  place(hard?bestMove():easyMove(),'O')}
+function askQuestion(i){busy=true;drawBoard();const Q=pickQuestion(),p=turn;
+  const m=document.createElement('div');m.className='modal';
+  m.innerHTML=`<div class="mbox" style="--tc:${p==='X'?'var(--sky)':'var(--pink)'}"><span class="tag">${p==='X'?'❌':'⭕'} ${U(...names()[p])}</span><div class="q">${U(Q.q.ar,Q.q.en)}</div><div class="opts">${Q.o.map((o,k)=>`<button class="opt" data-k="${k}">${U(o.ar,o.en)}</button>`).join('')}</div></div>`;
+  document.body.appendChild(m);let done=false;
+  m.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=+b.dataset.k===Q.a;b.classList.add(ok?'right':'wrong');m.querySelectorAll('.opt')[Q.a].classList.add('right');ok?sfx.ok():sfx.bad();
+    setTimeout(()=>{m.remove();busy=false;if(ok){place(i,p)}else{const ai=$('#oppSel').value==='ai';turn=p==='X'?'O':'X';drawBoard();drawTeams();say('✗ إِجَابَةٌ خَاطِئَة، يَنْتَقِلُ الدَّوْر','✗ Wrong answer — the turn passes');if(ai&&turn==='O')setTimeout(aiMove,900)}},900)})}
+$('#board').onclick=e=>{const c=e.target.closest('.cell');if(!c||over||busy)return;const i=+c.dataset.i;if(board[i])return;if($('#oppSel').value==='ai'&&turn==='O')return;
+  if($('#modeSel').value==='quiz')askQuestion(i);else place(i,turn)};
+$('#again').onclick=newRound;$('#newB').onclick=()=>{score={X:0,O:0,D:0};starter='X';newRound()};
+$('#oppSel').onchange=()=>{$('#lvlWrap').hidden=$('#oppSel').value!=='ai';score={X:0,O:0,D:0};starter='X';newRound()};
+$('#modeSel').onchange=newRound;
+$('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 صوت','🔊 Sound'):U('🔇 بدون صوت','🔇 Muted');$('#sndB').setAttribute('aria-pressed',soundOn)};
+TQI.relabel();newRound();
+
+</script>
+<!--tq-nav--><script src="../tq-nav.js"></script>
+</body></html>
