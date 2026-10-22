@@ -1,0 +1,707 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="../tq-i18n.css"><script src="../tq-i18n.js"></script>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="tq-i18n">
+<title>المد الأصلي والفرعي · Original and Secondary Madd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout: one-column "journey" — sticky progress header, one station at a time, fixed bottom nav. Tajweed-mushaf colors carry meaning. */
+:root{
+  --bg:#F3F6F4; --surface:#FFFFFF; --ink:#16302B; --muted:#5B6F69; --line:#D3DED9;
+  --accent:#0F5E4E; --accent-ink:#0B4A3D; --accent-soft:#8DBFB2; --accent-wash:#E3F0EC; --on-accent:#FFFFFF;
+  --star:#D9A21B; --star-ink:#8A6200; --note-bg:#FBF4E1;
+  --good:#2E8B57; --good-bg:#E4F4EA; --good-ink:#1E6B41; --bad:#C2413A; --bad-bg:#FBE7E5; --bad-ink:#9A2C26;
+  --m-tab:#3D7FB8; --m-wajib:#D21F3C; --m-jaiz:#E07800; --m-lazim:#8B0A1A; --m-badal:#B8860B;
+  --f-display:"Reem Kufi",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic",ui-sans-serif,system-ui,sans-serif;
+  --f-quran:"Amiri Quran","Amiri",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1A17; --surface:#15241F; --ink:#E4EEEA; --muted:#9DB2AB; --line:#2A3D37;
+  --accent:#3DB394; --accent-ink:#7FD6BE; --accent-soft:#2B6E5E; --accent-wash:#18332C; --on-accent:#06201A;
+  --star:#E8B53A; --star-ink:#F2C964; --note-bg:#2A2412;
+  --good:#4CC384; --good-bg:#14301F; --good-ink:#8BE0B1; --bad:#E5685F; --bad-bg:#3A1A18; --bad-ink:#F4A39C;
+  --m-tab:#7DB8EA; --m-wajib:#FF5C70; --m-jaiz:#FFA23D; --m-lazim:#FF8A8A; --m-badal:#E8C25A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1A17; --surface:#15241F; --ink:#E4EEEA; --muted:#9DB2AB; --line:#2A3D37;
+  --accent:#3DB394; --accent-ink:#7FD6BE; --accent-soft:#2B6E5E; --accent-wash:#18332C; --on-accent:#06201A;
+  --star:#E8B53A; --star-ink:#F2C964; --note-bg:#2A2412;
+  --good:#4CC384; --good-bg:#14301F; --good-ink:#8BE0B1; --bad:#E5685F; --bad-bg:#3A1A18; --bad-ink:#F4A39C;
+  --m-tab:#7DB8EA; --m-wajib:#FF5C70; --m-jaiz:#FFA23D; --m-lazim:#FF8A8A; --m-badal:#E8C25A; color-scheme:dark}
+.card h4.ex{font-family:var(--f-quran);font-size:2.2rem;line-height:1.3;color:var(--m-tab)}
+.c-tab{color:var(--m-tab)} .c-wajib{color:var(--m-wajib)} .c-jaiz{color:var(--m-jaiz)} .c-lazim{color:var(--m-lazim)} .c-badal{color:var(--m-badal)}
+.type{border-inline-start:6px solid var(--tc);}
+.type .cnt{font-family:var(--f-display);color:var(--tc);font-size:1.05rem}
+.ex{font-family:var(--f-quran);font-size:1.6rem;line-height:2}
+.stretch{height:38px;border-radius:19px;background:var(--accent-wash);position:relative;overflow:hidden;margin:10px 0}
+.stretch i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--accent);border-radius:19px;width:0;transition:width 2.4s cubic-bezier(.3,.1,.3,1)}
+.stretch.go i{width:100%}
+.counter{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.dots{display:flex;gap:8px}
+.dots b{width:30px;height:30px;border-radius:50%;border:2px solid var(--accent);display:grid;place-items:center;font-size:.85rem;color:var(--accent-ink);transition:background .2s}
+.dots b.on{background:var(--accent);color:var(--on-accent)}
+.tree{display:grid;gap:10px}
+.tree .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.cause{text-align:center;font-family:var(--f-display);font-size:1.15rem;padding:12px;border-radius:14px;background:var(--accent-wash);color:var(--accent-ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.9rem}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--lc);margin-inline-end:6px;vertical-align:middle}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.8;direction:rtl}
+.app{max-width:880px;margin:0 auto;padding-inline:16px;padding-block:0 96px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 10px;border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-size:1.15rem;color:var(--accent-ink);margin:0;flex:1 1 200px;min-width:0;line-height:1.4}
+.brand small{display:block;font-family:var(--f-body);font-size:.78rem;color:var(--muted);font-weight:400}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:.85rem;color:var(--muted);background:var(--surface);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip.stars{color:var(--star-ink);border-color:var(--star);font-weight:700}
+.tbtn{font:inherit;font-size:.82rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:2px 12px;cursor:pointer}
+.tbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.progress{display:flex;gap:4px;margin-top:10px}
+.progress button{flex:1;height:8px;border:0;border-radius:4px;background:var(--line);cursor:pointer;padding:0}
+.progress button{position:relative}.progress button::after{content:"";position:absolute;inset:-14px -2px}
+.progress button.done{background:var(--accent-soft)}
+.progress button.on{background:var(--accent)}
+.stage{padding-block:24px 8px;animation:in .35s ease}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stage-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.stage-head .n{font-family:var(--f-display);color:var(--accent);font-size:.95rem}
+.stage-head h2{font-family:var(--f-display);font-size:clamp(1.5rem,4.5vw,2.1rem);line-height:1.35;margin:0;text-wrap:balance;flex:1 1 260px}
+.guide{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-block:8px 18px}
+.guide svg{flex:0 0 44px;width:44px;height:44px}
+.guide p{margin:0;min-width:0}
+.guide b{color:var(--accent-ink)}
+.tnote{display:none;border-inline-start:4px solid var(--star);background:var(--note-bg);padding:10px 14px;border-radius:8px;font-size:.92rem;margin-block:10px}
+body.teacher .tnote{display:block}
+.tnote::before{content:"ملاحظة للمعلم: ";font-weight:700;color:var(--star-ink)}
+.en{display:none;font-family:system-ui,sans-serif;direction:ltr;unicode-bidi:isolate;font-size:.8em;color:var(--muted)}
+body.show-en .en{display:inline}
+body.show-en .en.blk{display:block}
+h3{font-family:var(--f-display);font-size:1.25rem;margin:22px 0 8px;color:var(--accent-ink);line-height:1.4}
+p{margin:0 0 12px;max-width:65ch}
+.big{font-size:1.25rem}
+.quran{font-family:var(--f-quran);font-size:clamp(1.6rem,5vw,2.2rem);line-height:2.2;text-align:center;padding:18px 12px;margin:14px 0;border-block:1px solid var(--line);color:var(--ink)}
+.quran .ref,.hadith .ref{display:block;font-family:var(--f-body);font-size:.85rem;color:var(--muted);line-height:1.6}
+.hadith{font-family:var(--f-quran);font-size:1.45rem;line-height:2;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-block:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.card h4{margin:0 0 4px;font-family:var(--f-display);font-size:1.1rem;color:var(--accent-ink)}
+.card p{margin:0}
+.flip{cursor:pointer;min-height:130px;display:flex;flex-direction:column;justify-content:center;text-align:center;user-select:none;transition:background .2s}
+.flip .back{display:none}
+.flip.open{background:var(--accent-wash)}
+.flip.open .front{display:none}
+.flip.open .back{display:block}
+.flip .front{font-family:var(--f-quran);font-size:1.9rem}
+.flip .hint{font-size:.78rem;color:var(--muted)}
+.widget{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-block:16px}
+.widget .q{font-weight:700;margin-bottom:10px}
+.widget .q .ar{font-family:var(--f-quran);font-size:1.5rem;font-weight:400}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button,.pool button,.order-pool button,.go{font:inherit;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:8px 16px;cursor:pointer;min-height:44px;transition:transform .1s,background .2s,border-color .2s}
+.opts button:hover,.pool button:hover,.order-pool button:hover{border-color:var(--accent)}
+.opts button:focus-visible,.pool button:focus-visible,.tbtn:focus-visible,.nav button:focus-visible,.progress button:focus-visible,.bin:focus-visible,.go:focus-visible{outline:3px solid var(--star);outline-offset:2px}
+.opts .letter{font-family:var(--f-quran);font-size:1.8rem;min-width:64px;padding:2px 14px}
+.opts button.right{background:var(--good-bg);border-color:var(--good);color:var(--good-ink)}
+.opts button.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad-ink)}
+.why{display:none;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--accent-wash);font-size:.95rem}
+.widget.answered .why{display:block}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(5px)}75%{transform:translateX(-5px)}}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px}
+.bin{border:2px dashed var(--line);border-radius:12px;padding:8px;min-height:90px;cursor:pointer;background:var(--bg);display:flex;flex-direction:column;gap:6px}
+.bin>b{font-family:var(--f-display);font-size:.95rem;color:var(--bin-c,var(--accent-ink))}
+.bin.armed{border-color:var(--accent);background:var(--accent-wash)}
+.bin .placed{font-family:var(--f-quran);font-size:1.15rem;line-height:1.7}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.pool button{font-family:var(--f-quran);font-size:1.3rem;padding:4px 14px}
+.pool button.sel{border-color:var(--accent);background:var(--accent-wash);transform:translateY(-2px)}
+.order-slots{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.order-slots span{border:1.5px dashed var(--line);border-radius:10px;padding:6px 12px;min-width:70px;text-align:center;color:var(--muted)}
+.order-slots span.f{border-style:solid;border-color:var(--good);color:var(--good-ink);background:var(--good-bg)}
+.order-slots i{font-style:normal;color:var(--muted)}
+.done-msg{display:none;margin-top:10px;font-weight:700;color:var(--good-ink)}
+.widget.complete .done-msg{display:block}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:6;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.nav-in{max-width:880px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nav button{font:inherit;font-weight:700;border-radius:12px;padding:10px 20px;cursor:pointer;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);min-height:46px}
+.nav .next{background:var(--accent);color:var(--on-accent);border-color:var(--accent);margin-inline-start:auto}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav .where{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.starpop{position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);font-family:var(--f-display);font-size:2rem;color:var(--star-ink);background:var(--surface);border:2px solid var(--star);border-radius:999px;padding:6px 22px;pointer-events:none;animation:pop 1s ease forwards;z-index:9}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}25%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-80%)}}
+.result{text-align:center;padding:20px;border:2px solid var(--star);border-radius:20px;background:var(--surface);margin-block:12px}
+.result .score{font-family:var(--f-display);font-size:3rem;color:var(--star-ink);font-variant-numeric:tabular-nums;line-height:1.3}
+table.sum{width:100%;border-collapse:collapse;font-size:.95rem}
+table.sum th,table.sum td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:start;vertical-align:top}
+table.sum th{font-family:var(--f-display);color:var(--accent-ink);font-weight:400}
+.tw{overflow-x:auto}
+ul.clean{padding-inline-start:20px;margin:0 0 12px}
+ul.clean li{margin-bottom:4px}
+.check label{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:520px){body{font-size:16px}.nav button{padding:10px 14px}.nav .where{display:none}}
+/* Pen tools & whiteboard (same design as the "عينك أمانة" deck) */
+.stage{position:relative}
+.ink-cv{position:absolute;left:0;top:0;width:100%;height:100%;z-index:45;pointer-events:none;touch-action:none}
+body.ink-on .ink-cv.cur,body.ink-on #wbBoard .ink-cv{pointer-events:auto;cursor:crosshair}
+body.ink-erase .ink-cv{cursor:cell!important}
+body.ink-laser .ink-cv{cursor:none!important}
+#wbLaser{position:fixed;inset:0;width:100%;height:100%;z-index:66;pointer-events:none}
+#wbBoard{position:fixed;inset:0;z-index:60;background-color:#FDFCF8;background-image:linear-gradient(#E6ECEF 1px,transparent 1px),linear-gradient(90deg,#E6ECEF 1px,transparent 1px);background-size:40px 40px}
+#wbBoard[hidden]{display:none!important}
+#wbBoard .bt{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font:700 18px/1 var(--f-body);color:#86662A;background:#FBF3E1;border:1px solid #EBDDBB;border-radius:20px;padding:8px 16px;z-index:2;pointer-events:none;white-space:nowrap}
+#tools{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:5px;background:rgba(7,23,33,.95);border:1px solid #C9A35A;border-radius:16px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#tools button{width:42px;height:42px;border-radius:10px;border:1px solid #24485A;background:#12303F;color:#E8F1F5;display:grid;place-items:center;padding:0;cursor:pointer}
+#tools button svg{width:22px;height:22px}
+#tools button.on{background:#C9A35A;color:#0B2431;border-color:#C9A35A}
+#tools button:focus-visible{outline:3px solid #C9A35A;outline-offset:2px}
+#tools .sw i{width:22px;height:22px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.6)}
+#tools .sw.on{background:#24485A;border-color:#C9A35A}
+#tools .sz i{display:block;border-radius:50%;background:#E8F1F5}
+#tools .sep{height:1px;background:#2A5266;margin:2px 0}
+#tools[hidden]{display:none!important}
+@media (max-height:980px){#tools{gap:4px;padding:6px}#tools button{width:34px;height:34px}#tools button svg{width:18px;height:18px}#tools .sw i{width:18px;height:18px}}
+@media (max-height:800px){#tools{flex-direction:row;flex-wrap:wrap;top:auto;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:none;max-width:calc(100% - 20px)}#tools .sep{width:1px;height:auto;margin:0 2px}}
+#drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
+
+</style>
+<div class="app" id="app" dir="rtl" lang="ar"></div>
+<script>
+(function(){
+const mcq=(key,q,opts,a,why,letters)=>`<div class="widget w-mcq" data-key="${key}" data-a="${a}"><div class="q">${q}</div><div class="opts">${opts.map(o=>`<button class="${letters?'letter':''}">${o}</button>`).join('')}</div><div class="why">${why}</div></div>`;
+const count=(n,label)=>`<div class="widget w-count" data-n="${n}"><div class="q">${label}</div><div class="counter"><button class="go">ابدأ العدّ</button><div class="dots">${Array.from({length:n},(_,i)=>`<b>${'١٢٣٤٥٦'[i]}</b>`).join('')}</div></div></div>`;
+const countE=(n,label)=>`<div class="widget w-count" data-n="${n}"><div class="q">${label}</div><div class="counter"><button class="go">Start counting</button><div class="dots">${Array.from({length:n},(_,i)=>`<b>${i+1}</b>`).join('')}</div></div></div>`;
+const en=t=>` <span class="en">${t}</span>`;
+const T=(c,t)=>`<span class="${c}">${t}</span>`;
+const tab=t=>T('c-tab',t), hmz=t=>T('c-wajib',t), suk=t=>T('c-lazim',t), bad=t=>T('c-badal',t);
+const ref=t=>`<span class="ref">${t}</span>`;
+/* Qur'an text below is copied from al-Maktaba al-Shamela (Hafs, إملائي): 110:1, 108:1, 103:3, 102:1–3, 1:2, 1:7, 69:1 */
+const SAY=s=>`<br><b>Say:</b> <i dir="ltr">${s}</i>`;
+
+window.LESSON={
+title:'المد الأصلي والمد الفرعي',
+sub:'التجويد · المدود ٢ · ترتيل القرآن | Tarteel Al-Quran',
+guideSvg:'<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="var(--accent-wash)"/><path d="M24 40V22M24 30l-8-7M24 26l8-6" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/><path d="M16 40h16" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="21" r="4" fill="var(--m-wajib)"/><circle cx="32" cy="18" r="4" fill="var(--m-lazim)"/><circle cx="24" cy="12" r="5" fill="var(--m-tab)"/></svg>',
+stages:[
+{title:'من الأطول؟', min:3,
+ guide:'اسمع المعلم يقرأ كلمة واحدة بطريقتين. أيهما الصحيح؟'+en('Listen: the teacher reads one word in two ways. Which one is right?'),
+ note:'اقرأ «جَاءَ» مرة بحركتين فقط (خطأ) ومرة بأربع أو خمس حركات (صح). لا تذكر السبب بعد؛ الطالب يكتشفه في المحطة ٥.'+SAY('Listen carefully. Which one is right? The first or the second?'),
+ html:`
+ <div class="quran">إِذَا ${'جَ'+hmz('ا')+'ءَ'} نَصْرُ اللَّهِ وَالْفَتْحُ${ref('النصر: ١')}</div>
+ ${mcq('h0','المعلم قرأ «جَاءَ» مرتين: مرة قصيرة ومرة أطول. أيهما الصحيح؟'+en('Which reading of جَاءَ is right?'),['القصيرة (حركتان)','الأطول (٤ أو ٥ حركات)'],1,'صح! هنا نمد أكثر من المد الطبيعي، لأن بعد الألف <b>سببًا</b>. اليوم نعرف ما هو السبب.')}
+ <h3>ماذا سأتعلم اليوم؟</h3>
+ <ul class="clean">
+  <li>المد الأصلي (الطبيعي): ما هو؟${en('Original (natural) Madd')}</li>
+  <li>المد الفرعي: لماذا نمد أكثر؟${en('Secondary Madd: why longer?')}</li>
+  <li>سببا المد الفرعي: الهمزة والسكون${en('The two causes: Hamza and Sukoon')}</li>
+ </ul>`},
+
+{title:'مراجعة: حروف المد', min:3,
+ guide:'تذكّر: حروف المد ثلاثة تجمعها كلمة <b>نُوحِيهَا</b>.'+en('Remember the 3 Madd letters: نوحيها'),
+ note:'مراجعة سريعة من الحصة الماضية. السؤال الأخير فخ: الواو بعد فتحة حرف لين لا مد.'+SAY('Show me the Madd letter. Good job!'),
+ html:`
+ <div class="quran">${'نُ'+tab('و')+'حِ'+tab('ي')+'هَ'+tab('ا')}</div>
+ ${mcq('r1','أين حرف المد؟ <span class="ar">قَالَ</span>',['قَ','ا','لَ'],1,'الألف ساكنة وقبلها فتحة.',true)}
+ ${mcq('r2','أين حرف المد؟ <span class="ar">يَقُولُ</span>',['يَ','قُ','و','لُ'],2,'الواو ساكنة وقبلها ضمة.',true)}
+ ${mcq('r3','أين حرف المد؟ <span class="ar">قِيلَ</span>',['قِ','ي','لَ'],1,'الياء ساكنة وقبلها كسرة.',true)}
+ ${mcq('r4','الواو في <span class="ar">سَوْفَ</span> حرف مد؟'+en('Is the Waw in سوف a Madd letter?'),['نعم','لا'],1,'لا. قبلها فتحة، فهي حرف <b>لين</b>.')}`},
+
+{title:'المد الأصلي', min:4,
+ guide:'المد الأصلي هو مد حرف المد <b>بنفسه</b>، بدون سبب بعده. اسمه أيضًا <b>المد الطبيعي</b>، ونمده <b>حركتين</b>.'+en('Original Madd = the Madd letter by itself, with no cause after it. Also called Natural Madd. 2 counts.'),
+ note:'سُمّي أصليًا لأن الحرف لا يقوم إلا به: لو حذفناه ضاع حرف المد. اطلب من الطالب أن يقرأ الآية ويعدّ بأصابعه.'+SAY('Listen carefully. Repeat after me. Now read alone.'),
+ html:`
+ <div class="card type" style="--tc:var(--m-tab)"><span class="cnt">٢</span><p>حرف مد + <b>لا همزة</b> بعده + <b>لا سكون</b> بعده</p></div>
+ <div class="quran">حَتَّى زُرْتُمُ ${'الْمَقَ'+tab('ا')+'بِرَ'}${ref('التكاثر: ٢ — من حفظك!')}</div>
+ ${count(2,'اقرأ «الْمَقَابِرَ» ومُدّ الألف حركتين')}
+ ${mcq('a1','لماذا اسمه «أصلي»؟'+en('Why is it called “original”?'),['لأن الحرف لا يُنطق صحيحًا بدونه','لأنه أطول مد','لأنه في أول الكلمة'],0,'صح! بدونه يضيع حرف المد نفسه: «الْمَقَبِرَ» خطأ.')}
+ ${mcq('a2','كم حركة نمد المد الأصلي؟'+en('How many counts?'),['حركتان','أربع','ست'],0,'حركتان دائمًا.')}`},
+
+{title:'المد الفرعي', min:4,
+ guide:'المد الفرعي هو <b>زيادة</b> على المد الأصلي بسبب: <b>همزة</b> أو <b>سكون</b>. مثل الشجرة: أصل، ومنه فروع.'+en('Secondary Madd = extra length because of a cause: Hamza or Sukoon. Like a tree: a root and branches.'),
+ note:'ارسم الشجرة على السبورة (W): الجذع = المد الأصلي، والفرعان = الهمزة والسكون. اقلب البطاقات واحدة واحدة.'+SAY('Look. This is the root. These are the branches.'),
+ html:`
+ <div class="tree">
+  <div class="row"><div class="card type" style="--tc:var(--m-tab)"><h4>المد الأصلي</h4><p>لا سبب بعده · <span class="cnt">٢</span></p></div>
+   <div class="card type" style="--tc:var(--accent)"><h4>المد الفرعي</h4><p>له سبب ← نمد أكثر</p></div></div>
+  <div class="row"><div class="cause">السبب ١: الهمزة ء</div><div class="cause">السبب ٢: السكون ـْ</div></div>
+ </div>
+ <div class="grid">
+  <div class="flip card"><b class="front">أصل</b><span class="back">الشيء الذي يُبنى عليه غيره</span></div>
+  <div class="flip card"><b class="front">فرع</b><span class="back">ما يخرج من الأصل ويزيد عليه</span></div>
+  <div class="flip card"><b class="front">السبب</b><span class="back">همزة أو سكون بعد حرف المد</span></div>
+ </div>
+ ${mcq('f1','سببا المد الفرعي هما:'+en('The two causes are:'),['الفتحة والكسرة','الهمزة والسكون','الشدة والتنوين'],1,'الهمزة والسكون فقط.')}`},
+
+{title:'السبب الأول: الهمزة', min:5,
+ guide:'إذا جاءت <b>همزة بعد حرف المد</b> نمد أكثر من حركتين. والهمزة تأتي في <b>نفس الكلمة</b> أو في <b>الكلمة التالية</b>.'+en('A Hamza after the Madd letter makes it longer. The Hamza can be in the same word or in the next word.'),
+ note:'لا تفصّل المتصل والمنفصل الآن؛ هذا درس الحصة القادمة (الدرس جاهز من 10/10). الهدف هنا أن يرى «الهمزة سبب». البدل (همزة قبل حرف المد) يُذكر فقط.'+SAY('Find the Hamza. Is it after the Madd letter?'),
+ html:`
+ <div class="grid">
+  <div class="card"><h4>في نفس الكلمة</h4><div class="quran" style="margin:4px 0">${'جَ'+hmz('ا')+'ءَ'}${ref('النصر: ١')}</div></div>
+  <div class="card"><h4>في الكلمة التالية</h4><div class="quran" style="margin:4px 0">${'إِنَّ'+hmz('ا')} ${hmz('أَ')}عْطَيْنَاكَ${ref('الكوثر: ١')}</div></div>
+ </div>
+ ${count(4,'اقرأ «جَاءَ» ومُدّ أربع حركات')}
+ ${mcq('h1','في «إِنَّا أَعْطَيْنَاكَ» أين الهمزة؟'+en('Where is the Hamza?'),['في نفس كلمة «إِنَّا»','في أول الكلمة التالية «أَعْطَيْنَاكَ»'],1,'الألف في آخر «إِنَّا» والهمزة في أول الكلمة التالية.')}
+ <div class="card" style="--tc:var(--m-badal)"><h4 class="c-badal">معلومة إضافية</h4><p>وإذا جاءت الهمزة <b>قبل</b> حرف المد مثل ${bad('آ')}مَنُوا (العصر: ٣) فاسمه <b>مد البدل</b>، وندرسه لاحقًا.</p></div>`},
+
+{title:'السبب الثاني: السكون', min:5,
+ guide:'إذا جاء <b>سكون بعد حرف المد</b> نمد أكثر. السكون نوعان: <b>ثابت</b> دائمًا، أو <b>عارض</b> يأتي عند الوقف.'+en('A Sukoon after the Madd letter makes it longer. Permanent Sukoon (always), or temporary Sukoon (when we stop).'),
+ note:'الشدة = حرفان: الأول ساكن. لذلك في «الضَّالِّينَ» بعد الألف سكون ثابت. في «تَعْلَمُونَ» الوقف يجعل النون ساكنة، فيصير السكون عارضًا. اطلب منه الوقف على آيات التكاثر.'+SAY('Stop here. Read the end again. Good!'),
+ html:`
+ <div class="grid">
+  <div class="card"><h4>سكون ثابت (أو شدة)</h4><div class="quran" style="margin:4px 0">وَلَا ${'الضَّ'+suk('ا')+'لِّينَ'}${ref('الفاتحة: ٧')}</div><div class="quran" style="margin:4px 0">${'الْحَ'+suk('ا')+'قَّةُ'}${ref('الحاقة: ١')}</div></div>
+  <div class="card"><h4>سكون عارض عند الوقف</h4><div class="quran" style="margin:4px 0">كَلَّا سَوْفَ ${'تَعْلَمُ'+suk('و')+'نْ'}${ref('التكاثر: ٣ — عند الوقف')}</div><div class="quran" style="margin:4px 0">رَبِّ ${'الْعَالَمِ'+suk('ي')+'نْ'}${ref('الفاتحة: ٢ — عند الوقف')}</div></div>
+ </div>
+ ${count(6,'اقرأ «الضَّالِّينَ» ومُدّ ست حركات')}
+ ${mcq('s1','لماذا نمد الألف في «الْحَاقَّةُ» طويلًا؟'+en('Why is the Alif in الحاقة long?'),['بعدها همزة','بعدها شدة (سكون ثابت)','لأنها أول السورة'],1,'القاف مشددة: أولها ساكن، فالسبب سكون ثابت.')}
+ ${mcq('s2','«تَعْلَمُونَ» عند الوقف: سبب المد الفرعي هو...'+en('When we stop on تعلمون, the cause is...'),['همزة','سكون عارض بسبب الوقف'],1,'الوقف جعل النون ساكنة.')}`},
+
+{title:'لعبة الشجرة', min:4,
+ guide:'اختر الكلمة، ثم اضغط على الغصن الصحيح.'+en('Pick a word, then tap the right branch.'),
+ note:'إذا أخطأ، اسأله: «بعد حرف المد: همزة؟ سكون؟ لا شيء؟».'+SAY('What comes after the Madd letter? Hamza? Sukoon? Nothing?'),
+ html:`
+ <div class="widget w-sort" data-key="g1">
+  <div class="bins">
+   <div class="bin" data-bin="a" style="--bin-c:var(--m-tab)"><b>أصلي</b></div>
+   <div class="bin" data-bin="h" style="--bin-c:var(--m-wajib)"><b>فرعي: همزة</b></div>
+   <div class="bin" data-bin="s" style="--bin-c:var(--m-lazim)"><b>فرعي: سكون</b></div>
+  </div>
+  <div class="pool">
+   <button data-bin="a">قَالَ</button><button data-bin="a">يَقُولُ</button><button data-bin="a">الْمَقَابِرَ</button>
+   <button data-bin="h">جَاءَ</button><button data-bin="h">إِنَّا أَعْطَيْنَاكَ</button><button data-bin="h">مَاءٌ</button>
+   <button data-bin="s">الضَّالِّينَ</button><button data-bin="s">الْحَاقَّةُ</button><button data-bin="s">تَعْلَمُونْ (وقف)</button>
+  </div>
+  <div class="done-msg">ممتاز! كل كلمة على غصنها.</div>
+ </div>`},
+
+{title:'الاختبار النهائي', min:4,
+ guide:'خمسة أسئلة. الإجابة الصحيحة من أول مرة = نجمة!'+en('Right the first time = a star!'),
+ note:'',
+ html:`
+ ${mcq('q1','١. المد الأصلي نمده:',['حركتين','أربع حركات','ست حركات'],0,'حركتان.')}
+ ${mcq('q2','٢. سببا المد الفرعي:',['الهمزة والسكون','الضمة والكسرة','التنوين والشدة'],0,'الهمزة والسكون.')}
+ ${mcq('q3','٣. <span class="ar">الْمَقَابِرَ</span> الألف فيها مد:',['أصلي','فرعي بسبب الهمزة','فرعي بسبب السكون'],0,'لا همزة ولا سكون بعد الألف.')}
+ ${mcq('q4','٤. <span class="ar">جَاءَ</span> الألف فيها مد:',['أصلي','فرعي بسبب الهمزة','فرعي بسبب السكون'],1,'بعد الألف همزة.')}
+ ${mcq('q5','٥. <span class="ar">الضَّالِّينَ</span> سبب المد فيها:',['همزة','سكون (شدة)','لا سبب'],1,'اللام مشددة: أولها ساكن.')}`},
+
+{title:'نتيجتك والواجب', min:0,
+ html:`
+ <div class="result"><div>نجومك</div><div class="score" id="res"></div><p id="resMsg" style="margin-inline:auto"></p></div>
+ <h3>الخلاصة</h3>
+ <div class="tw"><table class="sum"><thead><tr><th>النوع</th><th>بعد حرف المد</th><th>مثال</th></tr></thead><tbody>
+  <tr><td class="c-tab"><b>أصلي (طبيعي)</b></td><td>لا شيء · ٢</td><td class="ex" style="font-size:1.3rem">الْمَقَابِرَ</td></tr>
+  <tr><td class="c-wajib"><b>فرعي</b></td><td>همزة</td><td class="ex" style="font-size:1.3rem">جَاءَ</td></tr>
+  <tr><td class="c-lazim"><b>فرعي</b></td><td>سكون</td><td class="ex" style="font-size:1.3rem">الضَّالِّينَ</td></tr>
+ </tbody></table></div>
+ <h3>الواجب (على الموقع)</h3>
+ <ul class="clean">
+  <li>افتح لينك الواجب: لعبة «أصلي أم فرعي؟» ثم سجّل قراءتك.${en('Open your homework link: the game, then record your reading.')}</li>
+  <li>استمع إلى سورة التكاثر ٣–٨ ثلاث مرات، ثم سمّعها.${en('Listen to At-Takathur 3–8 three times, then recite.')}</li>
+ </ul>
+ <p class="small">الحصة القادمة: المد المتصل والمد المنفصل.${en('Next class: Connected and Separated Madd.')}</p>`,
+ onEnter:({earned,total,ar,$})=>{
+  $('#res').textContent=ar(earned)+' / '+ar(total);
+  const r=earned/total;
+  $('#resMsg').textContent=r>=.85?'ما شاء الله! فهمت الأصل والفروع.':r>=.6?'أحسنت! راجع السببين مرة أخرى.':'بداية طيبة. نراجعها معًا في الحصة القادمة إن شاء الله.';
+ }}
+],
+init:({$$})=>{
+  $$('.w-count').forEach(w=>{
+    const dots=$$('.dots b',w), btn=w.querySelector('.go'); let t=[];
+    btn.onclick=()=>{t.forEach(clearTimeout);t=[];dots.forEach(d=>d.classList.remove('on'));
+      dots.forEach((d,i)=>t.push(setTimeout(()=>d.classList.add('on'),700*(i+1))));};
+  });
+}
+};
+
+/* ---------- English version of every station (same widgets, answers and keys) ---------- */
+const LESSON_EN=[
+{title:'Which one is longer?',
+ guide:'Listen: the teacher reads one word in two ways. Which one is right?',
+ note:'Read “جَاءَ” once with only 2 counts (wrong) and once with 4–5 counts (right). Do not give the reason yet; he finds it in station 5.'+SAY('Listen carefully. Which one is right? The first or the second?'),
+ html:`
+ <div class="quran">إِذَا ${'جَ'+hmz('ا')+'ءَ'} نَصْرُ اللَّهِ وَالْفَتْحُ${ref('An-Nasr 110:1')}</div>
+ ${mcq('h0','The teacher read “جَاءَ” twice: short and longer. Which one is right?',['The short one (2 counts)','The longer one (4 or 5 counts)'],1,'Right! Here we stretch more than natural Madd, because after the Alif there is a <b>cause</b>. Today we find out what it is.')}
+ <h3>What will I learn today?</h3>
+ <ul class="clean">
+  <li>Original (natural) Madd: what is it?</li>
+  <li>Secondary Madd: why do we stretch more?</li>
+  <li>The two causes: Hamza and Sukoon</li>
+ </ul>`},
+{title:'Review: the Madd letters',
+ guide:'Remember: there are 3 Madd letters, in the word <b>نُوحِيهَا</b>.',
+ note:'Quick review of last class. The last question is a trap: Waw after Fatha is a Leen letter, not Madd.'+SAY('Show me the Madd letter. Good job!'),
+ html:`
+ <div class="quran">${'نُ'+tab('و')+'حِ'+tab('ي')+'هَ'+tab('ا')}</div>
+ ${mcq('r1','Where is the Madd letter? <span class="ar">قَالَ</span>',['قَ','ا','لَ'],1,'Alif with Fatha before it.',true)}
+ ${mcq('r2','Where is the Madd letter? <span class="ar">يَقُولُ</span>',['يَ','قُ','و','لُ'],2,'Waw sakinah with Damma before it.',true)}
+ ${mcq('r3','Where is the Madd letter? <span class="ar">قِيلَ</span>',['قِ','ي','لَ'],1,'Yaa sakinah with Kasra before it.',true)}
+ ${mcq('r4','Is the Waw in <span class="ar">سَوْفَ</span> a Madd letter?',['Yes','No'],1,'No. Fatha comes before it, so it is a <b>Leen</b> letter.')}`},
+{title:'Original Madd',
+ guide:'Original Madd is the Madd letter <b>by itself</b>, with no cause after it. It is also called <b>Natural Madd</b>. We stretch it <b>2 counts</b>.',
+ note:'It is “original” because the letter cannot exist without it: drop it and the Madd letter is gone. Ask him to read the ayah and count on his fingers.'+SAY('Listen carefully. Repeat after me. Now read alone.'),
+ html:`
+ <div class="card type" style="--tc:var(--m-tab)"><span class="cnt">2</span><p>Madd letter + <b>no Hamza</b> after + <b>no Sukoon</b> after</p></div>
+ <div class="quran">حَتَّى زُرْتُمُ ${'الْمَقَ'+tab('ا')+'بِرَ'}${ref('At-Takathur 102:2 — you memorised it!')}</div>
+ ${countE(2,'Read “الْمَقَابِرَ” and stretch the Alif 2 counts')}
+ ${mcq('a1','Why is it called “original”?',['Without it the letter is not read correctly','It is the longest Madd','It is at the start of the word'],0,'Right! Without it the Madd letter itself is lost: “الْمَقَبِرَ” is wrong.')}
+ ${mcq('a2','How many counts for Original Madd?',['2','4','6'],0,'Always 2.')}`},
+{title:'Secondary Madd',
+ guide:'Secondary Madd is <b>extra</b> length on top of the original, because of a cause: <b>Hamza</b> or <b>Sukoon</b>. Like a tree: a root, and branches.',
+ note:'Draw the tree on the whiteboard (W): trunk = Original Madd, two branches = Hamza and Sukoon. Flip the cards one by one.'+SAY('Look. This is the root. These are the branches.'),
+ html:`
+ <div class="tree">
+  <div class="row"><div class="card type" style="--tc:var(--m-tab)"><h4>Original Madd</h4><p>no cause · <span class="cnt">2</span></p></div>
+   <div class="card type" style="--tc:var(--accent)"><h4>Secondary Madd</h4><p>has a cause → longer</p></div></div>
+  <div class="row"><div class="cause">Cause 1: Hamza ء</div><div class="cause">Cause 2: Sukoon ـْ</div></div>
+ </div>
+ <div class="grid">
+  <div class="flip card"><b class="front">Asl (root)</b><span class="back">what other things are built on</span></div>
+  <div class="flip card"><b class="front">Far‘ (branch)</b><span class="back">what grows from the root and adds to it</span></div>
+  <div class="flip card"><b class="front">The cause</b><span class="back">Hamza or Sukoon after the Madd letter</span></div>
+ </div>
+ ${mcq('f1','The two causes are:',['Fatha and Kasra','Hamza and Sukoon','Shadda and Tanween'],1,'Only Hamza and Sukoon.')}`},
+{title:'Cause 1: Hamza',
+ guide:'A <b>Hamza after the Madd letter</b> makes us stretch more than 2 counts. The Hamza is in the <b>same word</b> or in the <b>next word</b>.',
+ note:'Do not teach Muttasil / Munfasil in detail now; that is next class (lesson ready since 10/10). Goal: he sees “Hamza = cause”. Badal (Hamza before the Madd letter) is only mentioned.'+SAY('Find the Hamza. Is it after the Madd letter?'),
+ html:`
+ <div class="grid">
+  <div class="card"><h4>Same word</h4><div class="quran" style="margin:4px 0">${'جَ'+hmz('ا')+'ءَ'}${ref('An-Nasr 110:1')}</div></div>
+  <div class="card"><h4>Next word</h4><div class="quran" style="margin:4px 0">${'إِنَّ'+hmz('ا')} ${hmz('أَ')}عْطَيْنَاكَ${ref('Al-Kawthar 108:1')}</div></div>
+ </div>
+ ${countE(4,'Read “جَاءَ” and stretch 4 counts')}
+ ${mcq('h1','In “إِنَّا أَعْطَيْنَاكَ”, where is the Hamza?',['In the same word «إِنَّا»','At the start of the next word «أَعْطَيْنَاكَ»'],1,'The Alif ends «إِنَّا» and the Hamza starts the next word.')}
+ <div class="card" style="--tc:var(--m-badal)"><h4 class="c-badal">Extra</h4><p>If the Hamza comes <b>before</b> the Madd letter, like ${bad('آ')}مَنُوا (Al-‘Asr 103:3), it is called <b>Madd al-Badal</b>. We learn it later.</p></div>`},
+{title:'Cause 2: Sukoon',
+ guide:'A <b>Sukoon after the Madd letter</b> makes us stretch more. Two kinds: <b>permanent</b> Sukoon (always), or <b>temporary</b> Sukoon when we stop.',
+ note:'Shadda = two letters, the first one has Sukoon. So in «الضَّالِّينَ» a permanent Sukoon comes after the Alif. In «تَعْلَمُونَ» stopping makes the Noon sakinah: a temporary Sukoon. Ask him to stop at the end of the Takathur ayat.'+SAY('Stop here. Read the end again. Good!'),
+ html:`
+ <div class="grid">
+  <div class="card"><h4>Permanent Sukoon (or Shadda)</h4><div class="quran" style="margin:4px 0">وَلَا ${'الضَّ'+suk('ا')+'لِّينَ'}${ref('Al-Fatihah 1:7')}</div><div class="quran" style="margin:4px 0">${'الْحَ'+suk('ا')+'قَّةُ'}${ref('Al-Haqqah 69:1')}</div></div>
+  <div class="card"><h4>Temporary Sukoon (stopping)</h4><div class="quran" style="margin:4px 0">كَلَّا سَوْفَ ${'تَعْلَمُ'+suk('و')+'نْ'}${ref('At-Takathur 102:3 — when stopping')}</div><div class="quran" style="margin:4px 0">رَبِّ ${'الْعَالَمِ'+suk('ي')+'نْ'}${ref('Al-Fatihah 1:2 — when stopping')}</div></div>
+ </div>
+ ${countE(6,'Read “الضَّالِّينَ” and stretch 6 counts')}
+ ${mcq('s1','Why is the Alif in «الْحَاقَّةُ» long?',['A Hamza comes after it','A Shadda (permanent Sukoon) comes after it','It is the first word of the surah'],1,'The Qaf has Shadda: its first part is sakin, so the cause is a permanent Sukoon.')}
+ ${mcq('s2','Stopping on «تَعْلَمُونَ»: the cause of the longer Madd is...',['Hamza','Temporary Sukoon from stopping'],1,'Stopping made the Noon sakinah.')}`},
+{title:'The tree game',
+ guide:'Pick a word, then tap the right branch.',
+ note:'If he is wrong, ask: “After the Madd letter: Hamza? Sukoon? Nothing?”'+SAY('What comes after the Madd letter? Hamza? Sukoon? Nothing?'),
+ html:`
+ <div class="widget w-sort" data-key="g1">
+  <div class="bins">
+   <div class="bin" data-bin="a" style="--bin-c:var(--m-tab)"><b>Original</b></div>
+   <div class="bin" data-bin="h" style="--bin-c:var(--m-wajib)"><b>Secondary: Hamza</b></div>
+   <div class="bin" data-bin="s" style="--bin-c:var(--m-lazim)"><b>Secondary: Sukoon</b></div>
+  </div>
+  <div class="pool">
+   <button data-bin="a">قَالَ</button><button data-bin="a">يَقُولُ</button><button data-bin="a">الْمَقَابِرَ</button>
+   <button data-bin="h">جَاءَ</button><button data-bin="h">إِنَّا أَعْطَيْنَاكَ</button><button data-bin="h">مَاءٌ</button>
+   <button data-bin="s">الضَّالِّينَ</button><button data-bin="s">الْحَاقَّةُ</button><button data-bin="s">تَعْلَمُونْ (stop)</button>
+  </div>
+  <div class="done-msg">Excellent! Every word is on its branch.</div>
+ </div>`},
+{title:'Final quiz',
+ guide:'Five questions. Right the first time = a star!',
+ note:'',
+ html:`
+ ${mcq('q1','1. Original Madd is stretched:',['2 counts','4 counts','6 counts'],0,'2 counts.')}
+ ${mcq('q2','2. The two causes of Secondary Madd:',['Hamza and Sukoon','Damma and Kasra','Tanween and Shadda'],0,'Hamza and Sukoon.')}
+ ${mcq('q3','3. <span class="ar">الْمَقَابِرَ</span>: the Alif is',['Original','Secondary (Hamza)','Secondary (Sukoon)'],0,'No Hamza and no Sukoon after the Alif.')}
+ ${mcq('q4','4. <span class="ar">جَاءَ</span>: the Alif is',['Original','Secondary (Hamza)','Secondary (Sukoon)'],1,'A Hamza comes after the Alif.')}
+ ${mcq('q5','5. <span class="ar">الضَّالِّينَ</span>: the cause is',['Hamza','Sukoon (Shadda)','No cause'],1,'The Lam has Shadda: its first part is sakin.')}`},
+{title:'Your result and homework',
+ html:`
+ <div class="result"><div>Your stars</div><div class="score" id="res"></div><p id="resMsg" style="margin-inline:auto"></p></div>
+ <h3>Summary</h3>
+ <div class="tw"><table class="sum"><thead><tr><th>Type</th><th>After the Madd letter</th><th>Example</th></tr></thead><tbody>
+  <tr><td class="c-tab"><b>Original (natural)</b></td><td>nothing · 2</td><td class="ex" style="font-size:1.3rem">الْمَقَابِرَ</td></tr>
+  <tr><td class="c-wajib"><b>Secondary</b></td><td>Hamza</td><td class="ex" style="font-size:1.3rem">جَاءَ</td></tr>
+  <tr><td class="c-lazim"><b>Secondary</b></td><td>Sukoon</td><td class="ex" style="font-size:1.3rem">الضَّالِّينَ</td></tr>
+ </tbody></table></div>
+ <h3>Homework (on the website)</h3>
+ <ul class="clean">
+  <li>Open your homework link: play “Original or Secondary?”, then record your reading.</li>
+  <li>Listen to At-Takathur 3–8 three times, then recite it.</li>
+ </ul>
+ <p class="small">Next class: Connected and Separated Madd.</p>`,
+ onEnter:({earned,total,ar,$})=>{
+  $('#res').textContent=earned+' / '+total;
+  const r=earned/total;
+  $('#resMsg').textContent=r>=.85?'Masha Allah! You understand the root and the branches.':r>=.6?'Well done! Review the two causes once more.':'A good start. We will review together next class, in sha Allah.';
+ }}
+];
+LESSON.titleEn='Original and Secondary Madd';LESSON.subEn='Tajweed · Madd 2 · Tarteel Al-Quran';
+LESSON.stages.forEach((s,i)=>s.en=LESSON_EN[i]);
+})();
+</script>
+<script>
+(function(){
+// Pen tools + whiteboard, ported from the "عينك أمانة" deck to the scrolling lesson pages.
+// Ink lives inside each station (scrolls with the text); the whiteboard is a full-screen grid board.
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ hand:SV('<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V12M16 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L7 15"/>'),
+ pen:SV('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ hl:SV('<path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ erase:SV('<path d="M20 20H8l-5-5a2 2 0 0 1 0-2.8L12.2 3a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L13 20"/><path d="M6 11l7 7"/>'),
+ laser:SV('<circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'),
+ undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+ clear:SV('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'),
+ board:SV('<rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21l4-4 4 4"/>'),
+ close:SV('<path d="M6 6l12 12M18 6L6 18"/>')
+};
+const COLORS=['#C2453A','#14374A','#2E8B5A','#2F6FB3','#C9A35A','#FFFFFF'];
+const SIZES=[2.5,5,9];
+
+// toolbar
+const tb=document.createElement('div');tb.id='tools';tb.hidden=true;tb.setAttribute('role','toolbar');tb.setAttribute('aria-label','أدوات الكتابة');
+tb.innerHTML=`
+ <button data-t="none" title="تحكم في الدرس (V / Esc)" aria-label="تحكم في الدرس">${IC.hand}</button>
+ <button data-t="pen" title="قلم (P)" aria-label="قلم">${IC.pen}</button>
+ <button data-t="hl" title="هايلايتر لتظليل الكلمات (H)" aria-label="هايلايتر">${IC.hl}</button>
+ <button data-t="erase" title="ممحاة (E)" aria-label="ممحاة">${IC.erase}</button>
+ <button data-t="laser" title="مؤشر ليزر (L)" aria-label="مؤشر ليزر">${IC.laser}</button>
+ <div class="sep"></div>
+ ${COLORS.map(c=>`<button class="sw" data-c="${c}" title="لون" aria-label="لون ${c}"><i style="background:${c}"></i></button>`).join('')}
+ <div class="sep"></div>
+ ${SIZES.map((s,i)=>`<button class="sz" data-s="${i}" title="سُمك" aria-label="سمك ${i+1}"><i style="width:${6+i*6}px;height:${6+i*6}px"></i></button>`).join('')}
+ <div class="sep"></div>
+ <button data-a="undo" title="تراجع (Ctrl+Z)" aria-label="تراجع">${IC.undo}</button>
+ <button data-a="clear" title="امسح كتابة هذه المحطة" aria-label="مسح">${IC.clear}</button>
+ <button data-a="board" title="سبورة بيضاء (W)" aria-label="سبورة بيضاء">${IC.board}</button>
+ <button data-a="close" title="إغلاق أدوات الكتابة (D)" aria-label="إغلاق">${IC.close}</button>`;
+document.body.appendChild(tb);
+
+// whiteboard overlay + laser layer
+const board=document.createElement('div');board.id='wbBoard';board.hidden=true;board.innerHTML='<span class="bt">سبورة بيضاء · Whiteboard</span>';document.body.appendChild(board);
+const lz=document.createElement('canvas');lz.id='wbLaser';document.body.appendChild(lz);const lctx=lz.getContext('2d');
+
+let tool='none',color=COLORS[0],sizeI=1,stage=0;
+const store={},backup={};
+const key=()=>stage+(board.hidden?'':'-wb');
+const list=()=>store[key()]||(store[key()]=[]);
+
+function lw(s,pr){return s.t==='hl'?s.w*5:s.w*(0.45+1.1*(pr==null?.5:pr))}
+function seg(c,s,i){const p=s.pts,a=p[i-1],b=p[i];const m0=i===1?a:[(p[i-2][0]+a[0])/2,(p[i-2][1]+a[1])/2];const m1=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ c.lineWidth=lw(s,(a[2]+b[2])/2);c.beginPath();c.moveTo(m0[0],m0[1]);c.quadraticCurveTo(a[0],a[1],m1[0],m1[1]);c.stroke()}
+function drawStroke(c,s){const p=s.pts;if(!p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.c;c.fillStyle=s.c;
+ if(s.t==='hl'){c.globalAlpha=.35;c.lineWidth=lw(s);c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++){const m=[(p[i-1][0]+p[i][0])/2,(p[i-1][1]+p[i][1])/2];c.quadraticCurveTo(p[i-1][0],p[i-1][1],m[0],m[1])}c.lineTo(p[p.length-1][0],p[p.length-1][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]);c.stroke()}
+ else{if(p.length===1){c.beginPath();c.arc(p[0][0],p[0][1],lw(s,p[0][2])/2,0,7);c.fill()}else for(let i=1;i<p.length;i++)seg(c,s,i)}
+ c.restore()}
+
+// canvases: one per station + one on the board
+const cvs={};
+function makeCanvas(host,k){
+ const cv=document.createElement('canvas');cv.className='ink-cv';host.appendChild(cv);
+ const o={cv,ctx:cv.getContext('2d'),w:0,h:0,k};
+ o.fit=()=>{const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;o.w=r.width;o.h=r.height;cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));o.ctx.setTransform(d,0,0,d,0,0);o.redraw()};
+ o.redraw=extra=>{o.ctx.clearRect(0,0,o.w,o.h);(store[o.k()]||[]).forEach(s=>drawStroke(o.ctx,s));if(extra)drawStroke(o.ctx,extra)};
+ bind(o);return o;
+}
+function stageCanvas(i){
+ if(cvs[i])return cvs[i];const sec=document.getElementById('s'+i);if(!sec)return null;
+ const o=makeCanvas(sec,()=>String(i));new ResizeObserver(()=>o.fit()).observe(sec);return cvs[i]=o;
+}
+const bcv=makeCanvas(board,()=>stage+'-wb');
+const active=()=>board.hidden?stageCanvas(stage):bcv;
+function redraw(){const a=active();if(a)a.redraw()}
+
+let cur=null,erasing=false,trail=[];
+function bind(o){
+ const cv=o.cv;
+ const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?(e.pressure||.5):.5]};
+ const eraseAt=(x,y)=>{const L=store[o.k()]||[],r=14;let ch=false;for(let i=L.length-1;i>=0;i--){if(L[i].pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<r+lw(L[i],p[2])/2)){L.splice(i,1);ch=true}}if(ch)o.redraw()};
+ cv.addEventListener('pointerdown',e=>{if(tool==='none')return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=pos(e);
+  erasing=tool==='erase'||e.button===5||!!(e.buttons&32);
+  if(tool==='laser'){trail=[[e.clientX,e.clientY,performance.now()]];return}
+  if(erasing){eraseAt(p[0],p[1]);return}
+  cur={t:tool,c:color,w:SIZES[sizeI],pts:[p]};if(tool==='pen')drawStroke(o.ctx,cur)});
+ cv.addEventListener('pointermove',e=>{if(tool==='none')return;const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce.length?ce:[e];
+  if(tool==='laser'){trail.push([e.clientX,e.clientY,performance.now()]);return}
+  if(!e.buttons)return;
+  for(const ev of evs){const p=pos(ev);if(erasing){eraseAt(p[0],p[1]);continue}if(!cur)continue;const l=cur.pts[cur.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])<1.2)continue;cur.pts.push(p);
+   if(cur.t==='pen'){o.ctx.save();o.ctx.lineCap='round';o.ctx.strokeStyle=cur.c;seg(o.ctx,cur,cur.pts.length-1);o.ctx.restore()}}
+  if(cur&&cur.t==='hl')o.redraw(cur)});
+ const up=()=>{if(cur){(store[o.k()]||(store[o.k()]=[])).push(cur);cur=null;o.redraw()}erasing=false};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(tool==='laser')trail.push(null)});
+ cv.addEventListener('contextmenu',e=>{if(tool!=='none')e.preventDefault()});
+}
+
+function fitLaser(){const d=window.devicePixelRatio||1;lz.width=innerWidth*d;lz.height=innerHeight*d;lctx.setTransform(d,0,0,d,0,0)}
+fitLaser();
+(function loop(){const now=performance.now();lctx.clearRect(0,0,innerWidth,innerHeight);
+ if(tool==='laser'){trail=trail.filter(p=>p&&now-p[2]<450);for(let i=1;i<trail.length;i++){const a=trail[i-1],b=trail[i],k=1-(now-b[2])/450;lctx.strokeStyle=`rgba(255,40,40,${.7*k})`;lctx.lineWidth=8*k+2;lctx.lineCap='round';lctx.beginPath();lctx.moveTo(a[0],a[1]);lctx.lineTo(b[0],b[1]);lctx.stroke()}
+  const t=trail[trail.length-1];if(t){lctx.fillStyle='rgba(255,40,40,.25)';lctx.beginPath();lctx.arc(t[0],t[1],16,0,7);lctx.fill();lctx.fillStyle='#FF2A2A';lctx.beginPath();lctx.arc(t[0],t[1],7,0,7);lctx.fill()}}
+ requestAnimationFrame(loop)})();
+
+function markCurrent(){Object.entries(cvs).forEach(([i,o])=>o.cv.classList.toggle('cur',+i===stage))}
+function setTool(t){tool=t;if(t!=='laser')trail=[];
+ document.body.classList.toggle('ink-on',t!=='none');document.body.classList.toggle('ink-erase',t==='erase');document.body.classList.toggle('ink-laser',t==='laser');
+ if(t!=='none'){const a=stageCanvas(stage);if(a&&!a.w)a.fit()}markCurrent();
+ tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setColor(c){color=c;tb.querySelectorAll('.sw').forEach(b=>b.classList.toggle('on',b.dataset.c===c));if(tool==='none'||tool==='erase'||tool==='laser')setTool('pen')}
+function setSize(i){sizeI=i;tb.querySelectorAll('.sz').forEach(b=>b.classList.toggle('on',+b.dataset.s===i))}
+function openTools(open){tb.hidden=!open;if(open){if(tool==='none')setTool('pen')}else{setTool('none');if(!board.hidden)toggleBoard()}if(dbtn)dbtn.classList.toggle('on',open)}
+function toggleBoard(){board.hidden=!board.hidden;tb.querySelector('[data-a="board"]').classList.toggle('on',!board.hidden);if(!board.hidden){bcv.fit();if(tool==='none')setTool('pen')}redraw()}
+function undo(){const L=list();if(L.length)L.pop();else if(backup[key()]){store[key()]=backup[key()];delete backup[key()]}redraw()}
+function clearAll(){const L=list();if(!L.length)return;backup[key()]=L.slice();store[key()]=[];redraw()}
+tb.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)setTool(b.dataset.t);else if(b.dataset.c)setColor(b.dataset.c);else if(b.dataset.s)setSize(+b.dataset.s);
+ else if(b.dataset.a==='undo')undo();else if(b.dataset.a==='clear')clearAll();else if(b.dataset.a==='board')toggleBoard();else if(b.dataset.a==='close')openTools(false)});
+
+let dbtn=null;
+document.addEventListener('lesson:stage',e=>{
+ if(!dbtn){const row=document.querySelector('.top-row');if(row){dbtn=document.createElement('button');dbtn.id='drawB';dbtn.className='tbtn';dbtn.innerHTML='✏️ قلم / سبورة';dbtn.title='أدوات الكتابة (D)';
+  dbtn.onclick=()=>openTools(tb.hidden);row.appendChild(dbtn)}}
+ stage=e.detail;
+ if(!board.hidden){board.hidden=true;tb.querySelector('[data-a="board"]').classList.remove('on')}
+ if(store[String(stage)]||tool!=='none'){const o=stageCanvas(stage);if(o)requestAnimationFrame(()=>o.fit())}
+ markCurrent();
+});
+window.addEventListener('resize',()=>{fitLaser();if(!board.hidden)bcv.fit()});
+setColor(COLORS[0]);setTool('none');setSize(1);
+
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();
+ if((e.ctrlKey||e.metaKey)&&k==='z'){if(!tb.hidden){e.preventDefault();undo()}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(k==='d'){openTools(tb.hidden);return}
+ if(tb.hidden&&!['p','h','w','l'].includes(k))return;
+ if(k==='p'){openTools(true);setTool('pen')}else if(k==='h'){openTools(true);setTool('hl')}else if(k==='e'&&!tb.hidden)setTool('erase')
+ else if(k==='l'){openTools(true);setTool('laser')}else if(k==='v'||k==='escape')setTool('none');else if(k==='w'){openTools(true);toggleBoard()}});
+})();
+
+</script>
+<script>
+(function(){
+const L=window.LESSON, S=L.stages;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const hot=window.claude&&window.claude.hot;
+let cur=0, earned=new Set();
+const EN=()=>document.body.classList.contains('show-en');
+const T=(a,e)=>EN()?e:a;
+const ar=n=>EN()?String(n):String(n).replace(/\d/g,d=>'\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669'[d]);
+const fld=(s,k)=>EN()&&s.en&&s.en[k]!=null?s.en[k]:s[k];
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+const app=$('#app');
+app.innerHTML=`
+<header class="top"><div class="top-row">
+  <h1 class="brand" id="brandH"></h1>
+  <span class="chip stars" aria-live="polite">\u2605 <span id="sc">0</span> / <span id="st">0</span></span>
+  <span class="chip" id="mins"></span>
+  <button class="tbtn" id="enT" aria-pressed="false">English</button>
+  <button class="tbtn" id="tT" aria-pressed="false"></button>
+</div><div class="progress" id="prog"></div></header>
+<main id="stages"></main>`;
+const nav=document.createElement('nav');nav.className='nav';
+nav.innerHTML=`<div class="nav-in"><button class="prev" id="prev"></button><span class="where" id="where"></span><button class="next" id="next"></button></div>`;
+document.body.appendChild(nav);
+
+const main=$('#stages'), prog=$('#prog');
+const total=S.reduce((a,s)=>a+(s.min||0),0);
+S.forEach((s,i)=>{
+  const sec=document.createElement('section');sec.className='stage';sec.hidden=true;sec.id='s'+i;
+  sec.innerHTML='<div class="sc"></div>';
+  main.appendChild(sec);
+  const b=document.createElement('button');b.onclick=()=>go(i);prog.appendChild(b);
+});
+
+function star(key){
+  if(!key||earned.has(key))return; earned.add(key); $('#sc').textContent=ar(earned.size);
+  const p=document.createElement('div');p.className='starpop';p.textContent='★ +'+ar(1);document.body.appendChild(p);setTimeout(()=>p.remove(),1000);
+}
+function wrongFx(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
+
+
+/* (re)draw every station in the current language, then re-bind the widgets */
+function fill(){
+  app.dir=EN()?'ltr':'rtl';app.lang=EN()?'en':'ar';
+  $('#brandH').innerHTML=EN()&&L.titleEn?`${L.titleEn}<small>${L.subEn||L.sub}</small>`:`${L.title}<small>${L.sub}</small>`;
+  $('#tT').textContent=T('ملاحظات المعلم','Teacher notes');
+  $('#prev').textContent=T('\u2192 السابق','\u2190 Previous');$('#next').textContent=T('التالي \u2190','Next \u2192');
+  S.forEach((s,i)=>{
+    const c=$('.sc',$('#s'+i)),title=fld(s,'title'),guide=fld(s,'guide'),note=fld(s,'note');
+    c.innerHTML=`<div class="stage-head"><span class="n">${T('المحطة '+ar(i+1),'Station '+(i+1))}</span><h2>${title}</h2>${s.min?`<span class="chip">${T(ar(s.min)+' د',s.min+' min')}</span>`:''}</div>
+    ${guide?`<div class="guide">${L.guideSvg}<p>${guide}</p></div>`:''}
+    ${note?`<div class="tnote">${note}</div>`:''}
+    <div class="body">${fld(s,'html')}</div>`;
+    const b=prog.children[i];b.title=title.replace(/<[^>]+>/g,'');b.setAttribute('aria-label',T('المحطة ','Station ')+(i+1)+': '+b.title);
+  });
+  $('#sc').textContent=ar(earned.size);
+  bindAll();
+}
+function bindAll(){
+// MCQ / true-false / letter pick
+$$('.w-mcq').forEach(w=>{
+  const a=+w.dataset.a, btns=$$('.opts button',w); let tries=0;
+  btns.forEach((b,i)=>b.onclick=()=>{
+    if(w.classList.contains('answered'))return;
+    tries++;
+    if(i===a){b.classList.add('right');w.classList.add('answered');if(tries===1)star(w.dataset.key);}
+    else{b.classList.add('wrong');wrongFx(b);if(tries>=2){btns[a].classList.add('right');w.classList.add('answered');}}
+  });
+});
+// sort into bins
+$$('.w-sort').forEach(w=>{
+  const pool=$('.pool',w), items=shuffle($$('button',pool)); items.forEach(b=>pool.appendChild(b));
+  let sel=null;
+  items.forEach(b=>b.onclick=()=>{items.forEach(x=>x.classList.remove('sel'));sel=b;b.classList.add('sel');$$('.bin',w).forEach(x=>x.classList.add('armed'))});
+  $$('.bin',w).forEach(bin=>{
+    bin.tabIndex=0;
+    const drop=()=>{
+      if(!sel)return;
+      if(sel.dataset.bin===bin.dataset.bin){const d=document.createElement('div');d.className='placed';d.innerHTML=sel.innerHTML;bin.appendChild(d);sel.remove();sel=null;$$('.bin',w).forEach(x=>x.classList.remove('armed'));
+        if(!$$('button',pool).length){w.classList.add('complete');star(w.dataset.key)}}
+      else{wrongFx(sel)}
+    };
+    bin.onclick=drop;bin.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();drop()}};
+  });
+});
+// order sequence
+$$('.w-order').forEach(w=>{
+  const pool=$('.order-pool',w), slots=$('.order-slots',w), items=$$('button',pool), n=items.length; let next=0;
+  slots.innerHTML=items.map((_,i)=>`<span>${ar(i+1)}</span>`).join('<i>←</i>');
+  shuffle(items).forEach(b=>pool.appendChild(b));
+  items.forEach(b=>b.onclick=()=>{
+    if(+b.dataset.i===next){const s=$$('span',slots)[next];s.textContent=b.textContent;s.classList.add('f');b.remove();next++;if(next===n){w.classList.add('complete');star(w.dataset.key)}}
+    else wrongFx(b);
+  });
+});
+// flip cards
+$$('.flip').forEach(c=>{c.tabIndex=0;c.setAttribute('role','button');const t=()=>c.classList.toggle('open');c.onclick=t;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}}});
+
+$('#st').textContent=ar($$('[data-key]').length);
+if(L.init)L.init({star,ar,$,$$});
+}
+
+function go(i,keepScroll){
+  i=Math.max(0,Math.min(S.length-1,i)); cur=i;
+  $$('.stage').forEach((s,k)=>s.hidden=k!==i);
+  $$('#prog button').forEach((b,k)=>{b.className=k===i?'on':k<i?'done':''});
+  $('#prev').disabled=i===0; $('#next').disabled=i===S.length-1;
+  $('#where').textContent=T(`${ar(i+1)} من ${ar(S.length)}`,`${i+1} of ${S.length}`);
+  const spent=S.slice(0,i).reduce((a,s)=>a+(s.min||0),0);
+  $('#mins').textContent=T(`الوقت: ${ar(spent)}\u2013${ar(spent+(S[i].min||0))} من ${ar(total)} د`,`Time: ${spent}\u2013${spent+(S[i].min||0)} of ${total} min`);
+  document.dispatchEvent(new CustomEvent('lesson:stage',{detail:i}));
+  const oe=(EN()&&S[i].en&&S[i].en.onEnter)||S[i].onEnter;
+  if(oe)oe({earned:earned.size,total:$$('[data-key]').length,ar,$,$$});
+  if(!keepScroll)window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
+}
+$('#prev').onclick=()=>go(cur-1); $('#next').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;const f=EN()?1:-1;if(e.key==='ArrowLeft')go(cur-f);if(e.key==='ArrowRight')go(cur+f)});
+const tog=(btn,cls)=>{btn.onclick=()=>{const on=document.body.classList.toggle(cls);btn.setAttribute('aria-pressed',on)}};
+tog($('#enT'),'show-en'); tog($('#tT'),'teacher');
+/* the shared top bar switches language: redraw the stations in the new language, staying on the same one */
+window.addEventListener('tq-lang',()=>{fill();go(cur,true)});
+fill();
+if(hot&&hot.snapshot)hot.snapshot(()=>({cur}));
+const start=d=>go((d&&d.cur)||0);
+hot&&hot.ready?hot.ready(start):start(hot&&hot.data||{});
+})();
+
+</script>
+
+<!--tq-nav--><script src="../tq-nav.js"></script>
+</body></html>

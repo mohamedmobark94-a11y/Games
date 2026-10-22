@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>أصلي أم فرعي؟ · Original or Secondary?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
+<!-- Homework for the lesson lessons/madd-asli-fari.html. Qur'an text from al-Maktaba al-Shamela (102:1–3, 110:1, 108:1, 1:7, 69:1). -->
+<style>
+:root{--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;
+  --asl:#7DB8EA;--hmz:#FF5C70;--suk:#FF8A8A;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif;--f-en:"Inter","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.6 var(--f-ui);padding:14px}
+html[lang=en] body{font-family:var(--f-en)}
+h2{margin:0 0 4px;color:var(--gold);font-size:1.25rem}
+h3{margin:0 0 6px;font-size:1.05rem;color:var(--gold)}
+.hi{color:var(--muted)}
+.card{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+.word{font:700 2.4rem/1.6 var(--f-ar);text-align:center;background:#FFFDF7;color:#1f2a27;border-radius:14px;padding:4px 10px;margin:6px 0 10px;direction:rtl}
+.word small{display:block;font:600 .8rem var(--f-ui);color:#6b6b6b}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.opt{font:inherit;font-weight:700;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:14px;min-height:52px;cursor:pointer;padding:6px 10px}
+.opt[data-j="0"]{border-inline-start:6px solid var(--asl)}.opt[data-j="1"]{border-inline-start:6px solid var(--hmz)}.opt[data-j="2"]{border-inline-start:6px solid var(--suk)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 22%,var(--card))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 20%,var(--card))}
+.why{margin-top:8px;color:var(--muted);font-size:.95rem}
+.bar{height:10px;background:var(--card);border-radius:999px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+.ayat{font:700 1.6rem/2.3 var(--f-ar);background:#FFFDF7;color:#1f2a27;border-radius:14px;padding:8px 12px;direction:rtl;text-align:center}
+.ayat .m{color:#B0182F}
+.end{text-align:center;font-size:1.15rem}
+.small{font-size:.9rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<h2 id="t"></h2>
+<div class="hi" id="hi"></div>
+<div class="bar"><i id="prog"></i></div>
+<div id="game"></div>
+<div class="card">
+  <h3 id="recH"></h3>
+  <div class="ayat">أَلْهَاكُمُ التَّكَاثُرُ ﴿١﴾ حَتَّى زُرْتُمُ الْمَقَابِرَ ﴿٢﴾ كَلَّا سَوْفَ تَعْلَمُ<span class="m">و</span>نَ ﴿٣﴾</div>
+  <div class="small" id="recSay" style="margin-top:8px"></div>
+  <div id="recBox" style="margin-top:8px"></div>
+</div>
+
+<script src="../app/hwkit.js"></script>
+<script>
+(function(){
+  const TXT = {
+    title: ['أصلي أم فرعي؟', 'Original or Secondary?'],
+    hi: ['أهلًا {n}! لكل كلمة: هل المد أصلي، أم فرعي بسبب الهمزة، أم فرعي بسبب السكون؟', 'Hi {n}! For each word: is the Madd original, secondary because of Hamza, or secondary because of Sukoon?'],
+    hiNo: ['لكل كلمة: هل المد أصلي، أم فرعي بسبب الهمزة، أم فرعي بسبب السكون؟', 'For each word: is the Madd original, secondary because of Hamza, or secondary because of Sukoon?'],
+    ask: ['ماذا بعد حرف المد؟', 'What comes after the Madd letter?'],
+    end: ['أحسنت! خلّصت اللعبة 🌟', 'Well done! Game finished 🌟'],
+    recH: ['🎙️ سجّل: سورة التكاثر ١–٣', '🎙️ Record: Surah At-Takathur 1–3'],
+    rec: ['اقرأ الآيات وقف في آخر كل آية. في آخر الآية ٣ مُدّ الواو أكثر، لأن الوقف جعل النون ساكنة.', 'Read the ayat and stop at the end of each one. At the end of ayah 3 stretch the Waw longer: stopping makes the Noon sakinah.'],
+    recLabel: ['التكاثر ١–٣ بالوقف', 'At-Takathur 1–3 with stopping']
+  };
+  const OPTS = [['أصلي', 'Original'], ['فرعي: همزة', 'Secondary: Hamza'], ['فرعي: سكون', 'Secondary: Sukoon']];
+  const WHY = [['لا همزة ولا سكون بعد حرف المد: حركتان.', 'No Hamza and no Sukoon after the Madd letter: 2 counts.'],
+               ['بعد حرف المد همزة.', 'A Hamza comes after the Madd letter.'],
+               ['بعد حرف المد سكون (أو شدة).', 'A Sukoon (or Shadda) comes after the Madd letter.']];
+  const QS = [
+    {w: 'قَالَ', a: 0}, {w: 'جَاءَ', ref: ['النصر: ١', 'An-Nasr 110:1'], a: 1}, {w: 'الضَّالِّينَ', ref: ['الفاتحة: ٧', 'Al-Fatihah 1:7'], a: 2},
+    {w: 'الْمَقَابِرَ', ref: ['التكاثر: ٢', 'At-Takathur 102:2'], a: 0}, {w: 'إِنَّا أَعْطَيْنَاكَ', ref: ['الكوثر: ١', 'Al-Kawthar 108:1'], a: 1},
+    {w: 'الْحَاقَّةُ', ref: ['الحاقة: ١', 'Al-Haqqah 69:1'], a: 2}, {w: 'يَقُولُ', a: 0}, {w: 'مَاءٌ', a: 1},
+    {w: 'تَعْلَمُونْ', ref: ['التكاثر: ٣ — عند الوقف', 'At-Takathur 102:3 — when stopping'], a: 2}
+  ];
+  const E = () => TQHW.lang === 'en' ? 1 : 0, L = k => TXT[k][E()];
+  let qi = 0, right = 0, picked = null; const details = [];
+
+  function draw(){
+    document.documentElement.lang = TQHW.lang; document.documentElement.dir = TQHW.lang === 'en' ? 'ltr' : 'rtl';
+    document.getElementById('t').textContent = L('title');
+    document.getElementById('hi').textContent = TQHW.name ? L('hi').replace('{n}', TQHW.name) : L('hiNo');
+    document.getElementById('recH').textContent = L('recH');
+    document.getElementById('recSay').textContent = L('rec');
+    document.getElementById('prog').style.width = (qi / QS.length * 100) + '%';
+    const g = document.getElementById('game');
+    if(qi >= QS.length){ g.innerHTML = '<div class="card end">' + L('end') + '<div style="margin-top:6px"><b dir="ltr">' + right + ' / ' + QS.length + '</b></div></div>'; return; }
+    const q = QS[qi];
+    g.innerHTML = '<div class="card"><div class="small">' + (qi + 1) + ' / ' + QS.length + ' · ' + L('ask') + '</div>' +
+      '<div class="word">' + q.w + (q.ref ? '<small>' + q.ref[E()] + '</small>' : '') + '</div><div class="opts">' +
+      OPTS.map((o, j) => '<button class="opt" data-j="' + j + '">' + o[E()] + '</button>').join('') + '</div>' +
+      (picked != null ? '<div class="why">' + WHY[q.a][E()] + '</div>' : '') + '</div>';
+    g.querySelectorAll('[data-j]').forEach(b => b.onclick = () => answer(+b.dataset.j));
+  }
+  function answer(j){
+    if(picked != null) return;
+    const q = QS[qi], ok = j === q.a; picked = j;
+    if(ok) right++;
+    details.push({q: q.w, a: OPTS[j][0] + (ok ? '' : ' (الصح: ' + OPTS[q.a][0] + ')'), ok});
+    TQHW.result({score: right, max: QS.length, done: qi + 1 >= QS.length, details});
+    draw();
+    document.querySelectorAll('[data-j]').forEach(x => { x.disabled = true; const k = +x.dataset.j; if(k === q.a) x.classList.add('right'); else if(k === j) x.classList.add('wrong'); });
+    setTimeout(() => { qi++; picked = null; draw(); }, ok ? 900 : 1900);
+  }
+  TQHW.recordButton(document.getElementById('recBox'), TXT.recLabel[0]);
+  TQHW.on('lang', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

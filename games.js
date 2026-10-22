@@ -92,6 +92,8 @@ window.LESSONS = [
    desc:'غض البصر وحفظ الفرج للشباب بأسلوب عرض تفاعلي، مع القلم والسبورة.', book:'فقه الشباب في سؤال وجواب'},
   {file:'ghadd-albasar.html', date:'2026-10-03', ico:'👀', ar:'غَضُّ البَصَر', en:'Lowering the Gaze', age:['teens'], subj:'islamic',
    desc:'درس ٣٠ دقيقة بمحطات: الحكم والدليل والمواقف واختبار.', book:'فقه الشباب في سؤال وجواب', min:30},
+  {file:'madd-asli-fari.html', date:'2026-10-23', ico:'🌳', ar:'المَدُّ الأَصْلِيُّ وَالفَرْعِيّ', en:'Original and Secondary Madd', age:['teens'], subj:'tajweed',
+   desc:'درس ٣٠ دقيقة: المد الأصلي وسببا المد الفرعي (الهمزة والسكون) بلعبة الشجرة.', book:'التجويد · المدود', min:32},
   {file:'ahkam-almadd.html', date:'2026-10-03', ico:'〰️', ar:'أَحْكَامُ المَدّ', en:'The Rules of Madd', age:['kids','teens'], subj:'tajweed',
    desc:'درس ٤٠ دقيقة للمبتدئين: المد الطبيعي والفرعي بأمثلة وألعاب.', book:'التجويد للمبتدئين', min:40},
   {file:'reciters-road.html', date:'2026-09-14', ico:'🛣️', ar:'طَرِيقُ القَارِئ', en:"The Reciter's Road", age:['teens','adults'], subj:'tajweed',
@@ -128,6 +130,7 @@ window.DESC_EN = {
   'allah-watching.html':'A lesson on mindfulness for children: Allah sees me and hears me everywhere, through stories and situations.',
   'aynuk-amana.html':'Lowering the gaze and guarding chastity for teens, in an interactive presentation with pen and whiteboard.',
   'ghadd-albasar.html':'A 30-minute lesson in stations: the ruling, the evidence, situations and a quiz.',
+  'madd-asli-fari.html':'A 30-minute lesson: original madd and the two causes of secondary madd (hamza and sukoon), with a tree sorting game.',
   'ahkam-almadd.html':'A 40-minute beginner lesson: natural and secondary madd with examples and games.',
   'reciters-road.html':'The six stop signs in the muṣḥaf and other marks you will meet, with examples.'
 };
