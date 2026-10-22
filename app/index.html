@@ -170,6 +170,19 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         }catch(e){}
       }; }
   }
+  /* Runs inside the report generator page too: who-is-who fixes. The name list itself is private (kv 'genAliases'):
+     {drop:{id:[tokens]}, add:{id:[tokens]}, ids:[{id, phrases, tokens, first}]}; accents are ignored in names. */
+  function genNameFixes(A){
+    if(window.__tqFix2) return; window.__tqFix2 = true;
+    if(typeof window.foldId === 'function'){ const o = window.foldId;
+      window.foldId = n => o(String(n == null ? '' : n).normalize('NFD').replace(/[\u0300-\u036f]/g, '')); }
+    let L; try{ L = STUDENT_IDS; }catch(e){ return; }
+    if(!A) return;
+    const get = id => L.find(s => s.id === id);
+    Object.keys(A.drop || {}).forEach(id => { const s = get(id); if(s) s.tokens = s.tokens.filter(t => A.drop[id].indexOf(t) < 0); });
+    Object.keys(A.add || {}).forEach(id => { const s = get(id); if(s) s.tokens.push.apply(s.tokens, A.add[id]); });
+    (A.ids || []).forEach(x => { if(!get(x.id)) L[x.first ? 'unshift' : 'push']({id: x.id, phrases: x.phrases || [], tokens: x.tokens || []}); });
+  }
   async function reportView(){
     if(genUrl){ app.innerHTML = '<iframe id="genFrame" src="' + genUrl + '" title="تقرير الحصة"></iframe>'; return; }
     app.innerHTML = '<div class="card muted" style="margin:16px">بيفتح المولّد…</div>';
@@ -177,7 +190,8 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     if(r.error){ app.innerHTML = '<div class="card" style="margin:16px">معرفتش أفتح المولّد: ' + esc(r.error.message) + '</div>'; return; }
     let html = await r.data.text();
     /* small fixes for the stored generator (skipped automatically once the stored file already contains them) */
-    const fix = '<script>(' + genFixes.toString() + ')();<\/script>';
+    let aliases = null; try{ aliases = JSON.parse(await kvGet('genAliases')); }catch(e){}
+    const fix = '<script>(' + genFixes.toString() + ')();(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
     html = /<\/body>/i.test(html) ? html.replace(/<\/body>(?![\s\S]*<\/body>)/i, fix + '</body>') : html + fix;
     genUrl = URL.createObjectURL(new Blob([html], {type: 'text/html;charset=utf-8'}));
     if(view === 'report') reportView();
