@@ -35,7 +35,7 @@ h3{margin:0 0 6px;font-size:1.05rem;color:var(--gold)}
 </style>
 </head>
 <body>
-<h2 id="t"></h2>
+<div style="display:flex;align-items:center;gap:8px"><h2 id="t" style="flex:1"></h2><button data-tq-sound style="font-size:1.2rem;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;width:44px;height:44px;cursor:pointer"></button></div>
 <div class="hi" id="hi"></div>
 <div class="bar"><i id="prog"></i></div>
 <div id="game"></div>
@@ -47,6 +47,7 @@ h3{margin:0 0 6px;font-size:1.05rem;color:var(--gold)}
 </div>
 
 <script src="../app/hwkit.js"></script>
+<script src="../tq-fx.js"></script>
 <script>
 (function(){
   const TXT = {
@@ -96,6 +97,8 @@ h3{margin:0 0 6px;font-size:1.05rem;color:var(--gold)}
     TQHW.result({score: right, max: QS.length, done: qi + 1 >= QS.length, details});
     draw();
     document.querySelectorAll('[data-j]').forEach(x => { x.disabled = true; const k = +x.dataset.j; if(k === q.a) x.classList.add('right'); else if(k === j) x.classList.add('wrong'); });
+    const btn = document.querySelector('[data-j="' + j + '"]');
+    if(window.TQFX){ ok ? TQFX.ok(btn) : TQFX.bad(btn); if(qi + 1 >= QS.length) setTimeout(() => TQFX.win(), 1000); }
     setTimeout(() => { qi++; picked = null; draw(); }, ok ? 900 : 1900);
   }
   TQHW.recordButton(document.getElementById('recBox'), TXT.recLabel[0]);

@@ -12,6 +12,7 @@
   - It runs inside the student's homework link (app/hw.html); every TQHW.result() call updates what is sent.
   - Language follows the homework page button: TQHW.lang + TQHW.on('lang', …).
   - Do not use 100vh heights: the frame grows to fit the page.
+  - Sounds and voice: ../tq-fx.js — TQFX.ok(el) / TQFX.bad(el) on every answer, TQFX.win() at the end.
 -->
 <style>
 :root{--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;
@@ -33,13 +34,14 @@ h2{margin:0 0 4px;color:var(--gold);font-size:1.25rem}
 </style>
 </head>
 <body>
-<h2 id="t"></h2>
+<div style="display:flex;align-items:center;gap:8px"><h2 id="t" style="flex:1"></h2><button data-tq-sound style="font-size:1.2rem;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;width:44px;height:44px;cursor:pointer"></button></div>
 <div class="hi" id="hi"></div>
 <div class="bar"><i id="prog"></i></div>
 <div id="game"></div>
 <div class="card" id="recCard"><div id="recSay"></div><div id="recBox" style="margin-top:8px"></div></div>
 
 <script src="../app/hwkit.js"></script>
+<script src="../tq-fx.js"></script>
 <script>
 (function(){
   /* ---- content (bilingual) ---- */
@@ -75,6 +77,7 @@ h2{margin:0 0 4px;color:var(--gold);font-size:1.25rem}
     b.classList.add(ok ? 'right' : 'wrong'); if(!ok) document.querySelector('[data-j="' + q.a + '"]').classList.add('right');
     document.querySelectorAll('[data-j]').forEach(x => x.disabled = true);
     if(ok) right++;
+    if(window.TQFX){ ok ? TQFX.ok(b) : TQFX.bad(b); if(qi + 1 >= QS.length) setTimeout(() => TQFX.win(), 800); }
     details.push({q: q.show, a: OPTS[j][0], ok});
     qi++;
     /* report after every answer: the last report is what gets sent */

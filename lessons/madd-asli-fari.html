@@ -166,6 +166,22 @@ body.ink-laser .ink-cv{cursor:none!important}
 #drawB.on{background:#C9A35A!important;color:#0B2431!important;border-color:#C9A35A!important}
 
 </style>
+<style>
+.guide{position:relative}
+.vbtn,.qplay{border:0;border-radius:999px;background:var(--accent);color:#fff;font-size:1.15rem;width:44px;height:44px;cursor:pointer;flex:none;box-shadow:0 3px 0 rgba(0,0,0,.18);transition:transform .1s}
+.vbtn{margin-inline-start:auto}.vbtn:active,.qplay:active{transform:translateY(2px)}
+.qplay{display:inline-grid;place-items:center;vertical-align:middle;margin-inline-start:10px;width:40px;height:40px;font-size:1rem}
+.qplay.on{animation:qp 1s infinite}@keyframes qp{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--accent) 30%,transparent)}}
+.mtree{display:block;width:100%;max-width:560px;margin:4px auto 8px}
+.mtree .g{fill:none;stroke:#8B5E3C;stroke-width:16;stroke-linecap:round;stroke-dasharray:600;stroke-dashoffset:600;animation:grow 1.2s ease forwards}
+.mtree .gr{stroke:#7BAE6A;stroke-width:6;animation-duration:.6s}.mtree .rt{stroke-width:8;animation-delay:.3s}.mtree .b1{animation-delay:.9s;stroke-width:11}.mtree .b2{animation-delay:1.1s;stroke-width:11}
+.mtree .lf,.mtree .lt{opacity:0;transform-box:fill-box;transform-origin:center;animation:popin .5s ease forwards}
+.mtree .l0{animation-delay:1.5s}.mtree .l1{animation-delay:1.8s}.mtree .l2{animation-delay:2.1s}.mtree .l3{animation-delay:2.3s}
+.mtree text{font:700 24px var(--f-ui,system-ui);fill:#fff}
+@keyframes grow{to{stroke-dashoffset:0}}@keyframes popin{0%{opacity:0;transform:scale(.3)}70%{opacity:1;transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+.stage:not([hidden]) .quran{animation:qin .5s ease}@keyframes qin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.mtree .g{stroke-dashoffset:0;animation:none}.mtree .lf,.mtree .lt{opacity:1;animation:none}}
+</style>
 <div class="app" id="app" dir="rtl" lang="ar"></div>
 <script>
 (function(){
@@ -178,8 +194,23 @@ const tab=t=>T('c-tab',t), hmz=t=>T('c-wajib',t), suk=t=>T('c-lazim',t), bad=t=>
 const ref=t=>`<span class="ref">${t}</span>`;
 /* Qur'an text below is copied from al-Maktaba al-Shamela (Hafs, إملائي): 110:1, 108:1, 103:3, 102:1–3, 1:2, 1:7, 69:1 */
 const SAY=s=>`<br><b>Say:</b> <i dir="ltr">${s}</i>`;
+const qp=(s,a)=>`<button class="qplay" data-s="${s}" data-a="${a}" title="Husary · الحصري">🔊</button>`;
+const TREE=(en)=>`<svg class="mtree" viewBox="0 0 640 360" role="img" aria-label="${en?'Madd tree':'شجرة المد'}">
+ <path class="g gr" d="M40 330 H600" />
+ <path class="g trunk" d="M320 330 V170" />
+ <path class="g rt" d="M320 330 C300 345 270 350 240 352 M320 330 C340 345 370 350 400 352" />
+ <path class="g b1" d="M320 210 C280 180 230 150 170 120" />
+ <path class="g b2" d="M320 190 C360 160 410 130 470 100" />
+ <circle class="lf l1" cx="160" cy="110" r="46" fill="var(--m-wajib)"/><circle class="lf l2" cx="480" cy="92" r="46" fill="var(--m-lazim)"/>
+ <circle class="lf l0" cx="320" cy="150" r="58" fill="var(--m-tab)"/>
+ <text class="lt l1" x="160" y="118" text-anchor="middle">${en?'Hamza':'همزة'}</text>
+ <text class="lt l2" x="480" y="100" text-anchor="middle">${en?'Sukoon':'سكون'}</text>
+ <text class="lt l0" x="320" y="157" text-anchor="middle" style="font-size:18px">${en?'Original · 2':'أصلي ٢'}</text>
+ <text class="lt l3" x="336" y="316" text-anchor="start" direction="ltr" style="fill:var(--muted);font-size:19px">${en?'root: the Madd letter':'الجذر: حرف المد'}</text>
+</svg>`;
 
 window.LESSON={
+voice:'lessons/madd-asli-fari/s',
 title:'المد الأصلي والمد الفرعي',
 sub:'التجويد · المدود ٢ · ترتيل القرآن | Tarteel Al-Quran',
 guideSvg:'<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="var(--accent-wash)"/><path d="M24 40V22M24 30l-8-7M24 26l8-6" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/><path d="M16 40h16" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="21" r="4" fill="var(--m-wajib)"/><circle cx="32" cy="18" r="4" fill="var(--m-lazim)"/><circle cx="24" cy="12" r="5" fill="var(--m-tab)"/></svg>',
@@ -188,7 +219,7 @@ stages:[
  guide:'اسمع المعلم يقرأ كلمة واحدة بطريقتين. أيهما الصحيح؟'+en('Listen: the teacher reads one word in two ways. Which one is right?'),
  note:'اقرأ «جَاءَ» مرة بحركتين فقط (خطأ) ومرة بأربع أو خمس حركات (صح). لا تذكر السبب بعد؛ الطالب يكتشفه في المحطة ٥.'+SAY('Listen carefully. Which one is right? The first or the second?'),
  html:`
- <div class="quran">إِذَا ${'جَ'+hmz('ا')+'ءَ'} نَصْرُ اللَّهِ وَالْفَتْحُ${ref('النصر: ١')}</div>
+ <div class="quran">إِذَا ${'جَ'+hmz('ا')+'ءَ'} نَصْرُ اللَّهِ وَالْفَتْحُ${ref('النصر: ١')}${qp(110,1)}</div>
  ${mcq('h0','المعلم قرأ «جَاءَ» مرتين: مرة قصيرة ومرة أطول. أيهما الصحيح؟'+en('Which reading of جَاءَ is right?'),['القصيرة (حركتان)','الأطول (٤ أو ٥ حركات)'],1,'صح! هنا نمد أكثر من المد الطبيعي، لأن بعد الألف <b>سببًا</b>. اليوم نعرف ما هو السبب.')}
  <h3>ماذا سأتعلم اليوم؟</h3>
  <ul class="clean">
@@ -212,7 +243,7 @@ stages:[
  note:'سُمّي أصليًا لأن الحرف لا يقوم إلا به: لو حذفناه ضاع حرف المد. اطلب من الطالب أن يقرأ الآية ويعدّ بأصابعه.'+SAY('Listen carefully. Repeat after me. Now read alone.'),
  html:`
  <div class="card type" style="--tc:var(--m-tab)"><span class="cnt">٢</span><p>حرف مد + <b>لا همزة</b> بعده + <b>لا سكون</b> بعده</p></div>
- <div class="quran">حَتَّى زُرْتُمُ ${'الْمَقَ'+tab('ا')+'بِرَ'}${ref('التكاثر: ٢ — من حفظك!')}</div>
+ <div class="quran">حَتَّى زُرْتُمُ ${'الْمَقَ'+tab('ا')+'بِرَ'}${ref('التكاثر: ٢ — من حفظك!')}${qp(102,2)}</div>
  ${count(2,'اقرأ «الْمَقَابِرَ» ومُدّ الألف حركتين')}
  ${mcq('a1','لماذا اسمه «أصلي»؟'+en('Why is it called “original”?'),['لأن الحرف لا يُنطق صحيحًا بدونه','لأنه أطول مد','لأنه في أول الكلمة'],0,'صح! بدونه يضيع حرف المد نفسه: «الْمَقَبِرَ» خطأ.')}
  ${mcq('a2','كم حركة نمد المد الأصلي؟'+en('How many counts?'),['حركتان','أربع','ست'],0,'حركتان دائمًا.')}`},
@@ -221,6 +252,7 @@ stages:[
  guide:'المد الفرعي هو <b>زيادة</b> على المد الأصلي بسبب: <b>همزة</b> أو <b>سكون</b>. مثل الشجرة: أصل، ومنه فروع.'+en('Secondary Madd = extra length because of a cause: Hamza or Sukoon. Like a tree: a root and branches.'),
  note:'ارسم الشجرة على السبورة (W): الجذع = المد الأصلي، والفرعان = الهمزة والسكون. اقلب البطاقات واحدة واحدة.'+SAY('Look. This is the root. These are the branches.'),
  html:`
+ ${TREE(false)}
  <div class="tree">
   <div class="row"><div class="card type" style="--tc:var(--m-tab)"><h4>المد الأصلي</h4><p>لا سبب بعده · <span class="cnt">٢</span></p></div>
    <div class="card type" style="--tc:var(--accent)"><h4>المد الفرعي</h4><p>له سبب ← نمد أكثر</p></div></div>
@@ -238,8 +270,8 @@ stages:[
  note:'لا تفصّل المتصل والمنفصل الآن؛ هذا درس الحصة القادمة (الدرس جاهز من 10/10). الهدف هنا أن يرى «الهمزة سبب». البدل (همزة قبل حرف المد) يُذكر فقط.'+SAY('Find the Hamza. Is it after the Madd letter?'),
  html:`
  <div class="grid">
-  <div class="card"><h4>في نفس الكلمة</h4><div class="quran" style="margin:4px 0">${'جَ'+hmz('ا')+'ءَ'}${ref('النصر: ١')}</div></div>
-  <div class="card"><h4>في الكلمة التالية</h4><div class="quran" style="margin:4px 0">${'إِنَّ'+hmz('ا')} ${hmz('أَ')}عْطَيْنَاكَ${ref('الكوثر: ١')}</div></div>
+  <div class="card"><h4>في نفس الكلمة</h4><div class="quran" style="margin:4px 0">${'جَ'+hmz('ا')+'ءَ'}${ref('النصر: ١')}${qp(110,1)}</div></div>
+  <div class="card"><h4>في الكلمة التالية</h4><div class="quran" style="margin:4px 0">${'إِنَّ'+hmz('ا')} ${hmz('أَ')}عْطَيْنَاكَ${ref('الكوثر: ١')}${qp(108,1)}</div></div>
  </div>
  ${count(4,'اقرأ «جَاءَ» ومُدّ أربع حركات')}
  ${mcq('h1','في «إِنَّا أَعْطَيْنَاكَ» أين الهمزة؟'+en('Where is the Hamza?'),['في نفس كلمة «إِنَّا»','في أول الكلمة التالية «أَعْطَيْنَاكَ»'],1,'الألف في آخر «إِنَّا» والهمزة في أول الكلمة التالية.')}
@@ -250,8 +282,8 @@ stages:[
  note:'الشدة = حرفان: الأول ساكن. لذلك في «الضَّالِّينَ» بعد الألف سكون ثابت. في «تَعْلَمُونَ» الوقف يجعل النون ساكنة، فيصير السكون عارضًا. اطلب منه الوقف على آيات التكاثر.'+SAY('Stop here. Read the end again. Good!'),
  html:`
  <div class="grid">
-  <div class="card"><h4>سكون ثابت (أو شدة)</h4><div class="quran" style="margin:4px 0">وَلَا ${'الضَّ'+suk('ا')+'لِّينَ'}${ref('الفاتحة: ٧')}</div><div class="quran" style="margin:4px 0">${'الْحَ'+suk('ا')+'قَّةُ'}${ref('الحاقة: ١')}</div></div>
-  <div class="card"><h4>سكون عارض عند الوقف</h4><div class="quran" style="margin:4px 0">كَلَّا سَوْفَ ${'تَعْلَمُ'+suk('و')+'نْ'}${ref('التكاثر: ٣ — عند الوقف')}</div><div class="quran" style="margin:4px 0">رَبِّ ${'الْعَالَمِ'+suk('ي')+'نْ'}${ref('الفاتحة: ٢ — عند الوقف')}</div></div>
+  <div class="card"><h4>سكون ثابت (أو شدة)</h4><div class="quran" style="margin:4px 0">وَلَا ${'الضَّ'+suk('ا')+'لِّينَ'}${ref('الفاتحة: ٧')}${qp(1,7)}</div><div class="quran" style="margin:4px 0">${'الْحَ'+suk('ا')+'قَّةُ'}${ref('الحاقة: ١')}${qp(69,1)}</div></div>
+  <div class="card"><h4>سكون عارض عند الوقف</h4><div class="quran" style="margin:4px 0">كَلَّا سَوْفَ ${'تَعْلَمُ'+suk('و')+'نْ'}${ref('التكاثر: ٣ — عند الوقف')}${qp(102,3)}</div><div class="quran" style="margin:4px 0">رَبِّ ${'الْعَالَمِ'+suk('ي')+'نْ'}${ref('الفاتحة: ٢ — عند الوقف')}${qp(1,2)}</div></div>
  </div>
  ${count(6,'اقرأ «الضَّالِّينَ» ومُدّ ست حركات')}
  ${mcq('s1','لماذا نمد الألف في «الْحَاقَّةُ» طويلًا؟'+en('Why is the Alif in الحاقة long?'),['بعدها همزة','بعدها شدة (سكون ثابت)','لأنها أول السورة'],1,'القاف مشددة: أولها ساكن، فالسبب سكون ثابت.')}
@@ -302,16 +334,19 @@ stages:[
  <p class="small">الحصة القادمة: المد المتصل والمد المنفصل.${en('Next class: Connected and Separated Madd.')}</p>`,
  onEnter:({earned,total,ar,$})=>{
   $('#res').textContent=ar(earned)+' / '+ar(total);
-  const r=earned/total;
+  const r=earned/total; window.TQFX&&setTimeout(()=>TQFX.win(),300);
   $('#resMsg').textContent=r>=.85?'ما شاء الله! فهمت الأصل والفروع.':r>=.6?'أحسنت! راجع السببين مرة أخرى.':'بداية طيبة. نراجعها معًا في الحصة القادمة إن شاء الله.';
  }}
 ],
 init:({$$})=>{
+  const FX=window.TQFX;
   $$('.w-count').forEach(w=>{
     const dots=$$('.dots b',w), btn=w.querySelector('.go'); let t=[];
     btn.onclick=()=>{t.forEach(clearTimeout);t=[];dots.forEach(d=>d.classList.remove('on'));
-      dots.forEach((d,i)=>t.push(setTimeout(()=>d.classList.add('on'),700*(i+1))));};
+      dots.forEach((d,i)=>t.push(setTimeout(()=>{d.classList.add('on');FX&&FX.tap();if(i===dots.length-1&&FX)setTimeout(()=>FX.ok(btn,true),250)},700*(i+1))));};
   });
+  $$('.vbtn').forEach(b=>b.onclick=()=>FX&&FX.play(FX.url(LESSON.voice+b.dataset.v)));
+  $$('.qplay').forEach(b=>b.onclick=()=>{if(!FX)return;const a=FX.ayah(+b.dataset.s,+b.dataset.a);b.classList.add('on');if(a)a.onended=a.onpause=()=>b.classList.remove('on');});
 }
 };
 
@@ -321,7 +356,7 @@ const LESSON_EN=[
  guide:'Listen: the teacher reads one word in two ways. Which one is right?',
  note:'Read “جَاءَ” once with only 2 counts (wrong) and once with 4–5 counts (right). Do not give the reason yet; he finds it in station 5.'+SAY('Listen carefully. Which one is right? The first or the second?'),
  html:`
- <div class="quran">إِذَا ${'جَ'+hmz('ا')+'ءَ'} نَصْرُ اللَّهِ وَالْفَتْحُ${ref('An-Nasr 110:1')}</div>
+ <div class="quran">إِذَا ${'جَ'+hmz('ا')+'ءَ'} نَصْرُ اللَّهِ وَالْفَتْحُ${ref('An-Nasr 110:1')}${qp(110,1)}</div>
  ${mcq('h0','The teacher read “جَاءَ” twice: short and longer. Which one is right?',['The short one (2 counts)','The longer one (4 or 5 counts)'],1,'Right! Here we stretch more than natural Madd, because after the Alif there is a <b>cause</b>. Today we find out what it is.')}
  <h3>What will I learn today?</h3>
  <ul class="clean">
@@ -343,7 +378,7 @@ const LESSON_EN=[
  note:'It is “original” because the letter cannot exist without it: drop it and the Madd letter is gone. Ask him to read the ayah and count on his fingers.'+SAY('Listen carefully. Repeat after me. Now read alone.'),
  html:`
  <div class="card type" style="--tc:var(--m-tab)"><span class="cnt">2</span><p>Madd letter + <b>no Hamza</b> after + <b>no Sukoon</b> after</p></div>
- <div class="quran">حَتَّى زُرْتُمُ ${'الْمَقَ'+tab('ا')+'بِرَ'}${ref('At-Takathur 102:2 — you memorised it!')}</div>
+ <div class="quran">حَتَّى زُرْتُمُ ${'الْمَقَ'+tab('ا')+'بِرَ'}${ref('At-Takathur 102:2 — you memorised it!')}${qp(102,2)}</div>
  ${countE(2,'Read “الْمَقَابِرَ” and stretch the Alif 2 counts')}
  ${mcq('a1','Why is it called “original”?',['Without it the letter is not read correctly','It is the longest Madd','It is at the start of the word'],0,'Right! Without it the Madd letter itself is lost: “الْمَقَبِرَ” is wrong.')}
  ${mcq('a2','How many counts for Original Madd?',['2','4','6'],0,'Always 2.')}`},
@@ -351,6 +386,7 @@ const LESSON_EN=[
  guide:'Secondary Madd is <b>extra</b> length on top of the original, because of a cause: <b>Hamza</b> or <b>Sukoon</b>. Like a tree: a root, and branches.',
  note:'Draw the tree on the whiteboard (W): trunk = Original Madd, two branches = Hamza and Sukoon. Flip the cards one by one.'+SAY('Look. This is the root. These are the branches.'),
  html:`
+ ${TREE(true)}
  <div class="tree">
   <div class="row"><div class="card type" style="--tc:var(--m-tab)"><h4>Original Madd</h4><p>no cause · <span class="cnt">2</span></p></div>
    <div class="card type" style="--tc:var(--accent)"><h4>Secondary Madd</h4><p>has a cause → longer</p></div></div>
@@ -367,8 +403,8 @@ const LESSON_EN=[
  note:'Do not teach Muttasil / Munfasil in detail now; that is next class (lesson ready since 10/10). Goal: he sees “Hamza = cause”. Badal (Hamza before the Madd letter) is only mentioned.'+SAY('Find the Hamza. Is it after the Madd letter?'),
  html:`
  <div class="grid">
-  <div class="card"><h4>Same word</h4><div class="quran" style="margin:4px 0">${'جَ'+hmz('ا')+'ءَ'}${ref('An-Nasr 110:1')}</div></div>
-  <div class="card"><h4>Next word</h4><div class="quran" style="margin:4px 0">${'إِنَّ'+hmz('ا')} ${hmz('أَ')}عْطَيْنَاكَ${ref('Al-Kawthar 108:1')}</div></div>
+  <div class="card"><h4>Same word</h4><div class="quran" style="margin:4px 0">${'جَ'+hmz('ا')+'ءَ'}${ref('An-Nasr 110:1')}${qp(110,1)}</div></div>
+  <div class="card"><h4>Next word</h4><div class="quran" style="margin:4px 0">${'إِنَّ'+hmz('ا')} ${hmz('أَ')}عْطَيْنَاكَ${ref('Al-Kawthar 108:1')}${qp(108,1)}</div></div>
  </div>
  ${countE(4,'Read “جَاءَ” and stretch 4 counts')}
  ${mcq('h1','In “إِنَّا أَعْطَيْنَاكَ”, where is the Hamza?',['In the same word «إِنَّا»','At the start of the next word «أَعْطَيْنَاكَ»'],1,'The Alif ends «إِنَّا» and the Hamza starts the next word.')}
@@ -378,8 +414,8 @@ const LESSON_EN=[
  note:'Shadda = two letters, the first one has Sukoon. So in «الضَّالِّينَ» a permanent Sukoon comes after the Alif. In «تَعْلَمُونَ» stopping makes the Noon sakinah: a temporary Sukoon. Ask him to stop at the end of the Takathur ayat.'+SAY('Stop here. Read the end again. Good!'),
  html:`
  <div class="grid">
-  <div class="card"><h4>Permanent Sukoon (or Shadda)</h4><div class="quran" style="margin:4px 0">وَلَا ${'الضَّ'+suk('ا')+'لِّينَ'}${ref('Al-Fatihah 1:7')}</div><div class="quran" style="margin:4px 0">${'الْحَ'+suk('ا')+'قَّةُ'}${ref('Al-Haqqah 69:1')}</div></div>
-  <div class="card"><h4>Temporary Sukoon (stopping)</h4><div class="quran" style="margin:4px 0">كَلَّا سَوْفَ ${'تَعْلَمُ'+suk('و')+'نْ'}${ref('At-Takathur 102:3 — when stopping')}</div><div class="quran" style="margin:4px 0">رَبِّ ${'الْعَالَمِ'+suk('ي')+'نْ'}${ref('Al-Fatihah 1:2 — when stopping')}</div></div>
+  <div class="card"><h4>Permanent Sukoon (or Shadda)</h4><div class="quran" style="margin:4px 0">وَلَا ${'الضَّ'+suk('ا')+'لِّينَ'}${ref('Al-Fatihah 1:7')}${qp(1,7)}</div><div class="quran" style="margin:4px 0">${'الْحَ'+suk('ا')+'قَّةُ'}${ref('Al-Haqqah 69:1')}${qp(69,1)}</div></div>
+  <div class="card"><h4>Temporary Sukoon (stopping)</h4><div class="quran" style="margin:4px 0">كَلَّا سَوْفَ ${'تَعْلَمُ'+suk('و')+'نْ'}${ref('At-Takathur 102:3 — when stopping')}${qp(102,3)}</div><div class="quran" style="margin:4px 0">رَبِّ ${'الْعَالَمِ'+suk('ي')+'نْ'}${ref('Al-Fatihah 1:2 — when stopping')}${qp(1,2)}</div></div>
  </div>
  ${countE(6,'Read “الضَّالِّينَ” and stretch 6 counts')}
  ${mcq('s1','Why is the Alif in «الْحَاقَّةُ» long?',['A Hamza comes after it','A Shadda (permanent Sukoon) comes after it','It is the first word of the surah'],1,'The Qaf has Shadda: its first part is sakin, so the cause is a permanent Sukoon.')}
@@ -427,7 +463,7 @@ const LESSON_EN=[
  <p class="small">Next class: Connected and Separated Madd.</p>`,
  onEnter:({earned,total,ar,$})=>{
   $('#res').textContent=earned+' / '+total;
-  const r=earned/total;
+  const r=earned/total; window.TQFX&&setTimeout(()=>TQFX.win(),300);
   $('#resMsg').textContent=r>=.85?'Masha Allah! You understand the root and the branches.':r>=.6?'Well done! Review the two causes once more.':'A good start. We will review together next class, in sha Allah.';
  }}
 ];
@@ -593,6 +629,7 @@ app.innerHTML=`
   <span class="chip" id="mins"></span>
   <button class="tbtn" id="enT" aria-pressed="false">English</button>
   <button class="tbtn" id="tT" aria-pressed="false"></button>
+  <button class="tbtn" data-tq-sound aria-label="sound"></button>
 </div><div class="progress" id="prog"></div></header>
 <main id="stages"></main>`;
 const nav=document.createElement('nav');nav.className='nav';
@@ -624,7 +661,7 @@ function fill(){
   S.forEach((s,i)=>{
     const c=$('.sc',$('#s'+i)),title=fld(s,'title'),guide=fld(s,'guide'),note=fld(s,'note');
     c.innerHTML=`<div class="stage-head"><span class="n">${T('المحطة '+ar(i+1),'Station '+(i+1))}</span><h2>${title}</h2>${s.min?`<span class="chip">${T(ar(s.min)+' د',s.min+' min')}</span>`:''}</div>
-    ${guide?`<div class="guide">${L.guideSvg}<p>${guide}</p></div>`:''}
+    ${guide?`<div class="guide">${L.guideSvg}<p>${guide}</p>${L.voice?`<button class="vbtn" data-v="${i+1}" title="${T('اسمع','Listen')}">🔊</button>`:''}</div>`:''}
     ${note?`<div class="tnote">${note}</div>`:''}
     <div class="body">${fld(s,'html')}</div>`;
     const b=prog.children[i];b.title=title.replace(/<[^>]+>/g,'');b.setAttribute('aria-label',T('المحطة ','Station ')+(i+1)+': '+b.title);
@@ -639,22 +676,23 @@ $$('.w-mcq').forEach(w=>{
   btns.forEach((b,i)=>b.onclick=()=>{
     if(w.classList.contains('answered'))return;
     tries++;
-    if(i===a){b.classList.add('right');w.classList.add('answered');if(tries===1)star(w.dataset.key);}
-    else{b.classList.add('wrong');wrongFx(b);if(tries>=2){btns[a].classList.add('right');w.classList.add('answered');}}
+    if(i===a){b.classList.add('right');w.classList.add('answered');if(tries===1)star(w.dataset.key);window.TQFX&&TQFX.ok(b);}
+    else{b.classList.add('wrong');wrongFx(b);window.TQFX&&TQFX.bad(b);if(tries>=2){btns[a].classList.add('right');w.classList.add('answered');}}
   });
 });
 // sort into bins
 $$('.w-sort').forEach(w=>{
   const pool=$('.pool',w), items=shuffle($$('button',pool)); items.forEach(b=>pool.appendChild(b));
   let sel=null;
-  items.forEach(b=>b.onclick=()=>{items.forEach(x=>x.classList.remove('sel'));sel=b;b.classList.add('sel');$$('.bin',w).forEach(x=>x.classList.add('armed'))});
+  items.forEach(b=>b.onclick=()=>{window.TQFX&&TQFX.tap();items.forEach(x=>x.classList.remove('sel'));sel=b;b.classList.add('sel');$$('.bin',w).forEach(x=>x.classList.add('armed'))});
   $$('.bin',w).forEach(bin=>{
     bin.tabIndex=0;
     const drop=()=>{
       if(!sel)return;
       if(sel.dataset.bin===bin.dataset.bin){const d=document.createElement('div');d.className='placed';d.innerHTML=sel.innerHTML;bin.appendChild(d);sel.remove();sel=null;$$('.bin',w).forEach(x=>x.classList.remove('armed'));
-        if(!$$('button',pool).length){w.classList.add('complete');star(w.dataset.key)}}
-      else{wrongFx(sel)}
+        window.TQFX&&TQFX.ok(d,Math.random()<.6);
+        if(!$$('button',pool).length){w.classList.add('complete');star(w.dataset.key);window.TQFX&&setTimeout(()=>TQFX.win(),400)}}
+      else{wrongFx(sel);window.TQFX&&TQFX.bad(sel)}
     };
     bin.onclick=drop;bin.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();drop()}};
   });
@@ -670,7 +708,7 @@ $$('.w-order').forEach(w=>{
   });
 });
 // flip cards
-$$('.flip').forEach(c=>{c.tabIndex=0;c.setAttribute('role','button');const t=()=>c.classList.toggle('open');c.onclick=t;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}}});
+$$('.flip').forEach(c=>{c.tabIndex=0;c.setAttribute('role','button');const t=()=>{c.classList.toggle('open');window.TQFX&&TQFX.tap()};c.onclick=t;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}}});
 
 $('#st').textContent=ar($$('[data-key]').length);
 if(L.init)L.init({star,ar,$,$$});
@@ -685,6 +723,7 @@ function go(i,keepScroll){
   const spent=S.slice(0,i).reduce((a,s)=>a+(s.min||0),0);
   $('#mins').textContent=T(`الوقت: ${ar(spent)}\u2013${ar(spent+(S[i].min||0))} من ${ar(total)} د`,`Time: ${spent}\u2013${spent+(S[i].min||0)} of ${total} min`);
   document.dispatchEvent(new CustomEvent('lesson:stage',{detail:i}));
+  if(window.TQFX&&!keepScroll){TQFX.stop();TQFX.whoosh();}
   const oe=(EN()&&S[i].en&&S[i].en.onEnter)||S[i].onEnter;
   if(oe)oe({earned:earned.size,total:$$('[data-key]').length,ar,$,$$});
   if(!keepScroll)window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
@@ -703,5 +742,6 @@ hot&&hot.ready?hot.ready(start):start(hot&&hot.data||{});
 
 </script>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>
