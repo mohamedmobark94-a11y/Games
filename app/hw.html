@@ -44,6 +44,7 @@ audio{width:100%;margin-top:8px}
 .done{background:var(--card);border:2px solid var(--ok);border-radius:20px;padding:18px;margin-top:14px;text-align:center}
 .done b{font-size:1.6rem;color:var(--ok)}
 .small{font-size:.9rem;color:var(--muted)}
+.pframe{display:block;width:100%;height:520px;border:0;border-radius:14px;background:#fff;margin-top:6px}
 .both .en2{display:block;font-family:var(--f-en);font-size:.9em;color:var(--muted)}
 </style>
 </head>
@@ -51,6 +52,8 @@ audio{width:100%;margin-top:8px}
 <div class="wrap">
   <div class="top"><div class="brand">ترتيل القرآن</div><button class="lang" id="langBtn" type="button">English</button></div>
   <div id="app"><div class="msg">…</div></div>
+  <div id="items"></div>
+  <div id="after"></div>
 </div>
 <div class="bar" id="bar" hidden><button class="btn" id="send" type="button"></button></div>
 
@@ -81,7 +84,10 @@ audio{width:100%;margin-top:8px}
     notext: ['ما قدرنا نحمّل نص الآيات — الاستماع شغال عادي.', 'Could not load the verses text — listening still works.'],
     noaud: ['الصوت ما اتحمّلش. اتأكد من النت وجرّب تاني.', 'The audio did not load. Check your connection and try again.'],
     nolis: ['لسه ما خلّصتش الاستماع المطلوب. تسلّم كده؟', 'You have not finished the required listening. Send anyway?'], reciteNow: ['بعد ما تسمع: سمّع بصوتك وسجّل.', 'After listening: recite in your own voice and record it.'],
-    fail: ['حصلت مشكلة في الإرسال، جرّب تاني.', 'Sending failed. Please try again.'], tries: ['محاولات سابقة', 'Earlier tries']
+    fail: ['حصلت مشكلة في الإرسال، جرّب تاني.', 'Sending failed. Please try again.'], tries: ['محاولات سابقة', 'Earlier tries'],
+    page: ['نشاط', 'Activity'], pwait: ['حل النشاط اللي فوق — نتيجتك هتتبعت مع الواجب.', 'Do the activity above — your result is sent with your homework.'],
+    pres: ['نتيجتك', 'Your result'], pdone: ['خلّصت ✓', 'finished ✓'], nopage: ['لسه ما خلّصتش النشاط. تسلّم كده؟', 'You have not finished the activity. Send anyway?'],
+    precs: ['تسجيلات', 'recordings']
   };
   const L = k => T[k][lang === 'en' ? 1 : 0];
   const pick = (ar, en) => lang === 'en' ? (en || ar) : (ar || en);
@@ -89,7 +95,7 @@ audio{width:100%;margin-top:8px}
   function setLang(l){
     lang = l; document.documentElement.lang = l === 'en' ? 'en' : 'ar'; document.documentElement.dir = l === 'en' ? 'ltr' : 'rtl';
     $('langBtn').textContent = l === 'en' ? 'عربي' : 'English'; try{ localStorage.setItem('tq-lang', l); }catch(_){}
-    if(A) draw();
+    if(A){ draw(); framesPost({kind: 'lang', lang: l, name: pick((A.student || {}).name_ar, (A.student || {}).name_en) || ''}); pageStatusAll(); }
   }
   $('langBtn').onclick = () => setLang(lang === 'en' ? 'ar' : 'en');
 
@@ -103,8 +109,11 @@ audio{width:100%;margin-top:8px}
       h += '<div class="note"><b>' + L(A.last.status === 'redo' ? 'redo' : 'teacher') + '</b>' + (A.last.feedback ? '<br>' + esc(A.last.feedback) : '') + '</div>';
     if(A.page_url) h += '<div class="row" style="margin-top:12px"><a class="btn ghost" href="' + esc(A.page_url) + '" target="_blank" rel="noopener">' + L('open') + '</a></div>';
     h += '</div>';
+    $('app').innerHTML = h;
+    if(!$('items').children.length) $('items').innerHTML = items.map((it, i) => '<div data-box="' + i + '"></div>').join('');
     items.forEach((it, i) => {
-      h += '<div class="item" data-i="' + i + '"><div class="n">' + (i + 1) + ' · ' + L(it.type === 'quran' ? 'qhd' : it.type === 'recite' ? 'recite' : 'q') + '</div>';
+      if(it.type === 'page') return;
+      h = '<div class="item" data-i="' + i + '"><div class="n">' + (i + 1) + ' · ' + L(it.type === 'quran' ? 'qhd' : it.type === 'recite' ? 'recite' : 'q') + '</div>';
       if(it.type === 'mcq'){
         h += '<div class="q">' + esc(pick(it.q, it.q_en)) + '</div>' + (it.ayah ? '<div class="ayah">' + esc(it.ayah) + '</div>' : '') + '<div class="opts">' +
           (it.options || []).map((o, j) => {
@@ -121,11 +130,44 @@ audio{width:100%;margin-top:8px}
           (recs[i] ? '<audio controls src="' + recs[i].url + '"></audio>' : '');
       }
       h += '</div>';
+      document.querySelector('[data-box="' + i + '"]').innerHTML = h;
     });
-    if(sent) h += sentBox;
-    $('app').innerHTML = h;
+    $('after').innerHTML = sent ? sentBox : '';
     $('bar').hidden = sent || !items.length; $('send').textContent = L('send');
   }
+
+  /* ---------- 🧩 interactive homework pages (built with app/hwkit.js): they run here and hand back score, answers and recordings ---------- */
+  const pageRes = {}, pageRecs = {}, frames = {};
+  const pageUrl = (u, st) => { const x = new URL(u, new URL('../', location.href)); x.searchParams.set('embed', '1'); x.searchParams.set('lang', lang);
+    x.searchParams.set('name', pick(st.name_ar, st.name_en) || ''); return x.href; };
+  function drawPages(){
+    const items = (A.content && A.content.items) || [], st = A.student || {};
+    items.forEach((it, i) => { if(it.type !== 'page') return;
+      document.querySelector('[data-box="' + i + '"]').innerHTML = '<div class="item" data-i="' + i + '"><div class="n" data-pt="' + i + '"></div>' +
+        '<iframe class="pframe" data-pf="' + i + '" src="' + esc(pageUrl(it.url, st)) + '" allow="microphone; autoplay; fullscreen" title="' + esc(it.title || '') + '"></iframe>' +
+        '<div class="small" data-ps="' + i + '"></div></div>';
+      frames[i] = document.querySelector('[data-pf="' + i + '"]'); });
+    pageStatusAll();
+  }
+  function pageStatusAll(){
+    if(!A) return; const items = (A.content && A.content.items) || [];
+    items.forEach((it, i) => {
+      if(it.type !== 'page') return;
+      const t = document.querySelector('[data-pt="' + i + '"]'), s = document.querySelector('[data-ps="' + i + '"]'), r = pageRes[i], n = (pageRecs[i] || []).length;
+      if(t) t.textContent = (i + 1) + ' · 🧩 ' + (pick(it.title, it.title_en) || L('page'));
+      if(s) s.innerHTML = r ? L('pres') + ': ' + (r.max ? '<b dir="ltr">' + r.score + ' / ' + r.max + '</b> ' : '') + (r.done ? L('pdone') : '') + (n ? ' · 🎙️ ' + n + ' ' + L('precs') : '') : L('pwait') + (n ? ' · 🎙️ ' + n + ' ' + L('precs') : '');
+    });
+  }
+  function framesPost(m){ Object.values(frames).forEach(f => { try{ f.contentWindow.postMessage(Object.assign({tq: 'hw'}, m), '*'); }catch(_){} }); }
+  window.addEventListener('message', e => {
+    const m = e.data; if(!m || m.tq !== 'hw') return;
+    const k = Object.keys(frames).find(j => frames[j].contentWindow === e.source); if(k == null) return;
+    const i = +k, st = A.student || {};
+    if(m.kind === 'ready') e.source.postMessage({tq: 'hw', kind: 'init', lang, name: pick(st.name_ar, st.name_en) || ''}, '*');
+    else if(m.kind === 'height') frames[k].style.height = Math.min(Math.max(+m.h || 0, 260), 6000) + 'px';
+    else if(m.kind === 'result' && !sent){ pageRes[i] = m.result; pageStatusAll(); }
+    else if(m.kind === 'rec' && !sent && m.blob){ const a = pageRecs[i] = pageRecs[i] || []; if(a.length < 5) a.push({blob: m.blob, type: m.type || 'audio/webm', label: m.label || ''}); pageStatusAll(); }
+  });
 
   /* ---------- Qur'an homework: listen N times (ayah by ayah, highlighted), then recite ---------- */
   const lst = {}, verses = {}; let au = null;
@@ -211,6 +253,8 @@ audio{width:100%;margin-top:8px}
     if(mcq.some(x => chosen[x[1]] == null) && !confirm(L('missing'))) return;
     const qs = items.map((it, i) => [it, i]).filter(x => x[0].type === 'quran');
     if(qs.some(x => !st(x[1]).done) && !confirm(L('nolis'))) return;
+    const pg = items.map((it, i) => [it, i]).filter(x => x[0].type === 'page');
+    if(pg.some(x => !(pageRes[x[1]] && pageRes[x[1]].done)) && !confirm(L('nopage'))) return;
     const btn = $('send'); btn.disabled = true; btn.textContent = L('sending');
     try{
       const paths = [], recite = [];
@@ -221,14 +265,24 @@ audio{width:100%;margin-top:8px}
         if(up.error) throw up.error;
         paths.push(path); recite.push({i: +k, path});
       }
+      for(const k of Object.keys(pageRecs)) for(let n = 0; n < pageRecs[k].length; n++){
+        const r = pageRecs[k][n], ext = r.type.indexOf('mp4') >= 0 ? 'm4a' : r.type.indexOf('ogg') >= 0 ? 'ogg' : r.type.indexOf('mpeg') >= 0 ? 'mp3' : 'webm';
+        const path = token + '/' + Date.now() + '-p' + k + '-' + n + '.' + ext;
+        const up = await db.storage.from('recordings').upload(path, r.blob, {contentType: r.type === 'audio/x-m4a' ? 'audio/mp4' : r.type, upsert: false});
+        if(up.error) throw up.error;
+        paths.push(path); recite.push({i: +k, path, label: r.label || undefined});
+      }
       const right = mcq.filter(x => chosen[x[1]] === x[0].answer).length;
       const listen = qs.map(x => ({i: x[1], reps: x[0].reps, reps_done: st(x[1]).done ? x[0].reps : Math.max(0, (st(x[1]).reps_done || 0)), done: !!st(x[1]).done}));
-      const answers = {listen, mcq: mcq.map(x => ({i: x[1], chose: chosen[x[1]] == null ? null : chosen[x[1]], right: chosen[x[1]] === x[0].answer})), recite};
-      const r = await db.rpc('submit_assignment', {p_token: token, p_score: mcq.length ? right : null, p_max: mcq.length || null,
+      const page = pg.map(x => Object.assign({i: x[1]}, pageRes[x[1]] || {score: null, max: null, done: false, details: []}));
+      const answers = {listen, mcq: mcq.map(x => ({i: x[1], chose: chosen[x[1]] == null ? null : chosen[x[1]], right: chosen[x[1]] === x[0].answer})), recite, page};
+      const pMax = page.reduce((t, p) => t + (p.max || 0), 0), pScore = page.reduce((t, p) => t + (p.max ? (p.score || 0) : 0), 0);
+      const tot = right + pScore, totMax = mcq.length + pMax;
+      const r = await db.rpc('submit_assignment', {p_token: token, p_score: totMax ? tot : null, p_max: totMax || null,
         p_answers: answers, p_audio_paths: paths, p_duration: Math.round((Date.now() - t0) / 1000)});
       if(r.error) throw r.error;
       sent = true;
-      sentBox = '<div class="done"><div>' + L('done') + '</div>' + (mcq.length ? '<div style="margin-top:6px">' + L('score') + ': <b>' + right + ' / ' + mcq.length + '</b></div>' : '') +
+      sentBox = '<div class="done"><div>' + L('done') + '</div>' + (totMax ? '<div style="margin-top:6px">' + L('score') + ': <b dir="ltr">' + tot + ' / ' + totMax + '</b></div>' : '') +
         (paths.length ? '<div class="small" style="margin-top:6px">' + L('heard') + '</div>' : '') + '</div>';
       draw(); scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
     }catch(err){
@@ -243,7 +297,7 @@ audio{width:100%;margin-top:8px}
     A = r.data;
     let saved = null; try{ saved = localStorage.getItem('tq-lang'); }catch(_){}
     setLang(saved || (A.student && A.student.lang === 'ar' ? 'ar' : 'en'));
-    draw();
+    draw(); drawPages();
   })();
 })();
 </script>
