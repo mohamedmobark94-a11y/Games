@@ -56,6 +56,7 @@ audio{width:100%;margin-top:8px}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
+<script src="quran-data.js"></script>
 <script>
 (function(){
   const esc = TQ.esc, $ = id => document.getElementById(id);
@@ -75,6 +76,11 @@ audio{width:100%;margin-top:8px}
     score: ['درجتك', 'Your score'], heard: ['المعلم هيسمع تسجيلك ويرد عليك.', 'Your teacher will listen to your recording and reply.'],
     teacher: ['ملاحظة المعلم على آخر مرة', "Teacher's note on your last try"], redo: ['المعلم طلب تعيد الواجب', 'Your teacher asked you to do it again'],
     open: ['📖 افتح الدرس / اللعبة', '📖 Open the lesson / game'], due: ['آخر ميعاد', 'Due'],
+    lst: ['▶ ابدأ الاستماع', '▶ Start listening'], pause: ['⏸ إيقاف مؤقت', '⏸ Pause'], resume: ['▶ كمّل', '▶ Resume'], rep: ['التكرار', 'Repeat'], ayah: ['الآية', 'Ayah'],
+    lfin: ['✓ خلّصت الاستماع', '✓ Listening finished'], speed: ['السرعة', 'Speed'], qhd: ['واجب قرآن', 'Qur’an homework'],
+    notext: ['ما قدرنا نحمّل نص الآيات — الاستماع شغال عادي.', 'Could not load the verses text — listening still works.'],
+    noaud: ['الصوت ما اتحمّلش. اتأكد من النت وجرّب تاني.', 'The audio did not load. Check your connection and try again.'],
+    nolis: ['لسه ما خلّصتش الاستماع المطلوب. تسلّم كده؟', 'You have not finished the required listening. Send anyway?'], reciteNow: ['بعد ما تسمع: سمّع بصوتك وسجّل.', 'After listening: recite in your own voice and record it.'],
     fail: ['حصلت مشكلة في الإرسال، جرّب تاني.', 'Sending failed. Please try again.'], tries: ['محاولات سابقة', 'Earlier tries']
   };
   const L = k => T[k][lang === 'en' ? 1 : 0];
@@ -98,7 +104,7 @@ audio{width:100%;margin-top:8px}
     if(A.page_url) h += '<div class="row" style="margin-top:12px"><a class="btn ghost" href="' + esc(A.page_url) + '" target="_blank" rel="noopener">' + L('open') + '</a></div>';
     h += '</div>';
     items.forEach((it, i) => {
-      h += '<div class="item" data-i="' + i + '"><div class="n">' + (i + 1) + ' · ' + L(it.type === 'recite' ? 'recite' : 'q') + '</div>';
+      h += '<div class="item" data-i="' + i + '"><div class="n">' + (i + 1) + ' · ' + L(it.type === 'quran' ? 'qhd' : it.type === 'recite' ? 'recite' : 'q') + '</div>';
       if(it.type === 'mcq'){
         h += '<div class="q">' + esc(pick(it.q, it.q_en)) + '</div>' + (it.ayah ? '<div class="ayah">' + esc(it.ayah) + '</div>' : '') + '<div class="opts">' +
           (it.options || []).map((o, j) => {
@@ -106,6 +112,8 @@ audio{width:100%;margin-top:8px}
             if(sent){ if(j === it.answer) cls += ' right'; else if(chosen[i] === j) cls += ' wrong'; }
             return '<button type="button" class="' + cls + '" data-q="' + i + '" data-o="' + j + '"' + (sent ? ' disabled' : '') + '>' + esc(typeof o === 'object' ? pick(o.ar, o.en) : o) + '</button>';
           }).join('') + '</div>';
+      } else if(it.type === 'quran'){
+        h += quranBlock(it, i);
       } else if(it.type === 'recite'){
         h += (it.say ? '<div class="q">' + esc(pick(it.say, it.say_en)) + '</div>' : '') + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') +
           '<div class="row">' + (it.ref_audio ? '<button type="button" class="btn ghost" data-ref="' + i + '">' + L('listen') + '</button>' : '') +
@@ -119,9 +127,61 @@ audio{width:100%;margin-top:8px}
     $('bar').hidden = sent || !items.length; $('send').textContent = L('send');
   }
 
+  /* ---------- Qur'an homework: listen N times (ayah by ayah, highlighted), then recite ---------- */
+  const lst = {}, verses = {}; let au = null;
+  const st = i => lst[i] || (lst[i] = {rep: 0, ayah: 0, playing: false, paused: false, done: false, speed: 1, err: ''});
+  function loadVerses(s){
+    if(verses[s]) return; verses[s] = {};
+    fetch(TQQ.textUrl(s)).then(r => r.json()).then(j => { (j.verses || []).forEach(v => { verses[s][v.verse_key] = v.text_uthmani; }); if(!sent) draw(); })
+      .catch(() => { verses[s] = null; if(!sent) draw(); });
+  }
+  function quranBlock(it, i){
+    const s = st(i), n = it.to - it.from + 1, name = TQQ.nameOf(it.surah, lang), V = verses[it.surah];
+    if(it.showtext !== false && V === undefined) loadVerses(it.surah);
+    let h = '<div class="q"><b>' + esc((lang === 'en' ? 'Surah ' : 'سورة ') + name) + '</b> · ' + L('ayah') + ' ' + it.from + (n > 1 ? '–' + it.to : '') + ' · ×' + it.reps + '</div>';
+    if(it.showtext !== false){
+      if(V === null) h += '<div class="small">' + L('notext') + '</div>';
+      else h += '<div class="ayah" style="line-height:2.3">' + Array.from({length: n}, (_, k) => { const a = it.from + k, t = V && V[it.surah + ':' + a];
+        return '<span data-ay="' + i + ':' + a + '" style="' + (s.playing && s.ayah === a ? 'background:#F6E3A8;border-radius:8px;padding:0 6px' : '') + '">' + esc(t || '…') + ' ﴿' + a + '﴾</span> '; }).join('') + '</div>';
+    }
+    h += '<div class="row">' + (s.done ? '<span class="tag" style="margin:0">' + L('lfin') + ' · ' + it.reps + '/' + it.reps + '</span>' : '') +
+      '<button type="button" class="btn" data-play="' + i + '"' + (sent ? ' disabled' : '') + '>' + (s.playing ? L('pause') : s.paused ? L('resume') : L('lst')) + '</button>' +
+      '<label class="small">' + L('speed') + ' <select data-speed="' + i + '" style="font:inherit;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:10px;padding:2px 6px">' +
+      [.75, 1, 1.25].map(x => '<option value="' + x + '"' + (s.speed === x ? ' selected' : '') + '>' + x + '×</option>').join('') + '</select></label>' +
+      '<span class="small" id="lc' + i + '">' + (s.rep ? L('rep') + ' ' + s.rep + '/' + it.reps : '') + '</span></div>' + (s.err ? '<div class="small" style="color:var(--bad)">' + esc(s.err) + '</div>' : '');
+    if(it.record){
+      h += '<div class="small" style="margin-top:10px">' + L('reciteNow') + '</div><div class="row">' + (sent ? '' : '<button type="button" class="btn rec" data-rec="' + i + '">' + (recs[i] ? L('again') : L('record')) + '</button>') + '</div>' +
+        (recs[i] ? '<audio controls src="' + recs[i].url + '"></audio>' : '');
+    }
+    return h;
+  }
+  function stopAudio(){ if(au){ au.onended = au.onerror = null; au.pause(); au = null; } }
+  function playItem(i){
+    const it = A.content.items[i], s = st(i);
+    if(s.playing){ s.playing = false; s.paused = true; if(au) au.pause(); draw(); return; }
+    if(s.paused && au){ s.playing = true; s.paused = false; au.play().catch(() => {}); draw(); return; }
+    stopAll(i); s.rep = 1; s.ayah = it.from; s.playing = true; s.paused = false; s.done = false; s.err = ''; draw(); step(i);
+  }
+  function stopAll(except){ Object.keys(lst).forEach(k => { if(+k !== except && lst[k].playing){ lst[k].playing = false; lst[k].paused = false; } }); stopAudio(); }
+  function step(i){
+    const it = A.content.items[i], s = st(i); if(!s.playing) return;
+    stopAudio(); au = new Audio(TQQ.audioUrl(it.reciter, it.surah, s.ayah)); au.playbackRate = s.speed;
+    au.onended = () => {
+      if(s.ayah < it.to) s.ayah++;
+      else if(s.rep < it.reps){ s.rep++; s.ayah = it.from; }
+      else { s.playing = false; s.done = true; s.reps_done = it.reps; stopAudio(); draw(); return; }
+      s.reps_done = s.rep - 1; draw(); step(i);
+    };
+    au.onerror = () => { s.playing = false; s.err = L('noaud'); stopAudio(); draw(); };
+    au.play().catch(() => { s.playing = false; s.err = L('noaud'); draw(); });
+    const c = document.getElementById('lc' + i); if(c) c.textContent = L('rep') + ' ' + s.rep + '/' + it.reps;
+  }
+  document.addEventListener('change', e => { const sp = e.target.closest && e.target.closest('[data-speed]'); if(sp){ const s = st(+sp.dataset.speed); s.speed = +sp.value; if(au) au.playbackRate = s.speed; } });
+
   let sentBox = '';
   document.addEventListener('click', e => {
     const b = e.target.closest('button'); if(!b) return;
+    if(b.dataset.play != null) return playItem(+b.dataset.play);
     if(b.dataset.q != null && !sent){ chosen[+b.dataset.q] = +b.dataset.o; draw(); return; }
     if(b.dataset.ref != null){ const a = new Audio(A.content.items[+b.dataset.ref].ref_audio); a.play().catch(() => {}); return; }
     if(b.dataset.rec != null) return toggleRec(+b.dataset.rec, b);
@@ -149,6 +209,8 @@ audio{width:100%;margin-top:8px}
     const items = (A.content && A.content.items) || [];
     const mcq = items.map((it, i) => [it, i]).filter(x => x[0].type === 'mcq');
     if(mcq.some(x => chosen[x[1]] == null) && !confirm(L('missing'))) return;
+    const qs = items.map((it, i) => [it, i]).filter(x => x[0].type === 'quran');
+    if(qs.some(x => !st(x[1]).done) && !confirm(L('nolis'))) return;
     const btn = $('send'); btn.disabled = true; btn.textContent = L('sending');
     try{
       const paths = [], recite = [];
@@ -160,7 +222,8 @@ audio{width:100%;margin-top:8px}
         paths.push(path); recite.push({i: +k, path});
       }
       const right = mcq.filter(x => chosen[x[1]] === x[0].answer).length;
-      const answers = {mcq: mcq.map(x => ({i: x[1], chose: chosen[x[1]] == null ? null : chosen[x[1]], right: chosen[x[1]] === x[0].answer})), recite};
+      const listen = qs.map(x => ({i: x[1], reps: x[0].reps, reps_done: st(x[1]).done ? x[0].reps : Math.max(0, (st(x[1]).reps_done || 0)), done: !!st(x[1]).done}));
+      const answers = {listen, mcq: mcq.map(x => ({i: x[1], chose: chosen[x[1]] == null ? null : chosen[x[1]], right: chosen[x[1]] === x[0].answer})), recite};
       const r = await db.rpc('submit_assignment', {p_token: token, p_score: mcq.length ? right : null, p_max: mcq.length || null,
         p_answers: answers, p_audio_paths: paths, p_duration: Math.round((Date.now() - t0) / 1000)});
       if(r.error) throw r.error;
