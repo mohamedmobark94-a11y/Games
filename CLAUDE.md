@@ -24,7 +24,7 @@
 ## طريقة بناء درس
 - كل الدروس والواجبات بتتعمل هنا وتتنشر على الموقع (مش Artifacts على claude.ai).
 - اقرأ الخطة أولًا ← درس تفاعلي + واجب تفاعلي + ورقة عمل + وسام.
-- **الدرس:** صفحة في `lessons/` (بدون أسماء طلاب) بنفس محرك الدروس و`tq-nav.js`، ويتسجل في `docs/lessons` (id `YYYY-MM-DD-<key>`، وفيه `url`) فيظهر في صفحة الطالب الثابتة (`app/student.html?k=`) وفي تنبيه الإرسال.
+- **الدرس:** صفحة في `lessons/` (بدون أسماء طلاب) على **محرك الشرائح** `assets/deck/` (`window.DECK` = بيانات الشرائح؛ مثال كامل: `lessons/madd-asli-fari.html`) + `tq-fx.js` + GSAP + رسومات Fluent 3D (`assets/img/fluent/`)، والستايل حسب سن الطالب ومستواه (`th-night` للكبار؛ الكرتوني للصغار)، ويتسجل في `docs/lessons` (id `YYYY-MM-DD-<key>`، وفيه `url`) فيظهر في صفحة الطالب الثابتة (`app/student.html?k=`) وفي تنبيه الإرسال.
 - **الواجب:** صفحة في `hw/` منسوخة من `hw/_template.html` وبتستخدم `app/hwkit.js`:
   `TQHW.result({score, max, done, details:[{q, a, ok}]})` بعد كل خطوة، و`TQHW.recordButton(el, label)` للتسجيل، و`TQHW.lang` / `TQHW.on('lang')` للغة، و`TQHW.name` لاسم الطالب. ممنوع `100vh`.
   بعدين يتعمل واجب في المنصة: «واجب جديد» ← «🧩 صفحة واجب تفاعلية» (لينك `hw/…html`) + أي أسئلة/تسميع/واجب قرآن، ويتحدد الطلاب.
