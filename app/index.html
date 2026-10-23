@@ -119,6 +119,37 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     students = r.data || [];
     go(view);
     checkPending(); setInterval(checkPending, 60000); document.addEventListener('visibilitychange', () => { if(!document.hidden) checkPending(); });
+    ensureToday(); setInterval(ensureToday, 30 * 60000);
+  }
+  /* «دروس اليوم» safety net: the nightly task builds today's list from Google Calendar. If it did not run (e.g. usage limit),
+     build it from the weekly roster (kv deskRoster, kept in line with the calendar) so the tab never shows an old day.
+     Private rules in kv 'dayRules': {skip:[names with no lesson prep], keys:{name:planKey}, times:{name:{weekday:'HH:MM'}}}. */
+  async function ensureToday(){
+    try{
+      const now = new Date(), cairo = new Date(now.toLocaleString('en-US', {timeZone: 'Africa/Cairo'}));
+      const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const id = iso(cairo);
+      const ex = await db.from('docs').select('id').eq('collection', 'days').eq('id', id).maybeSingle();
+      if(ex.error || ex.data) return;
+      const R = JSON.parse(await kvGet('deskRoster') || '{}'), rules = JSON.parse(await kvGet('dayRules') || '{}');
+      const skip = new Set(rules.skip || []), keys = rules.keys || {}, times = rules.times || {};
+      const wd = cairo.getDay(), tw = (wd + 1) % 7, hm = h => +h.slice(0, 2) * 60 + +h.slice(3, 5);
+      const end = (t, m) => { const x = (hm(t) + (m || 30)) % 1440; return String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0'); };
+      const items = [];
+      (R.students || []).forEach(s => {
+        if(skip.has(s.name) || !/^\d\d:\d\d$/.test(s.time || '')) return;
+        const at = d => (times[s.name] && times[s.name][d]) || s.time;
+        if((s.days || []).includes(wd)) items.push({ord: hm(at(wd)), s, t: at(wd), tom: false});
+        if((s.days || []).includes(tw) && hm(at(tw)) < 360) items.push({ord: 1440 + hm(at(tw)), s, t: at(tw), tom: true});
+      });
+      items.sort((a, b) => a.ord - b.ord);
+      const DN = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+      const MN = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+      const data = {id, label: DN[wd] + ' ' + cairo.getDate() + ' ' + MN[cairo.getMonth()] + ' ' + cairo.getFullYear(), updated: String(cairo.getHours()).padStart(2, '0') + ':' + String(cairo.getMinutes()).padStart(2, '0'),
+        auto: 'roster', items: items.map(x => ({key: keys[x.s.name] || x.s.id, name: x.s.name, time: (x.tom ? 'غدًا ' + DN[tw] + ' ' : '') + x.t + '–' + end(x.t, x.s.mins),
+          note: 'من الجدول الأسبوعي (المهمة الليلية ما اشتغلتش)', need: false, status: ''}))};
+      await db.from('docs').insert({collection: 'days', id, data});
+    }catch(e){ console.warn('ensureToday', e); }
   }
   document.querySelectorAll('.tab[data-v]').forEach(b => b.onclick = () => go(b.dataset.v));
   function go(v){
