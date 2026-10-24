@@ -30,7 +30,7 @@
   function draw(){
     var home='../'+(dir==='lessons'?'#lessons':'');
     bar.setAttribute('aria-label',t('nav'));
-    bar.innerHTML='<a class="home" href="'+home+'">🏠 <span class="lbl">'+t('home')+'</span></a>'+
+    bar.innerHTML='<a class="home" href="'+home+'"><img src="../assets/brand/emblem.svg" alt="" style="width:26px;height:26px;margin:-4px 0"> <span class="lbl">'+t('home')+'</span></a>'+
       '<button type="button" id="tqBack">← <span class="lbl">'+t('back')+'</span></button>'+
       '<a class="tch" href="../teacher.html" title="'+t('teacher')+'">👩‍🏫 <span class="lbl">'+t('teacher')+'</span></a>'+
       '<span class="sp"></span>'+

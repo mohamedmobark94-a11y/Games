@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ترتيل القرآن | Tarteel Al-Quran — Qur'an, Tajweed & Arabic</title>
+<title>محمد مبارك | Mohamed Mubarak — Qur'an, Tajweed & Arabic</title>
 <meta name="description" content="Free interactive games and online classes for Qur'an, Tajweed and Arabic for non-Arabic speakers — kids, teens and adults. ألعاب تفاعلية مجانية وحصص أونلاين في القرآن والتجويد والعربية.">
-<meta property="og:title" content="ترتيل القرآن | Tarteel Al-Quran">
+<meta property="og:title" content="محمد مبارك | Mohamed Mubarak">
 <meta property="og:description" content="Free interactive games and online classes for Qur'an, Tajweed and Arabic — for kids, teens and adults.">
 <meta name="theme-color" content="#0B1E2D">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<link rel="icon" type="image/svg+xml" href="assets/brand/emblem.svg"><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta property="og:image" content="https://mohamedmobark94-a11y.github.io/Games/assets/brand/og.png">
+<link rel="manifest" href="assets/brand/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
@@ -40,7 +42,8 @@ a{color:inherit}
 /* top bar */
 .bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .bar .in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:8px max(16px,env(safe-area-inset-left,0px));padding-top:calc(8px + env(safe-area-inset-top,0px))}
-.brand{white-space:nowrap;font-family:var(--f-ar);font-weight:700;font-size:1.5rem;color:var(--gold);text-decoration:none;margin-inline-end:auto;line-height:1.2}
+.brand{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;font-family:var(--f-ar);font-weight:700;font-size:1.5rem;color:var(--gold);text-decoration:none;margin-inline-end:auto;line-height:1.2}
+.brand .bl{width:44px;height:44px;flex:none}
 html[lang=en] .brand{font-family:var(--f-en);font-size:1.2rem;font-weight:800}
 .lang{font:inherit;font-weight:700;font-size:.9rem;border:2px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:2px 14px;min-height:40px;cursor:pointer}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:800;text-decoration:none;border:0;cursor:pointer;border-radius:14px;padding:8px 20px;min-height:46px;background:var(--accent);color:var(--btn-ink);box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 55%,#000);transition:transform .12s}
@@ -206,7 +209,7 @@ h3.grp small{font-weight:500;font-size:.85rem;color:var(--muted)}
 </head>
 <body>
 <div class="bar"><div class="in">
-  <a class="brand" href="./"><span class="ar">تَرْتِيلُ القُرْآن</span><span class="en">Tarteel Al-Quran</span></a>
+  <a class="brand" href="./"><img src="assets/brand/emblem.svg" alt="" class="bl"><span class="ar">مُحَمَّد مُبَارَك</span><span class="en">Mohamed Mubarak</span></a>
   <button class="lang" id="lang" type="button" aria-label="Language / اللغة"></button>
   <a class="btn sm" href="about.html#book">🎁 <span class="ar">حصة مجانية</span><span class="en">Free trial</span></a>
 </div></div>
@@ -268,7 +271,7 @@ h3.grp small{font-weight:500;font-size:.85rem;color:var(--muted)}
   </section>
 
   <footer>
-    <b>Tarteel Al-Quran · ترتيل القرآن</b><br>
+    <b>Mohamed Mubarak · محمد مبارك</b><br>
     <span class="ar">حصص أونلاين في القرآن والتجويد والعربية لغير الناطقين بها. لعبة جديدة تقريبًا كل يوم.</span><span class="en">Online classes in Qur'an, Tajweed and Arabic for non-Arabic speakers. A new game almost every day.</span><br>
     <a href="about.html"><span class="ar">عن المعلم والحجز</span><span class="en">About the teacher & booking</span></a>
     · <a href="app/"><span class="ar">🔐 دخول المعلم</span><span class="en">🔐 Teacher login</span></a> · <a href="teacher.html"><span class="ar">أدوات الحلقة</span><span class="en">Class toolkit</span></a>
@@ -334,7 +337,7 @@ function drawStatic(){
   if(B)$('bow').innerHTML=`<span class="lbl">📚 ${t('كتاب الأسبوع','Book of the week')} · ${fmt(B.since)}</span><b>«${B.ar}»</b><small>${B.by}</small><small>${B.note||''}</small>`;
 
   document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x.dataset.t===state.tab));
-  if(waNum){const u='https://wa.me/'+waNum+'?text='+encodeURIComponent("Assalamu alaikum, I'd like to book a free trial class (Tarteel Al-Quran).");
+  if(waNum){const u='https://wa.me/'+waNum+'?text='+encodeURIComponent("Assalamu alaikum, I'd like to book a free trial class (Mohamed Mubarak).");
     $('fab').href=u;$('fab').target='_blank';$('fab').rel='noopener';$('fab').hidden=false}
 }
 

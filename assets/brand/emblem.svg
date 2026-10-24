@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Mohamed Mubarak · محمد مبارك">
+ <circle cx="100" cy="100" r="96" fill="#0B1E2D"/>
+ <circle cx="100" cy="100" r="92" fill="none" stroke="#E2B85C" stroke-width="5"/>
+ <circle cx="100" cy="100" r="82" fill="#12304A"/>
+ <path d="M118 44a26 26 0 1 0 22 40 21 21 0 1 1-22-40z" fill="#E2B85C"/>
+ <path d="M44 110c20-10 40-10 56 2 16-12 36-12 56-2v40c-20-10-40-10-56 2-16-12-36-12-56-2z" fill="#F4EBD6"/>
+ <path d="M100 112v40" stroke="#12304A" stroke-width="3"/>
+ <path d="M58 164l84-30M142 164l-84-30" stroke="#E2B85C" stroke-width="7" stroke-linecap="round"/>
+</svg>

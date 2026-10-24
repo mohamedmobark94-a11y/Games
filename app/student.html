@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>صفحتي · My page — Tarteel</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<title>صفحتي · My page — Mohamed Mubarak</title>
+<text y='.9em' font-size='90'>📖</text></svg>">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
 <style>
 :root{color-scheme:dark;--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;
@@ -37,10 +37,11 @@ ul{margin:6px 0;padding-inline-start:22px}
 .msg{text-align:center;padding:50px 10px;color:var(--muted)}
 .foot{text-align:center;margin-top:28px;color:var(--muted);font-size:.85rem}
 </style>
+<link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg"><link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><div class="brand">ترتيل القرآن</div><button class="lang" id="langBtn" type="button">English</button></div>
+  <div class="top"><div class="brand" style="display:flex;align-items:center;gap:10px"><img src="../assets/brand/emblem.svg" alt="" style="width:42px;height:42px">محمد مبارك</div><button class="lang" id="langBtn" type="button">English</button></div>
   <div id="app"><div class="msg">…</div></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -87,7 +88,7 @@ ul{margin:6px 0;padding-inline-start:22px}
         '<div class="row" style="margin-top:8px">' + (l.url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.url) + '">🎓 ' + T('الدرس', 'Lesson') + '</a>' : '') + (l.hw ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.hw) + '">🎨 ' + T('صفحة الواجب', 'Homework page') + '</a>' : '') + '</div></div>').join('')
       : '<div class="card muted">' + T('لسه مفيش دروس متسجلة هنا.', 'No lessons here yet.') + '</div>');
     h += '<h2>🎮 ' + T('العب وراجع', 'Play and review') + '</h2><div class="card"><div>' + T('ألعاب القرآن والتجويد والعربي — كلها مجانية.', 'Qur’an, tajweed and Arabic games — all free.') + '</div><div class="row" style="margin-top:8px"><a class="btn" href="' + TQ.site + '" target="_blank" rel="noopener">' + T('افتح الألعاب ↗', 'Open the games ↗') + '</a></div></div>';
-    h += '<div class="foot">Tarteel Al-Quran · ' + T('المعلم محمد مبارك', 'Teacher Mohamed Mobark') + '</div>';
+    h += '<div class="foot">Mohamed Mubarak · ' + T('المعلم محمد مبارك', 'Teacher Mohamed Mubarak') + '</div>';
     app.innerHTML = h;
   }
 

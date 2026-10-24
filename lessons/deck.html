@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>درس · Lesson — Tarteel</title>
+<title>درس · Lesson — Mohamed Mubarak</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@600;700&family=Fredoka:wght@500;600;700&family=Inter:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="../assets/deck/deck.css">
 <style>#ld{color:#F4EBD6;font:600 22px Inter,sans-serif;text-align:center;padding:80px 20px}</style>
+<link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg"><link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
 </head>
 <body>
 <div id="ld">…</div>
@@ -24,7 +25,7 @@
   try{ const db = supabase.createClient(TQ.url, TQ.key, {auth: {persistSession: false}}); const r = await db.rpc('get_deck', {p_id: id}); data = r.data; }catch(_){}
   if(!data || !Array.isArray(data.slides)) return fail();
   window.DECK = data; ld.remove();
-  const t = data.title; document.title = (typeof t === 'object' ? (t.ar || '') + ' · ' + (t.en || '') : (t || 'Lesson')) + ' — Tarteel';
+  const t = data.title; document.title = (typeof t === 'object' ? (t.ar || '') + ' · ' + (t.en || '') : (t || 'Lesson')) + ' — Mohamed Mubarak';
   const load = src => new Promise(ok => { const s = document.createElement('script'); s.src = src; s.onload = s.onerror = ok; document.body.appendChild(s); });
   for(const src of ['../tq-fx.js', '../assets/vendor/gsap-3.12.5.min.js', '../assets/deck/deck.js', '../tq-nav.js']) await load(src);
 })();
