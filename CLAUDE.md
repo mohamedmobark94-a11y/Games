@@ -22,6 +22,7 @@
 - تقرير الحصة (المولّد): Artifact على claude.ai، ونسخة في Storage `private/generator.html`؛ `app/index.html` يحقن `genFixes()` لتصحيح المدة والتوقيع.
 
 ## طريقة بناء درس
+- **التحضير بيتعمل من الاستخدام الأسبوعي** (محادثة Claude عادية/Cowork/مهمة مجدولة) كـ«بيانات» حسب `docs claude/lesson-protocol`: الدرس صف في `docs decks` ويتعرض على `lessons/deck.html?d=<id>`، والواجب صف في `docs hwpages` ويتعرض على `hw/play.html?h=<id>`. شات Claude Code ده لتطوير الموقع بس (رصيد محدود).
 - كل الدروس والواجبات بتتعمل هنا وتتنشر على الموقع (مش Artifacts على claude.ai).
 - اقرأ الخطة أولًا ← درس تفاعلي + واجب تفاعلي + ورقة عمل + وسام.
 - **الدرس:** صفحة في `lessons/` (بدون أسماء طلاب) على **محرك الشرائح** `assets/deck/` (`window.DECK` = بيانات الشرائح؛ مثال كامل: `lessons/madd-asli-fari.html`) + `tq-fx.js` + GSAP + رسومات Fluent 3D (`assets/img/fluent/`)، والستايل حسب سن الطالب ومستواه (`th-night` للكبار؛ الكرتوني للصغار)، ويتسجل في `docs/lessons` (id `YYYY-MM-DD-<key>`، وفيه `url`) فيظهر في صفحة الطالب الثابتة (`app/student.html?k=`) وفي تنبيه الإرسال.

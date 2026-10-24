@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>واجب تفاعلي · Homework activity</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
+<!-- Homework activity stored as data: docs collection 'hwpages', id = ?h=…, data:
+  {title:{ar,en}, hi:{ar,en}, tasks:[
+    {t:'classify', ask:{ar,en}, options:[{ar,en},…], items:[{w:'arabic word', ref:{ar,en}?, a:index, why:{ar,en}?}]},
+    {t:'mcq', q:{ar,en}, opts:[{ar,en},…], a:index, why:{ar,en}?},
+    {t:'record', label:{ar,en}, say:{ar,en}, text:'Qur'an text copied from Shamela/quran.com', ref:{ar,en}}]}
+  Runs inside the student's homework link (app/hw.html) through app/hwkit.js; sounds from tq-fx.js. -->
+<style>
+:root{--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif;--f-en:"Inter","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.6 var(--f-ui);padding:14px}
+html[lang=en] body{font-family:var(--f-en)}
+.top{display:flex;align-items:center;gap:8px}
+h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
+.snd{font-size:1.2rem;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;width:44px;height:44px;cursor:pointer}
+.hi{color:var(--muted)}
+.card{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+.word{font:700 2.3rem/1.6 var(--f-ar);text-align:center;background:#FFFDF7;color:#1f2a27;border-radius:14px;padding:4px 10px;margin:6px 0 10px;direction:rtl}
+.word small{display:block;font:600 .8rem var(--f-ui);color:#6b6b6b}
+.q{font-weight:800;font-size:1.1rem}.q .ar{font-family:var(--f-ar);font-size:1.4em}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.opt{font:inherit;font-weight:700;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:14px;min-height:52px;cursor:pointer;padding:6px 10px}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 22%,var(--card))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 20%,var(--card))}
+.why{margin-top:8px;color:var(--muted);font-size:.95rem}
+.bar{height:10px;background:var(--card);border-radius:999px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+.ayat{font:700 1.6rem/2.3 var(--f-ar);background:#FFFDF7;color:#1f2a27;border-radius:14px;padding:8px 12px;direction:rtl;text-align:center}
+.small{font-size:.9rem;color:var(--muted)}
+.end{text-align:center;font-size:1.15rem}
+</style>
+</head>
+<body>
+<div class="top"><h2 id="t">…</h2><button class="snd" data-tq-sound></button></div>
+<div class="hi" id="hi"></div>
+<div class="bar"><i id="prog"></i></div>
+<div id="game"></div>
+<div id="recs"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../app/config.js"></script>
+<script src="../app/hwkit.js"></script>
+<script src="../tq-fx.js"></script>
+<script>
+(async function(){
+  const id = new URLSearchParams(location.search).get('h') || '';
+  let H = null;
+  try{ const db = supabase.createClient(TQ.url, TQ.key, {auth: {persistSession: false}}); const r = await db.rpc('get_hwpage', {p_id: id}); H = r.data; }catch(_){}
+  if(!H || !Array.isArray(H.tasks)){ document.getElementById('t').textContent = 'الواجب ده مش موجود · Homework not found'; return; }
+  const E = () => TQHW.lang === 'en' ? 1 : 0, T = x => x == null ? '' : typeof x === 'string' ? x : (E() ? (x.en || x.ar) : (x.ar || x.en)) || '';
+  /* one question = one step: every classify item and every mcq; record tasks sit under the game */
+  const steps = [];
+  H.tasks.forEach(k => { if(k.t === 'classify') k.items.forEach(it => steps.push({k, it})); else if(k.t === 'mcq') steps.push({k}); });
+  let qi = 0, right = 0, picked = null; const details = [];
+  function draw(){
+    document.documentElement.lang = TQHW.lang; document.documentElement.dir = TQHW.lang === 'en' ? 'ltr' : 'rtl';
+    document.getElementById('t').textContent = T(H.title);
+    const hi = T(H.hi); document.getElementById('hi').textContent = TQHW.name && hi ? hi.replace('{n}', TQHW.name) : hi.replace(/\s*\{n\}\s*!?/, ' ').trim();
+    document.getElementById('prog').style.width = (steps.length ? qi / steps.length * 100 : 100) + '%';
+    const g = document.getElementById('game');
+    if(qi >= steps.length){ g.innerHTML = steps.length ? '<div class="card end">' + (E() ? 'Well done! Finished 🌟' : 'أحسنت! خلّصت 🌟') + '<div style="margin-top:6px"><b dir="ltr">' + right + ' / ' + steps.length + '</b></div></div>' : ''; return; }
+    const s = steps[qi], k = s.k, opts = k.t === 'classify' ? k.options : k.opts, a = k.t === 'classify' ? s.it.a : k.a, why = k.t === 'classify' ? s.it.why : k.why;
+    g.innerHTML = '<div class="card"><div class="small">' + (qi + 1) + ' / ' + steps.length + (k.ask ? ' · ' + T(k.ask) : '') + '</div>' +
+      (k.t === 'classify' ? '<div class="word">' + s.it.w + (s.it.ref ? '<small>' + T(s.it.ref) + '</small>' : '') + '</div>' : '<div class="q">' + T(k.q) + '</div>') +
+      '<div class="opts">' + opts.map((o, j) => '<button class="opt" data-j="' + j + '">' + T(o) + '</button>').join('') + '</div>' +
+      (picked != null && why ? '<div class="why">' + T(why) + '</div>' : '') + '</div>';
+    g.querySelectorAll('[data-j]').forEach(b => b.onclick = () => answer(+b.dataset.j, a, opts, s));
+  }
+  function answer(j, a, opts, s){
+    if(picked != null) return; picked = j; const ok = j === a; if(ok) right++;
+    details.push({q: s.it ? s.it.w : T(s.k.q).replace(/<[^>]+>/g, ''), a: (opts[j].ar || T(opts[j])) + (ok ? '' : ' (الصح: ' + (opts[a].ar || T(opts[a])) + ')'), ok});
+    TQHW.result({score: right, max: steps.length, done: qi + 1 >= steps.length, details});
+    draw();
+    document.querySelectorAll('[data-j]').forEach(x => { x.disabled = true; const n = +x.dataset.j; if(n === a) x.classList.add('right'); else if(n === j) x.classList.add('wrong'); });
+    const btn = document.querySelector('[data-j="' + j + '"]');
+    if(window.TQFX){ ok ? TQFX.ok(btn) : TQFX.bad(btn); if(qi + 1 >= steps.length) setTimeout(() => TQFX.win(), 1000); }
+    setTimeout(() => { qi++; picked = null; draw(); }, ok ? 900 : 1900);
+  }
+  function drawRecs(){
+    const box = document.getElementById('recs'); box.innerHTML = '';
+    H.tasks.filter(k => k.t === 'record').forEach(k => {
+      const c = document.createElement('div'); c.className = 'card';
+      c.innerHTML = '<div class="q">🎙️ ' + T(k.label) + '</div>' + (k.text ? '<div class="ayat">' + k.text + '</div>' : '') + (k.ref ? '<div class="small">' + T(k.ref) + '</div>' : '') +
+        (k.say ? '<div class="small" style="margin-top:6px">' + T(k.say) + '</div>' : '') + '<div data-rb style="margin-top:8px"></div>';
+      box.appendChild(c); TQHW.recordButton(c.querySelector('[data-rb]'), (k.label && (k.label.ar || k.label)) || 'recording');
+    });
+  }
+  TQHW.on('lang', () => { draw(); });
+  draw(); drawRecs();
+  if(!steps.length) TQHW.result({score: null, max: null, done: true, details: []});
+})();
+</script>
+</body>
+</html>
