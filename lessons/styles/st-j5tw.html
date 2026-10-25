@@ -1,0 +1,311 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>درس — محمد مبارك</title><link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg"><style>html,body{margin:0;background:#0e1325;color:#f3f5ff}</style></head><body>
+<!-- Lesson style st-j5tw (dark studio screen, Outfit + Amiri, EN/ع toggle, group turns + scoreboard). A lesson body (plain JS) replaces the LESSON marker in the last script. Guide: st-j5tw.md -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Lesson style st-j5tw — a dark "studio screen" for a small teen group (turns + scoreboard). Colour = meaning: blue=fatha (up/open), coral=kasra (down), gold=damma (round). Mint = interface. */
+:root{
+  --bg:#0e1325; --panel:#192041; --panel2:#232c58; --line:#33407a;
+  --ink:#f3f5ff; --mute:#9ba7d8;
+  --fatha:#5cc8ff; --kasra:#ff7d6b; --damma:#ffc857;
+  --mint:#5eead4; --ok:#4ade80; --bad:#ff5d73;
+  --ar:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif;
+  --ui:'Outfit','Segoe UI',system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+#vp{flex:1;position:relative;overflow:hidden;min-height:0}
+#stage{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0;background:radial-gradient(1200px 700px at 80% -10%,#26307a55,transparent),var(--bg);overflow:hidden}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate;line-height:1.5}
+.top{position:absolute;left:0;right:0;top:0;height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid var(--line)}
+.top .ttl{font-size:26px;font-weight:700;letter-spacing:.2px;display:flex;gap:14px;align-items:center}
+.top .ttl small{font-weight:500;color:var(--mute);font-size:20px}
+.board{display:flex;gap:12px}
+.chip{display:flex;align-items:center;gap:10px;padding:8px 18px;border-radius:40px;background:var(--panel);border:2px solid transparent;font-size:22px;font-weight:600;cursor:pointer}
+.chip b{color:var(--damma);font-size:24px;min-width:30px;text-align:center}
+.chip.on{border-color:var(--mint);background:var(--panel2);box-shadow:0 0 0 4px #5eead422}
+.slide{position:absolute;left:0;right:0;top:80px;bottom:0;padding:22px 60px 26px;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:54px;line-height:1.08;font-weight:800;text-wrap:balance}
+h2{margin:0;font-size:38px;font-weight:700}
+p{margin:0;font-size:28px;line-height:1.35;color:var(--ink)}
+.mute{color:var(--mute)}
+.row{display:flex;gap:20px;align-items:stretch}
+.col{display:flex;flex-direction:column;gap:16px}
+.grow{flex:1;min-width:0}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:20px 24px}
+.btn{font-family:var(--ui);font-size:26px;font-weight:700;padding:14px 28px;min-height:64px;border-radius:18px;border:2px solid var(--line);background:var(--panel2);color:var(--ink);cursor:pointer;transition:transform .12s,background .15s}
+.btn:active{transform:scale(.96)}
+.btn.go{background:var(--mint);color:#06231f;border-color:var(--mint)}
+.btn.f{border-color:var(--fatha);color:var(--fatha)} .btn.k{border-color:var(--kasra);color:var(--kasra)} .btn.d{border-color:var(--damma);color:var(--damma)}
+.btn.ok{background:var(--ok);color:#052b12;border-color:var(--ok)} .btn.no{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.big{font-family:var(--ar);direction:rtl;font-size:200px;line-height:1.15;padding:.32em 0 .2em}
+.fa{color:var(--fatha)} .ki{color:var(--kasra)} .du{color:var(--damma)} .mi{color:var(--mint)}
+.pill{display:inline-block;padding:4px 16px;border-radius:30px;background:var(--panel2);font-size:22px;font-weight:600;color:var(--mute)}
+.tag{font-size:20px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--mint)}
+.shake{animation:shake .35s}
+@keyframes shake{20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+.pop{animation:pop .4s}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+/* bottom bar */
+#bar{height:60px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#0a0e1c;border-top:1px solid var(--line);font-size:16px;color:var(--mute);overflow-x:auto}
+#bar button{font-family:var(--ui);font-size:15px;font-weight:700;min-width:44px;height:42px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;white-space:nowrap}
+#bar button.on{background:var(--mint);color:#06231f;border-color:var(--mint)}
+#dots{display:flex;gap:6px;flex:1;justify-content:center;min-width:120px}
+#dots i{width:12px;height:12px;border-radius:50%;background:var(--line);cursor:pointer;flex:none}
+#dots i.a{background:var(--mint);transform:scale(1.35)} #dots i.v{background:#4a5aa8}
+#notes{position:absolute;left:30px;bottom:24px;width:880px;max-height:420px;overflow:auto;background:#05081aEE;border:2px solid var(--mint);border-radius:18px;padding:16px 22px;font-size:24px;line-height:1.6;z-index:50;direction:rtl;font-family:var(--ar)}
+#pen{position:absolute;inset:0;z-index:40;pointer-events:none}
+#pen.on{pointer-events:auto;cursor:crosshair}
+#penbar{position:absolute;right:20px;top:92px;z-index:60;display:none;gap:8px;background:#05081aEE;padding:8px;border-radius:16px;border:1px solid var(--line)}
+#penbar.on{display:flex}
+#penbar button{width:48px;height:48px;border-radius:12px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font-size:20px;cursor:pointer}
+#penbar button.sel{border-color:#fff}
+#fx{position:absolute;inset:0;z-index:70;pointer-events:none}
+/* machine */
+.stations{display:flex;align-items:center;gap:14px}
+.st{flex:1;padding:14px 18px;border-radius:18px;background:var(--panel);border:2px solid var(--line);font-size:24px;font-weight:700;text-align:center;color:var(--mute);transition:.25s}
+.st.on{border-color:var(--mint);color:var(--ink);background:var(--panel2);transform:translateY(-4px)}
+.arrow{font-size:34px;color:var(--mute)}
+.peelbox{font-size:96px;font-weight:800;letter-spacing:2px}
+.peelbox .rest{color:var(--mute);transition:opacity .8s,transform .8s;display:inline-block}
+.peelbox.peeled .rest{opacity:0;transform:translateY(-30px)}
+.peelbox .core{color:var(--mint)}
+/* grids */
+.lgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.lcard{background:var(--panel);border:2px solid var(--line);border-radius:22px;text-align:center;padding:8px 6px 12px;cursor:pointer;transition:.2s}
+.lcard .ar{font-size:84px;line-height:1.2;padding:4px 0 22px}
+.lcard .nm{font-size:30px;font-weight:700;height:42px;position:relative;z-index:2;margin-top:-6px}
+.lcard.done{border-color:var(--mint);background:var(--panel2)}
+.opt{font-size:46px;font-weight:800;min-width:210px;min-height:96px;border-radius:22px;background:var(--panel2);border:3px solid var(--line);color:var(--ink);cursor:pointer;font-family:var(--ui);letter-spacing:1px}
+.opt.arb{font-family:var(--ar);font-size:84px;line-height:1.1;min-width:230px;min-height:150px;padding:26px 10px 8px;font-weight:400;flex:none}
+.opt.right{background:#14532d;border-color:var(--ok)} .opt.wrong{background:#5f1230;border-color:var(--bad)}
+.hand{font-size:90px}
+.mark{position:absolute;transition:all 1.1s cubic-bezier(.3,1.4,.5,1)}
+.slot{min-height:150px;border:3px dashed var(--line);border-radius:18px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:26px;font-weight:700;cursor:pointer;flex-direction:column;gap:4px}
+.slot.full{border-style:solid;background:var(--panel2)} .slot.good{border-color:var(--ok);background:#12432a} .slot.bad{border-color:var(--bad)}
+.tray{display:flex;gap:14px;flex-wrap:wrap}
+.pc{padding:14px 22px;border-radius:18px;background:var(--panel2);border:3px solid var(--line);font-size:28px;font-weight:700;cursor:pointer;text-align:center;line-height:1.25}
+.pc.sel{border-color:var(--mint);box-shadow:0 0 0 5px #5eead433}
+.pc small{display:block;font-weight:500;color:var(--mute);font-size:22px}
+table.ck{border-collapse:separate;border-spacing:8px;width:100%}
+table.ck th{font-size:21px;font-weight:600;color:var(--mute);text-align:center;padding:4px}
+table.ck td.nm{font-size:30px;font-weight:700;width:170px}
+.cell{height:74px;border-radius:16px;border:2px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font-size:34px;cursor:pointer}
+.cell.y{background:#14532d;border-color:var(--ok)} .cell.n{background:#6b4a0a;border-color:var(--damma)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#cue{position:absolute;top:92px;left:50%;transform:translateX(-50%);z-index:65;background:#05081aEE;color:var(--ink);border:2px solid var(--mint);border-radius:30px;padding:10px 24px;font:600 22px/1.4 var(--ui);white-space:nowrap}
+#cue b{color:var(--damma);font-size:34px}
+#notes .say{direction:ltr;text-align:left;font:500 20px/1.6 var(--ui);background:var(--panel2);border-radius:10px;padding:6px 12px;margin-top:8px}
+</style>
+
+<div id="app">
+  <div id="vp"><div id="stage">
+    <div class="top"><div class="ttl" id="ttl"></div><div class="board" id="board"></div></div>
+    <div id="slideHost"></div>
+    <canvas id="pen" width="1600" height="900"></canvas>
+    <canvas id="fx" width="1600" height="900"></canvas>
+    <div id="penbar"></div>
+    <div id="cue" hidden></div>
+    <div id="notes" hidden></div>
+  </div></div>
+  <div id="bar">
+    <button id="bPrev">◀</button><button id="bNext">▶</button>
+    <span id="cnt"></span>
+    <div id="dots"></div>
+    <span id="clock">00:00</span>
+    <button id="bNotes" title="N">Notes</button>
+    <button id="bPen" title="D">Pen</button>
+    <button id="bSnd" title="M">Sound</button>
+    <button id="bLang">ع / EN</button>
+    <button id="bFull">Full</button>
+  </div>
+</div>
+
+<script>
+/* ===================== engine: dark "studio screen" for a small group (turns + scoreboard) ===================== */
+(function(){
+'use strict';
+const $=(s,r)=>(r||document).querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+let lang='en',idx=0,turn=0,sndOn=true;
+const T=o=>o==null?'':typeof o==='string'?o:Array.isArray(o)?(lang==='ar'?o[1]:o[0]):(o[lang]||o.en);
+const players=[];
+const PN=p=>lang==='ar'?`<span class="ar">${p.a}</span>`:p.n;
+const V={a:{m:'َ',cls:'fa',col:'var(--fatha)',en:'Fatha',ar:'فتحة'},i:{m:'ِ',cls:'ki',col:'var(--kasra)',en:'Kasra',ar:'كسرة'},u:{m:'ُ',cls:'du',col:'var(--damma)',en:'Damma',ar:'ضمة'}};
+/* letters: glyph, English name, core sound (the name starts with the core sound, so "peeling" the name leaves the sound) */
+const L=[['ب','Baa','b'],['ت','Taa','t'],['ث','Thaa','th'],['ج','Jeem','j'],['ح','Haa','h'],['خ','Khaa','kh'],['د','Daal','d'],['ذ','Dhaal','dh'],['ر','Raa','r'],['ز','Zay','z'],
+ ['س','Seen','s'],['ش','Sheen','sh'],['ص','Saad','s'],['ض','Daad','d'],['ط','Taa','t'],['ظ','Dhaa','dh'],['غ','Ghayn','gh'],['ف','Faa','f'],['ق','Qaaf','q'],['ك','Kaaf','k'],
+ ['ل','Laam','l'],['م','Meem','m'],['ن','Noon','n'],['ه','Haa','h'],['و','Waaw','w'],['ي','Yaa','y']]
+ .map(x=>({c:x[0],n:x[1],core:x[2],head:x[1].slice(0,x[2].length),rest:x[1].slice(x[2].length)}));
+const LT=c=>L.find(x=>x.c===c)||{c,n:c,core:c,head:c,rest:''};
+const syl=(l,v)=>l.c+V[v].m;
+/* ---------- sound: short Web Audio effects; Qur'an = Husary; everything else the TEACHER says (cue bubble, no machine voice) ---------- */
+let AC=null;
+function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}catch(e){return null}}
+function beep(f,d,t,v){if(!sndOn)return;const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=v||.07;o.connect(g);g.connect(a.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+d);o.stop(a.currentTime+d)}
+const good=()=>{beep(660,.12);setTimeout(()=>beep(880,.18),110)};
+const bad=()=>{beep(220,.22,'triangle',.06)};
+let cueT=null;
+function cue(txt,secret){const c=$('#cue');if(!c)return;c.innerHTML=secret?T({en:'🗣 Teacher: say it now (answer in the notes)',ar:'🗣 المعلم: انطقها الآن (الجواب في الملاحظات)'}):T({en:'🗣 Teacher says: ',ar:'🗣 المعلم يقول: '})+'<b class="ar">'+txt+'</b>';c.hidden=false;clearTimeout(cueT);cueT=setTimeout(()=>c.hidden=true,2800);
+ if(secret){const n=$('#notes');n.dataset.secret=txt;if(!n.hidden)notes()}}
+const speak=(txt,secret)=>cue(txt,secret);
+let curA=null;
+function husary(s,n){if(!sndOn)return;try{curA&&curA.pause()}catch(e){}const k=String(s).padStart(3,'0')+String(n).padStart(3,'0');let a=new Audio('https://everyayah.com/data/Husary_Muallim_128kbps/'+k+'.mp3');a.onerror=()=>{a=new Audio('https://everyayah.com/data/Husary_128kbps/'+k+'.mp3');curA=a;a.play().catch(()=>{})};curA=a;a.play().catch(()=>{})}
+/* ---------- effects ---------- */
+const fx=$('#fx'),fctx=fx.getContext('2d');let parts=[],fxRun=false;
+function burst(x,y,n){x=x==null?800:x;y=y==null?420:y;for(let i=0;i<(n||70);i++)parts.push({x,y,vx:(Math.random()-.5)*16,vy:-Math.random()*14-3,g:.45,c:pick(['#5cc8ff','#ff7d6b','#ffc857','#5eead4','#fff']),r:6+Math.random()*7,life:70+Math.random()*30});if(!fxRun){fxRun=true;requestAnimationFrame(fxLoop)}}
+function fxLoop(){fctx.clearRect(0,0,1600,900);parts=parts.filter(p=>p.life>0);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.life--;fctx.fillStyle=p.c;fctx.fillRect(p.x,p.y,p.r,p.r*.6)});if(parts.length)requestAnimationFrame(fxLoop);else fxRun=false}
+/* ---------- scoreboard: whose turn + stars ---------- */
+function drawBoard(){const b=$('#board');b.innerHTML='';players.forEach((p,i)=>{const c=document.createElement('div');c.className='chip'+(i===turn?' on':'');c.innerHTML=`<span>${PN(p)}</span><b>★ ${p.s}</b>`;c.onclick=()=>{turn=i;drawBoard()};b.appendChild(c)})}
+function award(ok,pts){if(ok){if(players[turn])players[turn].s+=pts||1;good();burst(800,330,40)}else bad();if(players.length)turn=(turn+1)%players.length;drawBoard()}
+/* ---------- slides ---------- */
+const S=[];const host=$('#slideHost');let cleanup=null;
+function slide(o){o.st=o.st||{};S.push(o)}
+function show(i){idx=Math.max(0,Math.min(S.length-1,i));S[idx].visited=true;delete $('#notes').dataset.secret;build();drawDots();$('#cnt').textContent=(idx+1)+' / '+S.length;if(!$('#notes').hidden)notes();try{localStorage.setItem('j5tw-'+(window.LESSON_ID||document.title),idx)}catch(e){}}
+function build(){if(cleanup){try{cleanup()}catch(e){}cleanup=null}host.innerHTML='';const r=document.createElement('div');r.className='slide';host.appendChild(r);const s=S[idx];
+ $('#ttl').innerHTML=`<img src="../assets/brand/emblem.svg" alt="" style="width:40px;height:40px"><span>${T(window.SERIES||document.title)}</span><small>${T(s.title)} · ${s.mins} min</small>`;s.build(r,s.st);drawBoard()}
+function drawDots(){const d=$('#dots');d.innerHTML='';S.forEach((s,i)=>{const e=document.createElement('i');e.className=i===idx?'a':(s.visited?'v':'');e.onclick=()=>show(i);d.appendChild(e)})}
+function notes(){const n=$('#notes'),s=S[idx];n.innerHTML=(n.dataset.secret?`<div class="mi" style="font-size:30px">🗣 ${n.dataset.secret}</div>`:'')+`<b>${s.mins} د</b> — ${s.notes||''}`+(s.say?(Array.isArray(s.say)?s.say:[s.say]).map(x=>`<div class="say">Say: ${x}</div>`).join(''):'')}
+/* ---------- public API for the lesson body ---------- */
+Object.assign(window,{$,sleep,shuffle,pick,T,PN,V,L,LT,syl,ac,beep,good,bad,cue,speak,husary,burst,award,slide,show,players,
+ team:list=>{players.length=0;list.forEach(x=>players.push({n:x[0],a:x[1],s:0}))},
+ cur:()=>idx,turnOf:()=>players[turn],setCleanup:f=>{cleanup=f},redraw:()=>build()});
+/* ---------- pen layer ---------- */
+const pen=$('#pen'),pctx=pen.getContext('2d');let penOn=false,penMode='pen',penCol='#ffffff',drawing=false,lx=0,ly=0,penSeen=false;
+const PBTN=[['✎','pen'],['▮','hl'],['✦','laser'],['⌫','clear']];
+const pb=$('#penbar');
+['#ffffff','#ff7d6b','#5cc8ff','#ffc857','#5eead4'].forEach(c=>{const b=document.createElement('button');b.style.background=c;b.onclick=()=>{penCol=c;if(penMode==='clear')penMode='pen';selP()};b.dataset.c=c;pb.appendChild(b)});
+PBTN.forEach(x=>{const b=document.createElement('button');b.textContent=x[0];b.dataset.m=x[1];b.onclick=()=>{if(x[1]==='clear'){pctx.clearRect(0,0,1600,900)}else penMode=x[1];selP()};pb.appendChild(b)});
+function selP(){pb.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',b.dataset.c===penCol||b.dataset.m===penMode))}selP();
+function pxy(e){const rc=pen.getBoundingClientRect();return[(e.clientX-rc.left)*1600/rc.width,(e.clientY-rc.top)*900/rc.height]}
+pen.addEventListener('pointerdown',e=>{if(e.pointerType==='pen')penSeen=true;if(e.pointerType==='touch'&&penSeen)return;drawing=true;[lx,ly]=pxy(e);pen.setPointerCapture(e.pointerId);e.preventDefault()});
+pen.addEventListener('pointermove',e=>{if(!drawing)return;if(e.pointerType==='touch'&&penSeen)return;const[x,y]=pxy(e);const p=e.pressure>0&&e.pressure<1?e.pressure:.5;pctx.lineCap='round';pctx.lineJoin='round';
+ if(penMode==='hl'){pctx.globalAlpha=.3;pctx.lineWidth=34;pctx.strokeStyle=penCol}else if(penMode==='laser'){pctx.globalAlpha=1;pctx.lineWidth=10;pctx.strokeStyle='#ff2d55'}else{pctx.globalAlpha=1;pctx.lineWidth=3+p*9;pctx.strokeStyle=penCol}
+ pctx.beginPath();pctx.moveTo(lx,ly);pctx.lineTo(x,y);pctx.stroke();pctx.globalAlpha=1;lx=x;ly=y;
+ if(penMode==='laser'){clearTimeout(pen._t);pen._t=setTimeout(()=>pctx.clearRect(0,0,1600,900),900)}e.preventDefault()});
+['pointerup','pointercancel'].forEach(t=>pen.addEventListener(t,()=>{drawing=false}));
+function togglePen(){penOn=!penOn;pen.classList.toggle('on',penOn);pb.classList.toggle('on',penOn);$('#bPen').classList.toggle('on',penOn)}
+/* ---------- chrome ---------- */
+function fit(){const vp=$('#vp'),st=$('#stage');const k=Math.min(vp.clientWidth/1600,vp.clientHeight/900);st.style.transform=`scale(${k})`;st.style.left=((vp.clientWidth-1600*k)/2)+'px';st.style.top=((vp.clientHeight-900*k)/2)+'px'}
+window.addEventListener('resize',fit);fit();
+$('#bPrev').onclick=()=>show(idx-1);$('#bNext').onclick=()=>show(idx+1);
+$('#bNotes').onclick=()=>{const n=$('#notes');n.hidden=!n.hidden;$('#bNotes').classList.toggle('on',!n.hidden);if(!n.hidden)notes()};
+$('#bPen').onclick=togglePen;
+$('#bSnd').onclick=()=>{sndOn=!sndOn;$('#bSnd').textContent=sndOn?'Sound':'Muted';ac();if(!sndOn)try{curA&&curA.pause()}catch(e){}};
+$('#bLang').onclick=()=>{lang=lang==='en'?'ar':'en';build();drawBoard()};
+function full(){const d=document,e=d.documentElement;try{if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}catch(x){}}
+$('#bFull').onclick=full;
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight')show(idx+1);if(e.key==='ArrowLeft')show(idx-1);if(e.key==='n'||e.key==='N')$('#bNotes').click();if(e.key==='d'||e.key==='D')togglePen();if(e.key==='m'||e.key==='M')$('#bSnd').click();if(e.key==='f'||e.key==='F')full()});
+document.addEventListener('dblclick',e=>e.preventDefault());
+document.addEventListener('contextmenu',e=>e.preventDefault());
+const t0=Date.now();setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('#clock').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+' / '+(window.MINUTES||60)+':00'},1000);
+document.addEventListener('pointerdown',ac,{once:true});
+window.__start=()=>{let s=0;try{s=+(localStorage.getItem('j5tw-'+(window.LESSON_ID||document.title))||0)}catch(e){}drawBoard();show(s<S.length?s:0)};
+})();
+</script>
+<script>
+/* ===================== builders (one call = one slide). Text = {en:'…',ar:'…'} or ['en','ar']. Guide: st-j5tw.md ===================== */
+(function(){
+const TURN=()=>`<span class="pill" style="color:var(--mint)">${T({en:'Turn: ',ar:'الدور: '})}${players.length?PN(turnOf()):''}</span>`;
+const H=(t,extra)=>`<div class="row" style="align-items:center"><h1 class="grow">${T(t)}</h1>${extra||''}</div>`;
+const base=o=>({mins:o.mins||3,title:o.title,notes:o.notes||'',say:o.say});
+
+/* machine: NAME → peel to the SOUND → add a hat (vowel) → SYLLABLE */
+window.machine=o=>slide(Object.assign(base(o),{build(r,s){s.li=s.li||0;s.stage=s.stage||0;const letters=o.letters||['ب','ت','س','م'];
+ function draw(){const l=LT(letters[s.li%letters.length]);const act=Math.min(s.stage,3);let mid='',btns='';
+  if(s.stage===0){mid=`<div class="big mi">${l.c}</div><p class="mute">${T({en:'You see a letter. What do you say?',ar:'شايفين حرف. تقولوا إيه؟'})}</p>`;btns=`<button class="btn go" id="n">${T({en:'1 · Say its NAME',ar:'١ · قولوا اسمه'})}</button>`}
+  if(s.stage===1){mid=`<div class="peelbox">${l.n}</div><p class="mute">${T({en:'Its name is ',ar:'اسمه '})}<b>${l.n}</b>. ${T({en:'But the name is NOT the sound.',ar:'بس الاسم مش هو الصوت.'})}</p>`;btns=`<button class="btn go" id="n">${T({en:'2 · Peel off the end',ar:'٢ · شيلوا ذيل الاسم'})}</button>`}
+  if(s.stage===2){mid=`<div class="peelbox" id="pb"><span class="core">${l.head}</span><span class="rest">${l.rest}</span></div><p>${T({en:'What is left is the SOUND:',ar:'اللي فاضل هو الصوت:'})} <b class="mi" style="font-size:40px">${l.core}</b></p>`;btns=`<button class="btn go" id="n">${T({en:'3 · Add a hat',ar:'٣ · ضيفوا حركة'})}</button>`}
+  if(s.stage===3){mid=`<div class="peelbox"><span class="core">${l.head}</span></div><p>${T({en:'Pick a hat (vowel):',ar:'اختاروا حركة:'})}</p>`;btns=['a','i','u'].map(v=>`<button class="btn ${v==='a'?'f':v==='i'?'k':'d'}" data-v="${v}">${T(V[v])} · ${v}</button>`).join('')}
+  if(s.stage===4){const v=s.v;mid=`<div class="big ${V[v].cls} pop">${syl(l,v)}</div><p style="font-size:44px;font-weight:800">${l.core}${v}</p>`;btns=`<button class="btn go" id="n">${T({en:'Next letter ↻',ar:'حرف تاني ↻'})}</button>`}
+  r.innerHTML=`<h1>${T(o.h1||{en:'You know the NAME. Reading needs the SOUND.',ar:'أنتم عارفين الاسم. القراءة محتاجة الصوت.'})}</h1>
+  <div class="stations">${[{en:'1 Letter name',ar:'١ اسم الحرف'},{en:'2 Core sound',ar:'٢ الصوت'},{en:'3 Vowel hat',ar:'٣ الحركة'},{en:'4 Syllable',ar:'٤ المقطع'}].map((x,i)=>`<div class="st ${i===act||(s.stage===4&&i===3)?'on':''}">${T(x)}</div>${i<3?'<div class="arrow">→</div>':''}`).join('')}</div>
+  <div class="card grow col" style="align-items:center;justify-content:center;text-align:center">${mid}</div><div class="row" style="justify-content:center">${btns}</div>`;
+  const n=$('#n',r);if(n)n.onclick=()=>{ac();beep(500,.1);if(s.stage===4){s.stage=0;s.li++}else s.stage++;draw();if(s.stage===2)setTimeout(()=>{const p=$('#pb');if(p)p.classList.add('peeled')},50)};
+  r.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{s.v=b.dataset.v;s.stage=4;good();speak(syl(l,s.v));burst(800,400,50);draw()})}
+ draw()}}));
+
+/* hats: three vowel cards with body moves + random challenge for whoever's turn it is */
+window.hats=o=>slide(Object.assign(base(o),{build(r){const c=o.letter||'ب';const d={a:{h:'☝️',en:'Open your mouth. Hand UP.',ar:'افتح فمك. اليد لفوق.'},i:{h:'👇',en:'Drop your jaw. Hand DOWN.',ar:'نزّل فكك. اليد لتحت.'},u:{h:'🤌',en:'Round your lips. Hand makes a CIRCLE.',ar:'دوّر شفايفك. اليد دايرة.'}};
+ r.innerHTML=H(o.h1||{en:'Do it with your body',ar:'اعملوها بجسمكم'},`<button class="btn go" id="ch">🎲 ${T({en:'Challenge!',ar:'تحدي!'})}</button>`)+`<div class="row grow">${['a','i','u'].map(v=>`<div class="card grow col" data-v="${v}" style="align-items:center;justify-content:center;text-align:center;border-color:${V[v].col};cursor:pointer;gap:6px"><div class="hand">${d[v].h}</div><div class="ar ${V[v].cls}" style="font-size:150px;line-height:1.2">${c}${V[v].m}</div><div style="font-size:60px;font-weight:800" class="${V[v].cls}">${LT(c).core}${v}</div><p>${T(d[v])}</p></div>`).join('')}</div><div class="card" id="chbox" style="text-align:center;min-height:90px"><p class="mute">${T({en:'Press Challenge. One girl does the motion and says the sound.',ar:'دوس تحدي. بنت تعمل الحركة وتقول الصوت.'})}</p></div>`;
+ r.querySelectorAll('[data-v]').forEach(x=>x.onclick=()=>{const v=x.dataset.v;beep(v==='a'?740:v==='i'?400:540,.2);speak(c+V[v].m);x.classList.remove('pop');void x.offsetWidth;x.classList.add('pop')});
+ $('#ch',r).onclick=()=>{ac();const v=pick(['a','i','u']);$('#chbox',r).innerHTML=`<p style="font-size:36px">${T({en:'Now: ',ar:'دلوقتي: '})}<b>${PN(turnOf())}</b> → <b class="${V[v].cls}">${T(V[v])}</b> ! <button class="btn ok" id="y" style="min-height:52px;font-size:22px">✓</button> <button class="btn no" id="x" style="min-height:52px;font-size:22px">✗</button></p>`;$('#y',r).onclick=()=>{award(true,1);$('#chbox',r).innerHTML=''};$('#x',r).onclick=()=>{award(false);$('#chbox',r).innerHTML=''}}}}));
+
+/* readIt (game A): a written syllable → choose its sound (Latin), turns rotate; on a miss the decoding steps show */
+window.readIt=o=>slide(Object.assign(base(o),{build(r,s){const LS=(o.letters||['ب','ت','د','ر','س','ك','م','ن']).map(LT);s.n=s.n||0;const max=o.max||12;
+ const mk=()=>{const l=pick(LS),v=pick(['a','i','u']);let opts;const t=l.core+v;if(s.n%2===0)opts=['a','i','u'].map(k=>l.core+k);else{const ot=shuffle(LS.filter(x=>x.core!==l.core)).slice(0,2);opts=[t,...ot.map(x=>x.core+v)]}s.q={l,v,t,opts:shuffle(opts)};s.log=null};if(!s.q&&!s.fin)mk();
+ function draw(){if(s.fin){r.innerHTML=`<h1>${T({en:'Round complete!',ar:'الجولة خلصت!'})}</h1><div class="row grow" style="align-items:center;justify-content:center">${players.map(p=>`<div class="card col" style="align-items:center;min-width:300px"><h2>${PN(p)}</h2><div style="font-size:80px;color:var(--damma);font-weight:800">★ ${p.s}</div></div>`).join('')}</div><div class="row" style="justify-content:center"><button class="btn go" id="again">${T({en:'Play another round',ar:'جولة تانية'})}</button></div>`;$('#again',r).onclick=()=>{s.fin=false;s.n=0;mk();draw()};return}
+  const q=s.q;r.innerHTML=H({en:'Which sound is it?',ar:'إيه صوته؟'},`<span class="pill">${s.n+1} / ${max}</span>${TURN()}`)+`<div class="card grow col" style="align-items:center;justify-content:center;text-align:center"><div class="big ${V[q.v].cls}" style="font-size:210px">${syl(q.l,q.v)}</div><div id="fb" style="min-height:44px;font-size:30px" class="mute">${s.log||''}</div></div><div class="row" style="justify-content:center">${q.opts.map(x=>`<button class="opt" data-o="${x}">${x}</button>`).join('')}</div>`;
+  r.querySelectorAll('.opt').forEach(b=>b.onclick=async()=>{ac();const ok=b.dataset.o===q.t;if(ok){b.classList.add('right');award(true,1);await sleep(700)}else{b.classList.add('wrong','shake');award(false);$('#fb',r).innerHTML=`${q.l.n} → <b class="mi">${q.l.core}</b> · ${T(V[q.v])} → <b class="${V[q.v].cls}">${q.v}</b> = <b>${q.t}</b>`;await sleep(2300)}s.n++;if(s.n>=max){s.fin=true;burst()}else mk();draw()})}
+ draw()}}));
+
+/* teacherSays (game B): the teacher says a syllable (answer only in the notes / 👁), the girl taps the written one */
+window.teacherSays=o=>slide(Object.assign(base(o),{build(r,s){const LS=(o.letters||['ب','ت','د','ر','س','ك','م','ن']).map(LT);s.n=s.n||0;const max=o.max||8;
+ const mk=()=>{const l=pick(LS),v=pick(['a','i','u']);let cand;if(s.n%2===0)cand=['a','i','u'].map(k=>[l,k]);else{const ot=shuffle(LS.filter(x=>x!==l&&x.core!==l.core)).slice(0,2);cand=[[l,v],[ot[0],v],[ot[1],v]]}s.q={l,v,opts:shuffle(cand)};s.peek=false};if(!s.q&&!s.fin)mk();
+ function draw(){if(s.fin){r.innerHTML=`<h1>${T({en:'Great listening!',ar:'سماع ممتاز!'})}</h1><div class="row" style="justify-content:center"><button class="btn go" id="again">${T({en:'Again',ar:'تاني'})}</button></div>`;$('#again',r).onclick=()=>{s.fin=false;s.n=0;mk();draw()};return}
+  const q=s.q;r.innerHTML=H({en:'Listen. Tap what you hear.',ar:'اسمعوا. دوسوا اللي سمعتوه.'},`<span class="pill">${s.n+1} / ${max}</span>${TURN()}`)+`<div class="card row" style="align-items:center;justify-content:center;gap:24px"><button class="btn go" id="say" style="font-size:34px;min-height:80px">🗣 ${T({en:'Teacher says it',ar:'المدرس ينطقها'})}</button><button class="btn" id="pk">👁 Teacher</button><span id="tp" class="ar" style="font-size:60px;color:var(--mint);min-width:120px">${s.peek?syl(q.l,q.v):''}</span></div><div class="row grow" style="justify-content:center;align-items:center">${q.opts.map((x,i)=>`<button class="opt arb" data-i="${i}"><span class="${V[x[1]].cls}">${syl(x[0],x[1])}</span></button>`).join('')}</div>`;
+  $('#say',r).onclick=()=>{ac();speak(syl(q.l,q.v),1)};$('#pk',r).onclick=()=>{s.peek=!s.peek;$('#tp',r).textContent=s.peek?syl(q.l,q.v):''};
+  r.querySelectorAll('.opt').forEach(b=>b.onclick=async()=>{const x=q.opts[+b.dataset.i];const ok=x[0]===q.l&&x[1]===q.v;if(ok){b.classList.add('right');award(true,1)}else{b.classList.add('wrong','shake');award(false);const c=r.querySelectorAll('.opt')[q.opts.findIndex(z=>z[0]===q.l&&z[1]===q.v)];if(c)c.classList.add('right')}await sleep(1400);s.n++;if(s.n>=max){s.fin=true;burst()}else mk();draw()})}
+ draw()}}));
+
+/* order: tap a card, then a numbered slot (pillars, prayers, steps of wudu…). items in the RIGHT order: {en,ar,d:{en,ar},after:'shown when right'} */
+window.order=o=>slide(Object.assign(base(o),{build(r,s){const P=o.items.map((x,i)=>Object.assign({k:'k'+i},x));if(!s.tray){s.tray=shuffle(P.map(p=>p.k));s.slots=P.map(()=>null);s.sel=null;s.ok=false}
+ function draw(){const used=s.slots.filter(Boolean);
+  r.innerHTML=H(o.h1,o.quote?`<div class="ar mi" style="font-size:52px">${o.quote}</div>`:'')+(o.src?`<p class="mute" style="font-size:22px">${T(o.src)}</p>`:'')+(o.svg||'')+
+  `<div class="row" style="align-items:stretch">${s.slots.map((k,i)=>{const p=P.find(x=>x.k===k);return `<div class="slot grow ${p?'full':''} ${s.ok&&p?(P[i].k===k?'good':'bad'):''}" data-i="${i}"><span class="pill">${i+1}</span>${p?`<div>${p.en}</div><div class="ar" style="font-size:36px">${p.ar}</div>${s.ok&&P[i].k===k&&p.after?`<div class="mi">${T(p.after)}</div>`:''}`:'<span class="mute" style="font-size:22px">tap</span>'}</div>`}).join('')}</div>
+  <div class="tray">${s.tray.filter(k=>!used.includes(k)).map(k=>{const p=P.find(x=>x.k===k);return `<div class="pc ${s.sel===k?'sel':''}" data-k="${k}">${p.en} · <span class="ar">${p.ar}</span>${p.d?`<small>${T(p.d)}</small>`:''}</div>`}).join('')}</div>
+  <div class="row" style="justify-content:flex-end;margin-top:auto"><button class="btn" id="rs">↺</button><button class="btn go" id="ck" ${used.length<P.length?'disabled':''}>${T({en:'Check',ar:'تحقق'})}</button></div>`;
+  r.querySelectorAll('.pc').forEach(c=>c.onclick=()=>{ac();s.sel=c.dataset.k;beep(500,.08);draw()});
+  r.querySelectorAll('.slot').forEach(c=>c.onclick=()=>{const i=+c.dataset.i;if(s.slots[i]){s.slots[i]=null;s.ok=false;draw();return}if(s.sel){s.slots[i]=s.sel;s.sel=null;s.ok=false;beep(420,.1);draw()}});
+  $('#rs',r).onclick=()=>{s.slots=P.map(()=>null);s.sel=null;s.ok=false;draw()};
+  $('#ck',r).onclick=()=>{s.ok=true;if(s.slots.every((k,i)=>P[i].k===k)){award(true,2);burst()}else award(false);draw()}}
+ draw()}}));
+
+/* quiz: turn-based questions {q:{en,ar},o:['…'],a:index}; o may also be {en,ar} objects */
+window.quiz=o=>slide(Object.assign(base(o),{build(r,s){s.n=s.n||0;const Q=o.qs;
+ function draw(){if(s.fin){r.innerHTML=`<h1>${T(o.end||{en:'Well done!',ar:'أحسنتم!'})}</h1><div class="row" style="justify-content:center"><button class="btn go" id="nx">${T({en:'Next ▶',ar:'التالي ▶'})}</button></div>`;$('#nx',r).onclick=()=>show(cur()+1);return}
+  const q=Q[s.n];r.innerHTML=H(o.h1||o.title,`<span class="pill">${s.n+1} / ${Q.length}</span>${TURN()}`)+`<div class="card grow col" style="justify-content:center;text-align:center"><p style="font-size:46px">${T(q.q)}</p></div><div class="row" style="justify-content:center">${q.o.map((x,i)=>`<button class="opt ${/[؀-ۿ]/.test(T(x))&&T(x).length<4?'arb':''}" data-i="${i}" style="font-size:40px">${T(x)}</button>`).join('')}</div>`;
+  r.querySelectorAll('.opt').forEach(b=>b.onclick=async()=>{ac();const ok=+b.dataset.i===q.a;b.classList.add(ok?'right':'wrong');if(!ok){b.classList.add('shake');r.querySelectorAll('.opt')[q.a].classList.add('right')}award(ok,1);await sleep(1100);s.n++;if(s.n>=Q.length){s.fin=true;burst()}draw()})}
+ draw()}}));
+
+/* cards: a teaching slide — heading, optional ayah/hadith line with source, and tap-to-open cards {e,h:{en,ar},p:{en,ar}} */
+window.cards=o=>slide(Object.assign(base(o),{build(r){r.innerHTML=H(o.h1,o.quote?`<div class="ar mi" style="font-size:50px">${o.quote}</div>`:'')+(o.src?`<p class="mute" style="font-size:22px">${T(o.src)}</p>`:'')+`<div class="row grow">${o.cards.map((c,i)=>`<div class="card grow col" data-i="${i}" style="align-items:center;justify-content:center;text-align:center;cursor:pointer"><div style="font-size:80px">${c.e||'⭐'}</div><h2>${T(c.h)}</h2><p data-p hidden>${T(c.p)}</p><span class="pill" data-t>${T({en:'tap',ar:'اضغط'})}</span></div>`).join('')}</div>`;
+ r.querySelectorAll('[data-i]').forEach(c=>c.onclick=()=>{if(!$('[data-p]',c).hidden)return;$('[data-p]',c).hidden=false;$('[data-t]',c).hidden=true;good();c.classList.add('pop')})}}));
+
+/* recite: Qur'an lines with Husary (🔊 per ayah) — Listen carefully → Repeat after me → Now read alone */
+window.recite=o=>slide(Object.assign(base(o),{build(r,s){s.k=s.k||0;const steps=[{en:'1 · Listen carefully 👂',ar:'١ · اسمعوا جيدًا 👂'},{en:'2 · Repeat after me 🗣',ar:'٢ · ردّدوا ورائي 🗣'},{en:'3 · Now read alone 📖',ar:'٣ · الآن اقرؤوا وحدكم 📖'}];
+ function draw(){r.innerHTML=H(o.h1||o.title,`<span class="pill" style="color:var(--mint)">${T(steps[s.k])}</span>`)+`<div class="col grow" style="justify-content:center">${o.ayat.map((a,i)=>`<div class="card row" style="align-items:center"><button class="btn" data-a="${i}">🔊</button><div class="ar grow" style="font-size:54px;text-align:right">${a[2]} <span class="mi" style="font-size:34px">﴿${a[1]}﴾</span></div></div>`).join('')}</div><div class="row" style="justify-content:center"><button class="btn go" id="st">${s.k<2?T({en:'Next step →',ar:'الخطوة التالية ←'}):T({en:'Done ✓',ar:'تمّ ✓'})}</button></div>`;
+  r.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const a=o.ayat[+b.dataset.a];husary(a[0],a[1])});$('#st',r).onclick=()=>{if(s.k<2){s.k++;beep(520,.08);draw()}else{award(true,1);burst()}}}
+ draw()}}));
+
+/* checkin: teacher-only table, one row per girl; tap = ✓ / … / empty (kept in this browser only) */
+window.checkin=o=>slide(Object.assign(base(o),{build(r,s){const K='j5tw-chk-'+(window.LESSON_ID||document.title)+'-'+cur();if(!s.g){s.g=players.map(()=>o.cols.map(()=>0));try{const z=localStorage.getItem(K);if(z)s.g=JSON.parse(z)}catch(e){}}
+ function draw(){r.innerHTML=`<h1>${T(o.h1||{en:'Where is each of you now?',ar:'كل واحدة وصلت فين؟'})}</h1><p class="mute" style="font-size:22px">${T({en:'Teacher: ask quietly, then tap. Green = yes · Orange = not yet.',ar:'للمدرس: اسأل بهدوء ثم اضغط. أخضر = نعم · برتقالي = لسه.'})}</p>
+  <table class="ck"><tr><th></th>${o.cols.map(x=>`<th>${T(x)}</th>`).join('')}</tr>${players.map((p,i)=>`<tr><td class="nm">${PN(p)}</td>${s.g[i].map((v,j)=>`<td><div class="cell ${v===1?'y':v===2?'n':''}" data-i="${i}" data-j="${j}">${v===1?'✓':v===2?'…':''}</div></td>`).join('')}</tr>`).join('')}</table>${o.next?`<div class="card"><p>${T(o.next)}</p></div>`:''}`;
+  r.querySelectorAll('.cell').forEach(c=>c.onclick=()=>{const i=+c.dataset.i,j=+c.dataset.j;s.g[i][j]=(s.g[i][j]+1)%3;beep(500,.06);try{localStorage.setItem(K,JSON.stringify(s.g))}catch(e){}draw()})}
+ draw()}}));
+
+/* finale: final turn-based quiz → scores + certificate with the girls' names (from team()) + homework */
+window.finale=o=>slide(Object.assign(base(o),{build(r,s){s.n=s.n||0;const Q=o.qs||[];if(!Q.length)s.fin=true;
+ function draw(){if(s.fin){const mx=Math.max(...players.map(p=>p.s));
+   r.innerHTML=`<div class="row" style="align-items:center"><img src="../assets/brand/emblem.svg" alt="" style="width:70px;height:70px"><h1 class="grow">${T(o.cert||{en:'Certificate of Effort',ar:'شهادة تقدير'})}</h1><span class="pill">${T(o.topic)}</span></div>
+   <div class="row grow">${players.map(p=>`<div class="card grow col" style="align-items:center;justify-content:center;text-align:center;border-color:${p.s===mx?'var(--damma)':'var(--line)'}"><div style="font-size:54px">${p.s===mx?'🏆':'⭐'}</div><h2>${p.n} · <span class="ar">${p.a}</span></h2><div style="font-size:90px;font-weight:800;color:var(--damma)">★ ${p.s}</div><p class="mute" style="font-size:20px">${T(o.date||'')}</p></div>`).join('')}</div>
+   <div class="card"><p><b class="mi">${T({en:'Home task',ar:'الواجب'})}</b> · ${T(o.home)}</p>${o.next?`<p class="mute" style="font-size:24px">${T(o.next)}</p>`:''}</div>`;burst();return}
+  const q=Q[s.n];r.innerHTML=H(o.h1||{en:'Final quiz',ar:'الاختبار الأخير'},`<span class="pill">${s.n+1} / ${Q.length}</span>${TURN()}`)+`<div class="card grow col" style="justify-content:center;text-align:center"><p style="font-size:46px">${T(q.q)}</p></div><div class="row" style="justify-content:center">${q.o.map((x,i)=>`<button class="opt" data-i="${i}" style="font-size:40px;white-space:pre">${T(x)}</button>`).join('')}</div>`;
+  r.querySelectorAll('.opt').forEach(b=>b.onclick=async()=>{ac();const ok=+b.dataset.i===q.a;b.classList.add(ok?'right':'wrong');if(!ok){b.classList.add('shake');r.querySelectorAll('.opt')[q.a].classList.add('right')}award(ok,1);await sleep(1100);s.n++;if(s.n>=Q.length)s.fin=true;draw()})}
+ draw()}}));
+})();
+</script>
+<script>
+/* ===================== LESSON BODY (st-j5tw.md) ===================== */
+<!--LESSON-->
+</script>
+<script>__start()</script>
+</body></html>
