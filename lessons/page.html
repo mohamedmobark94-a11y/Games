@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>درس · Lesson — Mohamed Mubarak</title>
+<link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg">
+<style>body{margin:0;background:#081B25;color:#F4EBD6;font:600 20px "Cairo",system-ui,sans-serif}#ld{text-align:center;padding:80px 20px}</style>
+</head>
+<body>
+<div id="ld">…</div>
+<!-- A lesson in its own full style, stored as data: docs collection 'decks', id = ?d=…
+     data = {style:"<name in lessons/styles/>", body:"<lesson part>"}  or  {html:"<full page>"}
+     A style doc holds {head:"…", tail:"…"}; the page is head + body + tail.
+     Lessons are published by writing those rows from any Claude chat; no code change needed. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../app/config.js"></script>
+<script>
+(async function(){
+  const id = new URLSearchParams(location.search).get('d') || '', ld = document.getElementById('ld');
+  const fail = () => { ld.innerHTML = 'الدرس ده مش موجود أو اللينك ناقص.<br>This lesson link does not work.'; };
+  if(!id) return fail();
+  let db, data = null;
+  try{ db = supabase.createClient(TQ.url, TQ.key, {auth: {persistSession: false}}); data = (await db.rpc('get_deck', {p_id: id})).data; }catch(_){}
+  if(!data) return fail();
+  let html = data.html || '';
+  if(!html && data.style){
+    /* a student's own lesson style lives in lessons/styles/<style>.html; the lesson body goes where <!--LESSON--> is */
+    try{ const st = await (await fetch('styles/' + encodeURIComponent(data.style) + '.html', {cache: 'no-cache'})).text(); const k = st.indexOf('<!--LESSON-->');
+      if(k > 0) html = st.slice(0, k) + (data.body || '') + st.slice(k + 13); }catch(_){}
+  }
+  if(!html && data.engine){
+    let st = null; try{ st = (await db.rpc('get_deck', {p_id: data.engine})).data; }catch(_){}
+    if(!st) return fail();
+    html = (st.head || '') + (data.body || '') + (st.tail || '');
+  }
+  if(!html) return fail();
+  document.open(); document.write(html); document.close();
+})();
+</script>
+</body>
+</html>

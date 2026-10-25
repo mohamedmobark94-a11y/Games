@@ -1,9 +1,9 @@
 /* Tarteel lesson effects: sounds, a warm recorded voice, confetti, and Husary recitation.
    Used by lessons/ and hw/ pages:
      <script src="../tq-fx.js"></script>
-     TQFX.ok(el)        right answer: chime + bounce + sparkle + a short praise ("Great job!")
-     TQFX.bad(el)       wrong answer: soft "oops" sound + shake + "Oops! Try again."
-     TQFX.win()         finished a game / the lesson: fanfare + confetti + "You did it!"
+     TQFX.ok(el)        right answer: one of several chimes + bounce + sparkle (no voice)
+     TQFX.bad(el)       wrong answer: one of several soft "oops" sounds + shake (no voice)
+     TQFX.win()         finished a game / the lesson: fanfare + sparkles + confetti (no voice)
      TQFX.tap()         small click (cards, chips)        TQFX.whoosh()  page/station change
      TQFX.say(key)      play a recorded line: a bank key ('listen','repeat','alone', …) or a path under assets/voice/<voice>/
      TQFX.ayah(s, a)    Husary (al-Mushaf al-Mu'allim) from everyayah.com
@@ -33,10 +33,21 @@
     g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + t + d);
     o.connect(g).connect(c.destination); o.start(c.currentTime + t); o.stop(c.currentTime + t + d + .05);
   }
+  /* playful effects only (Mohamed 2026-10-25: no recorded English praise; interactive sounds instead).
+     Each right/wrong answer picks one of a few variants so it never gets boring. */
   const SFX = {
-    ok(){ [[784, 0], [988, .07], [1319, .14]].forEach(([f, t]) => { note(f, t, .28, 'triangle', .16); note(f * 2, t, .18, 'sine', .04); }); },
-    bad(){ note(330, 0, .16, 'sine', .16, 300); note(262, .14, .32, 'sine', .16, 196); },
-    win(){ [[523, 0], [659, .1], [784, .2], [1047, .32], [784, .46], [1047, .56]].forEach(([f, t], i) => note(f, t, i > 4 ? .6 : .2, 'triangle', .15)); },
+    ok(){ pick([
+      () => [[784, 0], [988, .07], [1319, .14]].forEach(([f, t]) => { note(f, t, .28, 'triangle', .16); note(f * 2, t, .18, 'sine', .04); }),
+      () => { [[1047, 0], [1319, .06], [1568, .12], [2093, .18]].forEach(([f, t]) => note(f, t, .22, 'sine', .13)); note(2637, .26, .35, 'sine', .05); },
+      () => { note(660, 0, .12, 'square', .06); note(880, .09, .12, 'square', .06); note(1320, .18, .4, 'triangle', .15); [0, .05, .1].forEach(t => note(2400 + Math.random() * 900, .3 + t, .08, 'sine', .04)); },
+      () => { note(523, 0, .5, 'triangle', .12); note(659, 0, .5, 'triangle', .1); note(784, 0, .5, 'triangle', .1); note(1047, .12, .45, 'sine', .08); }
+    ])(); },
+    bad(){ pick([
+      () => { note(330, 0, .16, 'sine', .16, 300); note(262, .14, .32, 'sine', .16, 196); },
+      () => { note(220, 0, .35, 'triangle', .14, 140); note(180, .05, .3, 'sine', .06, 120); },
+      () => { note(400, 0, .1, 'sine', .12, 380); note(300, .12, .1, 'sine', .12, 280); note(240, .24, .25, 'sine', .12, 200); }
+    ])(); },
+    win(){ [[523, 0], [659, .1], [784, .2], [1047, .32], [784, .46], [1047, .56]].forEach(([f, t], i) => note(f, t, i > 4 ? .6 : .2, 'triangle', .15)); [0, .08, .16, .24, .32].forEach(t => note(1800 + Math.random() * 1400, .7 + t, .1, 'sine', .05)); },
     tap(){ note(1200, 0, .05, 'sine', .07); },
     whoosh(){ note(300, 0, .22, 'sine', .05, 900); }
   };
@@ -47,8 +58,10 @@
     const now = Date.now(); if(!force && now - lastVoice < 1800) return null; lastVoice = now;
     try{ if(cur){ cur.pause(); } cur = new Audio(url); cur.play().catch(() => {}); return cur; }catch(_){ return null; }
   }
+  /* Arabic lessons/homework never play the English voice */
+  const isAr = () => { try{ return (window.DECK && window.DECK.lang === 'ar') || (window.TQHW && TQHW.lang === 'ar') || document.documentElement.lang === 'ar'; }catch(_){ return false; } };
   const voiceUrl = k => ROOT + 'assets/voice/' + VOICE + '/' + k + '.mp3';
-  function say(k, force){ const b = BANK[k]; return play(voiceUrl(b ? pick(b) : k), force !== false); }
+  function say(k, force){ const b = BANK[k]; if(b && isAr()) return null; return play(voiceUrl(b ? pick(b) : k), force !== false); }
 
   /* --- confetti / sparkles on a full-screen canvas --- */
   let cv = null, parts = [], raf = 0;
@@ -82,9 +95,9 @@
   const K = {
     get muted(){ return muted; },
     setMuted(m){ muted = !!m; try{ localStorage.setItem('tq-sound', muted ? 'off' : 'on'); }catch(_){} if(muted && cur) cur.pause(); document.dispatchEvent(new CustomEvent('tq-sound', {detail: !muted})); },
-    ok(el, quiet){ if(!muted) SFX.ok(); anim(el, 'pop'); const [x, y] = center(el); burst(x, y, 18, 4, 3); if(!quiet) setTimeout(() => say('ok', false), 250); },
-    bad(el, quiet){ if(!muted) SFX.bad(); anim(el, 'shake'); if(!quiet) setTimeout(() => say('bad', false), 200); },
-    win(quiet){ if(!muted) SFX.win(); for(let i = 0; i < 4; i++) setTimeout(() => burst(innerWidth * (.2 + .2 * i), innerHeight * .35, 45, 7, 6), i * 160); if(!quiet) setTimeout(() => say('win', true), 500); },
+    ok(el, quiet){ if(!muted) SFX.ok(); anim(el, 'pop'); const [x, y] = center(el); burst(x, y, 18, 4, 3); },
+    bad(el, quiet){ if(!muted) SFX.bad(); anim(el, 'shake'); },
+    win(quiet){ if(!muted) SFX.win(); for(let i = 0; i < 4; i++) setTimeout(() => burst(innerWidth * (.2 + .2 * i), innerHeight * .35, 45, 7, 6), i * 160); },
     tap(){ if(!muted) SFX.tap(); }, whoosh(){ if(!muted) SFX.whoosh(); },
     say, play: url => play(url, true), url: voiceUrl,
     ayah(s, a){ const f = String(s).padStart(3, '0') + String(a).padStart(3, '0') + '.mp3';
