@@ -107,7 +107,7 @@ p.sub{margin:0 0 14px;color:var(--muted)}
 .count{color:var(--muted);font-size:.9rem;text-align:center;margin:0;min-height:1.4em}
 
 /* cards */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:16px}
 .card{--sc:var(--accent);position:relative;overflow:hidden;background:linear-gradient(180deg,color-mix(in srgb,var(--sc) 9%,var(--card)),var(--card) 55%);border:2px solid var(--line);border-top:5px solid var(--sc);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:transform .15s,border-color .15s,box-shadow .15s}
 .card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 24px rgb(0 0 0/.25)}
 .card.new{border-color:var(--gold)}
@@ -304,9 +304,10 @@ const byDate=a=>(a||[]).slice().sort((x,y)=>(y.date||'').localeCompare(x.date||'
 const games=byDate(window.GAMES),lessons=byDate(window.LESSONS),live=games.filter(g=>g.file);
 const EN=window.DESC_EN||{};
 const desc=g=>L.lang==='en'&&EN[g.file]?EN[g.file]:g.desc;
-const strip=s=>String(s).toLowerCase().replace(/[ً-ٰٟ]/g,'');
+const strip=s=>String(s).normalize('NFKC').toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي');
 const state={age:'all',subj:'all',q:'',tab:'games'};
-try{const s=JSON.parse(store.get('tq-filter')||'{}');if(AGE[s.age])state.age=s.age;if(SUBJ[s.subj])state.subj=s.subj;if(location.hash==='#lessons')state.tab='lessons'}catch(e){}
+try{const s=JSON.parse(store.get('tq-filter')||'{}');if(AGE[s.age])state.age=s.age;if(SUBJ[s.subj])state.subj=s.subj}catch(e){}
+if(location.hash==='#lessons')state.tab='lessons';
 const $=id=>document.getElementById(id);
 const saveFilter=()=>store.set('tq-filter',JSON.stringify({age:state.age,subj:state.subj}));
 const waNum=String((window.SITE&&SITE.contact&&SITE.contact.whatsapp)||'').replace(/\D/g,'');
@@ -314,6 +315,7 @@ const waNum=String((window.SITE&&SITE.contact&&SITE.contact.whatsapp)||'').repla
 function drawStatic(){
   document.documentElement.lang=L.lang;document.documentElement.dir=L.lang==='ar'?'rtl':'ltr';
   $('lang').textContent=L.lang==='ar'?'English':'العربية';
+  $('q').setAttribute('aria-label',t('ابحث في الألعاب والدروس','Search games and lessons'));
   $('q').placeholder=t('🔎 ابحث: مد، نون، حفظ، جملة…','🔎 Search: madd, noon, memorise, sentence…');
   document.body.dataset.age=state.age==='all'?'':state.age;
 
@@ -336,7 +338,7 @@ function drawStatic(){
   $('bow').hidden=!B;
   if(B)$('bow').innerHTML=`<span class="lbl">📚 ${t('كتاب الأسبوع','Book of the week')} · ${fmt(B.since)}</span><b>«${B.ar}»</b><small>${B.by}</small><small>${B.note||''}</small>`;
 
-  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x.dataset.t===state.tab));
+  document.querySelectorAll('.tab').forEach(x=>{const selected=x.dataset.t===state.tab;x.setAttribute('aria-selected',selected);x.tabIndex=selected?0:-1});
   if(waNum){const u='https://wa.me/'+waNum+'?text='+encodeURIComponent("Assalamu alaikum, I'd like to book a free trial class (Mohamed Mubarak).");
     $('fab').href=u;$('fab').target='_blank';$('fab').rel='noopener';$('fab').hidden=false}
 }
@@ -373,7 +375,7 @@ document.addEventListener('click',e=>{
   const c=e.target.closest('.chip');
   if(c){if(c.dataset.reset)state.age='all';else state.subj=c.dataset.s;saveFilter();all();return}
   const tb=e.target.closest('.tab');
-  if(tb){state.tab=tb.dataset.t;history.replaceState(null,'',tb.dataset.t==='lessons'?'#lessons':location.pathname);all();return}
+  if(tb){state.tab=tb.dataset.t;history.replaceState(null,'',location.pathname+location.search+(tb.dataset.t==='lessons'?'#lessons':''));all();return}
   const b=e.target.closest('.copy');
   if(b){const url=new URL(b.dataset.f,location.href).href;
     const done=()=>{const x=document.createElement('div');x.className='toast';x.textContent=t('✓ تم نسخ الرابط','✓ Link copied');document.body.appendChild(x);setTimeout(()=>x.remove(),1500)};
@@ -381,6 +383,15 @@ document.addEventListener('click',e=>{
 });
 $('lang').onclick=()=>{L.lang=L.lang==='ar'?'en':'ar';store.set('tq-lang',L.lang);all()};
 $('q').oninput=e=>{state.q=e.target.value;render()};
+window.addEventListener('hashchange',()=>{state.tab=location.hash==='#lessons'?'lessons':'games';all()});
+document.querySelector('.tabs').addEventListener('keydown',e=>{
+  const tabs=Array.from(document.querySelectorAll('.tab')),i=tabs.indexOf(e.target);
+  if(i<0||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+  e.preventDefault();
+  const step=(e.key==='ArrowRight'?1:-1)*(L.lang==='ar'?-1:1);
+  const next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+step+tabs.length)%tabs.length;
+  tabs[next].click();tabs[next].focus();
+});
 all();
 
 /* ===== visual upgrade: starry sky, tappable letters, reveal-on-scroll, card glow, confetti ===== */
