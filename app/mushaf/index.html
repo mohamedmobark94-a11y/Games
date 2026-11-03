@@ -26,6 +26,7 @@
       <button class="mz-t" data-tool="pen" title="قلم">✏️</button>
       <button class="mz-t" data-tool="hl" title="هايلايت">🖍️</button>
       <button class="mz-t" data-tool="erase" title="ممحاة">🧽</button>
+      <button class="mz-t" data-tool="cover" title="إخفاء كلمات (H) — اضغط الصندوق الذهبي لإظهاره">🙈</button>
       <span class="mz-cols"><i data-col="#d62828" style="background:#d62828" class="on"></i><i data-col="#1d4ed8" style="background:#1d4ed8"></i><i data-col="#15803d" style="background:#15803d"></i><i data-col="#111" style="background:#111"></i></span>
       <button class="mz-b wide" data-mz="clear" title="امسح الكتابة من الصفحة">🗑</button>
     </div>
@@ -39,6 +40,7 @@
         <img id="mzImg" alt="" draggable="false" crossorigin="anonymous">
         <canvas id="mzInk"></canvas>
         <div id="mzMarks"></div>
+        <div id="mzCovers"></div>
         <div id="mzRect" hidden></div>
       </div>
       <div class="mz-msg" id="mzMsg" hidden></div>
@@ -97,6 +99,9 @@
 <script src="../gen-shim.js"></script>
 <script src="shim.js"></script>
 <script src="web.js"></script>
+<script src="../../tq-fx.js"></script>
+<script>window.TQLiveLeft = 370;</script>
+<script src="../../live/tools.js"></script>
 <script src="mushaf.js"></script>
 <script src="boot.js"></script>
 </body></html>

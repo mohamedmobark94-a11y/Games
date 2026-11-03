@@ -27,6 +27,21 @@
   $('qpMark').onclick = () => { st.blur(); key('F8'); };
   $('qpDraw').onclick = () => { st.blur(); key('d'); };
 
+  // live class tools: hide words, stickers with sound, timer, traffic light, stars (shared with live/index.html)
+  const live = document.createElement('div');
+  live.innerHTML = '<div class="qp-lh">🎙️ الحلقة المباشرة</div><div class="qp-live">' +
+    '<button type="button" class="qp-b" id="qpHide">🙈 إخفاء <kbd>H</kbd></button>' +
+    '<button type="button" class="qp-b" id="qpShow">👁 أظهر الكل</button>' +
+    '<button type="button" class="qp-b" data-lv="stickers">🌟 ستيكرز</button>' +
+    '<button type="button" class="qp-b" data-lv="stars">⭐ نجوم</button>' +
+    '<button type="button" class="qp-b" data-lv="timer">⏱️ مؤقت</button>' +
+    '<button type="button" class="qp-b" data-lv="light">🚦 إشارة</button></div>';
+  errCard.parentNode.insertBefore(live, errCard);
+  $('qpHide').onclick = () => { st.blur(); key('h'); };
+  $('qpShow').onclick = () => { if(window.__mzCovers) window.__mzCovers.clear(); };
+  live.querySelectorAll('[data-lv]').forEach(b => b.onclick = () => { if(window.TQLive) TQLive.toggle(b.dataset.lv); });
+  if(window.TQLive) TQLive.onToggle((n, open) => { const b = live.querySelector('[data-lv="' + n + '"]'); if(b) b.classList.toggle('on', open); });
+
   // the bottom buttons: report (gold) + copy to the generator
   const fin = $('mzFinish'); fin.innerHTML = '📤 تقرير الطالب <kbd>F9</kbd>';
   const toR = $('mzToReport'); toR.innerHTML = '📋 انسخ للمولّد';
@@ -38,7 +53,7 @@
   const tools = document.querySelectorAll('#page-mushaf [data-tool]');
   const sync = () => {
     const t = document.querySelector('#page-mushaf [data-tool].on'); const v = t ? t.dataset.tool : 'hand';
-    $('qpMark').classList.toggle('on', v === 'mark'); $('qpDraw').classList.toggle('on', v === 'pen' || v === 'hl');
+    $('qpMark').classList.toggle('on', v === 'mark'); $('qpDraw').classList.toggle('on', v === 'pen' || v === 'hl'); $('qpHide').classList.toggle('on', v === 'cover');
   };
   new MutationObserver(sync).observe(document.getElementById('mzTools'), {subtree: true, attributes: true, attributeFilter: ['class']});
   sync();

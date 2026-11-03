@@ -23,6 +23,8 @@
   let ids = {}, page = 7, W = 1923, H = 2789, scale = 1, tx = 0, ty = 0, tool = 'hand', color = '#d62828';
   const ink$ = {};          // page -> strokes
   let marks = [];           // the session's corrections
+  const covers = {};        // page -> gold covers that hide words/ayat (tap one to reveal it)
+  const coversEl = $('mzCovers'); let coverFrom = null, tapAt = null;
   let seq = 0;
 
   /* ---------- surah list ---------- */
@@ -119,7 +121,8 @@
     if(pts.size === 2){ stroke = null; markFrom = null; rectEl.hidden = true;
       const [a, b] = [...pts.values()]; pinch = {d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY)}; return; }
     const p = toImg(e.clientX, e.clientY);
-    if(tool === 'hand' || e.button === 1){ panFrom = {x:e.clientX - tx, y:e.clientY - ty}; stage.style.cursor = 'grabbing'; return; }
+    if(tool === 'hand' || e.button === 1){ tapAt = {x:e.clientX, y:e.clientY}; panFrom = {x:e.clientX - tx, y:e.clientY - ty}; stage.style.cursor = 'grabbing'; return; }
+    if(tool === 'cover'){ tapAt = {x:e.clientX, y:e.clientY}; coverFrom = p; Object.assign(rectEl.style, {left:p.x + 'px', top:p.y + 'px', width:'0px', height:'0px'}); rectEl.hidden = false; return; }
     if(tool === 'mark'){ markFrom = p; Object.assign(rectEl.style, {left:p.x + 'px', top:p.y + 'px', width:'0px', height:'0px'}); rectEl.hidden = false; return; }
     // the tablet pen's eraser end / eraser button arrives as button 5 (buttons bit 32)
     if(tool === 'erase' || isPenEraser(e)){ eraseAt(p, null); stroke = {erase:true, last:p}; return; }
@@ -132,6 +135,8 @@
       zoomAt(d / pinch.d, (a.clientX + b.clientX) / 2, (a.clientY + b.clientY) / 2); pinch.d = d; return; }
     if(panFrom){ tx = e.clientX - panFrom.x; ty = e.clientY - panFrom.y; apply(); return; }
     const p = toImg(e.clientX, e.clientY);
+    if(coverFrom){ const x = Math.min(p.x, coverFrom.x), y = Math.min(p.y, coverFrom.y);
+      Object.assign(rectEl.style, {left:x + 'px', top:y + 'px', width:Math.abs(p.x - coverFrom.x) + 'px', height:Math.abs(p.y - coverFrom.y) + 'px'}); return; }
     if(markFrom){ const x = Math.min(p.x, markFrom.x), y = Math.min(p.y, markFrom.y);
       Object.assign(rectEl.style, {left:x + 'px', top:y + 'px', width:Math.abs(p.x - markFrom.x) + 'px', height:Math.abs(p.y - markFrom.y) + 'px'}); return; }
     if(stroke && stroke.erase){ eraseAt(p, stroke.last); stroke.last = p; return; }
@@ -140,7 +145,12 @@
   });
   const end = e => {
     pts.delete(e.pointerId); if(pts.size < 2) pinch = null;
-    if(panFrom){ panFrom = null; stage.style.cursor = ''; }
+    const wasTap = tapAt && Math.hypot(e.clientX - tapAt.x, e.clientY - tapAt.y) < 7; tapAt = null;
+    if(panFrom){ panFrom = null; stage.style.cursor = ''; if(wasTap) revealAt(toImg(e.clientX, e.clientY)); }
+    if(coverFrom){ const cf = coverFrom, p = toImg(e.clientX, e.clientY); coverFrom = null; rectEl.hidden = true;
+      if(wasTap){ if(!revealAt(p)) addCover({x:p.x - 95, y:p.y - 60, w:190, h:120}); }
+      else { const r = {x:Math.min(p.x, cf.x), y:Math.min(p.y, cf.y), w:Math.abs(p.x - cf.x), h:Math.abs(p.y - cf.y)}; if(r.w > 14 && r.h > 14) addCover(r); }
+    }
     if(markFrom){ const p = toImg(e.clientX, e.clientY);
       const r = {x:Math.min(p.x, markFrom.x), y:Math.min(p.y, markFrom.y), w:Math.abs(p.x - markFrom.x), h:Math.abs(p.y - markFrom.y)};
       markFrom = null;
@@ -188,7 +198,13 @@
     });
     if(ink$[page].length !== before) drawInk();
   }
-  function drawMarks(){
+  const sndTap = () => { try{ if(window.TQFX) TQFX.tap(); }catch(_){} };
+  function addCover(r){ (covers[page] = covers[page] || []).push(r); drawCovers(); sndTap(); }
+  function revealAt(p){ const l = covers[page] || []; for(let i = l.length - 1; i >= 0; i--){ const r = l[i];
+    if(p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h){ l.splice(i, 1); drawCovers(); sndTap(); return true; } } return false; }
+  function drawCovers(){ coversEl.innerHTML = (covers[page] || []).map(r => '<div class="mz-cover" style="left:' + r.x + 'px;top:' + r.y + 'px;width:' + r.w + 'px;height:' + r.h + 'px"></div>').join(''); }
+  window.__mzCovers = {clear(){ covers[page] = []; drawCovers(); sndTap(); }, count(){ return (covers[page] || []).length; }};
+  function drawMarks(){ drawCovers();
     marksEl.innerHTML = marks.filter(m => m.page === page).map(m =>
       '<div class="mz-box" style="left:' + m.rect.x + 'px;top:' + m.rect.y + 'px;width:' + m.rect.w + 'px;height:' + m.rect.h + 'px;border-color:' + CATS[m.cat].c + '"><b style="background:' + CATS[m.cat].c + '">' + m.n + '</b></div>').join('');
   }
@@ -197,7 +213,7 @@
   document.querySelector('.mz-bar').addEventListener('click', e => {
     const b = e.target.closest('[data-mz],[data-tool],[data-col]'); if(!b) return;
     if(b.dataset.col){ color = b.dataset.col; document.querySelectorAll('.mz-cols i').forEach(i => i.classList.toggle('on', i === b)); if(tool !== 'pen') setTool('pen'); return; }
-    if(b.dataset.tool) return setTool(tool === b.dataset.tool && b.dataset.tool === 'mark' ? 'hand' : b.dataset.tool);
+    if(b.dataset.tool) return setTool(tool === b.dataset.tool && (b.dataset.tool === 'mark' || b.dataset.tool === 'cover') ? 'hand' : b.dataset.tool);
     const a = b.dataset.mz, r = stage.getBoundingClientRect();
     if(a === 'next') go(page + 1); if(a === 'prev') go(page - 1);
     if(a === 'zin') zoomAt(1.25, r.left + r.width / 2, r.top + r.height / 2);
@@ -225,6 +241,8 @@
     if(!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'e' || e.key === 'E' || e.key === 'ث')){ e.preventDefault();
       if(tool === 'erase') setTool(window.__mzPrevTool || 'pen'); else { window.__mzPrevTool = tool === 'mark' ? 'pen' : tool; setTool('erase'); } return; }
     if(!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'p' || e.key === 'P' || e.key === 'ح')){ e.preventDefault(); setTool('pen'); return; }
+    // H: hide words with a gold cover on / off (tap a cover to reveal it)
+    if(!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'h' || e.key === 'H' || e.key === 'ا')){ e.preventDefault(); setTool(tool === 'cover' ? 'hand' : 'cover'); return; }
     // D: drawing on / off (pen ⇄ hand)
     if(!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'd' || e.key === 'D' || e.key === 'ي')){ e.preventDefault(); setTool(tool === 'pen' || tool === 'hl' ? 'hand' : 'pen'); return; }
     if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z'){ e.preventDefault(); const l = ink$[page] || []; l.pop(); drawInk(); }
