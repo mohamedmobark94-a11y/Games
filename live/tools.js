@@ -36,6 +36,10 @@ html:not([data-lang=en]) .lv .en{display:none!important}
 .placed.lv b{display:block;font:800 clamp(2rem,6vw,4rem) "Baloo Bhaijaan 2",sans-serif;color:var(--c1)}
 .placed.lv i{display:block;font:700 clamp(1.2rem,3vw,2rem) "Baloo Bhaijaan 2",sans-serif;font-style:normal;color:var(--c2)}
 .placed.lv.big-em{background:none;box-shadow:none;font-size:clamp(4rem,10vw,7rem);padding:0}
+.lv .st.im{background:none;padding:2px}.lv .st.im img{height:88px;width:auto;max-width:160px;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
+.lv .sep{width:100%;text-align:center;color:var(--muted);font-size:.8rem}
+.placed.lv.img{background:none;box-shadow:none;padding:0}.placed.lv.img img{display:block;width:clamp(150px,22vw,300px);height:auto;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4))}
+.placed.lv .nm{display:block;margin-top:6px;font:800 1.1rem "Baloo Bhaijaan 2",sans-serif;background:#fff;color:#10263A;border-radius:999px;padding:0 14px;font-style:normal}
 .placed.lv .rm{position:absolute;top:-10px;inset-inline-end:-10px;width:30px;height:30px;border-radius:50%;border:0;background:var(--bad);color:#fff;font-weight:800;cursor:pointer;display:none}
 .placed.lv:hover .rm{display:block}
 @media (prefers-reduced-motion:reduce){.lv *,.placed.lv{animation:none!important;transition:none!important}}`;
@@ -43,6 +47,9 @@ html:not([data-lang=en]) .lv .en{display:none!important}
   if(!document.querySelector('link[href*="Baloo"]')){ const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap'; document.head.appendChild(l); }
   if(window.TQLiveLeft) document.documentElement.style.setProperty('--lv-left', window.TQLiveLeft + 'px');
 
+  const ME = document.currentScript && document.currentScript.src, ROOT = ME ? ME.replace(/live\/tools\.js.*$/, '') : '../';
+  const who = () => { try{ return String((window.TQLiveName && window.TQLiveName()) || '').trim(); }catch(_){ return ''; } };
+  const escH = x => String(x == null ? '' : x).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const $ = s => document.querySelector(s);
   const pick = a => a[Math.floor(Math.random() * a.length)];
   const sfx = (n, el) => { try{ if(window.TQFX && TQFX[n]) TQFX[n](el); }catch(_){} };
@@ -75,6 +82,15 @@ html:not([data-lang=en]) .lv .en{display:none!important}
     '<div class="row" style="margin-top:8px"><button class="btn" id="lvClr"><span class="ar">🧹 امسح الستيكرز من الشاشة</span><span class="en">🧹 Clear stickers</span></button></div>';
   document.body.appendChild(wid); document.body.appendChild(tray);
 
+  /* professional stickers: PNGs dropped in assets/stickers/ and listed in stickers.json  [{file, ar, en, sound}] */
+  const IMG = []; const grid = tray.querySelector('.grid');
+  try{ fetch(ROOT + 'assets/stickers/stickers.json', {cache: 'no-cache'}).then(r => r.ok ? r.json() : []).then(list => {
+    (Array.isArray(list) ? list : []).filter(x => x && x.file).forEach(x => IMG.push(x));
+    if(!IMG.length) return;
+    const first = grid.firstChild;
+    IMG.forEach((x, i) => { const b = document.createElement('button'); b.className = 'st im'; b.dataset.im = i; b.setAttribute('aria-label', x.ar || x.en || x.file); b.innerHTML = '<img alt="" src="' + ROOT + 'assets/stickers/' + escH(x.file) + '">'; grid.insertBefore(b, first); });
+    const sp = document.createElement('div'); sp.className = 'sep'; sp.textContent = '— — —'; grid.insertBefore(sp, first);
+  }).catch(() => {}); }catch(_){}
   function sound(kind, el){
     if(kind === 'ok'){ sfx('ok', el); voice(pick(OKV)); }
     else if(kind === 'win'){ sfx('win'); voice(pick(['you_did_it','amazing_work'])); }
@@ -84,7 +100,7 @@ html:not([data-lang=en]) .lv .en{display:none!important}
   }
   let zi = 0, place = 0;
   function drop(html, cls, kind){
-    const d = document.createElement('div'); d.className = 'placed lv ' + (cls || ''); d.innerHTML = html + '<button class="rm" aria-label="remove">✕</button>';
+    const d = document.createElement('div'); d.className = 'placed lv ' + (cls || ''); const nm = who(); d.innerHTML = html + (nm && !cls ? '<i class="nm">⭐ ' + escH(nm) + ' ⭐</i>' : '') + (nm && cls === 'img' ? '<i class="nm">' + escH(nm) + '</i>' : '') + '<button class="rm" aria-label="remove">✕</button>';
     const W = innerWidth, H = innerHeight, L = window.TQLiveLeft || 0;
     d.style.left = Math.max(10, Math.min(W - 260, L + (W - L) * (.12 + .15 * (place % 4)) + Math.random() * 30)) + 'px';
     d.style.top = Math.max(70, H * (.2 + .1 * (place % 3)) + Math.random() * 30) + 'px';
@@ -94,6 +110,7 @@ html:not([data-lang=en]) .lv .en{display:none!important}
   tray.addEventListener('click', e => {
     if(e.target.closest('#lvClr')){ document.querySelectorAll('.placed.lv').forEach(x => x.remove()); return; }
     const b = e.target.closest('.st'); if(!b) return;
+    if(b.dataset.im != null){ const x = IMG[+b.dataset.im]; API.toggle('stickers', false); drop('<img alt="" src="' + ROOT + 'assets/stickers/' + escH(x.file) + '">', 'img', x.sound || 'ok'); return; }
     if(b.dataset.e != null){ const m = EMO[+b.dataset.e]; drop(m[0], 'big-em', m[1]); API.toggle('stickers', false); return; }
     const s = STK[+b.dataset.i];
     API.toggle('stickers', false);

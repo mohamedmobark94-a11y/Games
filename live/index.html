@@ -60,6 +60,7 @@ input[type=range]{accent-color:var(--gold)}
 
 <section class="ctl" id="ctl" aria-label="Qur'an controls">
   <div class="row">
+    <label><span class="ar">الطالب</span><span class="en">Student</span><input id="stu" type="text" style="background:var(--card2);border:2px solid var(--line);border-radius:12px;min-height:44px;padding:0 10px;width:150px" autocomplete="off"></label>
     <label><span class="ar">السورة</span><span class="en">Surah</span><select id="sur"></select></label>
     <label><span class="ar">من آية</span><span class="en">From</span><input id="from" type="number" min="1" value="1"></label>
     <label><span class="ar">إلى</span><span class="en">To</span><input id="to" type="number" min="1" value="3"></label>
@@ -196,6 +197,9 @@ TQLive.onToggle((n,open)=>{const k=Object.keys(WN).find(x=>WN[x]===n),b=$(`#dock
 $('#dock').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(b)toggle(b.dataset.d)});
 $('#fs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>setMsg('للشاشة الكاملة اضغط F11','For full screen press F11'))}catch(e){}};
 
+try{$('#stu').value=st.get('mzStudent')||''}catch(e){}
+$('#stu').oninput=e=>st.set('mzStudent',e.target.value);
+window.TQLiveName=()=>$('#stu').value;
 setLang(lang());
 /* optional deep link from a lesson:  live/?s=112&a=1-4 */
 const P=new URLSearchParams(location.search);

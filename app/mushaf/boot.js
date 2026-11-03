@@ -16,6 +16,8 @@
   st.addEventListener('input', () => { try{ localStorage.setItem('mzStudent', st.value); }catch(_){} });
   st.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); st.blur(); } });
   st.placeholder = 'اسم الطالب';
+  try{ const q = new URLSearchParams(location.search).get('st'); if(q){ st.value = q; localStorage.setItem('mzStudent', q); } }catch(_){}
+  window.TQLiveName = () => st.value;   // stickers greet the student by name; marks and reports already carry it
 
   // the big actions, like Quran.com
   const acts = document.createElement('div'); acts.className = 'qp-acts';
