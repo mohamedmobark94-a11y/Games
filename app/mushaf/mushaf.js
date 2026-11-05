@@ -383,39 +383,14 @@
       let saved = false;
       try{ const dl = (typeof claude !== 'undefined' && claude.use) ? await claude.use('downloads') : null;
         if(dl){ await dl.save({filename:file, data:new Blob([html], {type:'text/html'})}); saved = true; } }catch(_){}
-      // web version: put the report on the student's own page on the site
-      let up = null;
-      if(window.__tqSb){
-        btn.textContent = '⏳ بيرفع التقرير على صفحة الطالب...';
-        try{
-          const r = await window.__tqSb.rpc('save_correction_report', {p_sid: String(sid0 || ''), p_name: name, p_date: todayISO(),
-            p_items: data.items.map(x => ({surah:x.surah, surahName:x.surahName, page:x.madaniPage, cat:x.cat})), p_html: html});
-          if(r.error) throw r.error;
-          up = r.data || {};
-        }catch(e){ up = {error: (e && e.message) || String(e)}; }
-      }
-      window.__mzLastUpload = up ? Object.assign({student:name, n:marks.length}, up) : null;
-      if(up && up.matched && up.portal_token){
-        note('✅ التقرير اترفع على صفحة ' + (up.name_ar || name) + ' — دوس «واتساب» يبعتله لينك صفحته.');
-      }else{
-        if(!saved){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html], {type:'text/html'})); a.download = file; document.body.appendChild(a); a.click(); a.remove(); saved = true; }
-        note(up && up.error ? ('⚠️ معرفتش أرفعه على الموقع (' + up.error + ') — اتحفظ ملف: ' + file)
-          : up ? ('⚠️ الاسم «' + name + '» مش مربوط بطالب في الموقع، فالتقرير ما ظهرش في صفحة حد — اختار الاسم من القايمة. اتحفظ ملف: ' + file)
-          : ('✅ التقرير اتحفظ: ' + file + ' — ابعته للطالب على واتساب وارفق الملف.'));
-      }
+      if(!saved){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html], {type:'text/html'})); a.download = file; document.body.appendChild(a); a.click(); a.remove(); saved = true; }
+      note('✅ التقرير اتحفظ: ' + file + ' — ابعته للطالب على واتساب (زرار واتساب تحت) وارفق الملف.');
     }catch(err){ note('معرفتش أجهّز التقرير: ' + ((err && err.message) || err)); }
     finally{ btn.disabled = false; btn.innerHTML = old; }
   }
   $('mzFinish').addEventListener('click', finish);
   $('mzWa').addEventListener('click', () => {
     const name = who(); const n = marks.length;
-    const U = window.__mzLastUpload;
-    if(U && U.portal_token && U.student === name && window.TQ && TQ.site){
-      const link = new URL('app/student.html?k=' + U.portal_token + '#corrections', TQ.site).href, k = U.n || n;
-      const t2 = 'السلام عليكم ' + (U.name_ar || name) + ' 🌱\nتقرير تصحيح التلاوة بتاع النهارده (' + k + ' ' + (k === 1 ? 'تصحيح' : 'تصحيحات') + ') موجود في صفحتك:\n' + link +
-        '\nاسمع صوتي في كل غلطة، سجّل صوتك وقارن.\n\nAssalamu alaykum! Today\'s recitation correction is on your page (link above). Listen to each correction, record yourself and compare.';
-      window.open('https://wa.me/?text=' + encodeURIComponent(t2), '_blank'); return;
-    }
     const t = 'السلام عليكم ' + name + ' 🌱\nده تقرير تصحيح التلاوة بتاع النهارده (' + n + ' ' + (n === 1 ? 'تصحيح' : 'تصحيحات') + ').\nافتح الملف المرفق، اسمع صوتي في كل غلطة، سجّل صوتك وقارن، ودوس «I got it right» لما تتقنها.\n\nAssalamu alaykum! Here is today\'s recitation correction report. Open the attached file, listen to each correction, record yourself and compare.';
     window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
   });
