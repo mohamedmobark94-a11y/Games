@@ -216,6 +216,76 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     Object.keys(A.add || {}).forEach(id => { const s = get(id); if(s) s.tokens.push.apply(s.tokens, A.add[id]); });
     (A.ids || []).forEach(x => { if(!get(x.id)) L[x.first ? 'unshift' : 'push']({id: x.id, phrases: x.phrases || [], tokens: x.tokens || []}); });
   }
+  /* Runs inside the report generator page too: an easier layout on a computer screen.
+     Top band (full width): last report per student + session info in one wide row.
+     Below: the form on the left (Qur'an bar first, rarely used parts folded), the final report fixed on the right. */
+  function genLayout(){
+    if(window.__tqFix3) return; window.__tqFix3 = true;
+    const $g = id => document.getElementById(id);
+    const page = $g('page-report'), wrap = page && page.querySelector('.wrap'), form = wrap && wrap.querySelector('.form-side');
+    if(!form) return;
+    const secs = [...form.querySelectorAll(':scope > .section')];
+    const byTitle = t => secs.find(s => { const h = s.querySelector('.section-head h3'); return h && h.textContent.indexOf(t) >= 0; });
+    const last = byTitle('Last report'), info = byTitle('Session Info'), qp = form.querySelector('.qp-section');
+    const css = document.createElement('style');
+    css.textContent = '@media(min-width:1100px){' +
+      '.tq-band{max-width:none;margin:0;padding:12px 18px 0;display:grid;grid-template-columns:minmax(340px,1.2fr) 3fr;gap:12px;align-items:start}' +
+      '.tq-band .section{margin:0}.tq-band .section-body{padding:10px 12px}.tq-band .section-body>div:first-child{flex-wrap:wrap}.tq-band .qp-hint{display:none}' +
+      '.tq-band .tq-info .section-body{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px}' +
+      '.tq-band .tq-info .row3{display:contents}.tq-band .tq-info .field{margin:0}.tq-band .tq-info .fld-hint{display:none}' +
+      '#page-report .wrap{max-width:none;grid-template-columns:minmax(0,1fr) minmax(420px,36%)}' +
+      '#page-report .preview-side{padding-top:12px}#page-report .preview-card{top:52px;max-height:calc(100vh - 62px)}' +
+      '.tq-qbar{display:grid;grid-template-columns:2.2fr .7fr .7fr auto;gap:8px;align-items:end}' +
+      '}' +
+      '.tq-qbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}' +
+      '.tq-qbtns button{flex:1 1 150px;min-height:44px;border-radius:10px;font:700 14px inherit;font-family:inherit;cursor:pointer;border:1.5px solid #177a5b;background:#fff;color:#177a5b}' +
+      '.tq-qbtns button.main{background:#177a5b;color:#fff}.tq-qbtns button.gold{background:#c99a3f;border-color:#c99a3f;color:#fff}';
+    document.head.appendChild(css);
+    // 1) the band on top
+    if(last || info){
+      const band = document.createElement('div'); band.className = 'tq-band';
+      if(last) band.appendChild(last);
+      if(info){ info.classList.add('tq-info'); band.appendChild(info); }
+      wrap.parentNode.insertBefore(band, wrap);
+    }
+    // 2) the Qur'an bar first in the form, in one row, with one-click buttons
+    if(qp){
+      form.insertBefore(qp, form.firstChild);
+      const body = qp.querySelector('.section-body'), sur = $g('qpSurah'), fr = $g('qpFrom'), to = $g('qpTo');
+      const hint = body.querySelector('.qp-hint'); if(hint) hint.remove();
+      const bar = document.createElement('div'); bar.className = 'tq-qbar';
+      [sur, fr, to].forEach(el => { const f = el && el.closest('.field'); if(f) bar.appendChild(f); });
+      const whole = $g('qpWhole') && $g('qpWhole').closest('label'); if(whole) bar.appendChild(whole);
+      body.insertBefore(bar, body.firstChild);
+      body.querySelectorAll('.row2').forEach(r => { if(!r.querySelector('select,input')) r.remove(); });
+      const tRow = $g('qpType') && $g('qpType').closest('.row2'); if(tRow) tRow.style.display = 'none';
+      const add = $g('qpAdd'); if(add) add.style.display = 'none';
+      const btns = document.createElement('div'); btns.className = 'tq-qbtns';
+      const go = (type, target) => { $g('qpType').value = type; $g('qpTarget').value = target; if(typeof window.addQuran === 'function') window.addQuran(); };
+      btns.innerHTML = '<button type="button" class="gold" data-q="cont">⏭ كمّل من حيث وقفنا</button>' +
+        '<button type="button" class="main" data-q="new">➕ حفظ جديد للواجب</button>' +
+        '<button type="button" class="main" data-q="rev">🔁 مراجعة للواجب</button>' +
+        '<button type="button" data-q="lesson">📖 للي اتعمل في الحصة</button>';
+      btns.onclick = e => { const b = e.target.closest('button'); if(!b) return; const q = b.dataset.q;
+        if(q === 'new') go('new', 'hw'); else if(q === 'rev') go('rev', 'hw'); else if(q === 'lesson') go('new', 'lesson');
+        else if(q === 'cont'){
+          try{ if(typeof window.selectSurahFromHw === 'function') window.selectSurahFromHw(); }catch(_){}
+          let msg = '✓ دي الآيات الجاية — عدّل لو محتاج ودوس «حفظ جديد»';
+          try{ const w = $g('qpWhole'), a0 = +fr.value || 1, b0 = +to.value || 1, n = Math.max(1, b0 - a0 + 1), max = to.options.length;
+            if((w && w.checked) || b0 >= max) msg = '✓ السورة اللي فاتت خلصت — اختار السورة الجاية';
+            else { fr.value = String(b0 + 1); to.value = String(Math.min(max, b0 + n)); fr.dispatchEvent(new Event('change')); } }catch(_){}
+          b.textContent = msg; setTimeout(() => { b.textContent = '⏭ كمّل من حيث وقفنا'; }, 3500);
+        } };
+      body.insertBefore(btns, bar.nextSibling);
+    }
+    // 3) fold the parts that are not used every session (they open with a click on their title)
+    ['Previous report', 'What I taught', 'AI helpers', 'Arabic', 'Islamic', 'Extra Notes', 'Custom addition'].forEach(t => {
+      secs.filter(s => { const h = s.querySelector('.section-head h3'); return h && h.textContent.indexOf(t) >= 0; }).forEach(s => {
+        const items = s.querySelectorAll('.item-list textarea'); const used = [...items].some(x => x.value.trim());
+        if(!used){ s.classList.add('collapsed'); form.appendChild(s); }   // the generator's own click on the title opens it
+      });
+    });
+  }
   async function reportView(){
     if(genUrl){ app.innerHTML = '<iframe id="genFrame" src="' + genUrl + '" title="تقرير الحصة"></iframe>'; return; }
     app.innerHTML = '<div class="card muted" style="margin:16px">بيفتح المولّد…</div>';
@@ -224,7 +294,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     let html = await r.data.text();
     /* small fixes for the stored generator (skipped automatically once the stored file already contains them) */
     let aliases = null; try{ aliases = JSON.parse(await kvGet('genAliases')); }catch(e){}
-    const fix = '<script>(' + genFixes.toString() + ')();(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
+    const fix = '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
     html = /<\/body>/i.test(html) ? html.replace(/<\/body>(?![\s\S]*<\/body>)/i, fix + '</body>') : html + fix;
     genUrl = URL.createObjectURL(new Blob([html], {type: 'text/html;charset=utf-8'}));
     if(view === 'report') reportView();
