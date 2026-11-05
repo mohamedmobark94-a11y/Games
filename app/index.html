@@ -127,7 +127,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
      Private rules in kv 'dayRules': {skip:[names with no lesson prep], keys:{name:planKey}, times:{name:{weekday:'HH:MM'}}}. */
   async function ensureToday(){
     try{
-      const now = new Date(), cairo = new Date(now.toLocaleString('en-US', {timeZone: 'Africa/Cairo'}));
+      const now = new Date(Date.now() - 6 * 3600e3), cairo = new Date(now.toLocaleString('en-US', {timeZone: 'Africa/Cairo'}));   // a day = 06:00 → 06:00
       const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
       const id = iso(cairo);
       const ex = await db.from('docs').select('id').eq('collection', 'days').eq('id', id).maybeSingle();
@@ -140,13 +140,13 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       (R.students || []).forEach(s => {
         if(skip.has(s.name) || !/^\d\d:\d\d$/.test(s.time || '')) return;
         const at = d => (times[s.name] && times[s.name][d]) || s.time;
-        if((s.days || []).includes(wd)) items.push({ord: hm(at(wd)), s, t: at(wd), tom: false});
+        if((s.days || []).includes(wd) && hm(at(wd)) >= 360) items.push({ord: hm(at(wd)), s, t: at(wd), tom: false});
         if((s.days || []).includes(tw) && hm(at(tw)) < 360) items.push({ord: 1440 + hm(at(tw)), s, t: at(tw), tom: true});
       });
       items.sort((a, b) => a.ord - b.ord);
       const DN = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
       const MN = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-      const data = {id, label: DN[wd] + ' ' + cairo.getDate() + ' ' + MN[cairo.getMonth()] + ' ' + cairo.getFullYear(), updated: String(cairo.getHours()).padStart(2, '0') + ':' + String(cairo.getMinutes()).padStart(2, '0'),
+      const data = {id, label: DN[wd] + ' ' + cairo.getDate() + ' ' + MN[cairo.getMonth()] + ' ' + cairo.getFullYear(), updated: new Date().toLocaleTimeString('en-GB', {timeZone: 'Africa/Cairo', hour: '2-digit', minute: '2-digit'}),
         auto: 'roster', items: items.map(x => ({key: keys[x.s.name] || x.s.id, name: x.s.name, time: (x.tom ? 'غدًا ' + DN[tw] + ' ' : '') + x.t + '–' + end(x.t, x.s.mins),
           note: 'من الجدول الأسبوعي (المهمة الليلية ما اشتغلتش)', need: false, status: ''}))};
       await db.from('docs').insert({collection: 'days', id, data});

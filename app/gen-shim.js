@@ -57,6 +57,12 @@
         let r = await sb.from('docs').select('id,data').eq('collection', col).limit(5000);
         if(r.error) throw r.error;
         let rows = r.data || [];
+        // «دروس اليوم»: a day runs 06:00 → 06:00 Cairo time; lists made early for a later day wait for their day
+        if(col === 'days'){
+          const c = new Date(new Date(Date.now() - 6 * 3600e3).toLocaleString('en-US', {timeZone: 'Africa/Cairo'}));
+          const today = c.getFullYear() + '-' + String(c.getMonth() + 1).padStart(2, '0') + '-' + String(c.getDate()).padStart(2, '0');
+          rows = rows.filter(x => String(x.id) <= today);
+        }
         if(opts.order){ const [f, d] = opts.order, key = x => (x.data && x.data[f] != null) ? x.data[f] : x.id;
           rows.sort((a, b) => { const A = key(a), B = key(b); return (A > B ? 1 : A < B ? -1 : 0) * (d === 'desc' ? -1 : 1); }); }
         if(opts.limit) rows = rows.slice(0, opts.limit);
