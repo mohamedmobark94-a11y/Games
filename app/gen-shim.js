@@ -89,7 +89,18 @@
   window.claude = {
     use(name){
       if(name === 'db') return ready.then(() => DBshim);
-      return Promise.resolve(null);      // AI, downloads, uploads and scheduled tasks: not on the site (yet)
+      // «دروس اليوم» → «حفظ»: instead of starting Claude's task directly, leave a request in the database;
+      // the scheduled task «طلبات تحضير الدروس من الموقع» picks it up and builds the lesson on the site
+      if(name === 'mcp') return ready.then(() => ({
+        async callTool(server, tool, args){
+          if(tool !== 'fire_trigger') throw new Error('not available on the site');
+          const id = 'req-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+          const r = await sb.from('docs').insert({collection: 'prepjobs', id, data: {trigger_id: (args && args.trigger_id) || '', text: (args && args.text) || '', status: 'queued', at: Date.now()}});
+          if(r.error) throw r.error;
+          return {ok: true, queued: id};
+        }
+      }));
+      return Promise.resolve(null);      // AI, downloads and uploads: not on the site (yet)
     }
   };
 
