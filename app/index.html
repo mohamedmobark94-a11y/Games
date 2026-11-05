@@ -248,6 +248,26 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       if(info){ info.classList.add('tq-info'); band.appendChild(info); }
       wrap.parentNode.insertBefore(band, wrap);
     }
+    // 1b) search box for «Last report per student»: type part of the name (Arabic or English)
+    const lp = $g('lastPick');
+    if(lp && !$g('tqLastFind')){
+      const box = document.createElement('input'); box.id = 'tqLastFind'; box.type = 'search'; box.autocomplete = 'off';
+      box.placeholder = '🔎 دوّر على الطالب… (اكتب جزء من الاسم)';
+      box.style.cssText = 'width:100%;margin-bottom:8px;padding:10px 12px;border:1.5px solid #177a5b;border-radius:8px;font:inherit;font-size:14px';
+      const fold = t => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ْٰ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/^(sheikh|brother|sister|الشيخ)\s+/, '');
+      const nameOf = o => String(o.value || o.textContent || '').split(' — ')[0];
+      const hit = (o, q) => { const n = nameOf(o); if(fold(n).indexOf(q) >= 0) return true;
+        try{ if(typeof window.similarNames === 'function' && window.similarNames(n, box.value.trim())) return true; }catch(_){}
+        try{ if(typeof window.studentIdOf === 'function' && window.studentIdOf(n) && window.studentIdOf(n) === window.studentIdOf(box.value.trim())) return true; }catch(_){}
+        return false; };
+      const apply = pick => { const q = fold(box.value.trim()); const opts = [...lp.options].filter(o => o.value);
+        const ok = q ? opts.filter(o => hit(o, q)) : opts; opts.forEach(o => { o.hidden = !!q && ok.indexOf(o) < 0; });
+        if(q && ok.length === 1 && (pick || lp.value !== ok[0].value)){ lp.value = ok[0].value; if(typeof window.pickLast === 'function') window.pickLast(); }
+        box.style.borderColor = q && !ok.length ? '#b42318' : '#177a5b'; return ok; };
+      box.addEventListener('input', () => apply(false));
+      box.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); const ok = apply(true); if(ok.length > 1){ lp.value = ok[0].value; if(typeof window.pickLast === 'function') window.pickLast(); } } });
+      lp.parentNode.parentNode.insertBefore(box, lp.parentNode);
+    }
     // 2) the Qur'an bar first in the form, in one row, with one-click buttons
     if(qp){
       form.insertBefore(qp, form.firstChild);
@@ -292,6 +312,16 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     const r = await db.storage.from('private').download('generator.html');
     if(r.error){ app.innerHTML = '<div class="card" style="margin:16px">معرفتش أفتح المولّد: ' + esc(r.error.message) + '</div>'; return; }
     let html = await r.data.text();
+    /* the stored generator carries its own (older) copy of gen-shim.js: swap in the site's current one */
+    try{
+      const sh = await (await fetch(new URL('app/gen-shim.js', TQ.site).href + '?v=' + Date.now(), {cache: 'no-store'})).text();
+      if(sh && sh.indexOf('<\/script') < 0){
+        const re = /<script>\s*\/\* Runs the report generator[\s\S]*?<\/script>/;
+        if(/src="[^"]*gen-shim\.js/.test(html)) html = html.replace(/(src="[^"]*gen-shim\.js)[^"]*"/g, (m, u) => u + '?v=' + Date.now() + '"');
+        else if(re.test(html)) html = html.replace(re, () => '<script>' + sh + '<\/script>');
+        else html = html.replace(/<head[^>]*>/i, m => m + '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"><\/script><script src="' + new URL('app/config.js', TQ.site).href + '"><\/script><script>' + sh + '<\/script>');
+      }
+    }catch(e){ console.warn('gen-shim swap', e); }
     /* small fixes for the stored generator (skipped automatically once the stored file already contains them) */
     let aliases = null; try{ aliases = JSON.parse(await kvGet('genAliases')); }catch(e){}
     const fix = '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
