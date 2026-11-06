@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -109,14 +109,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 </div>
 <div class="wrap">
   <section class="card">
-    <h2 class="h2"><i>١</i><span id="s1"></span></h2>
+    <h2 class="h2"><i>1</i><span id="s1"></span></h2>
     <p class="sub" id="s1b"></p>
     <div class="skies" id="skies"></div>
     <div class="goal" id="goal"></div>
   </section>
 
   <section class="card">
-    <h2 class="h2"><i>٢</i><span id="s2"></span></h2>
+    <h2 class="h2"><i>2</i><span id="s2"></span></h2>
     <p class="sub" id="s2b"></p>
     <div class="days" id="days"></div>
     <div class="list" id="list"></div>
@@ -145,13 +145,13 @@ button{font:inherit;color:inherit;cursor:pointer}
   </section>
 
   <section class="card">
-    <h2 class="h2"><i>٣</i><span id="s3"></span></h2>
+    <h2 class="h2"><i>3</i><span id="s3"></span></h2>
     <p class="sub" id="s3b"></p>
     <div class="chips" id="chips"></div>
   </section>
 
   <section class="card rec">
-    <h2 class="h2"><i>٤</i><span id="s4"></span></h2>
+    <h2 class="h2"><i>4</i><span id="s4"></span></h2>
     <p class="sub" id="s4b"></p>
     <div id="recBox"></div>
   </section>
@@ -207,7 +207,9 @@ button{font:inherit;color:inherit;cursor:pointer}
     recL: ['خطتي للصلاة', 'My prayer plan'], reset: ['ابدئي أسبوع جديد', 'Start a new week'], sure: ['اضغطي تاني علشان تمسحي الأسبوع', 'Tap again to clear the week'],
     foot: ['علاماتك محفوظة على الجهاز ده — افتحي نفس اللينك كل يوم، وسلّمي الواجب آخر الأسبوع.', 'Your marks stay on this device — open the same link every day and send your homework at the end of the week.']
   };
-  const en = () => TQHW.lang === 'en';
+  /* this page opens in English; it changes language only when the student presses the language button later */
+  let LANG = 'en'; const t0 = Date.now();
+  const en = () => LANG === 'en';
   const L = k => T[k][en() ? 1 : 0];
   const num = n => en() ? String(n) : String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
   const $ = id => document.getElementById(id);
@@ -264,7 +266,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     return all;
   }
   function draw(){
-    document.documentElement.lang = TQHW.lang; document.documentElement.dir = en() ? 'ltr' : 'rtl';
+    document.documentElement.lang = LANG; document.documentElement.dir = en() ? 'ltr' : 'rtl';
     $('t').textContent = L('title'); $('hi').textContent = TQHW.name ? L('hi').replace('{n}', TQHW.name) : L('hiNo');
     ['s1', 's1b', 's2', 's2b', 's3', 's3b', 's4', 's4b', 'lAll', 'lTime', 'lDays', 'hMean', 'hSrc', 'foot'].forEach(k => { $(k).textContent = L(k); });
     $('reset').textContent = L('reset');
@@ -287,7 +289,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     if(!sure){ sure = true; r.dataset.sure = '1'; r.textContent = L('sure'); clearTimeout(tm); tm = setTimeout(() => { sure = false; r.dataset.sure = ''; r.textContent = L('reset'); }, 4000); return; }
     sure = false; r.dataset.sure = ''; S = {hard: S.hard, m: {}, help: S.help, start: Date.now()}; sel = 1; save(); draw(); };
   TQHW.recordButton($('recBox'), L('recL'));
-  TQHW.on('lang', draw); draw();
+  TQHW.on('lang', l => { if(Date.now() - t0 < 4000) return; LANG = l === 'ar' ? 'ar' : 'en'; draw(); }); draw();
 })();
 </script>
 </body>
