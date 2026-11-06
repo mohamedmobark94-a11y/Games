@@ -7,6 +7,7 @@ window.TQQ = {
   /* reciter folders on everyayah.com (https://everyayah.com/data/<folder>/<SSSAAA>.mp3) */
   reciters: [
     {id:'Husary_128kbps', ar:'الحصري', en:'Al-Husary'},
+    {id:'Husary_Muallim_128kbps', ar:'الحصري المعلّم', en:'Al-Husary (teaching)'},
     {id:'Husary_Mujawwad_128kbps', ar:'الحصري (مجوَّد)', en:'Al-Husary (Mujawwad)'},
     {id:'Alafasy_128kbps', ar:'مشاري العفاسي', en:'Mishary Alafasy'},
     {id:'Minshawy_Murattal_128kbps', ar:'المنشاوي (مرتّل)', en:'Al-Minshawi (Murattal)'},
@@ -18,6 +19,11 @@ window.TQQ = {
     {id:'Saood_ash-Shuraym_128kbps', ar:'سعود الشريم', en:'Saud Ash-Shuraim'}
   ],
   audioUrl: function(folder, s, a){ var p = function(n){ return ('00' + n).slice(-3); }; return 'https://everyayah.com/data/' + folder + '/' + p(s) + p(a) + '.mp3'; },
+  /* quran.com chapter audio with word timings (used to light up each word while it is recited) */
+  qdc: {'Husary_128kbps': 6, 'Husary_Muallim_128kbps': 12, 'Minshawy_Murattal_128kbps': 9, 'Alafasy_128kbps': 7, 'Abdul_Basit_Murattal_192kbps': 2,
+    'Abdurrahmaan_As-Sudais_192kbps': 3, 'Abu_Bakr_Ash-Shaatree_128kbps': 4, 'Hani_Rifai_192kbps': 5, 'Saood_ash-Shuraym_128kbps': 10},
+  timingsUrl: function(folder, s){ var id = this.qdc[folder]; return id ? 'https://api.qurancdn.com/api/qdc/audio/reciters/' + id + '/audio_files?chapter=' + s + '&segments=true' : null; },
+  wordsUrl: function(s, page){ return 'https://api.quran.com/api/v4/verses/by_chapter/' + s + '?words=true&word_fields=text_uthmani&fields=text_uthmani&per_page=50&page=' + page; },
   textUrl: function(s){ return 'https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=' + s; },
   nameOf: function(s, lang){ var x = this.surahs[s - 1]; return lang === 'en' ? x[1] : x[0]; }
 };

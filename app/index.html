@@ -297,6 +297,102 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
           b.textContent = msg; setTimeout(() => { b.textContent = '⏭ كمّل من حيث وقفنا'; }, 3500);
         } };
       body.insertBefore(btns, bar.nextSibling);
+      // 2b) one click: the Qur'an homework lines of this report become a listening + recording homework on the student's page
+      const up = document.createElement('button'); up.type = 'button'; up.className = 'tq-up';
+      up.textContent = '📤 ارفع واجب القرآن على صفحة الطالب';
+      up.style.cssText = 'width:100%;margin-top:10px;min-height:48px;border:0;border-radius:10px;background:#0e4d3c;color:#fff;font:800 15px inherit;font-family:inherit;cursor:pointer';
+      body.insertBefore(up, btns.nextSibling);
+      up.onclick = () => tqQuranHw();
+    }
+    function tqQuranHw(){
+      const sb = window.__tqSb, S = typeof SURAHS !== 'undefined' ? SURAHS : null;
+      if(!sb || !S){ alert('الخاصية دي شغالة من الموقع بس.'); return; }
+      const fold = t => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ٰٟ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
+        .replace(/^(sheikh|shaykh|brother|sister|الشيخ|الاخ|الاخت)\s+/, '').replace(/['’`ʿʾ\-\s]/g, '');
+      const findS = nm => { const f = fold(nm); let b = S.find(x => fold(x.ar) === f || fold(x.en) === f);
+        if(!b) b = S.find(x => fold(x.en).indexOf(f) >= 0 || f.indexOf(fold(x.en)) >= 0 || fold(x.ar) === fold('ال' + nm)); return b; };
+      const lines = [...document.querySelectorAll('#list-hw textarea')].map(t => t.value.trim()).filter(Boolean);
+      const parts = [];
+      lines.forEach(l => {
+        let m = l.match(/^(حفظ|مراجعة المحفوظ السابق من|مراجعة)\s+سورة\s+(.+?)(?:\s+(كاملة)|\s+الآية\s*(\d+)|\s+من\s+الآية\s*(\d+)\s*إلى\s*الآية\s*(\d+))?\s*[.،]?\s*$/), type, name, whole, a, b;
+        if(m){ type = m[1] === 'حفظ' ? 'new' : 'rev'; name = m[2]; whole = m[3]; a = m[4] || m[5]; b = m[4] || m[6]; }
+        else { m = l.match(/^(Memori[sz]e|Review previous memori[sz]ation from|Review)\s+Surah\s+(.+?)(?:\s+(entirely)|,?\s*verses?\s*(\d+)(?:\s*[–—-]\s*(\d+))?)?\s*\.?\s*$/i);
+          if(m){ type = /^mem/i.test(m[1]) ? 'new' : 'rev'; name = m[2]; whole = m[3]; a = m[4]; b = m[5] || m[4]; } }
+        if(!m) return; const su = findS(name); if(!su) return;
+        let f = a ? +a : 1, t = b ? +b : su.v; if(whole){ f = 1; t = su.v; } f = Math.max(1, Math.min(f, su.v)); t = Math.max(f, Math.min(t, su.v));
+        parts.push({type, n: su.n, ar: su.ar, en: su.en, from: f, to: t, reps: type === 'new' ? 5 : 3, on: true});
+      });
+      const old = document.getElementById('tqQhw'); if(old) old.remove();
+      const ov = document.createElement('div'); ov.id = 'tqQhw';
+      ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,30,25,.55);display:flex;align-items:center;justify-content:center;padding:14px;direction:rtl;font-family:Cairo,inherit';
+      const box = document.createElement('div');
+      box.style.cssText = 'background:#fff;border-radius:16px;max-width:620px;width:100%;max-height:92vh;overflow:auto;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.3);color:#16241e';
+      ov.appendChild(box); document.body.appendChild(ov);
+      ov.addEventListener('click', e => { if(e.target === ov) ov.remove(); });
+      const esc = x => String(x == null ? '' : x).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+      const stName = (document.getElementById('student') || {}).value || '';
+      let students = [], sid = '';
+      const REC = [['Husary_Muallim_128kbps', 'الحصري المعلّم (بيقف عشان الطالب يردّد)'], ['Husary_128kbps', 'الحصري (مرتّل)'], ['Minshawy_Murattal_128kbps', 'المنشاوي (مرتّل)']];
+      let reciter = REC[0][0], record = true;
+      const draw = () => {
+        box.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><b style="font-size:18px;color:#0e4d3c">📤 واجب القرآن للطالب</b><button type="button" data-x style="margin-inline-start:auto;border:0;background:#eef3f0;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:16px">✕</button></div>' +
+          '<label style="display:block;font-size:13px;font-weight:700;color:#6b7d74;margin-bottom:4px">الطالب</label><select data-st style="width:100%;padding:9px;border:1.5px solid #cfe3d8;border-radius:9px;font:inherit;margin-bottom:12px">' +
+          (sid ? '' : '<option value="">— اختار الطالب —</option>') + students.map(x => '<option value="' + x.id + '"' + (x.id === sid ? ' selected' : '') + '>' + esc(x.name_ar || x.name_en) + (x.name_en && x.name_ar ? ' · ' + esc(x.name_en) : '') + '</option>').join('') + '</select>' +
+          (parts.length ? parts.map((p, k) => '<div style="border:1.5px solid ' + (p.on ? '#177a5b' : '#dfe7e3') + ';border-radius:12px;padding:10px 12px;margin-bottom:8px;opacity:' + (p.on ? 1 : .55) + '">' +
+            '<label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" data-on="' + k + '"' + (p.on ? ' checked' : '') + ' style="width:18px;height:18px;accent-color:#177a5b">' +
+            '<b>' + (p.type === 'new' ? '➕ حفظ جديد' : '🔁 مراجعة') + ': سورة ' + esc(p.ar) + '</b><span style="color:#6b7d74;font-size:13px">الآيات ' + p.from + (p.to > p.from ? '–' + p.to : '') + '</span></label>' +
+            '<div style="display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap"><span style="font-size:13px;color:#6b7d74">يسمع كام مرة؟</span>' +
+            [1, 2, 3, 5, 7, 10].map(r => '<button type="button" data-r="' + k + ':' + r + '" style="min-width:42px;height:34px;border-radius:9px;cursor:pointer;font:700 14px inherit;font-family:inherit;border:1.5px solid #177a5b;background:' + (p.reps === r ? '#177a5b;color:#fff' : '#fff;color:#177a5b') + '">×' + r + '</button>').join('') + '</div></div>').join('')
+          : '<div style="background:#fff7e6;border:1.5px solid #e0b968;border-radius:10px;padding:12px;font-size:14px;line-height:1.7">مفيش سطور قرآن في «Homework» لسه.<br>اختار السورة والآيات فوق ودوس «➕ حفظ جديد للواجب» أو «🔁 مراجعة للواجب»، وبعدين ارجع للزرار ده.</div>') +
+          '<label style="display:block;font-size:13px;font-weight:700;color:#6b7d74;margin:10px 0 4px">القارئ</label><select data-rc style="width:100%;padding:9px;border:1.5px solid #cfe3d8;border-radius:9px;font:inherit">' +
+          REC.map(r => '<option value="' + r[0] + '"' + (r[0] === reciter ? ' selected' : '') + '>' + r[1] + '</option>').join('') + '</select>' +
+          '<label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" data-rec' + (record ? ' checked' : '') + ' style="width:18px;height:18px;accent-color:#177a5b"> بعد الاستماع يسمّع بصوته ويسجّل (التسجيل يوصلك في «التسليمات»)</label>' +
+          '<div style="font-size:12.5px;color:#6b7d74;margin-top:6px">الطالب بيشوف نص الآيات، وكل كلمة بتنوّر وقت ما القارئ بيقولها.</div>' +
+          '<button type="button" data-go style="width:100%;margin-top:14px;min-height:50px;border:0;border-radius:12px;background:#177a5b;color:#fff;font:800 16px inherit;font-family:inherit;cursor:pointer"' + (parts.some(p => p.on) ? '' : ' disabled') + '>✅ ابعت الواجب للطالب</button><div data-out style="margin-top:12px"></div>';
+        box.querySelector('[data-x]').onclick = () => ov.remove();
+        box.querySelector('[data-st]').onchange = e => { sid = e.target.value; };
+        box.querySelector('[data-rc]').onchange = e => { reciter = e.target.value; };
+        box.querySelector('[data-rec]').onchange = e => { record = e.target.checked; };
+        box.querySelectorAll('[data-on]').forEach(c => c.onchange = () => { parts[+c.dataset.on].on = c.checked; draw(); });
+        box.querySelectorAll('[data-r]').forEach(c => c.onclick = () => { const [k, r] = c.dataset.r.split(':'); parts[+k].reps = +r; draw(); });
+        box.querySelector('[data-go]').onclick = send;
+      };
+      const send = async () => {
+        const out = box.querySelector('[data-out]'), go = box.querySelector('[data-go]');
+        if(!sid){ out.innerHTML = '<div style="color:#b42318;font-weight:700">اختار الطالب الأول.</div>'; return; }
+        const use = parts.filter(p => p.on); if(!use.length) return;
+        go.disabled = true; go.textContent = 'بيتبعت…';
+        const items = use.map(p => { const rng = p.from === p.to ? p.from : p.from + '–' + p.to;
+          return {type: 'quran', surah: p.n, from: p.from, to: p.to, reps: p.reps, reciter, record, showtext: true, follow: true, part: p.type,
+            say: (p.type === 'new' ? 'حفظ جديد: ' : 'مراجعة: ') + 'استمع ' + p.reps + ' مرات إلى سورة ' + p.ar + ' (' + rng + ')' + (record ? ' ثم سمّعها بصوتك' : ''),
+            say_en: (p.type === 'new' ? 'New: ' : 'Review: ') + 'listen ' + p.reps + '× to Surah ' + p.en + ' (' + rng + ')' + (record ? ', then recite it' : '')}; });
+        const d = new Date(), MN = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+        const title = 'واجب القرآن · ' + d.getDate() + ' ' + MN[d.getMonth()] + ' · ' + use.map(p => p.ar + ' ' + (p.from === p.to ? p.from : p.from + '–' + p.to)).join(' + ');
+        try{
+          const a = await sb.from('assignments').insert({title, kind: 'homework', subject: 'قرآن', content: {intro: {
+            ar: 'اسمع كل جزء بالعدد المطلوب وتابع الكلمة اللي بتنوّر مع القارئ' + (record ? '، وبعدين سمّع بصوتك وسجّل.' : '.'),
+            en: 'Listen to each part the number of times shown and follow the word that lights up' + (record ? ', then recite and record yourself.' : '.')}, items}}).select().single();
+          if(a.error) throw a.error;
+          const t = await sb.from('assignment_targets').insert({assignment_id: a.data.id, student_id: sid}).select('token').single();
+          if(t.error) throw t.error;
+          const link = (window.TQ && TQ.site ? TQ.site : 'https://mohamedmobark94-a11y.github.io/Games/') + 'app/hw.html?t=' + t.data.token;
+          const stu = students.find(x => x.id === sid) || {}, ar = stu.lang === 'ar';
+          const msg = ar ? 'السلام عليكم ' + (stu.name_ar || '') + ' 🌿\nده واجب القرآن: اسمع وتابع الكلمات، وبعدين سمّع وسجّل صوتك:\n' + link
+            : 'Assalamu alaikum ' + (stu.name_en || stu.name_ar || '') + ' 🌿\nHere is your Qur\'an homework: listen and follow the words, then recite and record:\n' + link;
+          go.textContent = '✓ اتبعت'; go.style.background = '#1e7a3c';
+          out.innerHTML = '<div style="background:#e9f5ef;border-radius:10px;padding:12px;font-size:14px;line-height:1.7">✅ الواجب ظهر على صفحة الطالب، وده لينكه:<br><a href="' + esc(link) + '" target="_blank" rel="noopener" style="direction:ltr;display:inline-block;word-break:break-all;color:#177a5b;font-weight:700">' + esc(link) + '</a>' +
+            '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" data-cp style="flex:1;min-height:42px;border:1.5px solid #177a5b;background:#fff;color:#177a5b;border-radius:10px;font:700 14px inherit;font-family:inherit;cursor:pointer">📋 انسخ اللينك</button>' +
+            '<a href="https://wa.me/?text=' + encodeURIComponent(msg) + '" target="_blank" rel="noopener" style="flex:1;min-height:42px;display:flex;align-items:center;justify-content:center;background:#25d366;color:#fff;border-radius:10px;font-weight:700;text-decoration:none">واتساب</a></div></div>';
+          out.querySelector('[data-cp]').onclick = e => { try{ navigator.clipboard.writeText(link); e.target.textContent = '✓ اتنسخ'; }catch(_){ prompt('انسخ اللينك:', link); } };
+        }catch(err){ go.disabled = false; go.textContent = '✅ ابعت الواجب للطالب'; out.innerHTML = '<div style="color:#b42318">ما اتبعتش: ' + esc(err.message || err) + '</div>'; }
+      };
+      draw();
+      sb.from('students').select('id,slug,name_ar,name_en,keys,lang,active').order('name_ar').then(r => {
+        students = (r.data || []).filter(x => x.active !== false);
+        const f = fold(stName); if(f){ const hit = students.filter(x => [x.name_ar, x.name_en, x.slug].concat(x.keys || []).some(n => n && (fold(n) === f || (fold(n).length > 2 && (f.indexOf(fold(n)) >= 0 || fold(n).indexOf(f) >= 0)))));
+          if(hit.length === 1) sid = hit[0].id; }
+        draw();
+      });
     }
     // 3) fold the parts that are not used every session (they open with a click on their title)
     ['Previous report', 'What I taught', 'AI helpers', 'Arabic', 'Islamic', 'Extra Notes', 'Custom addition'].forEach(t => {

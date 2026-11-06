@@ -45,6 +45,9 @@ audio{width:100%;margin-top:8px}
 .done b{font-size:1.6rem;color:var(--ok)}
 .small{font-size:.9rem;color:var(--muted)}
 .pframe{display:block;width:100%;height:520px;border:0;border-radius:14px;background:#fff;margin-top:6px}
+.ayah .w{border-radius:6px;padding:0 2px;transition:background .12s,color .12s}
+.ayah .w.on{background:#E2B85C;color:#10263A;box-shadow:0 0 0 3px #E2B85C}
+.ayah .ay.on{background:#FFF1CC;border-radius:10px}
 .both .en2{display:block;font-family:var(--f-en);font-size:.9em;color:var(--muted)}
 </style>
 <link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg"><link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
@@ -81,7 +84,7 @@ audio{width:100%;margin-top:8px}
     teacher: ['ملاحظة المعلم على آخر مرة', "Teacher's note on your last try"], redo: ['المعلم طلب تعيد الواجب', 'Your teacher asked you to do it again'],
     open: ['📖 افتح الدرس / اللعبة', '📖 Open the lesson / game'], due: ['آخر ميعاد', 'Due'],
     lst: ['▶ ابدأ الاستماع', '▶ Start listening'], pause: ['⏸ إيقاف مؤقت', '⏸ Pause'], resume: ['▶ كمّل', '▶ Resume'], rep: ['التكرار', 'Repeat'], ayah: ['الآية', 'Ayah'],
-    lfin: ['✓ خلّصت الاستماع', '✓ Listening finished'], speed: ['السرعة', 'Speed'], qhd: ['واجب قرآن', 'Qur’an homework'],
+    lfin: ['✓ خلّصت الاستماع', '✓ Listening finished'], speed: ['السرعة', 'Speed'], qhd: ['واجب قرآن', 'Qur’an homework'], follow: ['تابع الكلمة اللي بتنوّر مع القارئ.', 'Follow the word that lights up with the reciter.'],
     notext: ['ما قدرنا نحمّل نص الآيات — الاستماع شغال عادي.', 'Could not load the verses text — listening still works.'],
     noaud: ['الصوت ما اتحمّلش. اتأكد من النت وجرّب تاني.', 'The audio did not load. Check your connection and try again.'],
     nolis: ['لسه ما خلّصتش الاستماع المطلوب. تسلّم كده؟', 'You have not finished the required listening. Send anyway?'], reciteNow: ['بعد ما تسمع: سمّع بصوتك وسجّل.', 'After listening: recite in your own voice and record it.'],
@@ -135,6 +138,7 @@ audio{width:100%;margin-top:8px}
     });
     $('after').innerHTML = sent ? sentBox : '';
     $('bar').hidden = sent || !items.length; $('send').textContent = L('send');
+    lit = '';
   }
 
   /* ---------- 🧩 interactive homework pages (built with app/hwkit.js): they run here and hand back score, answers and recordings ---------- */
@@ -178,14 +182,41 @@ audio{width:100%;margin-top:8px}
     fetch(TQQ.textUrl(s)).then(r => r.json()).then(j => { (j.verses || []).forEach(v => { verses[s][v.verse_key] = v.text_uthmani; }); if(!sent) draw(); })
       .catch(() => { verses[s] = null; if(!sent) draw(); });
   }
+  /* follow-along: the words of each ayah (quran.com) and the reciter's word timings (quran.com audio), so each word lights up while it is recited */
+  const words = {}, tim = {};
+  const follows = it => it.follow !== false && it.showtext !== false && !!(TQQ.qdc && TQQ.qdc[it.reciter]);
+  function loadWords(it){
+    const s = it.surah, need = [];
+    for(let p = Math.ceil(it.from / 50); p <= Math.ceil(it.to / 50); p++) need.push(p);
+    words[s] = words[s] || {}; const W = words[s];
+    const todo = need.filter(p => !W['p' + p]); if(!todo.length) return;
+    todo.forEach(p => { W['p' + p] = 1;
+      fetch(TQQ.wordsUrl(s, p)).then(r => r.json()).then(j => { (j.verses || []).forEach(v => {
+        W[v.verse_key] = (v.words || []).filter(w => w.char_type_name === 'word').map(w => [w.position, w.text_uthmani]); }); if(!sent) draw(); })
+        .catch(() => { W['p' + p] = 0; W.bad = 1; if(!sent) draw(); }); });
+  }
+  function loadTim(it){
+    const k = it.reciter + '|' + it.surah; if(k in tim) return tim[k];
+    tim[k] = new Promise(res => {
+      fetch(TQQ.timingsUrl(it.reciter, it.surah)).then(r => r.json()).then(j => {
+        const f = (j.audio_files || [])[0]; if(!f || !f.audio_url || !(f.verse_timings || []).length) throw 0;
+        const v = {}; f.verse_timings.forEach(x => { v[x.verse_key] = {f: +x.timestamp_from, t: +x.timestamp_to, seg: (x.segments || []).filter(g => g.length >= 3)}; });
+        tim[k] = {url: f.audio_url, v}; res(tim[k]);
+      }).catch(() => { tim[k] = null; res(null); });
+    });
+    return tim[k];
+  }
   function quranBlock(it, i){
-    const s = st(i), n = it.to - it.from + 1, name = TQQ.nameOf(it.surah, lang), V = verses[it.surah];
+    const s = st(i), n = it.to - it.from + 1, name = TQQ.nameOf(it.surah, lang), V = verses[it.surah], fw = follows(it), W = fw ? words[it.surah] : null;
     if(it.showtext !== false && V === undefined) loadVerses(it.surah);
+    if(fw){ loadWords(it); loadTim(it); }
     let h = '<div class="q"><b>' + esc((lang === 'en' ? 'Surah ' : 'سورة ') + name) + '</b> · ' + L('ayah') + ' ' + it.from + (n > 1 ? '–' + it.to : '') + ' · ×' + it.reps + '</div>';
     if(it.showtext !== false){
-      if(V === null) h += '<div class="small">' + L('notext') + '</div>';
-      else h += '<div class="ayah" style="line-height:2.3">' + Array.from({length: n}, (_, k) => { const a = it.from + k, t = V && V[it.surah + ':' + a];
-        return '<span data-ay="' + i + ':' + a + '" style="' + (s.playing && s.ayah === a ? 'background:#F6E3A8;border-radius:8px;padding:0 6px' : '') + '">' + esc(t || '…') + ' ﴿' + a + '﴾</span> '; }).join('') + '</div>';
+      if(V === null && !(W && W[it.surah + ':' + it.from])) h += '<div class="small">' + L('notext') + '</div>';
+      else h += '<div class="ayah" style="line-height:2.3">' + Array.from({length: n}, (_, k) => { const a = it.from + k, key = it.surah + ':' + a, ws = W && W[key];
+        const body = ws ? ws.map(w => '<span class="w" data-w="' + i + ':' + a + ':' + w[0] + '">' + esc(w[1]) + '</span>').join(' ') : esc((V && V[key]) || '…');
+        return '<span class="ay" data-ay="' + i + ':' + a + '" style="' + (!fw && s.playing && s.ayah === a ? 'background:#F6E3A8;border-radius:8px;padding:0 6px' : '') + '">' + body + ' ﴿' + a + '﴾</span> '; }).join('') + '</div>';
+      if(fw) h += '<div class="small">' + L('follow') + '</div>';
     }
     h += '<div class="row">' + (s.done ? '<span class="tag" style="margin:0">' + L('lfin') + ' · ' + it.reps + '/' + it.reps + '</span>' : '') +
       '<button type="button" class="btn" data-play="' + i + '"' + (sent ? ' disabled' : '') + '>' + (s.playing ? L('pause') : s.paused ? L('resume') : L('lst')) + '</button>' +
@@ -198,14 +229,61 @@ audio{width:100%;margin-top:8px}
     }
     return h;
   }
+  let lit = '';
+  function light(i, a, pos){
+    const key = i + ':' + a + ':' + pos; if(key === lit) return;
+    document.querySelectorAll('.w.on,.ay.on').forEach(e => e.classList.remove('on')); lit = key;
+    if(a == null) return;
+    const ay = document.querySelector('[data-ay="' + i + ':' + a + '"]'); if(ay) ay.classList.add('on');
+    const w = pos != null && document.querySelector('[data-w="' + key + '"]'); if(w){ w.classList.add('on'); }
+  }
+  /* play the reciter's whole-surah file from the first ayah to the last one, repeat, and light each word by its timing */
+  function chapterPlay(i, T){
+    const it = A.content.items[i], s = st(i), vs = T.v, a0 = vs[it.surah + ':' + it.from], a1 = vs[it.surah + ':' + it.to];
+    if(!a0 || !a1) return false;
+    const start = a0.f / 1000, end = a1.t / 1000;
+    stopAudio(); s.mode = 'ch'; au = new Audio(T.url); au.preload = 'auto'; au.playbackRate = s.speed;
+    const me = au;
+    const seekStart = () => { try{ me.currentTime = start; }catch(_){} };
+    if(me.readyState >= 1) seekStart(); else me.addEventListener('loadedmetadata', seekStart, {once: true});
+    const finishRep = () => {
+      if(s.rep < it.reps){ s.rep++; s.reps_done = s.rep - 1; seekStart(); if(me.paused && s.playing) me.play().catch(() => {});
+        const c = document.getElementById('lc' + i); if(c) c.textContent = L('rep') + ' ' + s.rep + '/' + it.reps; return; }
+      s.playing = false; s.done = true; s.reps_done = it.reps; s.mode = ''; light(null); stopAudio(); draw();
+    };
+    const tick = () => {
+      if(au !== me || !s.playing) return;
+      const t = me.currentTime;
+      if(t >= end - 0.03 && me.readyState >= 1 && t > start){ finishRep(); }
+      else {
+        const ms = t * 1000; let a = null, pos = null;
+        for(let x = it.from; x <= it.to; x++){ const v = vs[it.surah + ':' + x]; if(v && ms >= v.f && ms < v.t){ a = x; const g = v.seg.find(q => ms >= q[1] && ms < q[2]); if(g) pos = g[0]; break; } }
+        if(a != null){ s.ayah = a; light(i, a, pos); }
+      }
+      if(au === me && s.playing) requestAnimationFrame(tick);
+    };
+    s.tick = tick;
+    me.ontimeupdate = () => { if(document.hidden && au === me && s.playing && me.currentTime >= end - 0.05) finishRep(); };
+    me.onended = () => { if(au === me && s.playing) finishRep(); };
+    me.onerror = () => { if(au !== me) return; s.mode = ''; s.err = ''; step(i); };   // fall back to ayah-by-ayah audio
+    me.onplay = () => requestAnimationFrame(tick);
+    me.play().catch(() => { s.playing = false; s.err = L('noaud'); draw(); });
+    const c = document.getElementById('lc' + i); if(c) c.textContent = L('rep') + ' ' + s.rep + '/' + it.reps;
+    return true;
+  }
   function stopAudio(){ if(au){ au.onended = au.onerror = null; au.pause(); au = null; } }
   function playItem(i){
     const it = A.content.items[i], s = st(i);
     if(s.playing){ s.playing = false; s.paused = true; if(au) au.pause(); draw(); return; }
     if(s.paused && au){ s.playing = true; s.paused = false; au.play().catch(() => {}); draw(); return; }
-    stopAll(i); s.rep = 1; s.ayah = it.from; s.playing = true; s.paused = false; s.done = false; s.err = ''; draw(); step(i);
+    stopAll(i); s.rep = 1; s.ayah = it.from; s.playing = true; s.paused = false; s.done = false; s.err = ''; s.mode = ''; draw();
+    if(follows(it)){ const T = tim[it.reciter + '|' + it.surah];
+      if(T && T.url){ if(!chapterPlay(i, T)) step(i); return; }
+      if(T === null || T === undefined){ step(i); return; }
+      T.then(x => { if(!s.playing) return; if(!(x && chapterPlay(i, x))) step(i); }); return; }
+    step(i);
   }
-  function stopAll(except){ Object.keys(lst).forEach(k => { if(+k !== except && lst[k].playing){ lst[k].playing = false; lst[k].paused = false; } }); stopAudio(); }
+  function stopAll(except){ Object.keys(lst).forEach(k => { if(+k !== except && lst[k].playing){ lst[k].playing = false; lst[k].paused = false; } }); stopAudio(); light(null); }
   function step(i){
     const it = A.content.items[i], s = st(i); if(!s.playing) return;
     stopAudio(); au = new Audio(TQQ.audioUrl(it.reciter, it.surah, s.ayah)); au.playbackRate = s.speed;
