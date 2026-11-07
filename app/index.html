@@ -210,6 +210,22 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
           if(typeof window.render === 'function') window.render();
         }catch(e){}
       }; }
+    /* The lesson summary follows the report language: a lesson keeps headlines_ar and headlines_en,
+       and the one that matches the report (Arabic or English) goes in. */
+    if(typeof window.addLessonSummary === 'function'){ const o = window.addLessonSummary;
+      window.addLessonSummary = function(){
+        try{
+          const c = typeof window.currentChoice === 'function' ? window.currentChoice() : null, L = c && c.lesson;
+          if(L){
+            let lang = 'en'; try{ lang = window.effectiveLang(); }catch(e){}
+            const isAr = a => { const t = (a || []).join(' '); return (t.match(/[؀-ۿ]/g) || []).length > (t.match(/[A-Za-z]/g) || []).length; };
+            const ok = a => Array.isArray(a) && a.length && isAr(a) === (lang === 'ar');
+            const pick = [lang === 'ar' ? L.headlines_ar : L.headlines_en, L.headlines, L.summary].find(ok);
+            if(pick) L.headlines = pick.slice();
+          }
+        }catch(e){}
+        return o.apply(this, arguments);
+      }; }
   }
   /* Runs inside the report generator page too: who-is-who fixes. The name list itself is private (kv 'genAliases'):
      {drop:{id:[tokens]}, add:{id:[tokens]}, ids:[{id, phrases, tokens, first}]}; accents are ignored in names. */
