@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>How to Pray · كيف أصلي؟</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Amiri:wght@400;700&family=Baloo+Bhaijaan+2:wght@600;700;800&display=swap">
+<!-- Interactive lesson «How to pray» for girls (step by step, with the girl figures from the teacher's own deck).
+     No student names here. Arabic words of the prayer are shown with transliteration and meaning; Al-Fatiha text and
+     audio come from quran.com / everyayah (Al-Husary), never typed by hand. -->
+<script src="../tq-nav.js" defer></script>
+<style>
+:root{--bg:#FFF6FA;--card:#fff;--ink:#3B2346;--soft:#7D6488;--line:#EBD8F0;--pink:#E86AA4;--pink2:#FBD3E6;--lav:#9B7BD8;--lav2:#E6DCFA;
+  --gold:#E9A93B;--gold2:#FFF1D2;--mint:#3FB58F;--mint2:#DDF5EC;--f:"Fredoka","Segoe UI",system-ui,sans-serif;--ar:"Amiri",serif;--ar2:"Baloo Bhaijaan 2",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:500 18px/1.55 var(--f);color:var(--ink);background:radial-gradient(900px 500px at 100% 0,#FDE6F1 0,transparent 60%),radial-gradient(800px 600px at 0 60%,#EFE6FF 0,transparent 55%),var(--bg);min-height:100%;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,246,250,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top b{font-size:19px;color:var(--lav)}
+.dots{flex:1;display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s}
+.dots i.on{background:var(--pink);transform:scale(1.35)}
+.dots i.done{background:var(--lav)}
+.ib{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);background:#fff;font-size:17px}
+.stage{max-width:1100px;margin:0 auto;padding:16px 14px 110px}
+.slide{display:none;animation:in .35s ease}
+.slide.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:20px;box-shadow:0 8px 26px rgba(155,123,216,.12)}
+.step{display:grid;grid-template-columns:minmax(200px,38%) 1fr;gap:22px;align-items:start}
+.step>.pose{position:sticky;top:76px}
+@media(max-width:720px){.step{grid-template-columns:1fr}.step>.pose{position:relative;top:0;min-height:0;padding:10px 0}.pose img{max-height:190px}.pose img.wide{max-height:160px}}
+.pose{position:relative;display:grid;place-items:center;min-height:300px;border-radius:24px;background:radial-gradient(circle at 50% 60%,#fff 0,#FBEAF3 55%,#F1E7FF 100%)}
+.pose img{max-width:86%;max-height:380px;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(59,35,70,.18))}
+.pose img.wide{max-width:96%;max-height:300px}
+.pose .tag{position:absolute;top:12px;inset-inline-start:12px;background:#fff;border-radius:999px;padding:2px 12px;font-weight:700;color:var(--lav);border:2px solid var(--lav2)}
+.num{display:inline-block;background:var(--pink2);color:#B23A75;border-radius:999px;padding:0 12px;font-weight:700;font-size:15px}
+h2{margin:6px 0 2px;font-size:clamp(26px,4.6vw,40px);line-height:1.15}
+h2 small{display:block;font:700 clamp(18px,3vw,24px) var(--ar2);color:var(--soft);direction:rtl;text-align:start}
+.say0{margin:8px 0 0;font-size:clamp(17px,2.6vw,20px)}
+.say{margin-top:14px;background:linear-gradient(135deg,#FDE9F3,#EFE7FF);border:2px solid #F1CFE3;border-radius:22px;padding:14px 16px}
+.say .a{font:700 clamp(28px,5.4vw,44px)/1.7 var(--ar);direction:rtl;text-align:center;color:#5B2A63}
+.say .tr{text-align:center;font-weight:600;color:var(--lav)}
+.say .m{text-align:center;color:var(--soft);font-size:16px}
+.say+.say{margin-top:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:10px}
+.btn{min-height:50px;padding:0 20px;border:0;border-radius:16px;background:var(--pink);color:#fff;font-weight:700;font-size:17px;box-shadow:0 4px 0 #C24D86}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #C24D86}
+.btn.l{background:var(--lav);box-shadow:0 4px 0 #7B5DBA}
+.btn.g{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.cnt{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 18px;border-radius:999px;border:3px solid var(--gold);background:var(--gold2);color:#8A5A00;font-weight:700;font-size:18px}
+.cnt b{font-size:24px;min-width:2.2ch;text-align:center}
+.cnt.full{background:var(--mint2);border-color:var(--mint);color:#1F7A5C}
+.list{margin:8px 0 0;padding-inline-start:22px}
+.list li{margin:4px 0}
+.tip{margin-top:12px;background:var(--gold2);border-radius:16px;padding:10px 14px;font-size:16px}
+/* quiz */
+.qz h2{text-align:center}
+.qz .q{text-align:center;font-size:clamp(19px,3vw,24px);margin:6px 0 14px}
+.pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.pic{border:3px solid var(--line);border-radius:22px;background:#fff;padding:10px;display:grid;place-items:center;gap:6px;min-height:200px;transition:border-color .15s,transform .15s}
+.pic img{max-height:150px;max-width:100%;object-fit:contain}
+.pic span{font-weight:700}
+.pic.right{border-color:var(--mint);background:var(--mint2)}
+.pic.wrong{border-color:#F08A8A;background:#FFF0F0}
+.opts{display:grid;gap:10px;max-width:620px;margin:0 auto}
+.opt{min-height:56px;border:3px solid var(--line);border-radius:18px;background:#fff;font-weight:700;font-size:18px;padding:6px 14px}
+.opt .a{font:700 24px var(--ar);direction:rtl}
+.opt.right{border-color:var(--mint);background:var(--mint2)}
+.opt.wrong{border-color:#F08A8A;background:#FFF0F0}
+.fb{text-align:center;font-weight:700;min-height:1.6em;margin-top:10px}
+/* order game */
+.tray{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;min-height:120px}
+.chipP{border:3px solid var(--line);border-radius:18px;background:#fff;padding:6px 10px;display:grid;place-items:center;width:128px;transition:transform .15s}
+.chipP img{height:84px;max-width:100%;object-fit:contain}
+.chipP span{font-size:14px;font-weight:700}
+.chipP.used{opacity:.25;pointer-events:none}
+.line{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;min-height:118px;border:3px dashed var(--lav2);border-radius:22px;padding:10px}
+.line .chipP{width:110px;border-color:var(--lav)}
+.line .chipP img{height:70px}
+/* rak'ahs */
+.prs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media(max-width:620px){.prs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pr{border:3px solid var(--line);border-radius:20px;background:#fff;padding:10px 6px;text-align:center}
+.pr b{display:block;font-size:20px}
+.pr small{display:block;color:var(--soft);font:700 14px var(--ar2)}
+.pr .k{display:flex;gap:4px;justify-content:center;margin-top:8px}
+.pr .k button{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:#fff;font-weight:700}
+.pr.right{border-color:var(--mint);background:var(--mint2)}
+/* welcome & end */
+.hero{border-radius:28px;overflow:hidden;position:relative;aspect-ratio:16/8;min-height:240px;background:#E9C6E4 center/cover no-repeat}
+.hero .tx{position:absolute;inset:auto 0 0 0;padding:20px;color:#fff;background:linear-gradient(180deg,transparent,rgba(59,35,70,.65));text-shadow:0 2px 10px rgba(59,35,70,.5)}
+.hero h1{margin:0;font-size:clamp(34px,7vw,60px);line-height:1.1}
+.hero p{margin:4px 0 0;font-size:clamp(16px,2.8vw,22px)}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.plan div{background:#fff;border:2px solid var(--line);border-radius:18px;padding:10px;text-align:center;font-weight:700}
+.plan img{height:70px;object-fit:contain;display:block;margin:0 auto 4px}
+.nav{position:fixed;inset-inline:0;bottom:0;z-index:6;display:flex;gap:10px;justify-content:center;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,246,250,.94);border-top:1px solid var(--line)}
+.nav .btn{min-width:140px}
+.ar{direction:rtl;unicode-bidi:isolate}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="top"><b>How to Pray</b><div class="dots" id="dots"></div><button class="ib" data-tq-sound type="button" aria-label="sound"></button><button class="ib" id="fs" type="button" aria-label="full screen">⛶</button></div>
+<main class="stage" id="stage"></main>
+<div class="nav"><button class="btn g" id="prev" type="button">← Back</button><button class="btn" id="next" type="button">Next →</button></div>
+
+<script src="../tq-fx.js"></script>
+<script>
+(function(){
+  const IMG = k => '../assets/img/salah-girl/' + k + '.webp';
+  const WIDE = {ruku: 1, sujud: 1, sit: 1, feet: 1, dhikr: 1};
+  const AUD = k => '../assets/audio/salah/' + k + '.mp3';
+  const ar = t => '<span class="ar">' + t + '</span>';
+  const S = [];
+  const say = (a, tr, m, o) => ({a, tr, m, n: (o || {}).n || 0, au: (o || {}).au || ''});
+
+  /* ---------------- the lesson ---------------- */
+  S.push({kind: 'welcome'});
+  S.push({kind: 'step', pose: 'stand', tag: 'Before you start', t: 'Intention', ta: 'النيّة', txt: 'Make wudu. Stand on your prayer mat, facing the <b>Qiblah</b> (the direction of the Kaʿbah in Makkah). Make your <b>niyyah</b> (intention) in your heart for the prayer you want to pray.', tip: 'The intention is in the heart. You do not need to say it aloud.'});
+  S.push({kind: 'step', pose: 'takbeer', tag: 'Rakʿah 1', t: 'Takbeer', ta: 'تكبيرة الإحرام', txt: 'Look at the place of sujood. Raise both hands up to your shoulders and say:', says: [say('اللهُ أَكْبَرُ', 'Allāhu Akbar', 'Allah is the Greatest')], tip: 'Now you are in the prayer. No talking, no looking around.'});
+  S.push({kind: 'step', pose: 'qiyam', tag: 'Rakʿah 1', t: 'Standing', ta: 'القيام', txt: 'Put your <b>right hand over your left hand</b> on your chest. You may say the opening duʿāʾ:', says: [say('سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبَارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلَا إِلَهَ غَيْرُكَ', 'Subḥānaka-llāhumma wa biḥamdika, wa tabāraka-smuka, wa taʿālā jadduka, wa lā ilāha ghayruk', 'Glory and praise be to You, O Allah. Blessed is Your name, high is Your majesty, and there is no god but You.', {au: 'istiftah'})], tip: 'This duʿāʾ is sunnah (recommended), in the first rakʿah only (Abu Dawud 775).'});
+  S.push({kind: 'fatiha'});
+  S.push({kind: 'step', pose: 'qiyam', tag: 'Rakʿah 1', t: 'Another surah', ta: 'سورة بعد الفاتحة', txt: 'In the <b>1st and 2nd rakʿah</b>, recite another surah you know after Al-Fātiḥah, like Al-Ikhlāṣ or Al-Kawthar. Recite it in Arabic only.', tip: 'In the 3rd and 4th rakʿah, Al-Fātiḥah alone is enough.'});
+  S.push({kind: 'step', pose: 'takbeer', tag: 'Rakʿah 1', t: 'Going to bow', ta: 'تكبيرة الركوع', txt: 'Raise your hands again like the first takbeer, and say:', says: [say('اللهُ أَكْبَرُ', 'Allāhu Akbar', 'Allah is the Greatest')]});
+  S.push({kind: 'step', pose: 'ruku', tag: 'Rakʿah 1', t: 'Bowing · Rukūʿ', ta: 'الركوع', txt: 'Bend down. Put your hands on your knees and keep your back straight. Say it <b>3 times</b> — tap the counter each time:', says: [say('سُبْحَانَ رَبِّيَ الْعَظِيمِ', 'Subḥāna Rabbiyal-ʿAẓīm', 'Glory be to my Lord, the Most Great', {n: 3})]});
+  S.push({kind: 'pick', q: 'Quick check! Tap the picture of <b>Rukūʿ</b> (bowing).', ans: 'ruku', opts: ['qiyam', 'ruku', 'sujud']});
+  S.push({kind: 'step', pose: 'takbeer', tag: 'Rakʿah 1', t: 'Rising up', ta: 'الرفع من الركوع', txt: 'Raise your hands as you come up, and say:', says: [say('سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ', 'Samiʿa-llāhu liman ḥamidah', 'Allah hears the one who praises Him')]});
+  S.push({kind: 'step', pose: 'stand', tag: 'Rakʿah 1', t: 'Standing straight', ta: 'الاعتدال', txt: 'Stand still and straight, then say:', says: [say('رَبَّنَا وَلَكَ الْحَمْدُ', 'Rabbanā wa lakal-ḥamd', 'Our Lord, and to You is all praise')]});
+  S.push({kind: 'step', pose: 'sujud', tag: 'Rakʿah 1', t: 'Prostration · Sujūd', ta: 'السجود', txt: 'Go down saying <b>Allāhu Akbar</b>. In sujood make sure:', list: ['Your <b>forehead and nose</b> touch the floor', 'Your <b>two palms</b> are on the floor, fingers together', 'Your <b>two knees</b> are on the floor', 'Your <b>toes</b> are on the floor, pointing to the Qiblah'], says: [say('سُبْحَانَ رَبِّيَ الْأَعْلَى', 'Subḥāna Rabbiyal-Aʿlā', 'Glory be to my Lord, the Most High', {n: 3})], tip: 'Sujood is the closest a servant is to Allah — make duʿāʾ here! (Muslim 482)'});
+  S.push({kind: 'step', pose: 'sit', tag: 'Rakʿah 1', t: 'Sitting', ta: 'الجلوس بين السجدتين', txt: 'Come up saying <b>Allāhu Akbar</b>. Sit on your left foot, with your right foot upright and its toes facing the Qiblah. Hands on your knees. Say:', says: [say('رَبِّ اغْفِرْ لِي', 'Rabbighfir lī', 'My Lord, forgive me', {n: 3})], feet: true});
+  S.push({kind: 'step', pose: 'sujud', tag: 'Rakʿah 1', t: 'Second sujood', ta: 'السجدة الثانية', txt: 'Go down again saying <b>Allāhu Akbar</b>, and say:', says: [say('سُبْحَانَ رَبِّيَ الْأَعْلَى', 'Subḥāna Rabbiyal-Aʿlā', 'Glory be to my Lord, the Most High', {n: 3})]});
+  S.push({kind: 'pick', q: 'In which position do we say <b>رَبِّ اغْفِرْ لِي</b>?', ans: 'sit', opts: ['sit', 'ruku', 'stand']});
+  S.push({kind: 'step', pose: 'stand', tag: 'Rakʿah 2', t: 'The 2nd rakʿah', ta: 'الركعة الثانية', txt: 'Stand up saying <b>Allāhu Akbar</b>. Repeat everything you did in the first rakʿah: Al-Fātiḥah, a surah, rukūʿ, rising, two sujoods.', strip: true});
+  S.push({kind: 'step', pose: 'sit', tag: 'Rakʿah 2', t: 'Tashahhud', ta: 'التشهّد', txt: 'After the 2nd rakʿah, sit and say the tashahhud. Raise your right index finger at <b>illa-llāh</b>.', says: [
+    say('التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ', 'At-taḥiyyātu lillāhi waṣ-ṣalawātu waṭ-ṭayyibāt', 'All greetings, prayers and good words are for Allah', {au: 'tashahhud1'}),
+    say('السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 'As-salāmu ʿalayka ayyuhan-nabiyyu wa raḥmatullāhi wa barakātuh', 'Peace be upon you, O Prophet, and the mercy of Allah and His blessings', {au: 'tashahhud2'}),
+    say('السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ', 'As-salāmu ʿalaynā wa ʿalā ʿibādillāhiṣ-ṣāliḥīn', 'Peace be upon us and upon the righteous servants of Allah', {au: 'tashahhud3'}),
+    say('أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ', 'Ashhadu allā ilāha illa-llāh', 'I bear witness that there is no god but Allah', {au: 'shahada1'}),
+    say('وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ', 'Wa ashhadu anna Muḥammadan ʿabduhu wa rasūluh', 'And I bear witness that Muhammad is His servant and Messenger', {au: 'shahada2'})], tip: 'Taught by the Prophet ﷺ to Ibn Masʿūd (al-Bukhari 831, Muslim 402).'});
+  S.push({kind: 'rakah'});
+  S.push({kind: 'step', pose: 'sit', tag: 'Last sitting', t: 'Ṣalāh on the Prophet ﷺ', ta: 'الصلاة الإبراهيمية', txt: 'In the last sitting, after the tashahhud, say:', says: [
+    say('اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ', 'Allāhumma ṣalli ʿalā Muḥammadin wa ʿalā āli Muḥammad, kamā ṣallayta ʿalā Ibrāhīma wa ʿalā āli Ibrāhīm, innaka Ḥamīdun Majīd', 'O Allah, send prayers upon Muhammad and his family, as You sent prayers upon Ibrahim and his family. You are Praiseworthy, Glorious.'),
+    say('اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ', 'Allāhumma bārik ʿalā Muḥammadin wa ʿalā āli Muḥammad, kamā bārakta ʿalā Ibrāhīma wa ʿalā āli Ibrāhīm, innaka Ḥamīdun Majīd', 'O Allah, bless Muhammad and his family, as You blessed Ibrahim and his family. You are Praiseworthy, Glorious.')], tip: 'al-Bukhari 3370.'});
+  S.push({kind: 'step', pose: 'tasleem', tag: 'The end', t: 'Tasleem', ta: 'التسليم', txt: 'Turn your head to the <b>right</b> and say it, then to the <b>left</b> and say it again:', says: [say('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ', 'As-salāmu ʿalaykum wa raḥmatullāh', 'Peace and the mercy of Allah be upon you', {n: 2})], tip: 'Now your prayer is finished. Alḥamdulillāh!'});
+  S.push({kind: 'step', pose: 'dhikr', tag: 'After the prayer', t: 'Dhikr after salah', ta: 'الأذكار بعد الصلاة', txt: 'Sit a little and remember Allah. Tap each counter to 33:', says: [say('سُبْحَانَ اللَّهِ', 'Subḥāna-llāh', 'Glory be to Allah', {n: 33}), say('الْحَمْدُ لِلَّهِ', 'Al-ḥamdu lillāh', 'All praise is for Allah', {n: 33}), say('اللهُ أَكْبَرُ', 'Allāhu Akbar', 'Allah is the Greatest', {n: 33})], tip: 'Muslim 597.'});
+  S.push({kind: 'order'});
+  S.push({kind: 'end'});
+
+  /* ---------------- drawing ---------------- */
+  const stage = document.getElementById('stage'), dots = document.getElementById('dots');
+  let cur = 0; try{ cur = Math.min(S.length - 1, +localStorage.getItem('tq-howtopray-girls') || 0); }catch(_){}
+  const img = (k, cls) => '<img src="' + IMG(k) + '" alt="" class="' + (WIDE[k] ? 'wide ' : '') + (cls || '') + '">';
+  const NAMES = {stand: 'Standing', takbeer: 'Takbeer', qiyam: 'Standing', ruku: 'Rukūʿ', sujud: 'Sujūd', sit: 'Sitting', tasleem: 'Tasleem', dhikr: 'Dhikr'};
+  function sayBox(x, i, j){
+    return '<div class="say"><div class="a">' + x.a + '</div><div class="tr">' + x.tr + '</div><div class="m">' + x.m + '</div>' +
+      ((x.au || x.n) ? '<div class="row">' + (x.au ? '<button class="btn l" type="button" data-au="' + x.au + '">🔊 Listen</button>' : '') +
+      (x.n ? '<button class="cnt" type="button" data-n="' + x.n + '" data-c="0"><span>Tap</span><b>0</b><span>/ ' + x.n + '</span></button>' : '') + '</div>' : '') + '</div>';
+  }
+  function html(s, i){
+    if(s.kind === 'welcome') return '<div class="hero" style="background-image:url(../assets/img/prayer/hero.webp)"><div class="tx"><h1>How to Pray</h1><p>' + ar('كيف أصلّي؟') + ' · Step by step, like the Prophet ﷺ taught us</p></div></div>' +
+      '<div class="card" style="margin-top:14px"><p class="say0" style="margin:0">The Prophet ﷺ said: <b>“Pray as you have seen me praying.”</b> <span style="color:var(--soft)">(al-Bukhari 631)</span></p>' +
+      '<div class="plan">' + [['takbeer', 'Takbeer'], ['qiyam', 'Standing'], ['ruku', 'Rukūʿ'], ['sujud', 'Sujūd'], ['sit', 'Sitting'], ['tasleem', 'Tasleem']].map(x => '<div>' + '<img src="' + IMG(x[0]) + '" alt="">' + x[1] + '</div>').join('') + '</div>' +
+      '<p class="say0">Listen carefully → Repeat after me → Now do it alone.</p></div>';
+    if(s.kind === 'step'){
+      let h = '<div class="card step"><div class="pose"><span class="tag">' + s.tag + '</span>' + img(s.pose) + '</div><div><span class="num">Step ' + (S.filter((x, k) => k <= i && x.kind === 'step').length) + '</span>' +
+        '<h2>' + s.t + '<small>' + s.ta + '</small></h2><p class="say0">' + s.txt + '</p>';
+      if(s.list) h += '<ol class="list">' + s.list.map(x => '<li>' + x + '</li>').join('') + '</ol>';
+      if(s.strip) h += '<div class="plan">' + ['qiyam', 'ruku', 'stand', 'sujud', 'sit', 'sujud'].map(k => '<div><img src="' + IMG(k) + '" alt="">' + NAMES[k] + '</div>').join('') + '</div>';
+      (s.says || []).forEach((x, j) => { h += sayBox(x, i, j); });
+      if(s.feet) h += '<div class="row"><img src="' + IMG('feet') + '" alt="" style="max-height:150px;border-radius:16px"></div>';
+      if(s.tip) h += '<div class="tip">💡 ' + s.tip + '</div>';
+      return h + '</div></div>';
+    }
+    if(s.kind === 'fatiha') return '<div class="card step"><div class="pose"><span class="tag">Rakʿah 1</span>' + img('qiyam') + '</div><div><span class="num">Every rakʿah</span><h2>Al-Fātiḥah<small>سورة الفاتحة</small></h2>' +
+      '<p class="say0">Recite Al-Fātiḥah in <b>every rakʿah</b> — the prayer is not complete without it. Listen to Sheikh Al-Ḥuṣarī and follow the ayah that lights up:</p>' +
+      '<div class="say" id="fat"><div class="m">Loading…</div></div><div class="row"><button class="btn l" type="button" id="fatPlay">🔊 Listen to Al-Fātiḥah</button></div>' +
+      '<div class="tip">💡 After Al-Fātiḥah we say <b>Āmīn</b>.</div></div></div>';
+    if(s.kind === 'pick') return '<div class="card qz"><h2>Quick check</h2><p class="q">' + s.q + '</p><div class="pics">' +
+      s.opts.map(k => '<button class="pic" type="button" data-pk="' + k + '" data-ans="' + s.ans + '">' + '<img src="' + IMG(k) + '" alt=""><span>' + NAMES[k] + '</span></button>').join('') + '</div><div class="fb"></div></div>';
+    if(s.kind === 'rakah') return '<div class="card qz"><h2>How many rakʿahs?</h2><p class="q">After the first tashahhud, what comes next depends on the prayer. Tap the number of rakʿahs for each prayer:</p><div class="prs">' +
+      [['Fajr', 'الفجر', 2], ['Ẓuhr', 'الظهر', 4], ['ʿAṣr', 'العصر', 4], ['Maghrib', 'المغرب', 3], ['ʿIshāʾ', 'العشاء', 4]].map(p => '<div class="pr" data-r="' + p[2] + '"><b>' + p[0] + '</b><small>' + p[1] + '</small><div class="k">' + [2, 3, 4].map(n => '<button type="button" data-k="' + n + '">' + n + '</button>').join('') + '</div></div>').join('') + '</div>' +
+      '<div class="tip" style="margin-top:14px">💡 <b>Fajr (2):</b> finish with the tashahhud and tasleem. <b>Maghrib (3):</b> stand for one more rakʿah. <b>Ẓuhr, ʿAṣr, ʿIshāʾ (4):</b> stand for two more rakʿahs with Al-Fātiḥah only, then the last tashahhud.</div><div class="fb"></div></div>';
+    if(s.kind === 'order') return '<div class="card qz"><h2>Build your prayer</h2><p class="q">Tap the pictures <b>in order</b> for one rakʿah:</p><div class="line" id="line"></div><div class="tray" id="tray"></div><div class="fb"></div><div class="row"><button class="btn g" type="button" id="ordAgain">↺ Try again</button></div></div>';
+    if(s.kind === 'end') return '<div class="card" style="text-align:center;padding:0;overflow:hidden"><img src="../assets/img/prayer/reward.webp" alt="" style="width:100%;max-height:460px;object-fit:cover;display:block"><div style="padding:18px"><h2 style="color:#B23A75">Well done!</h2>' +
+      '<p class="say0">Now you know how to pray, step by step. Practise it today in every prayer, and keep your prayer garden blooming.</p><p class="say0">' + '<span class="ar" style="font:700 26px var(--ar)">﴿رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِنْ ذُرِّيَّتِي رَبَّنَا وَتَقَبَّلْ دُعَاءِ﴾</span><br>“My Lord, make me one who keeps up the prayer, and my children too. Our Lord, accept my duʿāʾ.” (Ibrāhīm 14:40)</p></div></div>';
+    return '';
+  }
+  stage.innerHTML = S.map((s, i) => '<section class="slide" data-i="' + i + '">' + html(s, i) + '</section>').join('');
+  dots.innerHTML = S.map(() => '<i></i>').join('');
+
+  /* ---------------- interactions ---------------- */
+  let au = null; const stopAu = () => { if(au){ au.pause(); au = null; } };
+  stage.addEventListener('click', e => {
+    const a = e.target.closest('[data-au]'); if(a){ stopAu(); au = new Audio(AUD(a.dataset.au)); au.play().catch(() => {}); return; }
+    const c = e.target.closest('.cnt'); if(c){ const n = +c.dataset.n; let v = +c.dataset.c; if(v >= n){ v = 0; c.classList.remove('full'); } else v++;
+      c.dataset.c = v; c.querySelector('b').textContent = v; if(v === n){ c.classList.add('full'); if(window.TQFX) TQFX.ok(c); } else if(window.TQFX && TQFX.tap) TQFX.tap(); return; }
+    const p = e.target.closest('.pic'); if(p){ const box = p.closest('.qz'), ok = p.dataset.pk === p.dataset.ans;
+      p.classList.add(ok ? 'right' : 'wrong'); box.querySelector('.fb').textContent = ok ? 'Great job! 🌸' : 'Oops! Try again.';
+      if(window.TQFX) ok ? TQFX.ok(p) : TQFX.bad(p); return; }
+    const k = e.target.closest('.pr [data-k]'); if(k){ const pr = k.closest('.pr'), ok = +k.dataset.k === +pr.dataset.r;
+      if(ok){ pr.classList.add('right'); pr.querySelectorAll('button').forEach(b => b.disabled = true); if(window.TQFX) TQFX.ok(k); }
+      else if(window.TQFX) TQFX.bad(k);
+      const box = pr.closest('.qz'); if(box.querySelectorAll('.pr.right').length === 5){ box.querySelector('.fb').textContent = 'All correct! Masha Allah! 🌟'; if(window.TQFX) TQFX.win(); } return; }
+  });
+  /* Al-Fatiha: text from quran.com, audio of Al-Husary from everyayah, the ayah lights up while it plays */
+  let fatDone = false;
+  function loadFatiha(){
+    if(fatDone) return; fatDone = true; const box = document.getElementById('fat');
+    fetch('https://api.quran.com/api/v4/verses/by_chapter/1?fields=text_uthmani&per_page=10').then(r => r.json()).then(j => {
+      box.innerHTML = (j.verses || []).map((v, i) => '<div class="a" data-fa="' + (i + 1) + '" style="font-size:clamp(24px,4.4vw,34px);border-radius:12px;transition:background .2s">' + v.text_uthmani + ' ﴿' + (i + 1) + '﴾</div>').join('');
+    }).catch(() => { box.innerHTML = '<div class="m">Could not load the text — the audio still works.</div>'; });
+    document.getElementById('fatPlay').onclick = () => {
+      stopAu(); let n = 1; const lit = k => document.querySelectorAll('[data-fa]').forEach(d => d.style.background = +d.dataset.fa === k ? '#FFE3F0' : '');
+      const next = () => { if(n > 7){ lit(0); au = null; return; } lit(n); au = new Audio('https://everyayah.com/data/Husary_128kbps/001' + String(n).padStart(3, '0') + '.mp3');
+        au.onended = () => { n++; next(); }; au.play().catch(() => {}); };
+      next();
+    };
+  }
+  /* order game */
+  const ORDER = [['takbeer', 'Takbeer'], ['qiyam', 'Standing'], ['ruku', 'Rukūʿ'], ['stand', 'Rising'], ['sujud', 'Sujūd'], ['sit', 'Sitting'], ['sujud2', 'Sujūd']];
+  function setupOrder(){
+    const tray = document.getElementById('tray'), line = document.getElementById('line'); if(!tray) return;
+    const box = tray.closest('.qz'), fb = box.querySelector('.fb'); let got = 0;
+    const deck = ORDER.map((x, i) => [x, i]).sort(() => Math.random() - .5);
+    tray.innerHTML = deck.map(([x, i]) => '<button class="chipP" type="button" data-o="' + i + '"><img src="' + IMG(x[0] === 'sujud2' ? 'sujud' : x[0]) + '" alt=""><span>' + x[1] + '</span></button>').join('');
+    line.innerHTML = ''; fb.textContent = '';
+    tray.onclick = e => { const b = e.target.closest('.chipP'); if(!b || b.classList.contains('used')) return; const i = +b.dataset.o, nm = ORDER[i][0];
+      const want = ORDER[got][0]; const ok = i === got || (nm.startsWith('sujud') && want.startsWith('sujud'));
+      if(!ok){ if(window.TQFX) TQFX.bad(b); fb.textContent = 'Oops! What comes next?'; return; }
+      b.classList.add('used'); line.insertAdjacentHTML('beforeend', b.outerHTML.replace('chipP used', 'chipP')); got++; fb.textContent = '';
+      if(window.TQFX) TQFX.ok(b); if(got === ORDER.length){ fb.textContent = 'Perfect! You built a whole rakʿah! 🌟'; if(window.TQFX) TQFX.win(); } };
+    document.getElementById('ordAgain').onclick = setupOrder;
+  }
+  function show(i){
+    stopAu(); cur = Math.max(0, Math.min(S.length - 1, i));
+    document.querySelectorAll('.slide').forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => { d.className = k === cur ? 'on' : k < cur ? 'done' : ''; });
+    document.getElementById('prev').disabled = cur === 0; document.getElementById('next').textContent = cur === S.length - 1 ? 'Start again ↺' : 'Next →';
+    if(S[cur].kind === 'fatiha') loadFatiha();
+    if(S[cur].kind === 'order') setupOrder();
+    if(S[cur].kind === 'end' && window.TQFX) TQFX.win();
+    try{ localStorage.setItem('tq-howtopray-girls', cur); }catch(_){}
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  document.getElementById('next').onclick = () => { if(window.TQFX && TQFX.whoosh) TQFX.whoosh(); show(cur === S.length - 1 ? 0 : cur + 1); };
+  document.getElementById('prev').onclick = () => show(cur - 1);
+  document.addEventListener('keydown', e => { if(e.key === 'ArrowRight' || e.key === 'PageDown') show(cur + 1); if(e.key === 'ArrowLeft' || e.key === 'PageUp') show(cur - 1); });
+  document.getElementById('fs').onclick = () => { const d = document.documentElement; if(document.fullscreenElement) document.exitFullscreen(); else (d.requestFullscreen || d.webkitRequestFullscreen || (() => {})).call(d); };
+  window.__go = show;
+  show(cur);
+})();
+</script>
+</body>
+</html>
