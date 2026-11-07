@@ -46,7 +46,7 @@
 @keyframes tkpop{40%{transform:scale(1.35) rotate(-8deg)}}
 .tk-sel{height:30px;border:1.5px solid #e3ece7;border-radius:8px;font:700 13px 'Cairo',sans-serif;color:#16241e;background:#fff}
 
-.tk-float{position:fixed;right:14px;bottom:14px;width:262px;max-height:calc(100vh - 28px);overflow:auto;z-index:60;background:#f5f3ec;border:1px solid #cfe3d8;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:0 8px 8px}
+.tk-float{position:fixed;right:14px;bottom:14px;width:262px;max-height:calc(100vh - 28px);overflow:auto;z-index:2147482500;background:#f5f3ec;border:1px solid #cfe3d8;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:0 8px 8px}
 .tk-fh{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin:0 -8px 8px;padding:8px 12px;background:#c99a3f;color:#fff;border-radius:16px 16px 0 0;font:800 14px 'Cairo',sans-serif;cursor:pointer}
 .tk-fh span{flex:1}
 .tk-float.min{width:auto;padding:0}.tk-float.min .tk-fh{margin:0;border-radius:16px}.tk-float.min .tk{display:none}
