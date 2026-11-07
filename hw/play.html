@@ -60,6 +60,8 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
   const steps = [];
   H.tasks.forEach(k => { if(k.t === 'classify') k.items.forEach(it => steps.push({k, it})); else if(k.t === 'mcq') steps.push({k}); });
   let qi = 0, right = 0, picked = null; const details = [];
+  /* multiple-choice options come in a random order, so the right answer is not always first (classify buttons stay fixed) */
+  const order = (s, opts) => { if(!s.ord){ s.ord = opts.map((_, j) => j); if(s.k.t === 'mcq') for(let i = s.ord.length - 1; i > 0; i--){ const r = Math.random() * (i + 1) | 0; [s.ord[i], s.ord[r]] = [s.ord[r], s.ord[i]]; } } return s.ord; };
   function draw(){
     document.documentElement.lang = TQHW.lang; document.documentElement.dir = TQHW.lang === 'en' ? 'ltr' : 'rtl';
     document.getElementById('t').textContent = T(H.title);
@@ -70,7 +72,7 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
     const s = steps[qi], k = s.k, opts = k.t === 'classify' ? k.options : k.opts, a = k.t === 'classify' ? s.it.a : k.a, why = k.t === 'classify' ? s.it.why : k.why;
     g.innerHTML = '<div class="card"><div class="small">' + (qi + 1) + ' / ' + steps.length + (k.ask ? ' · ' + T(k.ask) : '') + '</div>' +
       (k.t === 'classify' ? '<div class="word">' + s.it.w + (s.it.ref ? '<small>' + T(s.it.ref) + '</small>' : '') + '</div>' : '<div class="q">' + T(k.q) + '</div>') +
-      '<div class="opts">' + opts.map((o, j) => '<button class="opt" data-j="' + j + '">' + T(o) + '</button>').join('') + '</div>' +
+      '<div class="opts">' + order(s, opts).map(j => '<button class="opt" data-j="' + j + '">' + T(opts[j]) + '</button>').join('') + '</div>' +
       (picked != null && why ? '<div class="why">' + T(why) + '</div>' : '') + '</div>';
     g.querySelectorAll('[data-j]').forEach(b => b.onclick = () => answer(+b.dataset.j, a, opts, s));
   }

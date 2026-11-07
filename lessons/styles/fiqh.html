@@ -559,7 +559,7 @@ function quizGame(root){let q=0,turn=0;const order=QUIZ;
    confetti();tone('ok');root.querySelector('[data-r]').onclick=()=>{q=0;turn=0;render()};return}
   const [qt,opts,a]=order[q];const L=['أ','ب','ج','د'];
   root.innerHTML=`<div class="qtop"><span class="turn">${t('الدَّوْرُ','Turn')}: ${tname(turn)}</span><span class="qnum">${t('سُؤَالٌ '+(q+1)+' مِنْ '+order.length,'Question '+(q+1)+' of '+order.length)}</span></div>
-  <div class="qtext">${qt}</div><div class="qopts">${opts.map((o,k)=>`<button class="qopt" data-k="${k}"><b>${t(L[k],'ABCD'[k])}</b>${o}</button>`).join('')}</div>
+  <div class="qtext">${qt}</div><div class="qopts">${shuffle(opts.map((o,k)=>[o,k])).map(([o,k],n)=>`<button class="qopt" data-k="${k}"><b>${t(L[n],'ABCD'[n])}</b>${o}</button>`).join('')}</div>
   <div class="qfoot">${teamsHTML()}<button class="btn" data-n hidden>${t('السُّؤَالُ التَّالِي','Next question')} ←</button></div>`;
   let done=false;
   root.querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=+b.dataset.k===a;

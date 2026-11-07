@@ -623,8 +623,8 @@ function quiz(o){
  s=>{const QZ=o.qs;let r=0,right=0,locked=false;const q=s.querySelector('[data-q]'),oo=s.querySelector('[data-o]'),p=s.querySelector('[data-p]'),sr=s.querySelector('[data-sp-row]');const pass=o.pass||Math.ceil(QZ.length*.8);
   function round(){if(r>=QZ.length){sr.innerHTML='';oo.innerHTML='';q.innerHTML=`${T.score(right,QZ.length)} ${right>=pass?T.good:T.ok}`;win(right>=pass);window.__quizScore=right;return}locked=false;const Q=QZ[r];q.innerHTML=Q.t;p.innerHTML=QZ.map((_,k)=>`<i class="${k<r?'d':''}"></i>`).join('');
    sr.innerHTML=Q.a?`<button class="btn sky" data-pl>${T.listen}</button>`:'';if(Q.a){sr.querySelector('[data-pl]').onclick=()=>play(Q.a,null,1);play(Q.a,null,1)}
-   oo.innerHTML=Q.o.map((x,i)=>`<button class="qo" data-i="${i}">${x}</button>`).join('');
-   oo.querySelectorAll('.qo').forEach(b=>b.onclick=()=>{if(locked)return;locked=true;if(+b.dataset.i===Q.c){right++;b.classList.add('right','bounce');win()}else{b.classList.add('wrong','shake');tone('bad');oo.children[Q.c].classList.add('right')}setTimeout(()=>{r++;round()},o.delay||1300)})}
+   oo.innerHTML=shuffle(Q.o.map((x,i)=>[x,i])).map(([x,i])=>`<button class="qo" data-i="${i}">${x}</button>`).join('');
+   oo.querySelectorAll('.qo').forEach(b=>b.onclick=()=>{if(locked)return;locked=true;if(+b.dataset.i===Q.c){right++;b.classList.add('right','bounce');win()}else{b.classList.add('wrong','shake');tone('bad');oo.querySelector('[data-i="'+Q.c+'"]').classList.add('right')}setTimeout(()=>{r++;round()},o.delay||1300)})}
   round()});
 }
 
