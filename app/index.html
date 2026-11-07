@@ -455,9 +455,13 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     app.innerHTML = '<div class="card muted">بيحمّل…</div>';
     const r = await db.from('submissions').select('*, assignment_targets(token, students(id,name_ar,name_en), assignments(id,title,kind,content))').order('submitted_at', {ascending: false}).limit(80);
     if(r.error){ app.innerHTML = '<div class="card">' + esc(r.error.message) + '</div>'; return; }
-    const list = r.data || [], waiting = list.filter(x => x.status === 'submitted').length;
+    const all = r.data || [], waiting = all.filter(x => x.status === 'submitted').length, done = all.length - waiting;
     $('nNew').hidden = !waiting; $('nNew').textContent = waiting;
-    if(!list.length){ app.innerHTML = '<div class="card"><h2>📥 التسليمات</h2><p class="muted">لسه مفيش حد سلّم. اعمل واجب جديد وابعت اللينك للطالب.</p></div>'; return; }
+    /* only what still needs a reply shows here; once it gets ✅ تمام or 🔁 يعيد it leaves this list (it stays in the student's record) */
+    const list = window.__inboxAll ? all : all.filter(x => x.status === 'submitted');
+    const more = done ? '<button class="btn ghost sm" id="inbAll" style="margin-top:10px">' + (window.__inboxAll ? '🙈 اخفي اللي اتراجع' : '📂 اعرض اللي اتراجع (' + done + ')') + '</button>' : '';
+    const wire = () => { const b = $('inbAll'); if(b) b.onclick = () => { window.__inboxAll = !window.__inboxAll; inbox(); }; };
+    if(!list.length){ app.innerHTML = '<div class="card"><h2>📥 التسليمات</h2><p class="muted">' + (all.length ? 'مفيش واجبات مستنية ردّك ✓' : 'لسه مفيش حد سلّم. اعمل واجب جديد وابعت اللينك للطالب.') + '</p>' + more + '</div>'; wire(); return; }
     const paths = list.flatMap(x => x.audio_paths || []);
     const urls = {};
     if(paths.length){ const u = await db.storage.from('recordings').createSignedUrls(paths, 3600); (u.data || []).forEach(x => { if(x.signedUrl) urls[x.path] = x.signedUrl; }); }
@@ -475,7 +479,8 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         rec.map(p => { const it = items[p.i] || {}; return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (p.label ? ' · ' + esc(p.label) : it.say ? ' · ' + esc(it.say) : it.title ? ' · ' + esc(it.title) : '') + '</div>' + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') + (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') + '</div>'; }).join('') +
         '<label>ردّك للطالب</label><textarea data-fb>' + esc(x.feedback || '') + '</textarea>' +
         '<div class="row" style="margin-top:8px"><button class="btn ok sm" data-act="reviewed">✅ تمام</button><button class="btn bad sm" data-act="redo">🔁 يعيد</button><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">🔗 لينك الطالب</button></div></div>';
-    }).join('');
+    }).join('') + more;
+    wire();
     app.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
       const c = b.closest('[data-id]'), fb = c.querySelector('[data-fb]').value.trim();
       const r = await db.from('submissions').update({status: b.dataset.act, feedback: fb || null, reviewed_at: new Date().toISOString()}).eq('id', c.dataset.id);
