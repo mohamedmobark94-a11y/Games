@@ -18,7 +18,7 @@
 <script src="../app/config.js"></script>
 <script>
 (async function(){
-  const id = new URLSearchParams(location.search).get('d') || '', ld = document.getElementById('ld');
+  const id = new URLSearchParams(location.search).get('d') || decodeURIComponent(location.hash.replace(/^#(d=)?/,'')) || '', ld = document.getElementById('ld');
   const fail = () => { ld.innerHTML = 'الدرس ده مش موجود أو اللينك ناقص.<br>This lesson link does not work.'; };
   if(!id) return fail();
   let db, data = null;
