@@ -478,12 +478,39 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         (wrong.length ? '<div class="small muted">غلط في: ' + wrong.map(m => { const it = items[m.i] || {}; const o = (it.options || [])[m.chose]; return 'س' + (m.i + 1) + (o != null ? ' (اختار «' + esc(typeof o === 'object' ? o.ar : o) + '»)' : ' (ما جاوبش)'); }).join('، ') + '</div>' : '') +
         rec.map(p => { const it = items[p.i] || {}; return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (p.label ? ' · ' + esc(p.label) : it.say ? ' · ' + esc(it.say) : it.title ? ' · ' + esc(it.title) : '') + '</div>' + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') + (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') + '</div>'; }).join('') +
         '<label>ردّك للطالب</label><textarea data-fb>' + esc(x.feedback || '') + '</textarea>' +
+        '<div class="row" style="margin-top:6px;align-items:center"><button type="button" class="btn ghost sm" data-vrec>🎙️ سجّل ردّ صوتي</button><span class="small muted" data-vst></span></div>' +
+        '<div data-vbox>' + (x.feedback_audio ? '<audio controls preload="none" data-vpath="' + esc(x.feedback_audio) + '"></audio>' : '') + '</div>' +
         '<div class="row" style="margin-top:8px"><button class="btn ok sm" data-act="reviewed">✅ تمام</button><button class="btn bad sm" data-act="redo">🔁 يعيد</button><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">🔗 لينك الطالب</button></div></div>';
     }).join('') + more;
     wire();
+    /* 🎙️ voice reply: recorded here, saved next to the student's recordings as <token>/fb-<submission>.webm */
+    const vp = [...app.querySelectorAll('[data-vpath]')].map(a => a.dataset.vpath);
+    if(vp.length){ db.storage.from('recordings').createSignedUrls(vp, 3600).then(u => (u.data || []).forEach(x => { const a = app.querySelector('[data-vpath="' + x.path + '"]'); if(a && x.signedUrl) a.src = x.signedUrl; })); }
+    app.querySelectorAll('[data-vrec]').forEach(b => b.onclick = async () => {
+      const c = b.closest('[data-id]'), st = c.querySelector('[data-vst]'), box = c.querySelector('[data-vbox]');
+      if(c.__rec){ c.__rec.stop(); return; }
+      let stream; try{ stream = await navigator.mediaDevices.getUserMedia({audio: true}); }catch(e){ return alert('افتح إذن المايك للموقع الأول.'); }
+      const mt = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/webm'].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
+      const rec = new MediaRecorder(stream, mt ? {mimeType: mt} : undefined), parts = [];
+      rec.ondataavailable = e => { if(e.data.size) parts.push(e.data); };
+      rec.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop()); c.__rec = null; b.textContent = '🎙️ سجّل تاني'; b.classList.remove('bad');
+        const type = rec.mimeType || 'audio/webm', ext = type.indexOf('mp4') >= 0 ? 'm4a' : 'webm', blob = new Blob(parts, {type});
+        const x = list.find(y => String(y.id) === c.dataset.id), tok = x && x.assignment_targets && x.assignment_targets.token;
+        if(!tok) return; st.textContent = 'بيرفع…';
+        const path = tok + '/fb-' + c.dataset.id + '-' + Date.now() + '.' + ext;
+        const up = await db.storage.from('recordings').upload(path, blob, {contentType: type, upsert: true});
+        if(up.error){ st.textContent = ''; return alert(up.error.message); }
+        c.dataset.audio = path; st.textContent = '✓ اتسجل — اضغط تمام أو يعيد عشان يوصل للطالب';
+        box.innerHTML = '<audio controls src="' + URL.createObjectURL(blob) + '"></audio>';
+      };
+      rec.start(); c.__rec = rec; b.textContent = '⏹ وقّف التسجيل'; b.classList.add('bad'); st.textContent = '🔴 بيسجل…';
+    });
     app.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
       const c = b.closest('[data-id]'), fb = c.querySelector('[data-fb]').value.trim();
-      const r = await db.from('submissions').update({status: b.dataset.act, feedback: fb || null, reviewed_at: new Date().toISOString()}).eq('id', c.dataset.id);
+      const upd = {status: b.dataset.act, feedback: fb || null, reviewed_at: new Date().toISOString()};
+      if(c.dataset.audio) upd.feedback_audio = c.dataset.audio;
+      const r = await db.from('submissions').update(upd).eq('id', c.dataset.id);
       if(r.error) return alert(r.error.message); flash('اتحفظ ✓'); inbox();
     });
     app.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));

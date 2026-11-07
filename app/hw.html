@@ -109,11 +109,13 @@ audio{width:100%;margin-top:8px}
       '<span class="tag">' + L(A.kind === 'test' ? 'test' : 'hw') + (A.subject ? ' · ' + esc(A.subject) : '') + '</span>' +
       (A.due_date ? ' <span class="tag">' + L('due') + ': ' + esc(A.due_date) + '</span>' : '') +
       (c.intro ? '<div class="note">' + esc(pick(c.intro.ar, c.intro.en)) + '</div>' : '');
-    if(A.last && (A.last.feedback || A.last.status === 'redo'))
-      h += '<div class="note"><b>' + L(A.last.status === 'redo' ? 'redo' : 'teacher') + '</b>' + (A.last.feedback ? '<br>' + esc(A.last.feedback) : '') + '</div>';
+    if(A.last && (A.last.feedback || A.last.feedback_audio || A.last.status === 'redo'))
+      h += '<div class="note"><b>' + L(A.last.status === 'redo' ? 'redo' : 'teacher') + '</b>' + (A.last.feedback ? '<br>' + esc(A.last.feedback) : '') +
+        (A.last.feedback_audio ? '<div style="margin-top:8px">🎧 <audio controls preload="none" id="fbVoice" style="width:100%;margin-top:4px"></audio></div>' : '') + '</div>';
     if(A.page_url) h += '<div class="row" style="margin-top:12px"><a class="btn ghost" href="' + esc(A.page_url) + '" target="_blank" rel="noopener">' + L('open') + '</a></div>';
     h += '</div>';
     $('app').innerHTML = h;
+    if(A.last && A.last.feedback_audio) db.storage.from('recordings').createSignedUrl(A.last.feedback_audio, 21600).then(u => { const a = $('fbVoice'); if(a && u.data) a.src = u.data.signedUrl; });
     if(!$('items').children.length) $('items').innerHTML = items.map((it, i) => '<div data-box="' + i + '"></div>').join('');
     items.forEach((it, i) => {
       if(it.type === 'page') return;

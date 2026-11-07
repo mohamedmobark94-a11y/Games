@@ -80,6 +80,7 @@ ul{margin:6px 0;padding-inline-start:22px}
         (x.due_date ? '<div class="small muted">' + T('آخر ميعاد: ', 'Due: ') + fmt(x.due_date) + '</div>' : '') +
         (x.last && x.last.max_score ? '<div><b style="color:var(--ok);font-size:1.2rem">' + x.last.score + ' / ' + x.last.max_score + '</b></div>' : '') +
         (x.last && x.last.feedback ? '<div class="fb">💬 ' + esc(x.last.feedback) + '</div>' : '') +
+        (x.last && x.last.feedback_audio ? '<div class="fb">🎧 ' + T('رد المعلم الصوتي', 'Your teacher\'s voice reply') + '<audio controls preload="none" style="width:100%;margin-top:4px" data-fbv="' + esc(x.last.feedback_audio) + '"></audio></div>' : '') +
         '<div class="row" style="margin-top:8px"><a class="btn' + (st[0] === 'todo' || st[0] === 'redo' ? '' : ' ghost') + '" href="' + hwUrl(x.token) + '">' + (st[0] === 'todo' ? T('ابدأ الواجب ▶', 'Start ▶') : T('افتح', 'Open')) + '</a></div></div>'; }).join('')
       : '<div class="card muted">' + T('مفيش واجبات لسه.', 'No homework yet.') + '</div>');
     const C = P.corrections || [];
@@ -103,6 +104,7 @@ ul{margin:6px 0;padding-inline-start:22px}
     h += '<h2>🎮 ' + T('العب وراجع', 'Play and review') + '</h2><div class="card"><div>' + T('ألعاب القرآن والتجويد والعربي — كلها مجانية.', 'Qur’an, tajweed and Arabic games — all free.') + '</div><div class="row" style="margin-top:8px"><a class="btn" href="' + TQ.site + '" target="_blank" rel="noopener">' + T('افتح الألعاب ↗', 'Open the games ↗') + '</a></div></div>';
     h += '<div class="foot">Mohamed Mubarak · ' + T('المعلم محمد مبارك', 'Teacher Mohamed Mubarak') + '</div>';
     app.innerHTML = h;
+    app.querySelectorAll('[data-fbv]').forEach(a => db.storage.from('recordings').createSignedUrl(a.dataset.fbv, 21600).then(u => { if(u.data) a.src = u.data.signedUrl; }));
     app.querySelectorAll('[data-cr]').forEach(b => b.onclick = () => openCr(b.dataset.cr, b));
   }
   async function openCr(id, b){
