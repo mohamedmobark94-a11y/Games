@@ -499,7 +499,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         const x = list.find(y => String(y.id) === c.dataset.id), tok = x && x.assignment_targets && x.assignment_targets.token;
         if(!tok) return; st.textContent = 'بيرفع…';
         const path = tok + '/fb-' + c.dataset.id + '-' + Date.now() + '.' + ext;
-        const up = await db.storage.from('recordings').upload(path, blob, {contentType: type, upsert: true});
+        const up = await db.storage.from('recordings').upload(path, blob, {contentType: type});
         if(up.error){ st.textContent = ''; return alert(up.error.message); }
         c.dataset.audio = path; st.textContent = '✓ اتسجل — اضغط تمام أو يعيد عشان يوصل للطالب';
         box.innerHTML = '<audio controls src="' + URL.createObjectURL(blob) + '"></audio>';
