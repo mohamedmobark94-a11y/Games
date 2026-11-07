@@ -268,6 +268,72 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       $g('micGo').textContent = '⏹ وقّف'; $g('micGo').style.background = '#111'; $g('micLive').textContent = '🔴 بيسمع… اتكلم';
     };
   }
+  /* Runs inside the report generator page too: ✅ check the report before sending. Free, no key:
+     1) checks here: mixed Arabic/English lines, empty or repeated lines, a word written twice, empty lesson/homework;
+     2) spelling and grammar from LanguageTool (api.languagetool.org): only the report lines go there, never the
+        student's name or the header. Each suggestion has a button that fixes the line in place. */
+  function genCheck(){
+    if(window.__tqChk) return; window.__tqChk = true;
+    const go = document.getElementById('micGo') || document.querySelector('#page-report .form-side .section-body');
+    const host = go ? go.closest('.section-body') : null; if(!host) return;
+    const KEYS = [['lesson', 'محتوى الدرس'], ['hw', 'الواجب'], ['tajwid', 'التجويد'], ['arabic', 'العربي'], ['arabichw', 'واجب العربي'], ['islamic', 'الإسلاميات'], ['islamichw', 'واجب الإسلاميات'], ['notes', 'ملاحظات']];
+    const wrap = document.createElement('div'); wrap.style.cssText = 'margin-top:12px;border-top:1.5px dashed #f3c4c4;padding-top:12px';
+    wrap.innerHTML = '<button type="button" id="chkGo" style="width:100%;padding:13px;border:0;border-radius:10px;background:#177a5b;color:#fff;font:700 15px inherit;cursor:pointer">✅ راجع التقرير قبل الإرسال</button><div id="chkOut" style="margin-top:10px;font-size:13.5px;line-height:1.6"></div>';
+    host.appendChild(wrap);
+    const $g = id => document.getElementById(id);
+    const esc = x => String(x).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+    const on = k => { try{ return window.isOn(k); }catch(e){ return true; } };
+    const AR = /[؀-ۿ]/, LAT = /[A-Za-z]{3,}/;
+    /* every line of the report body, with the textarea it lives in */
+    const lines = () => {
+      const out = [];
+      KEYS.forEach(([k, name]) => { if(!on(k)) return; document.querySelectorAll('#list-' + k + ' textarea').forEach(ta => { if(ta.value.trim()) out.push({k, name, ta}); }); });
+      const e = $g('encourage'); if(e && e.value.trim()) out.push({k: 'encourage', name: 'التشجيع', ta: e});
+      return out;
+    };
+    const fix = (ta, from, len, to) => { ta.value = ta.value.slice(0, from) + to + ta.value.slice(from + len); ta.dispatchEvent(new Event('input', {bubbles: true})); try{ window.saveDraft(); }catch(e){} };
+    $g('chkGo').onclick = async () => {
+      const out = $g('chkOut'), L = lines(); let lang = 'ar'; try{ lang = window.effectiveLang(); }catch(e){}
+      const issues = [];   // {i, msg, from, len, sugg:[]}
+      if(!L.length){ out.innerHTML = '<div style="color:#9c3f3f">التقرير فاضي — مفيش سطور أراجعها.</div>'; return; }
+      ['lesson', 'hw'].forEach(k => { if(on(k) && !L.some(x => x.k === k)) issues.push({i: -1, msg: 'جزء «' + (k === 'lesson' ? 'محتوى الدرس' : 'الواجب') + '» مفتوح وفاضي.'}); });
+      const seen = {};
+      L.forEach((x, i) => { const v = x.ta.value.trim(), n = v.toLowerCase().replace(/\s+/g, ' ');
+        if(seen[n] != null) issues.push({i, msg: 'السطر ده مكرر.'}); seen[n] = i;
+        const plain = v.replace(/\([^)]*\)|«[^»]*»|"[^"]*"|https?:\S+/g, '');
+        if(lang === 'ar' && LAT.test(plain) && !/^(Qur|Tajw|Noor|Al-)/.test(plain)) issues.push({i, msg: 'فيه كلام إنجليزي والتقرير عربي.'});
+        if(lang === 'en' && AR.test(plain)) issues.push({i, msg: 'فيه كلام عربي والتقرير إنجليزي (لو آية أو كلمة مقصودة، حطها بين «» ).'});
+        const dup = v.match(/(^|\s)(\S{2,})\s+\2(?=\s|$|[.,،])/i); if(dup) issues.push({i, msg: 'كلمة مكتوبة مرتين: «' + dup[2] + '».', from: v.indexOf(dup[0]) + dup[1].length, len: dup[0].length - dup[1].length, sugg: [dup[2]]});
+        if(v.split(/\s+/).length < 2) issues.push({i, msg: 'السطر قصير قوي — ممكن يبقى مش مفهوم لولي الأمر.'});
+        /* common Arabic slips the spell checker lets through */
+        [[/(^|\s)(سوره)(?=\s|$)/, 'سورة'], [/(^|\s)(الصلاه)(?=\s|$)/, 'الصلاة'], [/(^|\s)(الزكاه)(?=\s|$)/, 'الزكاة'], [/(^|\s)(التلاوه)(?=\s|$)/, 'التلاوة'], [/(^|\s)(القراءه)(?=\s|$)/, 'القراءة'],
+         [/(^|\s)(انشاء الله|ان شاء الله)(?=\s|$|[.،])/, 'إن شاء الله'], [/(^|\s)(ماشاء الله|ماشاءالله)(?=\s|$|[.،!])/, 'ما شاء الله'], [/(^|\s)(الي)(?=\s)/, 'إلى']].forEach(([re, to]) => {
+          const m = v.match(re); if(m) issues.push({i, msg: 'الأصح: «' + to + '».', from: m.index + m[1].length, len: m[2].length, sugg: [to]}); });
+      });
+      out.innerHTML = '⏳ بيراجع الإملاء والقواعد…';
+      try{
+        const text = L.map(x => x.ta.value.trim()).join('\n'), starts = []; let pos = 0; L.forEach(x => { starts.push(pos); pos += x.ta.value.trim().length + 1; });
+        const r = await fetch('https://api.languagetool.org/v2/check', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({text, language: lang === 'en' ? 'en-GB' : 'ar'})});
+        const j = await r.json();
+        (j.matches || []).forEach(m => { let i = starts.length - 1; while(i > 0 && starts[i] > m.offset) i--;
+          const lead = L[i].ta.value.length - L[i].ta.value.trimStart().length;
+          issues.push({i, msg: m.message, from: m.offset - starts[i] + lead, len: m.length, sugg: (m.replacements || []).slice(0, 3).map(x => x.value)}); });
+      }catch(e){ issues.push({i: -1, msg: 'مقدرتش أوصل لمراجعة الإملاء دلوقتي (النت؟). المراجعة المحلية اتعملت.'}); }
+      if(!issues.length){ out.innerHTML = '<div style="background:#e8f4ee;color:#0e4d3c;border-radius:9px;padding:10px 12px;font-weight:700">✓ التقرير سليم: مفيش أخطاء إملاء أو قواعد، ولا تكرار، ولا خلط لغات.</div>'; return; }
+      out.innerHTML = '<div style="font-weight:700;color:#9c3f3f;margin-bottom:6px">لقيت ' + issues.length + ' ملاحظة:</div>' + issues.map((x, n) => {
+        const ln = x.i >= 0 ? L[x.i] : null, v = ln ? ln.ta.value : '';
+        const shown = ln ? (x.len ? esc(v.slice(0, x.from)) + '<mark style="background:#fde68a">' + esc(v.substr(x.from, x.len)) + '</mark>' + esc(v.slice(x.from + x.len)) : esc(v)) : '';
+        return '<div style="border:1px solid #f1d5d5;border-radius:9px;padding:8px 10px;margin-bottom:6px;background:#fff">' +
+          (ln ? '<div style="font-size:11.5px;color:#8a978f">' + esc(ln.name) + '</div><div>' + shown + '</div>' : '') +
+          '<div style="color:#9c3f3f;font-size:12.5px;margin-top:3px">• ' + esc(x.msg) + '</div>' +
+          ((x.sugg || []).length && ln ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px">' + x.sugg.map((sg, k) => '<button type="button" data-fx="' + n + ':' + k + '" style="border:1px solid #177a5b;background:#fff;color:#177a5b;border-radius:7px;padding:3px 9px;font:inherit;font-size:12.5px;cursor:pointer">✎ ' + (esc(sg) || 'احذف') + '</button>').join('') + '</div>' : '') + '</div>'; }).join('') +
+        '<div style="font-size:11.5px;color:#8a978f">اضغط ✎ عشان يتصلح، أو عدّل السطر بإيدك، وبعدين اضغط «راجع» تاني.</div>';
+      out.querySelectorAll('[data-fx]').forEach(b => b.onclick = () => { const [n, k] = b.dataset.fx.split(':').map(Number), x = issues[n];
+        fix(L[x.i].ta, x.from, x.len, x.sugg[k]); b.closest('div[style*="border:1px"]').style.opacity = .45; b.parentNode.innerHTML = '<span style="color:#177a5b;font-size:12.5px">✓ اتصلح</span>';
+        out.querySelectorAll('[data-fx]').forEach(o => { if(issues[+o.dataset.fx.split(':')[0]].i === x.i) o.disabled = true, o.title = 'اضغط «راجع» تاني بعد التصليح'; }); });
+    };
+  }
   /* Runs inside the report generator page too: who-is-who fixes. The name list itself is private (kv 'genAliases'):
      {drop:{id:[tokens]}, add:{id:[tokens]}, ids:[{id, phrases, tokens, first}]}; accents are ignored in names. */
   function genNameFixes(A){
@@ -485,7 +551,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     }catch(e){ console.warn('gen-shim swap', e); }
     /* small fixes for the stored generator (skipped automatically once the stored file already contains them) */
     let aliases = null; try{ aliases = JSON.parse(await kvGet('genAliases')); }catch(e){}
-    const fix = '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400);setTimeout(' + genMic.toString() + ',600)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
+    const fix = '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400);setTimeout(' + genMic.toString() + ',600);setTimeout(' + genCheck.toString() + ',700)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
     html = /<\/body>/i.test(html) ? html.replace(/<\/body>(?![\s\S]*<\/body>)/i, fix + '</body>') : html + fix;
     genUrl = URL.createObjectURL(new Blob([html], {type: 'text/html;charset=utf-8'}));
     if(view === 'report') reportView();
