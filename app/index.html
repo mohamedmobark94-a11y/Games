@@ -274,6 +274,9 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         student's name or the header. Each suggestion has a button that fixes the line in place. */
   function genCheck(){
     if(window.__tqChk) return; window.__tqChk = true;
+    /* on the site the generator has no Claude of its own: show the Anthropic key box in «AI helpers» (it is hidden by default) */
+    try{ const kb = document.getElementById('apikeyBlock'); if(kb && !(typeof window.aiReady === 'function' && window.aiReady())){ kb.style.display = 'block';
+      const sec = kb.closest('.section'); if(sec) sec.classList.remove('collapsed'); } }catch(e){}
     const go = document.getElementById('micGo') || document.querySelector('#page-report .form-side .section-body');
     const host = go ? go.closest('.section-body') : null; if(!host) return;
     const KEYS = [['lesson', 'محتوى الدرس'], ['hw', 'الواجب'], ['tajwid', 'التجويد'], ['arabic', 'العربي'], ['arabichw', 'واجب العربي'], ['islamic', 'الإسلاميات'], ['islamichw', 'واجب الإسلاميات'], ['notes', 'ملاحظات']];
@@ -322,7 +325,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       }catch(e){
         const msg = String(e && e.message || e);
         out.innerHTML = '<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:9px 11px;color:#7c2d12">' +
-          (/key|API|no-ai|401|403/i.test(msg) ? 'الترتيب محتاج مفتاح Anthropic: افتح قسم «🔑 AI helpers» تحت وحط المفتاح مرة واحدة (بيتحفظ). أو انسخ الطلب ده وابعته لـClaude في الشات:' : 'حصلت مشكلة: ' + esc(msg) + '<br>ممكن تنسخ الطلب وتبعته لـClaude في الشات:') +
+          (/key|API|no-ai|401|403/i.test(msg) ? 'الترتيب محتاج مفتاح Anthropic: افتح قسم «🔑 AI helpers»، حط المفتاح في خانة «Anthropic key» واضغط Test مرة واحدة (بيتحفظ). أو انسخ الطلب ده وابعته لـClaude في الشات:' : 'حصلت مشكلة: ' + esc(msg) + '<br>ممكن تنسخ الطلب وتبعته لـClaude في الشات:') +
           '<br><button type="button" id="tidyCopy" style="margin-top:6px;border:1px solid #7c3aed;background:#fff;color:#7c3aed;border-radius:7px;padding:4px 10px;font:inherit;cursor:pointer">📋 انسخ الطلب</button></div>';
         $g('tidyCopy').onclick = () => { const txt = prompt.replace('Answer with JSON only, the same keys, each a list of points (encourage: a string).', 'Answer with the tidy points only, under the same section names.');
           (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { $g('tidyCopy').textContent = '✓ اتنسخ'; }, () => { window.prompt('انسخ:', txt); }); };
