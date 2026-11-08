@@ -326,14 +326,19 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       try{
         let r = null;
         const hasClaude = (typeof window.aiReady === 'function' && window.aiReady()) || !!(($g('apiKey') || {}).value || '').trim();
-        if(hasClaude && typeof window.callClaudeJSON === 'function') r = await window.callClaudeJSON(prompt);
-        else if(gemKey) r = await gemini(prompt);
-        else throw new Error('no-ai');
+        let used = '';
+        if(hasClaude && typeof window.callClaudeJSON === 'function'){
+          try{ out.textContent = '⏳ Claude…'; r = await window.callClaudeJSON(prompt); used = 'Claude'; }
+          catch(e){ if(!gemKey) throw e; console.warn('Claude failed, trying Gemini', e); }   // Claude first; Gemini if Claude cannot answer
+        }
+        if(!r && gemKey){ r = await gemini(prompt); used = 'Gemini'; }
+        if(!r) throw new Error('no-ai');
+        window.__tidyUsed = used;
         let n = 0;
         Object.keys(secs).forEach(k => { const v = r && r[k]; if(k === 'encourage'){ if(typeof v === 'string' && v.trim()){ $g('encourage').value = v.trim(); $g('encourage').dispatchEvent(new Event('input', {bubbles: true})); n++; } return; }
           if(Array.isArray(v) && v.length){ window.clearList(k); v.forEach(x => { if(String(x).trim()) window.addItem(k, String(x).trim()); }); n++; } });
         try{ window.render(); window.saveDraft(); }catch(e){}
-        out.innerHTML = n ? '<span style="color:#177a5b;font-weight:700">✓ اترتّب. راجع السطور، وبعدين اضغط «✅ راجع التقرير».</span>' : '<span style="color:#9c3f3f">مرجعش ترتيب — جرّب تاني.</span>';
+        out.innerHTML = n ? '<span style="color:#177a5b;font-weight:700">✓ اترتّب بـ ' + used + '. راجع السطور، وبعدين اضغط «✅ راجع التقرير».</span>' : '<span style="color:#9c3f3f">مرجعش ترتيب — جرّب تاني.</span>';
       }catch(e){
         const msg = String(e && e.message || e);
         out.innerHTML = '<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:9px 11px;color:#7c2d12">' +
