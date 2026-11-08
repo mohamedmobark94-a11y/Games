@@ -90,12 +90,27 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
     const box = document.getElementById('recs'); box.innerHTML = '';
     H.tasks.filter(k => k.t === 'record').forEach(k => {
       const c = document.createElement('div'); c.className = 'card';
-      c.innerHTML = '<div class="q">🎙️ ' + T(k.label) + '</div>' + (k.text ? '<div class="ayat">' + k.text + '</div>' : '') + (k.ref ? '<div class="small">' + T(k.ref) + '</div>' : '') +
-        (k.say ? '<div class="small" style="margin-top:6px">' + T(k.say) + '</div>' : '') + '<div data-rb style="margin-top:8px"></div>';
+      c.innerHTML = '<div class="q" data-l>🎙️ ' + T(k.label) + '</div>' + (k.text ? '<div class="ayat">' + k.text + '</div>' : '') + (k.ref ? '<div class="small" data-r>' + T(k.ref) + '</div>' : '') +
+        (k.say ? '<div class="small" style="margin-top:6px" data-s>' + T(k.say) + '</div>' : '') + '<div data-rb style="margin-top:8px"></div>';
+      c.__k = k;
       box.appendChild(c); TQHW.recordButton(c.querySelector('[data-rb]'), (k.label && (k.label.ar || k.label)) || 'recording');
     });
   }
-  TQHW.on('lang', () => { draw(); });
+  /* a language switch only changes the words, so recordings already made stay */
+  function relabelRecs(){ document.querySelectorAll('#recs .card').forEach(c => { const k = c.__k; if(!k) return;
+    const l = c.querySelector('[data-l]'), r = c.querySelector('[data-r]'), sy = c.querySelector('[data-s]');
+    if(l) l.textContent = '🎙️ ' + T(k.label); if(r) r.textContent = T(k.ref); if(sy) sy.textContent = T(k.say); }); }
+  TQHW.on('lang', () => { draw(); relabelRecs(); langBtn(); });
+  /* opened from a public link (not inside the homework page): its own ع / EN button, top corner */
+  function langBtn(){
+    if(TQHW.embedded) return;
+    let b = document.getElementById('tqLangSw');
+    if(!b){ b = document.createElement('button'); b.id = 'tqLangSw'; b.type = 'button';
+      b.style.cssText = 'position:fixed;top:12px;inset-inline-end:12px;z-index:50;min-height:42px;padding:0 16px;border-radius:999px;border:2px solid #c99a3f;background:#fff;color:#0e4d3c;font:800 16px Cairo,sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.12)';
+      b.onclick = () => TQHW.setLang(TQHW.lang === 'en' ? 'ar' : 'en'); document.body.appendChild(b); }
+    b.textContent = TQHW.lang === 'en' ? 'عربي' : 'English';
+  }
+  langBtn();
   draw(); drawRecs();
   if(!steps.length) TQHW.result({score: null, max: null, done: true, details: []});
 })();
