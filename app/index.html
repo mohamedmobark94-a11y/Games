@@ -47,6 +47,7 @@ audio{width:100%;margin-top:6px}
 table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:start;vertical-align:top}
 .link{direction:ltr;unicode-bidi:isolate;font-size:.85rem;word-break:break-all;color:var(--muted)}
 .full .wrap{max-width:none;padding:0}
+@keyframes subIn{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
 #genFrame{display:block;width:100%;height:calc(100vh - 58px);border:0;background:#fff}
 .md h2,.md h3,.md h4,.md h5{margin:14px 0 6px;color:var(--gold)}.md p{margin:4px 0}.md .mdq{border-inline-start:3px solid var(--gold);padding:2px 10px;color:var(--muted);margin:6px 0}
 .mdt{margin:8px 0;font-size:.9rem;background:var(--card2);border-radius:10px;overflow:hidden}.mdt th{color:var(--gold)}.md code{background:var(--card2);padding:0 4px;border-radius:4px}
@@ -121,7 +122,46 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     go(view);
     checkPending(); setInterval(checkPending, 60000); document.addEventListener('visibilitychange', () => { if(!document.hidden) checkPending(); });
     ensureToday(); setInterval(ensureToday, 30 * 60000);
+    watchSubs(); setInterval(watchSubs, 30000); document.addEventListener('visibilitychange', () => { if(!document.hidden) watchSubs(); });
   }
+  /* 🔔 a student handed in homework: a pop-up on the page + a soft bell, and a system notification when the tab is in the
+     background (the browser asks once). Checks every 30 s while this page is open; already-seen ones are remembered on this device. */
+  let subsFirst = true;
+  async function watchSubs(){
+    try{
+      const r = await db.from('submissions').select('id, submitted_at, score, max_score, assignment_targets(students(name_ar,name_en), assignments(title))')
+        .eq('status', 'submitted').order('submitted_at', {ascending: false}).limit(30);
+      if(r.error) return;
+      const list = r.data || []; let seen = []; try{ seen = JSON.parse(localStorage.getItem('tq-seen-subs') || '[]'); }catch(e){}
+      $('nNew').hidden = !list.length; $('nNew').textContent = list.length;
+      const fresh = list.filter(x => seen.indexOf(x.id) < 0);
+      const keep = list.map(x => x.id).concat(seen).slice(0, 200); try{ localStorage.setItem('tq-seen-subs', JSON.stringify(keep)); }catch(e){}
+      if(subsFirst){ subsFirst = false; if(!seen.length) return; }   // the very first visit on a device: no pop-ups for old work
+      fresh.slice(0, 3).reverse().forEach(x => {
+        const t = x.assignment_targets || {}, st = t.students || {}, a = t.assignments || {};
+        const who = st.name_ar || st.name_en || 'طالب', what = a.title || 'واجب', sc = x.max_score ? ' — ' + x.score + '/' + x.max_score : '';
+        subPop(who, what + sc);
+        try{ if('Notification' in window && Notification.permission === 'granted' && document.hidden){
+          const n = new Notification('📥 ' + who + ' سلّم الواجب', {body: what + sc, tag: 'sub-' + x.id}); n.onclick = () => { window.focus(); go('inbox'); n.close(); }; } }catch(e){}
+      });
+    }catch(e){}
+  }
+  function subPop(who, what){
+    let box = $('subPops'); if(!box){ box = document.createElement('div'); box.id = 'subPops'; box.style.cssText = 'position:fixed;top:14px;left:14px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:340px'; document.body.appendChild(box); }
+    const d = document.createElement('div');
+    d.style.cssText = 'background:#fff;border:2px solid #177a5b;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.2);padding:12px 14px;font:600 14px Cairo,sans-serif;color:#16241e;direction:rtl;animation:subIn .4s ease';
+    d.innerHTML = '<div style="font-size:15px;font-weight:800;color:#0e4d3c">📥 ' + esc(who) + ' سلّم الواجب</div><div class="small" style="margin:3px 0 8px;color:#4d6459">' + esc(what) + '</div>' +
+      '<div style="display:flex;gap:6px"><button class="btn ok sm" data-o>افتح التسليمات</button><button class="btn ghost sm" data-x>✕</button></div>';
+    d.querySelector('[data-o]').onclick = () => { go('inbox'); d.remove(); };
+    d.querySelector('[data-x]').onclick = () => d.remove();
+    box.appendChild(d); setTimeout(() => d.remove(), 60000);
+    try{ const c = new (window.AudioContext || window.webkitAudioContext)(); [784, 1046].forEach((f, i) => { const o = c.createOscillator(), g = c.createGain(); o.frequency.value = f;
+      g.gain.setValueAtTime(.0001, c.currentTime + i * .25); g.gain.exponentialRampToValueAtTime(.2, c.currentTime + i * .25 + .02); g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + i * .25 + .8);
+      o.connect(g).connect(c.destination); o.start(c.currentTime + i * .25); o.stop(c.currentTime + i * .25 + .9); }); }catch(e){}
+  }
+  /* ask once for system notifications, on the teacher's first click (browsers only ask after a click) */
+  document.addEventListener('click', function askNotif(){ document.removeEventListener('click', askNotif, true);
+    try{ if('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }catch(e){} }, true);
   /* «دروس اليوم» safety net: the nightly task builds today's list from Google Calendar. If it did not run (e.g. usage limit),
      build it from the weekly roster (kv deskRoster, kept in line with the calendar) so the tab never shows an old day.
      Private rules in kv 'dayRules': {skip:[names with no lesson prep], keys:{name:planKey}, times:{name:{weekday:'HH:MM'}}}. */
