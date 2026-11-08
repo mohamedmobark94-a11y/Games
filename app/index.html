@@ -697,7 +697,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   /* ---------- 📥 submissions ---------- */
   async function inbox(){
     app.innerHTML = '<div class="card muted">بيحمّل…</div>';
-    const r = await db.from('submissions').select('*, assignment_targets(token, students(id,name_ar,name_en), assignments(id,title,kind,content))').order('submitted_at', {ascending: false}).limit(80);
+    const r = await db.from('submissions').select('*, assignment_targets(token, students(id,name_ar,name_en,lang), assignments(id,title,kind,content))').order('submitted_at', {ascending: false}).limit(80);
     if(r.error){ app.innerHTML = '<div class="card">' + esc(r.error.message) + '</div>'; return; }
     const all = r.data || [], waiting = all.filter(x => x.status === 'submitted').length, done = all.length - waiting;
     $('nNew').hidden = !waiting; $('nNew').textContent = waiting;
@@ -722,7 +722,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         (wrong.length ? '<div class="small muted">غلط في: ' + wrong.map(m => { const it = items[m.i] || {}; const o = (it.options || [])[m.chose]; return 'س' + (m.i + 1) + (o != null ? ' (اختار «' + esc(typeof o === 'object' ? o.ar : o) + '»)' : ' (ما جاوبش)'); }).join('، ') + '</div>' : '') +
         rec.map(p => { const it = items[p.i] || {}; return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (p.label ? ' · ' + esc(p.label) : it.say ? ' · ' + esc(it.say) : it.title ? ' · ' + esc(it.title) : '') + '</div>' + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') + (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') + '</div>'; }).join('') +
         '<label>ردّك للطالب</label><textarea data-fb>' + esc(x.feedback || '') + '</textarea>' +
-        '<div class="row" style="margin-top:6px;align-items:center"><button type="button" class="btn ghost sm" data-vrec>🎙️ سجّل ردّ صوتي</button><span class="small muted" data-vst></span></div>' +
+        '<div class="row" style="margin-top:6px;align-items:center"><button type="button" class="btn ghost sm" data-vrec>🎙️ سجّل ردّ صوتي</button><button type="button" class="btn ghost sm" data-dict>🗣️ اتكلم ويتكتب</button><button type="button" class="btn ghost sm" data-polish>✨ حوّلها رسالة للطالب</button><span class="small muted" data-vst></span></div>' +
         '<div data-vbox>' + (x.feedback_audio ? '<audio controls preload="none" data-vpath="' + esc(x.feedback_audio) + '"></audio>' : '') + '</div>' +
         '<div class="row" style="margin-top:8px"><button class="btn ok sm" data-act="reviewed">✅ تمام</button><button class="btn bad sm" data-act="redo">🔁 يعيد</button><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">🔗 لينك الطالب</button></div></div>';
     }).join('') + more;
@@ -749,6 +749,50 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         box.innerHTML = '<audio controls src="' + URL.createObjectURL(blob) + '"></audio>';
       };
       rec.start(); c.__rec = rec; b.textContent = '⏹ وقّف التسجيل'; b.classList.add('bad'); st.textContent = '🔴 بيسجل…';
+    });
+    /* 🗣️ speak and it is typed into the reply box (browser speech-to-text, Egyptian Arabic) */
+    app.querySelectorAll('[data-dict]').forEach(b => b.onclick = () => {
+      const c = b.closest('[data-id]'), ta = c.querySelector('[data-fb]'), st = c.querySelector('[data-vst]');
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if(!SR) return alert('الكتابة بالصوت محتاجة Edge أو Chrome.');
+      if(c.__dict){ c.__dict.stop(); return; }
+      const r = new SR(); r.lang = 'ar-EG'; r.continuous = true; r.interimResults = true; c.__dict = r; const base = ta.value.trim();
+      let done = '';
+      r.onresult = ev => { let live = ''; for(let i = ev.resultIndex; i < ev.results.length; i++){ const x = ev.results[i]; if(x.isFinal) done += (done ? ' ' : '') + x[0].transcript.trim(); else live += x[0].transcript; }
+        ta.value = [base, done, live].filter(Boolean).join(base || done ? ' ' : ''); };
+      r.onend = () => { c.__dict = null; b.textContent = '🗣️ اتكلم ويتكتب'; b.classList.remove('bad'); st.textContent = done ? 'اتكتب ✓ — عدّله أو دوس «✨ حوّلها رسالة»' : ''; };
+      r.onerror = e => { if(e.error === 'not-allowed') alert('افتح إذن المايك للموقع.'); };
+      r.start(); b.textContent = '⏹ خلصت'; b.classList.add('bad'); st.textContent = '🔴 بيسمع… اتكلم';
+    });
+    /* ✨ your words → a short, warm message to the student in the student's language (Claude with the saved Anthropic key, else Gemini) */
+    app.querySelectorAll('[data-polish]').forEach(b => b.onclick = async () => {
+      const c = b.closest('[data-id]'), ta = c.querySelector('[data-fb]'), st = c.querySelector('[data-vst]'), raw = ta.value.trim();
+      if(!raw) return alert('اكتب أو اتكلم الأول، وبعدين دوس ✨.');
+      const x = list.find(y => String(y.id) === c.dataset.id) || {}, t = x.assignment_targets || {}, s = t.students || {}, a = t.assignments || {};
+      const lang = s.lang === 'ar' ? 'Arabic (simple, warm)' : 'simple, easy English';
+      const prompt = 'A Quran / Arabic / Islamic studies teacher reviewed his student\'s homework "' + (a.title || '') + '"' + (x.max_score ? ' (score ' + x.score + '/' + x.max_score + ')' : '') + '. His notes (spoken, maybe in Egyptian Arabic, may have speech-recognition slips): «' + raw + '».\n' +
+        'Write the reply the student will read, in ' + lang + ', addressed to the student by first name "' + ((s.lang === 'ar' ? s.name_ar : s.name_en) || s.name_ar || '').split(' ')[0] + '": 2–4 short sentences, encouraging, keep every correction and instruction he gave, add nothing new. Plain text only, no quotes.';
+      const old = b.textContent; b.disabled = true; b.textContent = '✨ بيكتب…';
+      try{
+        let out = '';
+        const key = (await kvGet('apiKey') || '').replace(/^"|"$/g, '');
+        if(key){
+          const r = await fetch('https://api.anthropic.com/v1/messages', {method: 'POST', headers: {'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true'},
+            body: JSON.stringify({model: 'claude-sonnet-4-6', max_tokens: 400, messages: [{role: 'user', content: prompt}]})});
+          if(r.ok){ const j = await r.json(); out = (j.content || []).map(i => i.text || '').join('').trim(); }
+        }
+        if(!out){
+          const gk = (await kvGet('geminiKey') || '').replace(/^"|"$/g, '');
+          if(!gk) throw new Error('محتاج مفتاح Claude أو Gemini: حطّه مرة واحدة في صفحة «📝 التقرير» (AI helpers أو مفتاح Gemini).');
+          for(const m of ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-flash-latest']){
+            const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + m + ':generateContent', {method: 'POST', headers: {'Content-Type': 'application/json', 'x-goog-api-key': gk},
+              body: JSON.stringify({contents: [{role: 'user', parts: [{text: prompt}]}], generationConfig: {temperature: 0.4}})});
+            if(!r.ok) continue; const j = await r.json(); out = ((((j.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || '').join('').trim(); if(out) break;
+          }
+        }
+        if(!out) throw new Error('مرجعش رد — جرّب تاني بعد دقيقة.');
+        ta.dataset.raw = raw; ta.value = out; st.textContent = '✓ اتكتبت. راجعها وبعدين ✅ تمام أو 🔁 يعيد';
+      }catch(e){ alert(e.message || e); }
+      b.disabled = false; b.textContent = old;
     });
     app.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
       const c = b.closest('[data-id]'), fb = c.querySelector('[data-fb]').value.trim();
