@@ -71,7 +71,7 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
     if(qi >= steps.length){ g.innerHTML = steps.length ? '<div class="card end">' + (E() ? 'Well done! Finished 🌟' : 'أحسنت! خلّصت 🌟') + '<div style="margin-top:6px"><b dir="ltr">' + right + ' / ' + steps.length + '</b></div></div>' : ''; return; }
     const s = steps[qi], k = s.k, opts = k.t === 'classify' ? k.options : k.opts, a = k.t === 'classify' ? s.it.a : k.a, why = k.t === 'classify' ? s.it.why : k.why;
     g.innerHTML = '<div class="card"><div class="small">' + (qi + 1) + ' / ' + steps.length + (k.ask ? ' · ' + T(k.ask) : '') + '</div>' +
-      (k.t === 'classify' ? '<div class="word"' + (typeof s.it.w === 'object' && E() ? ' style="font-family:var(--f-en);font-size:1.4em"' : '') + '>' + T(s.it.w) + (s.it.ref ? '<small>' + T(s.it.ref) + '</small>' : '') + '</div>' : '<div class="q">' + T(k.q) + '</div>') +
+      (k.t === 'classify' ? '<div class="word"' + (typeof s.it.w === 'object' && E() ? ' dir="ltr" style="font-family:var(--f-en);font-size:1.4em"' : '') + '>' + T(s.it.w) + (s.it.ref ? '<small>' + T(s.it.ref) + '</small>' : '') + '</div>' : '<div class="q">' + T(k.q) + '</div>') +
       '<div class="opts">' + order(s, opts).map(j => '<button class="opt" data-j="' + j + '">' + T(opts[j]) + '</button>').join('') + '</div>' +
       (picked != null && why ? '<div class="why">' + T(why) + '</div>' : '') + '</div>';
     g.querySelectorAll('[data-j]').forEach(b => b.onclick = () => answer(+b.dataset.j, a, opts, s));
