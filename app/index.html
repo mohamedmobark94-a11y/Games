@@ -705,7 +705,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     const list = window.__inboxAll ? all : all.filter(x => x.status === 'submitted');
     const more = done ? '<button class="btn ghost sm" id="inbAll" style="margin-top:10px">' + (window.__inboxAll ? '🙈 اخفي اللي اتراجع' : '📂 اعرض اللي اتراجع (' + done + ')') + '</button>' : '';
     const wire = () => { const b = $('inbAll'); if(b) b.onclick = () => { window.__inboxAll = !window.__inboxAll; inbox(); }; };
-    if(!list.length){ app.innerHTML = '<div class="card"><h2>📥 التسليمات</h2><p class="muted">' + (all.length ? 'مفيش واجبات مستنية ردّك ✓' : 'لسه مفيش حد سلّم. اعمل واجب جديد وابعت اللينك للطالب.') + '</p>' + more + '</div>'; wire(); return; }
+    if(!list.length){ app.innerHTML = '<div class="card"><h2>📥 التسليمات</h2><p class="muted">' + (all.length ? 'مفيش واجبات مستنية ردّك ✓' : 'لسه مفيش حد سلّم. اعمل واجب جديد وابعت اللينك للطالب.') + '</p>' + more + '</div>'; wire(); addMonthly(); return; }
     const paths = list.flatMap(x => x.audio_paths || []);
     const urls = {};
     if(paths.length){ const u = await db.storage.from('recordings').createSignedUrls(paths, 3600); (u.data || []).forEach(x => { if(x.signedUrl) urls[x.path] = x.signedUrl; }); }
@@ -726,7 +726,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         '<div data-vbox>' + (x.feedback_audio ? '<audio controls preload="none" data-vpath="' + esc(x.feedback_audio) + '"></audio>' : '') + '</div>' +
         '<div class="row" style="margin-top:8px"><button class="btn ok sm" data-act="reviewed">✅ تمام</button><button class="btn bad sm" data-act="redo">🔁 يعيد</button><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">🔗 لينك الطالب</button></div></div>';
     }).join('') + more;
-    wire();
+    wire(); addMonthly();
     /* 🎙️ voice reply: recorded here, saved next to the student's recordings as <token>/fb-<submission>.webm */
     const vp = [...app.querySelectorAll('[data-vpath]')].map(a => a.dataset.vpath);
     if(vp.length){ db.storage.from('recordings').createSignedUrls(vp, 3600).then(u => (u.data || []).forEach(x => { const a = app.querySelector('[data-vpath="' + x.path + '"]'); if(a && x.signedUrl) a.src = x.signedUrl; })); }
@@ -758,6 +758,25 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       if(r.error) return alert(r.error.message); flash('اتحفظ ✓'); inbox();
     });
     app.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));
+  }
+
+  /* 📊 monthly summaries + monthly tests, made on the 1st of each month by the scheduled task (docs 'monthly', id YYYY-MM-<slug>) */
+  async function addMonthly(){
+    try{
+      const r = await db.from('docs').select('id,data').eq('collection', 'monthly').order('id', {ascending: false}).limit(60);
+      const rows = (r.data || []); if(!rows.length) return;
+      const M = rows[0].data.month || rows[0].id.slice(0, 7), mine = rows.filter(x => (x.data.month || x.id.slice(0, 7)) === M);
+      const d = document.createElement('details'); d.className = 'card'; d.style.cssText = 'border:2px solid #c99a3f';
+      d.innerHTML = '<summary style="cursor:pointer;font-weight:800;font-size:1.05rem">📊 ملخصات واختبارات شهر ' + esc(M) + ' (' + mine.length + ')</summary>' + mine.map((x, i) => { const v = x.data, st = v.stats || {};
+        return '<div class="item" style="margin-top:10px"><div class="row"><b>' + esc(v.name || v.slug) + '</b><span class="muted small">' + (st.lessons || 0) + ' درس · ' + (st.homework_done || 0) + '/' + (st.homework_sent || 0) + ' واجب' + (st.avg_score != null ? ' · ' + st.avg_score + '%' : '') + '</span></div>' +
+          '<div class="small" style="white-space:pre-wrap;margin:6px 0;max-height:140px;overflow:auto;background:var(--bg2,#f6f8f7);border-radius:8px;padding:8px" dir="auto">' + esc(v.text || '') + '</div>' +
+          '<div class="row"><button class="btn ok sm" data-mcopy="' + i + '">📋 انسخ الملخص</button>' + (v.test_url ? '<button class="btn ghost sm" data-copy="' + esc(v.test_url) + '">🔗 لينك الاختبار</button><a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(v.test_url) + '">👁 افتح الاختبار</a>' : '') +
+          '<a class="btn ghost sm" target="_blank" rel="noopener" data-mwa="' + i + '">🟢 واتساب</a></div></div>'; }).join('');
+      app.prepend(d);
+      d.querySelectorAll('[data-mcopy]').forEach(b => b.onclick = () => { const v = mine[+b.dataset.mcopy].data; copy((v.text || '') + (v.test_url ? '\n\n📝 ' + (v.lang === 'ar' ? 'اختبار الشهر' : 'Monthly test') + ': ' + v.test_url : '')); });
+      d.querySelectorAll('[data-mwa]').forEach(b => { const v = mine[+b.dataset.mwa].data; b.href = 'https://wa.me/?text=' + encodeURIComponent((v.text || '') + (v.test_url ? '\n\n📝 ' + (v.lang === 'ar' ? 'اختبار الشهر' : 'Monthly test') + ': ' + v.test_url : '')); });
+      d.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));
+    }catch(e){}
   }
 
   /* ---------- ✏️ new homework / test ---------- */
