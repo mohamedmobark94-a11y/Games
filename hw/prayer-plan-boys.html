@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>تحدّي الصلاة · My prayer challenge</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Fredoka:wght@500;600;700&family=Amiri:wght@400;700&display=swap">
+<!-- Weekly prayer tracker for girls, as a homework page: each prayer of each day is marked «on time» or «late»;
+     a star lights point by point for every day. Ticks, chosen helpers and a recording are sent with the homework
+     (app/hwkit.js). No student names in this file: the name comes from the homework link. -->
+<style>
+:root{--bg:#F1F5F9;--bg2:#E6EEF5;--card:#FFFFFF;--ink:#13283B;--soft:#5A6E80;--line:#D3E0EA;--pink:#1E6FA8;--pink2:#D8E9F6;
+  --lav:#0E7C86;--lav2:#D5EEF0;--gold:#E9A93B;--gold2:#FFF1D2;--mint:#3FB58F;--mint2:#DDF5EC;
+  --f-ar:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-en:"Fredoka","Segoe UI",system-ui,sans-serif;--f-q:"Amiri",serif}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:500 17px/1.6 var(--f-ar);background:radial-gradient(900px 500px at 100% 0,#FDE6F1 0,transparent 60%),radial-gradient(800px 500px at 0 30%,#EFE6FF 0,transparent 55%),var(--bg);padding:0 0 30px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html[lang=en] body{font-family:var(--f-en)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column;gap:16px}
+.hero{position:relative;border-radius:0 0 28px 28px;overflow:hidden;aspect-ratio:16/8;min-height:220px;background:#E9C6E4 center/cover no-repeat}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,40,59,.05) 0%,rgba(19,40,59,0) 40%,rgba(19,40,59,.55) 100%)}
+.hero .tx{position:absolute;inset-inline:0;bottom:0;padding:16px 20px;color:#fff;z-index:1;text-shadow:0 2px 10px rgba(19,40,59,.5)}
+.hero h1{margin:0;font-size:clamp(28px,6vw,46px);line-height:1.15}
+.hero p{margin:2px 0 0;font-size:clamp(15px,2.6vw,19px);opacity:.95}
+.snd{position:absolute;top:12px;inset-inline-end:12px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.85);font-size:18px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:16px;box-shadow:0 6px 20px rgba(155,123,216,.10)}
+.h2{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:clamp(18px,3.4vw,22px);color:var(--lav)}
+.h2 i{flex:none;width:34px;height:34px;border-radius:50%;background:var(--lav2);display:grid;place-items:center;font-style:normal;font-weight:800;color:var(--lav)}
+.sub{margin:-4px 0 12px;color:var(--soft);font-size:15px}
+/* prayer sky tiles */
+.skies{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media(max-width:560px){.skies{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.sky{position:relative;border:3px solid transparent;border-radius:20px;padding:0;overflow:hidden;background:#fff;text-align:center;box-shadow:0 4px 0 var(--line);transition:transform .15s,border-color .15s}
+.sky:active{transform:scale(.96)}
+.sky svg{display:block;width:100%;height:auto}
+.sky b{display:block;padding:6px 4px 2px;font-size:clamp(15px,2.8vw,19px)}
+.sky small{display:block;padding:0 4px 8px;color:var(--soft);font:500 13px var(--f-en)}
+.sky[aria-pressed=true]{border-color:var(--pink);box-shadow:0 4px 0 var(--pink)}
+.sky[aria-pressed=true]::after{content:"★";position:absolute;top:6px;inset-inline-start:8px;color:var(--gold);font-size:22px;text-shadow:0 1px 3px rgba(0,0,0,.25)}
+.goal{margin-top:12px;background:var(--pink2);border-radius:18px;padding:12px 16px;display:none}
+.goal.on{display:block;animation:pop .35s ease}
+.goal b{color:#155C8C}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
+/* days as flowers */
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{border:2px solid var(--line);background:#fff;border-radius:18px;padding:6px 2px 4px;text-align:center;transition:border-color .15s,background .15s}
+.day svg{width:100%;max-width:62px;height:auto;display:block;margin:0 auto}
+.day span{display:block;font-size:13px;color:var(--soft);font-weight:700}
+.day.sel{border-color:var(--lav);background:var(--lav2)}
+.day.today span{color:var(--pink)}
+.petal{transition:fill .3s,transform .35s;transform-box:fill-box;transform-origin:center}
+.petal.on{animation:bloom .5s ease}
+@keyframes bloom{0%{transform:scale(.3)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.list{display:grid;gap:10px;margin-top:14px}
+.pr{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;border:2px solid var(--line);border-radius:20px;padding:8px 10px;background:#fff}
+.pr svg{width:70px;height:46px;border-radius:12px;display:block}
+.pr .nm b{display:block;font-size:19px;line-height:1.2}
+.pr .nm small{color:var(--soft);font:500 13px var(--f-en)}
+.pr.hard{border-color:var(--pink)}
+.pr.hard .nm b::after{content:" ★";color:var(--gold)}
+.seg{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.seg button{min-height:44px;padding:0 12px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:700;font-size:14.5px;line-height:1.2}
+.seg button.t.on{background:var(--gold);border-color:var(--gold);color:#4A2C00}
+.seg button.l.on{background:var(--lav);border-color:var(--lav);color:#fff}
+@media(max-width:520px){.pr{grid-template-columns:56px 1fr}.pr svg{width:56px;height:40px}.seg{grid-column:1/-1;justify-content:stretch}.seg button{flex:1}}
+.dayline{margin-top:10px;text-align:center;font-weight:700;color:var(--mint);min-height:1.6em}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.st{border-radius:18px;padding:12px 8px;text-align:center}
+.st b{display:block;font:700 clamp(24px,5vw,32px)/1.1 var(--f-en)}
+.st span{font-size:14px;font-weight:700}
+.st.a{background:var(--pink2);color:#155C8C}.st.b{background:var(--gold2);color:#8A5A00}.st.c{background:var(--mint2);color:#1F7A5C}
+.track{height:16px;background:var(--lav2);border-radius:999px;overflow:hidden;margin-top:12px}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--lav));border-radius:999px;transition:width .4s}
+.msg{margin:10px 0 0;text-align:center;font-weight:700;color:var(--lav)}
+/* hadith */
+.hadith{background:linear-gradient(135deg,#E3F0FA,#E2F4F1);border:2px solid #C6DCEC}
+.hadith .q{font:700 clamp(20px,4vw,26px)/2 var(--f-q);text-align:center;direction:rtl;color:#13406B}
+.hadith .src{text-align:center;color:var(--soft);font-size:14px}
+.hadith .mean{text-align:center;font:500 15px var(--f-en);color:var(--soft);margin-top:4px}
+/* helpers */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:0 14px;border-radius:999px;border:2px solid var(--line);background:#fff;font-weight:700;font-size:15px}
+.chip.on{background:var(--lav);border-color:var(--lav);color:#fff}
+.chip.on::before{content:"✓ "}
+/* record */
+.rec button{background:var(--pink);color:#fff;border:0;border-radius:16px;min-height:48px;padding:0 20px;font-weight:800}
+.rec audio{width:100%;margin-top:8px}
+/* reward */
+.reward{display:none;text-align:center;overflow:hidden;padding:0}
+.reward.on{display:block;animation:pop .5s ease}
+.reward img{display:block;width:100%;max-height:420px;object-fit:cover}
+.reward .tx{padding:14px 16px 18px}
+.reward h3{margin:0;color:#155C8C;font-size:clamp(22px,4.6vw,30px)}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.reset{border:2px solid var(--line);background:#fff;border-radius:14px;padding:8px 14px;font-size:14px;color:var(--soft)}
+.reset[data-sure="1"]{border-color:var(--gold);background:var(--gold2);color:#8A5A00}
+.foot{text-align:center;color:var(--soft);font-size:14px;margin:0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg">
+</head>
+<body>
+<div class="hero" id="hero" style="background-image:url(../assets/img/fiqh/title.jpg)">
+  <button class="snd" data-tq-sound type="button" aria-label="sound"></button>
+  <div class="tx"><h1 id="t"></h1><p id="hi"></p></div>
+</div>
+<div class="wrap">
+  <section class="card">
+    <h2 class="h2"><i>1</i><span id="s1"></span></h2>
+    <p class="sub" id="s1b"></p>
+    <div class="skies" id="skies"></div>
+    <div class="goal" id="goal"></div>
+  </section>
+
+  <section class="card">
+    <h2 class="h2"><i>2</i><span id="s2"></span></h2>
+    <p class="sub" id="s2b"></p>
+    <div class="days" id="days"></div>
+    <div class="list" id="list"></div>
+    <div class="dayline" id="dayline" aria-live="polite"></div>
+  </section>
+
+  <section class="card">
+    <div class="stats">
+      <div class="st a"><b id="nAll">0</b><span id="lAll"></span></div>
+      <div class="st b"><b id="nTime">0</b><span id="lTime"></span></div>
+      <div class="st c"><b id="nDays">0</b><span id="lDays"></span></div>
+    </div>
+    <div class="track"><i id="fill"></i></div>
+    <p class="msg" id="msg" aria-live="polite"></p>
+  </section>
+
+  <section class="card reward" id="reward">
+    <img src="../assets/img/seerah/puzzle.jpg" alt="">
+    <div class="tx"><h3 id="rwT"></h3><p id="rwP" style="margin:6px 0 0"></p></div>
+  </section>
+
+  <section class="card hadith">
+    <div class="q">«أَيُّ العَمَلِ أَحَبُّ إِلَى اللَّهِ؟ قَالَ: الصَّلَاةُ عَلَى وَقْتِهَا»</div>
+    <div class="mean" id="hMean"></div>
+    <div class="src" id="hSrc"></div>
+  </section>
+
+  <section class="card">
+    <h2 class="h2"><i>3</i><span id="s3"></span></h2>
+    <p class="sub" id="s3b"></p>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="card rec">
+    <h2 class="h2"><i>4</i><span id="s4"></span></h2>
+    <p class="sub" id="s4b"></p>
+    <div id="recBox"></div>
+  </section>
+
+  <div class="row"><button class="reset" id="reset" type="button"></button></div>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script src="../app/hwkit.js"></script>
+<script src="../tq-fx.js"></script>
+<script>
+(function(){
+  /* each prayer gets its own little sky, drawn here (no pictures to load) */
+  const SKY = {
+    fajr: ['#5B4B9A', '#E7A0C4', '#FFD7A8', '<circle cx="66" cy="18" r="5" fill="#FFF6E0"/><path d="M60 15a7 7 0 1 0 8 9a6 6 0 1 1-8-9z" fill="#FFF6E0"/><circle cx="40" cy="62" r="12" fill="#FFC982" opacity=".9"/>'],
+    zuhr: ['#7CC6F0', '#B9E3FA', '#E9F7FF', '<circle cx="50" cy="20" r="11" fill="#FFD35C"/><circle cx="50" cy="20" r="16" fill="#FFD35C" opacity=".25"/>'],
+    asr: ['#8FBFE8', '#F6D7A6', '#FFE9C7', '<circle cx="74" cy="34" r="10" fill="#FFB547"/><circle cx="74" cy="34" r="15" fill="#FFB547" opacity=".22"/>'],
+    maghrib: ['#6A4C93', '#F07FA6', '#FFB077', '<path d="M30 60a20 20 0 0 1 40 0z" fill="#FF8A5C"/>'],
+    isha: ['#1E1B4B', '#3B2E7E', '#5B4B9A', '<path d="M58 12a12 12 0 1 0 14 16a10 10 0 1 1-14-16z" fill="#FFF2C9"/><circle cx="20" cy="16" r="1.6" fill="#fff"/><circle cx="34" cy="28" r="1.2" fill="#fff"/><circle cx="84" cy="14" r="1.4" fill="#fff"/><circle cx="16" cy="38" r="1" fill="#fff"/>']
+  };
+  const sky = (k, id) => { const s = SKY[k]; return '<svg viewBox="0 0 100 66" aria-hidden="true"><defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + s[0] + '"/><stop offset=".6" stop-color="' + s[1] + '"/><stop offset="1" stop-color="' + s[2] + '"/></linearGradient></defs>' +
+    '<rect width="100" height="66" fill="url(#g' + id + ')"/>' + s[3] +
+    '<path d="M0 58h18v-8a7 7 0 0 1 14 0v8h8v-16l4-6 4 6v16h8v-10a9 9 0 0 1 18 0v10h26v8H0z" fill="#13283B" opacity=".6"/></svg>'; };
+  const P = [
+    {k: 'fajr', ar: 'الفجر', en: 'Fajr', tip: ['نام بدري، واضبط منبّهين، واطلب من بابا أو أخوك يصحّيك.', 'Sleep early, set two alarms, and ask your dad or brother to wake you.']},
+    {k: 'zuhr', ar: 'الظهر', en: 'Ẓuhr', tip: ['حطّ تذكير على الموبايل، وصلّي في المسجد أو أول ما تفضى.', 'Set a phone reminder and pray as soon as you are free.']},
+    {k: 'asr', ar: 'العصر', en: 'ʿAṣr', tip: ['ما تستناش الشمس تقرّب تغرب. صلّي أول ما ترجع من المدرسة أو التمرين.', 'Do not wait for the sun to get low. Pray when you get home.']},
+    {k: 'maghrib', ar: 'المغرب', en: 'Maghrib', tip: ['وقتها قصير. أول ما تسمع الأذان، سيب اللي في إيدك وصلّي.', 'Its time is short. When you hear the adhan, make wudu and pray.']},
+    {k: 'isha', ar: 'العشاء', en: 'ʿIshāʾ', tip: ['صلّي قبل ما تفتح الألعاب أو الماتشات بالليل.', 'Pray before you open games or matches at night.']}
+  ];
+  const HELP = [
+    ['أتوضّى قبل الأذان', 'I make wudu before the adhan'], ['أصلّي أول ما أسمع الأذان', 'I pray as soon as I hear the adhan'],
+    ['أضبط منبّه لكل صلاة', 'I set an alarm for each prayer'], ['أتفق مع صاحبي نفكّر بعض', 'My friend and I remind each other'],
+    ['أقفل الموبايل وقت الصلاة', 'I put my phone away at prayer time'], ['أصلّي في المسجد', 'I pray in the masjid'],
+    ['أوقف اللعب أول ما الأذان يأذّن', 'I pause the game when I hear the adhan'], ['أدعي بعد كل صلاة', 'I make duʿāʾ after every prayer']
+  ];
+  const T = {
+    title: ['تحدّي الصلاة', 'My prayer challenge'], hi: ['أهلًا يا {n}! كل صلاة بتصلّيها بتنوّر نقطة في نجمة اليوم. اكسب ٧ نجوم!', 'Hi {n}! Every prayer lights one point of the day\'s star. Win all 7 stars!'],
+    hiNo: ['كل صلاة بتصلّيها بتنوّر نقطة في نجمة اليوم.', 'Every prayer lights one point of the day\'s star.'],
+    s1: ['أنهي صلاة أصعب عليك؟', 'Which prayer is hardest for you?'], s1b: ['اختار واحدة، وهتبقى مهمّتك الأسبوع ده ★', 'Choose one. It is your mission this week ★'],
+    goal: ['مهمّتي: أصلّي <b>{p}</b> في وقتها كل يوم ★', 'My mission: pray <b>{p}</b> on time every day ★'],
+    s2: ['نجوم الأسبوع', 'My week of stars'], s2b: ['اختار اليوم، وبعد كل صلاة اضغط: في وقتها ⭐ أو متأخر.', 'Choose the day. After each prayer tap: on time ⭐ or late.'],
+    day: ['يوم', 'Day'], today: ['النهارده', 'Today'], onT: ['في وقتها ⭐', 'On time ⭐'], late: ['متأخر', 'Late'],
+    d0: ['لسه ما علّمتش صلوات اليوم ده.', 'No prayers marked for this day yet.'], d5: ['ما شاء الله! نجمة كاملة النهارده ⭐', 'Mashaa Allah! A full star today ⭐'], dn: ['{n} من ٥ — كمّل يا بطل!', '{n} of 5 — keep going!'],
+    lAll: ['صلاة من ٣٥', 'prayers of 35'], lTime: ['في وقتها', 'on time'], lDays: ['أيام كاملة', 'full days'],
+    m0: ['ابدأ النهارده بأول صلاة.', 'Start today with the first prayer.'], mg: ['بداية قوية، كمّل يا بطل!', 'Lovely start, keep going!'], mh: ['عدّيت نص التحدي! ربنا يثبّتك.', 'You passed halfway! May Allah keep you steady.'],
+    m35: ['٣٥ صلاة كاملة! الحمد لله 🌟', 'All 35 prayers! Alhamdulillah 🌟'],
+    rwT: ['أحسنت يا {n}!', 'Well done, {n}!'], rwT0: ['أحسنت يا بطل!', 'Well done, champion!'], rwP: ['كسبت تحدّي الأسبوع. ابعت الواجب علشان المعلم يشوف إنجازك.', 'You won the week\'s challenge. Send your homework so your teacher can see.'],
+    hMean: ['سُئل النبي ﷺ: أيّ العمل أحبّ إلى الله؟ قال: الصلاة في وقتها.', 'The Prophet ﷺ was asked: which deed does Allah love most? He said: prayer on time.'],
+    hSrc: ['عن ابن مسعود ﵁ · البخاري ٥٢٧، مسلم ٨٥', 'Ibn Masʿūd ﵁ · al-Bukhari 527, Muslim 85'],
+    s3: ['إيه اللي هيساعدك؟', 'What will help you?'], s3b: ['اختار كل اللي هتعمله الأسبوع ده.', 'Choose everything you will do this week.'],
+    s4: ['سجّل بصوتك', 'Record your voice'], s4b: ['في دقيقة: أنهي صلاة أصعب عليك، وإيه خطتك علشان تصلّيها في وقتها؟', 'In one minute: which prayer is hardest for you, and what is your plan to pray it on time?'],
+    recL: ['خطتي للصلاة', 'My prayer plan'], reset: ['ابدأ أسبوع جديد', 'Start a new week'], sure: ['اضغط تاني علشان تمسح الأسبوع', 'Tap again to clear the week'],
+    foot: ['علاماتك محفوظة على الجهاز ده — افتح نفس اللينك كل يوم، وسلّم الواجب آخر الأسبوع.', 'Your marks stay on this device — open the same link every day and send your homework at the end of the week.']
+  };
+  /* this page opens in English; it changes language only when the student presses the language button later */
+  let LANG = 'en'; const t0 = Date.now();
+  const en = () => LANG === 'en';
+  const L = k => T[k][en() ? 1 : 0];
+  const num = n => en() ? String(n) : String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+  const $ = id => document.getElementById(id);
+  const nm = p => en() ? p.en : p.ar, other = p => en() ? p.ar : p.en;
+  const KEY = 'tq-prayer-challenge:' + (new URLSearchParams(location.search).get('name') || TQHW.name || 'me');
+  let S = {hard: null, m: {}, help: [], start: Date.now()};
+  try{ const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if(v && v.m) S = Object.assign(S, v); }catch(_){}
+  const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(_){} };
+  const todayIdx = () => Math.min(7, Math.max(1, Math.floor((Date.now() - S.start) / 864e5) + 1));
+  let sel = todayIdx();
+
+  const dayCount = d => P.filter(p => S.m[p.k + d]).length;
+  /* a five-point star: each point lights up for one prayer (dimmer when late), gold centre when all five */
+  function flower(d){
+    const c = dayCount(d), on = P.map(p => S.m[p.k + d]);
+    const cols = ['#2F80C9', '#17A2B8', '#F2A93B', '#E06A3B', '#5B5FC7'], R = 27, r = 11, cx = 30, cy = 32;
+    const pt = (a, rad) => [cx + Math.cos(a * Math.PI / 180) * rad, cy + Math.sin(a * Math.PI / 180) * rad].map(v => v.toFixed(1)).join(',');
+    let h = '<svg viewBox="0 0 60 66" aria-hidden="true">';
+    for(let i = 0; i < 5; i++){ const a = -90 + i * 72;
+      h += '<path class="petal" d="M' + cx + ',' + cy + ' L' + pt(a - 36, r) + ' L' + pt(a, R) + ' L' + pt(a + 36, r) + ' Z" fill="' + (on[i] ? cols[i] : '#E3EBF2') + '" fill-opacity="' + (on[i] === 'l' ? .5 : 1) + '" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>'; }
+    h += '<circle cx="' + cx + '" cy="' + cy + '" r="7" fill="' + (c === 5 ? '#FFC93C' : c ? '#FFE29A' : '#EEF3F7') + '" stroke="#fff" stroke-width="1.4"/></svg>';
+    return h;
+  }
+  function drawSkies(){
+    $('skies').innerHTML = P.map((p, i) => '<button class="sky" type="button" data-k="' + p.k + '" aria-pressed="' + (S.hard === p.k) + '">' + sky(p.k, 's' + i) + '<b>' + nm(p) + '</b><small>' + other(p) + '</small></button>').join('');
+    const p = P.find(x => x.k === S.hard), g = $('goal');
+    g.className = 'goal' + (p ? ' on' : ''); g.innerHTML = p ? L('goal').replace('{p}', nm(p)) + '<div style="margin-top:4px">' + p.tip[en() ? 1 : 0] + '</div>' : '';
+  }
+  function drawDays(){
+    const td = todayIdx();
+    $('days').innerHTML = [1, 2, 3, 4, 5, 6, 7].map(d => '<button class="day' + (d === sel ? ' sel' : '') + (d === td ? ' today' : '') + '" type="button" data-d="' + d + '">' + flower(d) + '<span>' + (d === td ? L('today') : L('day') + ' ' + num(d)) + '</span></button>').join('');
+  }
+  function drawList(){
+    $('list').innerHTML = P.map((p, i) => { const v = S.m[p.k + sel];
+      return '<div class="pr' + (S.hard === p.k ? ' hard' : '') + '">' + sky(p.k, 'l' + i) + '<div class="nm"><b>' + nm(p) + '</b><small>' + other(p) + '</small></div>' +
+        '<div class="seg"><button type="button" class="t' + (v === 't' ? ' on' : '') + '" data-m="' + p.k + ':t">' + L('onT') + '</button><button type="button" class="l' + (v === 'l' ? ' on' : '') + '" data-m="' + p.k + ':l">' + L('late') + '</button></div></div>'; }).join('');
+    const c = dayCount(sel); $('dayline').textContent = c === 0 ? L('d0') : c === 5 ? L('d5') : L('dn').replace('{n}', num(c));
+  }
+  function drawChips(){
+    $('chips').innerHTML = HELP.map((h, i) => '<button type="button" class="chip' + (S.help.includes(i) ? ' on' : '') + '" data-h="' + i + '">' + h[en() ? 1 : 0] + '</button>').join('');
+  }
+  function stats(){
+    let all = 0, time = 0, full = 0;
+    for(let d = 1; d <= 7; d++){ const c = dayCount(d); all += c; if(c === 5) full++; P.forEach(p => { if(S.m[p.k + d] === 't') time++; }); }
+    $('nAll').textContent = num(all); $('nTime').textContent = num(time); $('nDays').textContent = num(full); $('fill').style.width = (all / 35 * 100) + '%';
+    $('msg').textContent = all === 0 ? L('m0') : all === 35 ? L('m35') : all >= 18 ? L('mh') : L('mg');
+    const done = all === 35 || full >= 7; $('reward').classList.toggle('on', done);
+    $('rwT').textContent = TQHW.name ? L('rwT').replace('{n}', TQHW.name) : L('rwT0'); $('rwP').textContent = L('rwP');
+    const hard = P.find(p => p.k === S.hard);
+    const details = (hard ? [{q: 'الصلاة الأصعب · Hardest prayer', a: hard.ar + ' · ' + hard.en, ok: true}] : [])
+      .concat(P.map(p => { let c = 0, t = 0; for(let d = 1; d <= 7; d++){ if(S.m[p.k + d]) c++; if(S.m[p.k + d] === 't') t++; }
+        return {q: p.ar + ' · ' + p.en, a: c + ' / 7 (في وقتها · on time: ' + t + ')', ok: c === 7}; }))
+      .concat([{q: 'أيام كاملة · Full days', a: full + ' / 7', ok: full === 7}])
+      .concat(S.help.length ? [{q: 'هيساعدني · My helpers', a: S.help.map(i => HELP[i][0]).join('، '), ok: true}] : []);
+    TQHW.result({score: all, max: 35, done: all > 0, details});
+    return all;
+  }
+  function draw(){
+    document.documentElement.lang = LANG; document.documentElement.dir = en() ? 'ltr' : 'rtl';
+    $('t').textContent = L('title'); $('hi').textContent = TQHW.name ? L('hi').replace('{n}', TQHW.name) : L('hiNo');
+    ['s1', 's1b', 's2', 's2b', 's3', 's3b', 's4', 's4b', 'lAll', 'lTime', 'lDays', 'hMean', 'hSrc', 'foot'].forEach(k => { $(k).textContent = L(k); });
+    $('reset').textContent = L('reset');
+    drawSkies(); drawDays(); drawList(); drawChips(); stats();
+  }
+  $('skies').onclick = e => { const b = e.target.closest('.sky'); if(!b) return; S.hard = S.hard === b.dataset.k ? null : b.dataset.k; save(); drawSkies(); drawList(); stats(); if(S.hard && window.TQFX) TQFX.ok(b); };
+  $('days').onclick = e => { const b = e.target.closest('.day'); if(!b) return; sel = +b.dataset.d; drawDays(); drawList(); };
+  $('list').onclick = e => {
+    const b = e.target.closest('[data-m]'); if(!b) return; const [k, v] = b.dataset.m.split(':'), id = k + sel, before = dayCount(sel);
+    S.m[id] = S.m[id] === v ? undefined : v; if(!S.m[id]) delete S.m[id]; save();
+    drawDays(); drawList(); const all = stats();
+    const p = document.querySelectorAll('[data-d="' + sel + '"] .petal')[P.findIndex(x => x.k === k)]; if(p && S.m[id]) p.classList.add('on');
+    if(S.m[id] && window.TQFX){ TQFX.ok(b); if(dayCount(sel) === 5 && before < 5) TQFX.win(); }
+    if(all === 35 && window.TQFX) TQFX.win();
+  };
+  $('chips').onclick = e => { const b = e.target.closest('.chip'); if(!b) return; const i = +b.dataset.h, j = S.help.indexOf(i);
+    if(j >= 0) S.help.splice(j, 1); else { S.help.push(i); if(window.TQFX) TQFX.ok(b); } save(); drawChips(); stats(); };
+  let sure = false, tm = null;
+  $('reset').onclick = () => { const r = $('reset');
+    if(!sure){ sure = true; r.dataset.sure = '1'; r.textContent = L('sure'); clearTimeout(tm); tm = setTimeout(() => { sure = false; r.dataset.sure = ''; r.textContent = L('reset'); }, 4000); return; }
+    sure = false; r.dataset.sure = ''; S = {hard: S.hard, m: {}, help: S.help, start: Date.now()}; sel = 1; save(); draw(); };
+  TQHW.recordButton($('recBox'), L('recL'));
+  TQHW.on('lang', l => { if(Date.now() - t0 < 4000) return; LANG = l === 'ar' ? 'ar' : 'en'; draw(); }); draw();
+})();
+</script>
+</body>
+</html>
