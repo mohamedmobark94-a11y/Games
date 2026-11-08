@@ -403,7 +403,21 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
           const lead = L[i].ta.value.length - L[i].ta.value.trimStart().length;
           issues.push({i, msg: m.message, from: m.offset - starts[i] + lead, len: m.length, sugg: (m.replacements || []).slice(0, 3).map(x => x.value)}); });
       }catch(e){ issues.push({i: -1, msg: 'مقدرتش أوصل لمراجعة الإملاء دلوقتي (النت؟). المراجعة المحلية اتعملت.'}); }
-      if(!issues.length){ out.innerHTML = '<div style="background:#e8f4ee;color:#0e4d3c;border-radius:9px;padding:10px 12px;font-weight:700">✓ التقرير سليم: مفيش أخطاء إملاء أو قواعد، ولا تكرار، ولا خلط لغات.</div>'; return; }
+      /* with Claude connected (Anthropic key, or the page on claude.ai): a teacher's read of the meaning —
+         lines that do not make sense, do not fit the lesson, wrong honorifics or terms; each comes with a corrected line */
+      const hasClaude = (typeof window.aiReady === 'function' && window.aiReady()) || !!(($g('apiKey') || {}).value || '').trim();
+      if(hasClaude && typeof window.callClaudeJSON === 'function'){
+        out.innerHTML = '⏳ Claude بيراجع المعنى…';
+        try{
+          const r = await window.callClaudeJSON('You proofread a session report a Quran / Arabic / Islamic studies teacher sends to parents. Report language: ' + (lang === 'en' ? 'English' : 'Arabic') + '.\n' +
+            'Lines (index: text):\n' + L.map((x, i) => i + ' [' + x.name + ']: ' + x.ta.value.trim()).join('\n') + '\n' +
+            'Find only real problems: a line that does not make sense or is unclear to a parent, a sentence that does not fit with the others, wrong or missing honorific (ﷺ after the Prophet, raḍiya Allāhu ʿanhu/ʿanhā for Companions), a wrong Islamic or tajweed term, grammar that changes the meaning, a line in the wrong language. Do not report style taste. Do not add new facts.\n' +
+            'Answer JSON only: {"issues":[{"i": line index, "problem": "short reason in Egyptian Arabic", "fixed": "the whole corrected line"}]} — an empty list if all is fine.');
+          (r && r.issues || []).forEach(x => { const i = +x.i; if(!(i >= 0 && i < L.length) || !x.fixed) return; const v = L[i].ta.value;
+            issues.push({i, msg: '🤖 ' + (x.problem || 'تحسين'), from: 0, len: v.length, sugg: [String(x.fixed).trim()]}); });
+        }catch(e){ issues.push({i: -1, msg: 'مراجعة Claude مقدرتش تشتغل دلوقتي: ' + String(e && e.message || e).slice(0, 120)}); }
+      }
+      if(!issues.length){ out.innerHTML = '<div style="background:#e8f4ee;color:#0e4d3c;border-radius:9px;padding:10px 12px;font-weight:700">✓ التقرير سليم: مفيش أخطاء إملاء أو قواعد، ولا تكرار، ولا خلط لغات' + (hasClaude ? '، وClaude راجع المعنى' : '') + '.</div>'; return; }
       out.innerHTML = '<div style="font-weight:700;color:#9c3f3f;margin-bottom:6px">لقيت ' + issues.length + ' ملاحظة:</div>' + issues.map((x, n) => {
         const ln = x.i >= 0 ? L[x.i] : null, v = ln ? ln.ta.value : '';
         const shown = ln ? (x.len ? esc(v.slice(0, x.from)) + '<mark style="background:#fde68a">' + esc(v.substr(x.from, x.len)) + '</mark>' + esc(v.slice(x.from + x.len)) : esc(v)) : '';
