@@ -281,7 +281,11 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     const host = go ? go.closest('.section-body') : null; if(!host) return;
     const KEYS = [['lesson', 'محتوى الدرس'], ['hw', 'الواجب'], ['tajwid', 'التجويد'], ['arabic', 'العربي'], ['arabichw', 'واجب العربي'], ['islamic', 'الإسلاميات'], ['islamichw', 'واجب الإسلاميات'], ['notes', 'ملاحظات']];
     const wrap = document.createElement('div'); wrap.style.cssText = 'margin-top:12px;border-top:1.5px dashed #f3c4c4;padding-top:12px';
-    wrap.innerHTML = '<button type="button" id="tidyGo" style="width:100%;padding:13px;border:0;border-radius:10px;background:#7c3aed;color:#fff;font:700 15px inherit;cursor:pointer;margin-bottom:8px">✨ رتّب كلامي في نقاط واضحة</button><div id="tidyOut" style="font-size:13px;line-height:1.6;margin-bottom:8px"></div>' +
+    wrap.innerHTML = '<details id="gemBox" style="margin-bottom:8px;border:1px solid #e9d5ff;border-radius:9px;padding:6px 10px;background:#faf5ff"><summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:#6d28d9">🔑 مفتاح Gemini (مجاني) <span id="gemSt" style="font-weight:600;color:#8a978f"></span></summary>' +
+      '<div style="font-size:12px;color:#6b5a7a;margin:6px 0">من aistudio.google.com ← Get API key ← Create API key. بيتحفظ في إعداداتك الخاصة (إنت بس اللي تشوفه).</div>' +
+      '<div style="display:flex;gap:6px"><input type="password" id="gemKey" placeholder="الصق المفتاح هنا" autocomplete="off" style="flex:1;padding:8px 10px;border:1.5px solid #e9d5ff;border-radius:8px;font:inherit;font-size:13px">' +
+      '<button type="button" id="gemSave" style="border:0;border-radius:8px;background:#7c3aed;color:#fff;padding:0 12px;font:700 13px inherit;cursor:pointer">حفظ</button></div></details>' +
+      '<button type="button" id="tidyGo" style="width:100%;padding:13px;border:0;border-radius:10px;background:#7c3aed;color:#fff;font:700 15px inherit;cursor:pointer;margin-bottom:8px">✨ رتّب كلامي في نقاط واضحة</button><div id="tidyOut" style="font-size:13px;line-height:1.6;margin-bottom:8px"></div>' +
       '<button type="button" id="chkGo" style="width:100%;padding:13px;border:0;border-radius:10px;background:#177a5b;color:#fff;font:700 15px inherit;cursor:pointer">✅ راجع التقرير قبل الإرسال</button><div id="chkOut" style="margin-top:10px;font-size:13.5px;line-height:1.6"></div>';
     host.appendChild(wrap);
     const $g = id => document.getElementById(id);
@@ -315,8 +319,11 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         'Answer with JSON only, the same keys, each a list of points (encourage: a string).';
       const old = btn.textContent; btn.disabled = true; btn.textContent = '✨ بيرتّب…'; out.textContent = '';
       try{
-        if(typeof window.callClaudeJSON !== 'function') throw new Error('no-ai');
-        const r = await window.callClaudeJSON(prompt);
+        let r = null;
+        const hasClaude = (typeof window.aiReady === 'function' && window.aiReady()) || !!(($g('apiKey') || {}).value || '').trim();
+        if(hasClaude && typeof window.callClaudeJSON === 'function') r = await window.callClaudeJSON(prompt);
+        else if(gemKey) r = await gemini(prompt);
+        else throw new Error('no-ai');
         let n = 0;
         Object.keys(secs).forEach(k => { const v = r && r[k]; if(k === 'encourage'){ if(typeof v === 'string' && v.trim()){ $g('encourage').value = v.trim(); $g('encourage').dispatchEvent(new Event('input', {bubbles: true})); n++; } return; }
           if(Array.isArray(v) && v.length){ window.clearList(k); v.forEach(x => { if(String(x).trim()) window.addItem(k, String(x).trim()); }); n++; } });
@@ -325,13 +332,33 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       }catch(e){
         const msg = String(e && e.message || e);
         out.innerHTML = '<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:9px 11px;color:#7c2d12">' +
-          (/key|API|no-ai|401|403/i.test(msg) ? 'الترتيب محتاج مفتاح Anthropic: افتح قسم «🔑 AI helpers»، حط المفتاح في خانة «Anthropic key» واضغط Test مرة واحدة (بيتحفظ). أو انسخ الطلب ده وابعته لـClaude في الشات:' : 'حصلت مشكلة: ' + esc(msg) + '<br>ممكن تنسخ الطلب وتبعته لـClaude في الشات:') +
+          (/no-ai/.test(msg) ? 'الترتيب محتاج مفتاح: افتح «🔑 مفتاح Gemini (مجاني)» فوق الزرار، الصق المفتاح واضغط حفظ (مرة واحدة). أو انسخ الطلب ده وابعته لـClaude في الشات:' : /key|API|401|403/i.test(msg) ? 'المفتاح مش شغال (' + esc(msg).slice(0, 120) + '). اتأكد إنك نسخته كامل، أو اعمل واحد جديد. أو انسخ الطلب ده:' : 'حصلت مشكلة: ' + esc(msg) + '<br>ممكن تنسخ الطلب وتبعته لـClaude في الشات:') +
           '<br><button type="button" id="tidyCopy" style="margin-top:6px;border:1px solid #7c3aed;background:#fff;color:#7c3aed;border-radius:7px;padding:4px 10px;font:inherit;cursor:pointer">📋 انسخ الطلب</button></div>';
         $g('tidyCopy').onclick = () => { const txt = prompt.replace('Answer with JSON only, the same keys, each a list of points (encourage: a string).', 'Answer with the tidy points only, under the same section names.');
           (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { $g('tidyCopy').textContent = '✓ اتنسخ'; }, () => { window.prompt('انسخ:', txt); }); };
       }
       btn.disabled = false; btn.textContent = old;
     };
+    /* Gemini (free key from Google AI Studio): the key goes in a header, never in the link */
+    let gemKey = '';
+    const gemShow = () => { $g('gemSt').textContent = gemKey ? '✓ متوصّل' : '— مش متحط'; if(gemKey) $g('gemKey').value = gemKey; };
+    (async () => { try{ const v = await window.storage.get('geminiKey'); gemKey = v && v.value ? String(v.value) : ''; }catch(e){} gemShow(); })();
+    $g('gemSave').onclick = async () => { gemKey = $g('gemKey').value.replace(/\s+/g, ''); try{ await window.storage.set('geminiKey', gemKey); }catch(e){} gemShow(); $g('gemBox').open = !gemKey; };
+    async function gemini(text){
+      let last = '';
+      for(const m of ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.0-flash']){
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + m + ':generateContent', {method: 'POST',
+          headers: {'Content-Type': 'application/json', 'x-goog-api-key': gemKey},
+          body: JSON.stringify({contents: [{role: 'user', parts: [{text}]}], generationConfig: {temperature: 0.2, responseMimeType: 'application/json'}})});
+        if(res.status === 404){ last = m + ' not found'; continue; }
+        const j = await res.json().catch(() => ({}));
+        if(!res.ok) throw new Error('Gemini ' + res.status + ': ' + ((j.error && j.error.message) || ''));
+        const t = ((((j.candidates || [])[0] || {}).content || {}).parts || []).map(x => x.text || '').join('');
+        const a = t.indexOf('{'), b = t.lastIndexOf('}'); if(a < 0 || b < a) throw new Error('Gemini: no answer');
+        return JSON.parse(t.slice(a, b + 1));
+      }
+      throw new Error('Gemini: ' + last);
+    }
     $g('chkGo').onclick = async () => {
       const out = $g('chkOut'), L = lines(); let lang = 'ar'; try{ lang = window.effectiveLang(); }catch(e){}
       const issues = [];   // {i, msg, from, len, sugg:[]}
