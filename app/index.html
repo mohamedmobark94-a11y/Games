@@ -261,7 +261,18 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
             const isAr = a => { const t = (a || []).join(' '); return (t.match(/[؀-ۿ]/g) || []).length > (t.match(/[A-Za-z]/g) || []).length; };
             const ok = a => Array.isArray(a) && a.length && isAr(a) === (lang === 'ar');
             const pick = [lang === 'ar' ? L.headlines_ar : L.headlines_en, L.headlines, L.summary].find(ok);
-            if(pick) L.headlines = pick.slice();
+            if(pick){
+              let lines = pick.slice();
+              /* one-word headlines ("Motive", "Ability") say nothing to a parent: join them under the lesson title */
+              const words = lines.join(' ').trim().split(/\s+/).length / Math.max(1, lines.length);
+              if(words < 2.5){
+                const t = String(L.title || '').replace(/^.*?·\s*/, '').replace(/^[^:]*:\s*/, '').trim();
+                const and = lang === 'ar' ? ' و' : ' and ', sep = lang === 'ar' ? '، ' : ', ';
+                const joined = lines.length > 1 ? lines.slice(0, -1).join(sep) + and + lines[lines.length - 1] : lines[0];
+                lines = [(t ? t + ': ' : '') + joined];
+              }
+              L.headlines = lines;
+            }
           }
         }catch(e){}
         return o.apply(this, arguments);
