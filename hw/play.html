@@ -11,6 +11,7 @@
     {t:'classify', ask:{ar,en}, options:[{ar,en},…], items:[{w:'arabic word', ref:{ar,en}?, a:index, why:{ar,en}?}]},
     {t:'mcq', q:{ar,en}, opts:[{ar,en},…], a:index, why:{ar,en}?},
     {t:'record', label:{ar,en}, say:{ar,en}, text:'Qur'an text copied from Shamela/quran.com', ref:{ar,en}}]}
+  OR the richer station homework: {title, hi, theme, stations:[…]} — format documented at the top of hw/stations.js.
   Runs inside the student's homework link (app/hw.html) through app/hwkit.js; sounds from tq-fx.js. -->
 <style>
 :root{--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;
@@ -49,13 +50,23 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
 <script src="../app/config.js"></script>
 <script src="../app/hwkit.js"></script>
 <script src="../tq-fx.js"></script>
+<script src="stations.js"></script>
 <script>
 (async function(){
   const id = new URLSearchParams(location.search).get('h') || '';
   let H = null;
   try{ const db = supabase.createClient(TQ.url, TQ.key, {auth: {persistSession: false}}); const r = await db.rpc('get_hwpage', {p_id: id}); H = r.data; }catch(_){}
-  if(!H || !Array.isArray(H.tasks)){ document.getElementById('t').textContent = 'الواجب ده مش موجود · Homework not found'; return; }
+  if(!H || !(Array.isArray(H.tasks) || Array.isArray(H.stations))){ document.getElementById('t').textContent = 'الواجب ده مش موجود · Homework not found'; return; }
   const E = () => TQHW.lang === 'en' ? 1 : 0, T = x => x == null ? '' : typeof x === 'string' ? x : (E() ? (x.en || x.ar) : (x.ar || x.en)) || '';
+  /* station homework (pictures, book audio, build-the-sentence, recording, reward): see hw/stations.js */
+  if(Array.isArray(H.stations)){
+    const eng = TQST.run(H, {T, E});
+    const frame = () => { document.documentElement.lang = TQHW.lang; document.documentElement.dir = E() ? 'ltr' : 'rtl';
+      document.getElementById('t').textContent = T(H.title);
+      const hi = T(H.hi); document.getElementById('hi').textContent = TQHW.name && hi ? hi.replace('{n}', TQHW.name) : hi.replace(/\s*\{n\}\s*!?/, ' ').trim(); };
+    TQHW.on('lang', () => { frame(); eng.draw(); langBtn(); });
+    frame(); langBtn(); eng.start(); return;
+  }
   /* one question = one step: every classify item and every mcq; record tasks sit under the game */
   const steps = [];
   H.tasks.forEach(k => { if(k.t === 'classify') k.items.forEach(it => steps.push({k, it})); else if(k.t === 'mcq') steps.push({k}); });
