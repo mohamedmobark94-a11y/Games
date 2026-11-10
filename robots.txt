@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /Games/app/
+Disallow: /Games/hw/
+Sitemap: https://mohamedmobark94-a11y.github.io/Games/sitemap.xml
