@@ -211,8 +211,8 @@ let AC=null, soundOn=true;
 function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
 function tone(f,d=.15,type='sine',v=.18,when=0){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
 const sfx={open:()=>{tone(392,.1,'triangle',.18);tone(587,.12,'triangle',.18,.08);tone(784,.2,'triangle',.18,.16)},
-  good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
-  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
+  good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
+  win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 
 function confetti(n=46){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=pick(BOX_COLORS);c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
@@ -467,5 +467,6 @@ document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target
 document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 </script>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

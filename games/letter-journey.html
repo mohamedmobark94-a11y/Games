@@ -268,8 +268,8 @@ function tone(f,d=.15,type='sine',v=.18,when=0){const a=ac();if(!a||!soundOn)ret
 // "air" whoosh: filtered noise, a little nod to the journey of the breath
 function whoosh(){const a=ac();if(!a||!soundOn)return;const n=a.createBuffer(1,a.sampleRate*.5,a.sampleRate),d=n.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
   const s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=n;f.type='bandpass';f.frequency.setValueAtTime(400,a.currentTime);f.frequency.exponentialRampToValueAtTime(2400,a.currentTime+.45);g.gain.value=.25;s.connect(f).connect(g).connect(a.destination);s.start()}
-const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
-  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
+const sfx={good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
+  win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#C9A35A','#C0392B','#2471A3','#1E8449','#8E44AD','#D35400'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
 function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
@@ -507,5 +507,6 @@ document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target
 document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 </script>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

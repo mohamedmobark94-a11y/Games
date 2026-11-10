@@ -219,8 +219,8 @@ function tone(f,d=.15,type='sine',v=.18,when=0){ const a=ac(); if(!a||!soundOn)r
 const sfx={
   tick:(hi)=>tone(hi?1200:900,.05,'square',.06),
   freeze:()=>{tone(1568,.12,'triangle',.22);tone(1568,.25,'triangle',.22,.16)},
-  good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
-  bad:()=>tone(196,.22,'sawtooth',.08),
+  good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
+  bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),
   pop:()=>tone(660,.08,'sine',.15)
 };
 function startTicks(){ stopTicks(); let i=0; tickT=setInterval(()=>sfx.tick(i++%2===0),300) }
@@ -465,5 +465,6 @@ document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target
 document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 </script>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

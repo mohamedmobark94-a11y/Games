@@ -359,13 +359,13 @@ const words=t=>t.trim().split(/\s+/).map(w=>w.replace(/\+/g,' '));
 let AC=null,soundOn=true;
 function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
 function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
-const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
+const sfx={good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
   clink:()=>{tone(1568,.12,'triangle',.12);tone(2093,.25,'sine',.08,.05)},           // chain link closes
   reveal:()=>tone(440,.25,'sine',.1,0,660),                                           // a new clue
   mark:()=>{tone(880,.08,'square',.06);tone(660,.1,'square',.06,.08)},                // listener marks a slip
   swap:()=>{tone(392,.12,'triangle',.12);tone(523,.12,'triangle',.12,.12);tone(392,.12,'triangle',.1,.24)},
   climb:n=>{for(let i=0;i<n;i++)tone(523*Math.pow(1.122,i),.12,'triangle',.14,i*.1)},
-  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
+  win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#E2B85C','#2ECC71','#F5C33B','#E74C3C','#5DADE2','#AF7AC5'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
 function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
@@ -677,5 +677,6 @@ document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 
 </script>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

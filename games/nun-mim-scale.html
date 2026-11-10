@@ -312,8 +312,8 @@ const RULE_SOUND={
   idg_n:()=>{tone(523,.3,'triangle',.2,0,784)},                                          // slide, no hum
   iqlab:()=>{tone(587,.25,'triangle',.18,0,392);hum(.7,.2)},                             // bend (nūn → mīm) + hum
   ikhfa:()=>{hum(.75,0,.18)},m_ikhfa:()=>{hum(.75,0,.18)}};
-const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
-  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
+const sfx={good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
+  win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#C9A35A','#D35400','#2471A3','#1E8449','#8E44AD','#16A085'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
 function praise(p){const k=Math.floor(Math.random()*PRAISE.length),e=document.createElement('div');e.className='starpop';e.innerHTML=`★ +${U(ar(p),p)} ${U(PRAISE[k],PRAISE_EN[k])}`;document.body.appendChild(e);setTimeout(()=>e.remove(),1250)}
@@ -582,5 +582,6 @@ document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 </script>
 </body></html>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

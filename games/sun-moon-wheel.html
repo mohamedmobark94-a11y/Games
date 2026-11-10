@@ -325,11 +325,11 @@ function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext
 function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
 const sfx={
   tick:()=>tone(1400,.03,'square',.05),
-  good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
-  bad:()=>tone(196,.22,'sawtooth',.08),
+  good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
+  bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),
   moon:()=>[1568,1319,1760,2093].forEach((f,i)=>tone(f,.5,'sine',.09,i*.16)),          // twinkle
   sun:()=>{tone(392,.6,'triangle',.14);tone(494,.6,'triangle',.12,.05);tone(587,.7,'triangle',.12,.1);tone(880,.25,'sine',.12,.35,330)}, // warm chord + gulp
-  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13)),
+  win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13)),
   pop:()=>tone(660,.08,'sine',.15)};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2B705','#E36414','#3A86FF','#22A45D','#4C3FA8','#EF476F'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
@@ -628,5 +628,6 @@ document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 </script>
 
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

@@ -392,10 +392,10 @@ function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)
 function noise(d=.6,when=0,v=.12){const a=ac();if(!a||!soundOn)return;const n=a.createBuffer(1,a.sampleRate*d,a.sampleRate),x=n.getChannelData(0);for(let i=0;i<x.length;i++)x[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/x.length);
   const s=a.createBufferSource();s.buffer=n;const f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=900;f.Q.value=.7;const g=a.createGain();g.gain.value=v;s.connect(f).connect(g).connect(a.destination);s.start(a.currentTime+when)}
 function voice(d,when=0,f=330){tone(f,d,'triangle',.12,when,f*0.97)}
-const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
+const sfx={good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),pop:()=>tone(660,.08,'sine',.15),
   go:()=>{tone(440,.12,'sine',.15);tone(660,.2,'sine',.15,.12)},wait:()=>{tone(520,.12,'square',.07);tone(520,.12,'square',.07,.25)},stop:()=>tone(260,.4,'sawtooth',.08,0,180),
   unlock:()=>{tone(1200,.04,'square',.08);tone(900,.05,'square',.08,.06);[523,784].forEach((f,i)=>tone(f,.2,'triangle',.16,.15+i*.1))},
-  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
+  win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13))};
 // breath demos: waqf = voice · breath · voice ; sakt = voice · short silence · voice ; qat = voice + closing chime
 $('#bWaqf').onclick=()=>{ac();voice(.7);noise(.7,.85);voice(.7,1.7)};
 $('#bSakt').onclick=()=>{ac();voice(.7);voice(.7,.95)};
@@ -724,5 +724,6 @@ document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 
 </script>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

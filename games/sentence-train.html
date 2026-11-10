@@ -357,8 +357,8 @@ function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)
 function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
 function noise(d=.08,v=.12,when=0){const a=ac();if(!a||!soundOn)return;const b=a.createBuffer(1,a.sampleRate*d,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<x.length;i++)x[i]=(Math.random()*2-1)*(1-i/x.length);const s=a.createBufferSource(),g=a.createGain(),f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=900;s.buffer=b;g.gain.value=v;s.connect(f).connect(g).connect(a.destination);s.start(a.currentTime+when)}
 const sfx={
-  good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
-  bad:()=>tone(196,.22,'sawtooth',.07),
+  good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
+  bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.07),
   pop:()=>tone(660,.08,'sine',.15),
   n:()=>{tone(392,.14,'triangle',.18);tone(587,.2,'triangle',.18,.12)},          // name: "this!" — two steady notes
   v:()=>[0,1,2,3].forEach(i=>tone(300+i*80,.06,'square',.06,i*.06)),              // verb: quick running steps
@@ -799,5 +799,6 @@ document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target
 </script>
 <script>document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));</script>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

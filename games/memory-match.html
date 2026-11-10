@@ -80,7 +80,7 @@ const $=s=>document.querySelector(s),{U}=TQI;
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 let AC=null,soundOn=true;
 function tone(f,d=.12,type='sine',v=.15,when=0){if(!soundOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const t=AC.currentTime+when,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
-const sfx={tap:()=>tone(520,.06),ok:()=>[659,880].forEach((f,i)=>tone(f,.14,'triangle',.18,i*.09)),bad:()=>{tone(220,.18,'sawtooth',.08);tone(165,.25,'sawtooth',.08,.12)},win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',.2,i*.11))};
+const sfx={tap:()=>tone(520,.06),ok:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[659,880].forEach((f,i)=>tone(f,.14,'triangle',.18,i*.09)),bad:()=>{window.TQFX&&TQFX.cheer('bad');tone(220,.18,'sawtooth',.08);tone(165,.25,'sawtooth',.08,.12)},win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',.2,i*.11))};
 function confetti(n=60){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2C14E','#2EC4B6','#4DA8FF','#FF6B6B','#A98BFF'];for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=Math.random()*.3+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3300)}}
 
 const WORDS=[['كِتَاب','Book','📖'],['قَمَر','Moon','🌙'],['شَمْس','Sun','☀️'],['بَيْت','House','🏠'],['قَلَم','Pen','✏️'],['سَمَكَة','Fish','🐟'],['تُفَّاحَة','Apple','🍎'],['نَجْمَة','Star','⭐'],['مَاء','Water','💧'],['وَرْدَة','Rose','🌹'],['قِطَّة','Cat','🐱'],['سَيَّارَة','Car','🚗'],['مَسْجِد','Mosque','🕌'],['شَجَرَة','Tree','🌳'],['بَاب','Door','🚪'],['كُرَة','Ball','⚽']];
@@ -106,5 +106,6 @@ $('#sndB').onclick=()=>{soundOn=!soundOn;$('#sndB').innerHTML=soundOn?U('🔊 ص
 TQI.relabel();newGame();
 
 </script>
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>

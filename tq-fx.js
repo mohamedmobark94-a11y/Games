@@ -100,6 +100,9 @@
     win(quiet){ if(!muted) SFX.win(); for(let i = 0; i < 4; i++) setTimeout(() => burst(innerWidth * (.2 + .2 * i), innerHeight * .35, 45, 7, 6), i * 160); },
     tap(){ if(!muted) SFX.tap(); }, whoosh(){ if(!muted) SFX.whoosh(); },
     say, play: url => play(url, true), url: voiceUrl,
+    /* for games that already have their own tones: add only the spoken praise / "oops" and the win confetti */
+    cheer(k){ if(k === 'win'){ for(let i = 0; i < 4; i++) setTimeout(() => burst(innerWidth * (.2 + .2 * i), innerHeight * .35, 45, 7, 6), i * 160); setTimeout(() => v('win', true), 500); } else v(k, false);
+      function v(x, f){ let l = null; try{ l = localStorage.getItem('tq-lang'); }catch(_){} if(l === 'ar' || !BANK[x]) return; play(voiceUrl(pick(BANK[x])), f); } },
     ayah(s, a){ const f = String(s).padStart(3, '0') + String(a).padStart(3, '0') + '.mp3';
       const au = play('https://everyayah.com/data/Husary_Muallim_128kbps/' + f, true);
       if(au) au.onerror = () => play('https://everyayah.com/data/Husary_128kbps/' + f, true);   /* fallback: Husary murattal */

@@ -396,13 +396,13 @@ let AC=null,soundOn=true;
 function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
 function tone(f,d=.15,type='sine',v=.18,when=0,f2){const a=ac();if(!a||!soundOn)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
 const sfx={
-  good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
-  bad:()=>tone(196,.22,'sawtooth',.08),
+  good:()=>(window.TQFX&&TQFX.cheer('ok'),0)||[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.2,i*.09)),
+  bad:()=>(window.TQFX&&TQFX.cheer('bad'),0)||tone(196,.22,'sawtooth',.08),
   fat:()=>{tone(130,.7,'triangle',.28,0,98);tone(196,.6,'sine',.14,.02,147);tone(98,.8,'sine',.18,.05)},      // deep, round "boom"
   thin:()=>{tone(1568,.18,'sine',.12);tone(2093,.25,'sine',.09,.1)},                                          // small, bright "ting"
   inflate:s=>tone(220+s*60,.35,'sine',.13,0,440+s*120),
   flip:()=>tone(880,.06,'square',.05),
-  win:()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13)),
+  win:()=>(window.TQFX&&TQFX.cheer('win'),0)||[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.2,i*.13)),
   pop:()=>tone(660,.08,'sine',.15)};
 function confetti(n=40){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#F2B705','#E36414','#3A86FF','#22A45D','#8E5CF7','#EF476F'];
   for(let i=0;i<n;i++){const c=document.createElement('i');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
@@ -703,5 +703,6 @@ document.dispatchEvent(new CustomEvent('lesson:stage',{detail:0}));
 </script>
 </html>
 
+<script src="../tq-fx.js"></script>
 <!--tq-nav--><script src="../tq-nav.js"></script>
 </body></html>
