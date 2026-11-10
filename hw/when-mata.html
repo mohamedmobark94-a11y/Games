@@ -137,7 +137,7 @@ audio[hidden]{display:none!important}
     s.querySelectorAll('[data-s]').forEach(b => b.onclick = () => go(+b.dataset.s));
     document.getElementById('prog').style.width = (Object.keys(state.done).length / ST.length * 100) + '%';
   }
-  function go(i){ state.cur = Math.max(0, Math.min(ST.length - 1, i)); drawStations(); VIEW[ST[state.cur].id](document.getElementById('game')); window.scrollTo({top: 0, behavior: 'smooth'}); }
+  function go(i){ state.gen = (state.gen || 0) + 1; state.cur = Math.max(0, Math.min(ST.length - 1, i)); drawStations(); VIEW[ST[state.cur].id](document.getElementById('game')); window.scrollTo({top: 0, behavior: 'smooth'}); }
   const nextBtn = () => '<div class="row"><button class="btn" data-next>' + L('المحطة التالية ⬅', 'Next station ➜') + '</button></div>';
   const bindNext = g => { const b = g.querySelector('[data-next]'); if(b) b.onclick = () => go(state.cur + 1); };
   const meta = (i, n, r) => '<div class="meta"><span>' + (i + 1) + ' / ' + n + '</span><span>⭐ ' + r + '</span></div>';
@@ -164,7 +164,8 @@ audio[hidden]{display:none!important}
     /* 2 — listen to the book and tap the picture */
     listen(g){
       const rounds = shuffle(P.slice(1)); let i = 0, right = 0;
-      const draw = () => {
+      const my = state.gen; const draw = () => {
+        if(my !== state.gen) return;
         if(i >= rounds.length){ finish('listen'); g.innerHTML = '<div class="card end">🎧 ' + L('ممتاز! ', 'Great listening! ') + right + ' / ' + rounds.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
         const p = rounds[i], choices = shuffle([p].concat(shuffle(P.filter(x => x !== p)).slice(0, 3)));
         g.innerHTML = '<div class="card"><h3>' + L('🎧 اسمع السؤال واضغط الصورة الصح', '🎧 Listen to the question and tap the right picture') + '</h3>' +
@@ -189,7 +190,8 @@ audio[hidden]{display:none!important}
     /* 3 — read the clock and choose the answer */
     clock(g){
       const rounds = shuffle(P).slice(0, 6); let i = 0, right = 0;
-      const draw = () => {
+      const my = state.gen; const draw = () => {
+        if(my !== state.gen) return;
         if(i >= rounds.length){ finish('clock'); g.innerHTML = '<div class="card end">⏰ ' + L('أحسنت يا محقق الوقت! ', 'Well done, time detective! ') + right + ' / ' + rounds.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
         const p = rounds[i], wrong = shuffle(P.filter(x => x !== p)).slice(0, 2), opts = shuffle([p].concat(wrong));
         g.innerHTML = '<div class="card"><h3>' + L('⏰ انظر إلى الساعة وأجب', '⏰ Look at the clock and answer') + '</h3>' +
@@ -214,7 +216,8 @@ audio[hidden]{display:none!important}
       const rounds = picks.map(p => ({p, words: ['مَتَى', 'تَذْهَبُ', 'إِلَى', p.pl, '؟'], kind: 'q'}));
       rounds.push({p: picks[0], words: ['أَذْهَبُ', 'السَّاعَةَ', picks[0].n], kind: 'a'});
       let i = 0, right = 0;
-      const draw = () => {
+      const my = state.gen; const draw = () => {
+        if(my !== state.gen) return;
         if(i >= rounds.length){ finish('build'); g.innerHTML = '<div class="card end">🧩 ' + L('بنيت الأسئلة بنفسك! ', 'You built the questions yourself! ') + right + ' / ' + rounds.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
         const r = rounds[i], p = r.p;
         g.innerHTML = '<div class="card"><h3>' + (r.kind === 'q' ? L('🧩 رتّب الكلمات واصنع السؤال', '🧩 Put the words in order to make the question') : L('🧩 الآن رتّب الجواب', '🧩 Now put the answer in order')) + '</h3>' +
@@ -244,7 +247,8 @@ audio[hidden]{display:none!important}
         {s:'___ تَذْهَبُ إِلَى الْمَدْرَسَةِ؟', r:'أَذْهَبُ السَّاعَةَ السَّابِعَةَ.', a:'mata', img:'school'}
       ]);
       let i = 0, right = 0;
-      const draw = () => {
+      const my = state.gen; const draw = () => {
+        if(my !== state.gen) return;
         if(i >= items.length){ finish('which'); g.innerHTML = '<div class="card end">📍⏰ ' + L('تعرف الفرق الآن! ', 'Now you know the difference! ') + right + ' / ' + items.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
         const it = items[i];
         g.innerHTML = '<div class="card"><h3>' + L('📍 أَيْنَ أم ⏰ مَتَى؟ اقرأ الجواب أولًا', '📍 أَيْنَ or ⏰ مَتَى? Read the answer first') + '</h3>' +

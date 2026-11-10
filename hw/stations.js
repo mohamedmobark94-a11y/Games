@@ -105,7 +105,7 @@ body{--acc:#2EC4B6;--sky1:#0B2A55;--sky2:#123C55}`;
       nav.querySelectorAll('[data-s]').forEach(b => b.onclick = () => go(+b.dataset.s));
       document.getElementById('prog').style.width = (Object.keys(state.done).length / S.length * 100) + '%';
     }
-    function go(i){ state.cur = Math.max(0, Math.min(S.length - 1, i)); bar(); const x = S[state.cur]; (V[x.t] || V.learn)(x, state.cur); window.scrollTo({top: 0, behavior: 'smooth'}); }
+    function go(i){ state.gen = (state.gen || 0) + 1; state.cur = Math.max(0, Math.min(S.length - 1, i)); bar(); const x = S[state.cur]; (V[x.t] || V.learn)(x, state.cur); window.scrollTo({top: 0, behavior: 'smooth'}); }
     const head = x => '<h3>' + (x.icon || ICON[x.t] || '') + ' ' + T(x.title) + '</h3>' + help(x.help);
     const nextBtn = i => i < S.length - 1 ? '<div class="row"><button class="btn" data-next>' + L('المحطة التالية ⬅', 'Next station ➜') + '</button></div>' : '';
     const bindNext = () => { const b = g.querySelector('[data-next]'); if(b) b.onclick = () => go(state.cur + 1); };
@@ -131,7 +131,8 @@ body{--acc:#2EC4B6;--sky1:#0B2A55;--sky2:#123C55}`;
       },
       listen(x, i){
         const R = rounds(x); let r = 0, right = 0; const pool = x.pool || [];
-        const draw = () => {
+        const my = state.gen; const draw = () => {
+          if(my !== state.gen) return; /* the student moved to another station */
           if(r >= R.length) return endCard(x, i, right, R.length);
           const q = R[r], ans = pool.find(p => p.k === q.a), others = shuffle(pool.filter(p => p.k !== q.a)).slice(0, (x.n || 4) - 1);
           const ch = shuffle([ans].concat(others).filter(Boolean));
@@ -153,7 +154,8 @@ body{--acc:#2EC4B6;--sky1:#0B2A55;--sky2:#123C55}`;
       },
       pick(x, i){
         const R = rounds(x); let r = 0, right = 0;
-        const draw = () => {
+        const my = state.gen; const draw = () => {
+          if(my !== state.gen) return; /* the student moved to another station */
           if(r >= R.length) return endCard(x, i, right, R.length);
           const q = R[r], ord = shuffle(q.opts.map((o, j) => j)), picOpts = q.opts.some(o => o && o.img);
           g.innerHTML = '<div class="card">' + head(x) + scene(q.img, q.clock) + (q.q ? '<div class="qq' + (isAr(T(q.q)) ? '' : ' lt') + '">' + T(q.q) + '</div>' : '') + help(q.help) +
@@ -177,7 +179,8 @@ body{--acc:#2EC4B6;--sky1:#0B2A55;--sky2:#123C55}`;
       },
       build(x, i){
         const R = rounds(x); let r = 0, right = 0;
-        const draw = () => {
+        const my = state.gen; const draw = () => {
+          if(my !== state.gen) return; /* the student moved to another station */
           if(r >= R.length) return endCard(x, i, right, R.length);
           const q = R[r], W = q.words, rtl = isAr(W.join(' '));
           g.innerHTML = '<div class="card">' + head(x) + scene(q.img, q.clock) + help(q.help) +
@@ -222,7 +225,8 @@ body{--acc:#2EC4B6;--sky1:#0B2A55;--sky2:#123C55}`;
         const N = x.n || 15;
         g.innerHTML = '<div class="card">' + head(Object.assign({title: {ar: 'المكافأة: امسك ' + N + ' نجمة!', en: 'Reward: catch ' + N + ' stars!'}}, x)) + '<div class="sky" data-sky></div><div class="fb" data-fb></div></div>';
         const sky = g.querySelector('[data-sky]'); let got = 0, t;
-        const spawn = () => {
+        const my = state.gen; const spawn = () => {
+          if(my !== state.gen){ clearInterval(t); return; }
           if(got >= N) return;
           const s = document.createElement('div'); s.className = 'star'; s.textContent = (x.items && Math.random() < .25) ? x.items[Math.random() * x.items.length | 0] : '⭐';
           s.style.left = (5 + Math.random() * 85) + '%'; s.style.top = (5 + Math.random() * 75) + '%';
