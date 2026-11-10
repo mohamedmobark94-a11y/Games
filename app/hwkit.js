@@ -22,6 +22,8 @@
   const K = {
     get lang(){ return lang; }, name: qs.get('name') || '', embedded,
     on(ev, fn){ (subs[ev] = subs[ev] || []).push(fn); },
+    /* the page opened on its own (no homework link around it) switches its own language */
+    setLang(l){ l = l === 'en' ? 'en' : 'ar'; if(l === lang) return; lang = l; try{ localStorage.setItem('tq-lang', l); }catch(_){} (subs.lang || []).forEach(f => f(lang)); },
     result(r){
       r = r || {};
       const out = {score: r.score == null ? null : +r.score, max: r.max == null ? null : +r.max, done: !!r.done,

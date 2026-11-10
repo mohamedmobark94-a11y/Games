@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>مَتَى؟ محقق الوقت · When? Time detective</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
+<!-- Homework: asking with مَتَى (Al-Arabiyyah Bayna Yadayk, book 1, lesson 32, drill 1). Book pictures and book audio. No student names here. -->
+<style>
+:root{--bg:#0A2233;--card:#123C55;--card2:#0F3148;--ink:#F2F7FA;--muted:#A9C3D3;--line:#24607F;--gold:#F5B942;--teal:#2EC4B6;--blue:#3D8BFD;--orange:#FF8A3D;--ok:#2ECC71;--bad:#FF6B6B;
+  --f-ui:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;--f-ar:"Amiri","Traditional Arabic",serif;--f-en:"Inter","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 15% 0,#14506F 0,transparent 45%),var(--bg);color:var(--ink);font:500 17px/1.6 var(--f-ui);padding:14px;-webkit-tap-highlight-color:transparent}
+html[lang=en] body{font-family:var(--f-en)}
+.ar{font-family:var(--f-ar);direction:rtl;unicode-bidi:isolate}
+.top{display:flex;align-items:center;gap:12px}
+.top h2{flex:1;margin:0;color:var(--gold);font-size:1.35rem;line-height:1.3}
+.snd,.lsw{font:inherit;font-weight:800;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;min-width:44px;height:44px;cursor:pointer}
+.hi{color:var(--muted);margin:4px 0 8px}
+.stations{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.st{flex:1;min-width:84px;text-align:center;background:var(--card2);border:2px solid var(--line);border-radius:12px;padding:4px 6px;font-size:.82rem;color:var(--muted);cursor:pointer}
+.st.on{border-color:var(--gold);color:var(--ink);background:var(--card)}
+.st.done{border-color:var(--ok);color:var(--ok)}
+.bar{height:10px;background:var(--card2);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width .4s}
+.card{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:12px}
+.card h3{margin:0 0 6px;color:var(--gold);font-size:1.15rem}
+.help{background:#0C2A3D;border:2px dashed var(--teal);border-radius:14px;padding:8px 12px;margin:8px 0;color:#CFF5F1;font-size:.95rem}
+.help b{color:var(--gold)}
+.formula{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;direction:rtl;margin:10px 0}
+.chip{font:700 1.7rem/1.4 var(--f-ar);padding:4px 14px;border-radius:12px;background:#FFFDF7;color:#13303F;border:3px solid transparent;text-align:center}
+.chip small{display:block;font:600 .8rem/1.2 var(--f-en);color:#4b6574}
+.c1{border-color:var(--orange)}.c2{border-color:var(--blue)}.c3{border-color:var(--teal)}.c4{border-color:var(--gold)}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.vs>div{border-radius:14px;padding:10px;text-align:center;background:var(--card)}
+.vs .w{font:700 2.2rem/1.3 var(--f-ar)}
+.play{font:inherit;font-weight:800;border:0;border-radius:14px;padding:8px 16px;min-height:48px;cursor:pointer;background:var(--teal);color:#06303A}
+.play.big{font-size:1.15rem;padding:10px 22px}
+.btn{font:inherit;font-weight:800;border:0;border-radius:14px;padding:8px 20px;min-height:48px;cursor:pointer;background:var(--gold);color:#3A2600}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:10px}
+.pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px}
+.pic{border:3px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;cursor:pointer;padding:0;font:inherit;color:#13303F}
+.pic img{display:block;width:100%;aspect-ratio:191/112;object-fit:cover}
+.pic span{display:block;font:700 1.25rem/1.4 var(--f-ar);padding:2px 4px}
+.pic.right{border-color:var(--ok);box-shadow:0 0 0 3px var(--ok)}
+.pic.wrong{border-color:var(--bad);opacity:.6}
+.scene{display:grid;grid-template-columns:minmax(0,400px) 170px;gap:16px;align-items:center;justify-content:center}
+audio[hidden]{display:none!important}
+.scene img{width:100%;border-radius:14px;border:3px solid #fff;display:block}
+.q{font:700 1.9rem/1.6 var(--f-ar);text-align:center;background:#FFFDF7;color:#13303F;border-radius:14px;padding:6px 10px;margin:8px 0;direction:rtl}
+.opts{display:grid;gap:8px;margin-top:8px}
+.opt{font:700 1.5rem/1.5 var(--f-ar);direction:rtl;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:14px;min-height:56px;cursor:pointer;padding:4px 10px}
+.opt.en{font:700 1.05rem/1.4 var(--f-en);direction:ltr}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 25%,var(--card))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 22%,var(--card))}
+.pool,.line{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;direction:rtl;min-height:64px;padding:8px;border-radius:14px}
+.line{background:#0C2A3D;border:2px dashed var(--line)}
+.pool .chip{cursor:pointer;font-size:1.6rem}
+.blank{display:inline-block;min-width:90px;border-bottom:4px solid var(--gold);color:var(--gold)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.two .opt{font-size:2rem}
+.recItem{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;background:var(--card);border-radius:14px;padding:10px;margin-top:10px}
+.recItem img{width:100%;border-radius:10px}
+.recItem .hint{font:700 1.3rem/1.5 var(--f-ar);direction:rtl;color:#CFF5F1;opacity:.85}
+.recItem .hint.hide{filter:blur(6px);cursor:pointer}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;margin-top:8px}
+.fb{text-align:center;font-weight:800;margin-top:8px;min-height:1.6em}
+.sky{position:relative;height:300px;border-radius:16px;overflow:hidden;background:linear-gradient(#0B2A55,#123C55);touch-action:manipulation}
+.star{position:absolute;font-size:38px;cursor:pointer;user-select:none;transition:transform .15s}
+.end{text-align:center;font-size:1.25rem}
+@media (max-width:560px){.scene{grid-template-columns:1fr}.recItem{grid-template-columns:1fr}.chip{font-size:1.4rem}}
+</style>
+<link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg">
+</head>
+<body>
+<div class="top">
+  <svg width="52" height="52" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#FFFDF7" stroke="#F5B942" stroke-width="8"/><line x1="50" y1="50" x2="50" y2="20" stroke="#0F3148" stroke-width="7" stroke-linecap="round"/><line x1="50" y1="50" x2="72" y2="58" stroke="#2EC4B6" stroke-width="7" stroke-linecap="round"/><circle cx="50" cy="50" r="6" fill="#0F3148"/></svg>
+  <h2 id="t"></h2>
+  <button class="lsw" id="lsw" hidden></button>
+  <button class="snd" data-tq-sound></button>
+</div>
+<div class="hi" id="hi"></div>
+<div class="bar"><i id="prog"></i></div>
+<div class="stations" id="stations"></div>
+<div id="game"></div>
+
+<script src="../app/hwkit.js"></script>
+<script src="../tq-fx.js"></script>
+<script>
+(function(){
+  const IMG = k => '../assets/img/abyy32/' + k + '.jpg', AUD = k => '../assets/audio/abyy32/' + k + '.mp3';
+  /* the book's seven pictures (drill 1, lesson 32) */
+  const P = [
+    {k:'school',   pl:'الْمَدْرَسَةِ', en:'school',   h:7, n:'السَّابِعَةَ'},
+    {k:'house',    pl:'الْبَيْتِ',     en:'home',     h:1, n:'الْوَاحِدَةَ'},
+    {k:'doctor',   pl:'الطَّبِيبِ',    en:'the doctor', h:2, n:'الثَّانِيَةَ'},
+    {k:'mosque',   pl:'الْمَسْجِدِ',   en:'the mosque', h:3, n:'الثَّالِثَةَ'},
+    {k:'engineer', pl:'الْمُهَنْدِسِ', en:'the engineer', h:4, n:'الرَّابِعَةَ'},
+    {k:'flat',     pl:'الشَّقَّةِ',    en:'the flat',  h:5, n:'الْخَامِسَةَ'},
+    {k:'uncle',    pl:'الْعَمِّ',      en:'my uncle',  h:6, n:'السَّادِسَةَ'}
+  ];
+  const Q = p => 'مَتَى تَذْهَبُ إِلَى ' + p.pl + '؟';
+  const A = p => 'أَذْهَبُ السَّاعَةَ ' + p.n + '.';
+  const shuffle = a => { a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const en = () => TQHW.lang === 'en';
+  const L = (ar, e) => en() ? e : ar;
+  let audio = null;
+  const play = (keys, done) => { keys = [].concat(keys); if(audio) audio.pause(); const go = i => { if(i >= keys.length){ if(done) done(); return; } audio = new Audio(AUD(keys[i])); audio.onended = () => setTimeout(() => go(i + 1), 350); audio.play().catch(() => {}); }; go(0); };
+  const ok = el => { if(window.TQFX) TQFX.ok(el); };
+  const bad = el => { if(window.TQFX) TQFX.bad(el); };
+  const clock = (h, size) => { const a = (h % 12) * 30 * Math.PI / 180, s = size || 90;
+    return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#fff" stroke="#2EC4B6" stroke-width="6"/>' +
+      Array.from({length: 12}, (_, i) => { const b = (i + 1) * 30 * Math.PI / 180; return '<circle cx="' + (50 + Math.sin(b) * 37) + '" cy="' + (50 - Math.cos(b) * 37) + '" r="2.4" fill="#0F3148"/>'; }).join('') +
+      '<line x1="50" y1="50" x2="50" y2="16" stroke="#F5B942" stroke-width="5" stroke-linecap="round"/><line x1="50" y1="50" x2="' + (50 + Math.sin(a) * 24) + '" y2="' + (50 - Math.cos(a) * 24) + '" stroke="#0F3148" stroke-width="7" stroke-linecap="round"/><circle cx="50" cy="50" r="5" fill="#0F3148"/></svg>'; };
+
+  /* ---------- stations ---------- */
+  const ST = [
+    {id:'learn',  ic:'🧭', ar:'افهم',        en:'Learn'},
+    {id:'listen', ic:'🎧', ar:'اسمع واختر',   en:'Listen'},
+    {id:'clock',  ic:'⏰', ar:'اقرأ الساعة',  en:'Clock'},
+    {id:'build',  ic:'🧩', ar:'ابنِ السؤال',  en:'Build'},
+    {id:'which',  ic:'📍', ar:'أين أم متى؟',  en:'Where/When'},
+    {id:'speak',  ic:'🎙️', ar:'اسأل بصوتك',  en:'Ask aloud'},
+    {id:'stars',  ic:'🌟', ar:'المكافأة',     en:'Reward'}
+  ];
+  const state = {cur: 0, done: {}, score: 0, max: 0, details: [], rec: 0};
+  const SCORED = {listen: 6, clock: 6, build: 4, which: 6};
+  state.max = Object.values(SCORED).reduce((a, b) => a + b, 0);
+  function report(){ TQHW.result({score: state.score, max: state.max, done: !!state.done.stars, details: state.details}); }
+  function mark(q, a, right){ state.details.push({q, a, ok: right}); if(right) state.score++; report(); }
+  function finish(id){ state.done[id] = true; drawStations(); report(); }
+
+  function drawStations(){
+    const s = document.getElementById('stations');
+    s.innerHTML = ST.map((x, i) => '<div class="st' + (i === state.cur ? ' on' : '') + (state.done[x.id] ? ' done' : '') + '" data-s="' + i + '">' + x.ic + ' ' + L(x.ar, x.en) + (state.done[x.id] ? ' ✓' : '') + '</div>').join('');
+    s.querySelectorAll('[data-s]').forEach(b => b.onclick = () => go(+b.dataset.s));
+    document.getElementById('prog').style.width = (Object.keys(state.done).length / ST.length * 100) + '%';
+  }
+  function go(i){ state.cur = Math.max(0, Math.min(ST.length - 1, i)); drawStations(); VIEW[ST[state.cur].id](document.getElementById('game')); window.scrollTo({top: 0, behavior: 'smooth'}); }
+  const nextBtn = () => '<div class="row"><button class="btn" data-next>' + L('المحطة التالية ⬅', 'Next station ➜') + '</button></div>';
+  const bindNext = g => { const b = g.querySelector('[data-next]'); if(b) b.onclick = () => go(state.cur + 1); };
+  const meta = (i, n, r) => '<div class="meta"><span>' + (i + 1) + ' / ' + n + '</span><span>⭐ ' + r + '</span></div>';
+
+  const VIEW = {
+    /* 1 — understand the question */
+    learn(g){
+      g.innerHTML = '<div class="card"><h3>' + L('🧭 كيف أسأل عن الوقت؟', '🧭 How do I ask about time?') + '</h3>' +
+        '<div class="help">' + L('<b>مَتَى؟</b> = سؤال عن <b>الوقت</b> ⏰. الجواب فيه <b>السَّاعَةَ…</b>', '<b>مَتَى؟</b> = <b>When?</b> ⏰ It asks about <b>time</b>. The answer has <b>السَّاعَةَ…</b> (at … o’clock).') + '</div>' +
+        '<div class="formula"><div class="chip c1">مَتَى<small>when</small></div><div class="chip c2">تَذْهَبُ<small>do you go</small></div><div class="chip c3">إِلَى<small>to</small></div><div class="chip c4">الْمَدْرَسَةِ<small>the school</small></div><div class="chip">؟</div></div>' +
+        '<div class="formula"><div class="chip c2">أَذْهَبُ<small>I go</small></div><div class="chip c1">السَّاعَةَ<small>at … o’clock</small></div><div class="chip c4">السَّابِعَةَ<small>seven</small></div></div>' +
+        '<div class="scene"><img src="' + IMG('school') + '" alt=""><div style="text-align:center">' + clock(7, 120) + '</div></div>' +
+        '<div class="row"><button class="play big" data-ex>🔊 ' + L('اسمع المثال من الكتاب', 'Hear the book example') + '</button></div>' +
+        '<div class="help">' + L('🔁 اسمع ← كرّر ← اقرأ وحدك. قل السؤال بصوت عالٍ مع الكتاب.', '🔁 Listen carefully → Repeat after me → Now read alone. Say the question aloud with the book.') + '</div>' +
+        '<div class="vs"><div style="border:3px solid #FF8A3D"><div class="w">أَيْنَ؟</div>' + L('📍 عن <b>المكان</b><br><span class="ar">— فِي الْمَسْجِدِ</span>', '📍 <b>Where?</b> → a place<br><span class="ar">— فِي الْمَسْجِدِ</span>') + '</div>' +
+        '<div style="border:3px solid #2EC4B6"><div class="w">مَتَى؟</div>' + L('⏰ عن <b>الوقت</b><br><span class="ar">— السَّاعَةَ الثَّالِثَةَ</span>', '⏰ <b>When?</b> → a time<br><span class="ar">— السَّاعَةَ الثَّالِثَةَ</span>') + '</div></div>' +
+        '<h3 style="margin-top:12px">' + L('🔢 الساعات في الدرس', '🔢 The hours in this lesson') + '</h3>' +
+        '<div class="pics">' + P.slice(1).concat(P[0]).map(p => '<div style="text-align:center;background:var(--card);border-radius:12px;padding:6px">' + clock(p.h, 64) + '<div class="ar" style="font-size:1.35rem;font-weight:700">السَّاعَةَ ' + p.n + '</div><small style="color:var(--muted)">' + p.h + ' o’clock</small></div>').join('') + '</div>' +
+        nextBtn() + '</div>';
+      g.querySelector('[data-ex]').onclick = () => play(['q-school', 'a-school']);
+      bindNext(g); finish('learn');
+    },
+
+    /* 2 — listen to the book and tap the picture */
+    listen(g){
+      const rounds = shuffle(P.slice(1)); let i = 0, right = 0;
+      const draw = () => {
+        if(i >= rounds.length){ finish('listen'); g.innerHTML = '<div class="card end">🎧 ' + L('ممتاز! ', 'Great listening! ') + right + ' / ' + rounds.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
+        const p = rounds[i], choices = shuffle([p].concat(shuffle(P.filter(x => x !== p)).slice(0, 3)));
+        g.innerHTML = '<div class="card"><h3>' + L('🎧 اسمع السؤال واضغط الصورة الصح', '🎧 Listen to the question and tap the right picture') + '</h3>' +
+          '<div class="help">' + L('اسمع الكلمة بعد <b>إِلَى</b> — هي المكان.', 'Listen for the word after <b>إِلَى</b> (to) — it is the place.') + '</div>' +
+          '<div class="row"><button class="play big" data-p>🔊 ' + L('اسمع', 'Listen') + '</button></div>' +
+          '<div class="pics">' + choices.map(c => '<button class="pic" data-k="' + c.k + '"><img src="' + IMG(c.k) + '" alt=""><span>' + c.pl.replace(/ِ$/, '') + '</span></button>').join('') + '</div>' +
+          '<div class="fb" data-fb></div>' + meta(i, rounds.length, right) + '</div>';
+        let miss = false, done = false;
+        g.querySelector('[data-p]').onclick = () => play('q-' + p.k);
+        setTimeout(() => play('q-' + p.k), 300);
+        g.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
+          if(done) return;
+          if(b.dataset.k === p.k){ done = true; b.classList.add('right'); ok(b); if(!miss) right++; mark('🎧 ' + Q(p), b.dataset.k, !miss);
+            g.querySelector('[data-fb]').innerHTML = '<span class="ar" style="font-size:1.5rem">' + Q(p) + ' — ' + A(p) + '</span>';
+            play(['a-' + p.k], () => { i++; setTimeout(draw, 500); });
+          } else { miss = true; b.classList.add('wrong'); bad(b); }
+        });
+      };
+      draw();
+    },
+
+    /* 3 — read the clock and choose the answer */
+    clock(g){
+      const rounds = shuffle(P).slice(0, 6); let i = 0, right = 0;
+      const draw = () => {
+        if(i >= rounds.length){ finish('clock'); g.innerHTML = '<div class="card end">⏰ ' + L('أحسنت يا محقق الوقت! ', 'Well done, time detective! ') + right + ' / ' + rounds.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
+        const p = rounds[i], wrong = shuffle(P.filter(x => x !== p)).slice(0, 2), opts = shuffle([p].concat(wrong));
+        g.innerHTML = '<div class="card"><h3>' + L('⏰ انظر إلى الساعة وأجب', '⏰ Look at the clock and answer') + '</h3>' +
+          '<div class="scene"><img src="' + IMG(p.k) + '" alt=""><div style="text-align:center">' + clock(p.h, 130) + '</div></div>' +
+          '<div class="q">' + Q(p) + '</div>' +
+          '<div class="help">' + L('العقرب الصغير يقول الساعة. ابدأ الجواب بـ <b>أَذْهَبُ السَّاعَةَ…</b>', 'The short hand shows the hour. Start the answer with <b>أَذْهَبُ السَّاعَةَ…</b> (I go at …)') + '</div>' +
+          '<div class="opts">' + opts.map(o => '<button class="opt" data-k="' + o.k + '">' + A(o) + '</button>').join('') + '</div>' +
+          '<div class="fb" data-fb></div>' + meta(i, rounds.length, right) + '</div>';
+        let miss = false, done = false;
+        g.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
+          if(done) return;
+          if(b.dataset.k === p.k){ done = true; b.classList.add('right'); ok(b); if(!miss) right++; mark('⏰ ' + Q(p), A(p), !miss); play(['q-' + p.k, 'a-' + p.k], () => { i++; setTimeout(draw, 400); }); }
+          else { miss = true; b.classList.add('wrong'); bad(b); g.querySelector('[data-fb]').textContent = L('عُدّ مرة أخرى: أين يشير العقرب الصغير؟', 'Count again: where does the short hand point?'); }
+        });
+      };
+      draw();
+    },
+
+    /* 4 — build the question (and one answer) from word chips */
+    build(g){
+      const picks = shuffle(P).slice(0, 3);
+      const rounds = picks.map(p => ({p, words: ['مَتَى', 'تَذْهَبُ', 'إِلَى', p.pl, '؟'], kind: 'q'}));
+      rounds.push({p: picks[0], words: ['أَذْهَبُ', 'السَّاعَةَ', picks[0].n], kind: 'a'});
+      let i = 0, right = 0;
+      const draw = () => {
+        if(i >= rounds.length){ finish('build'); g.innerHTML = '<div class="card end">🧩 ' + L('بنيت الأسئلة بنفسك! ', 'You built the questions yourself! ') + right + ' / ' + rounds.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
+        const r = rounds[i], p = r.p;
+        g.innerHTML = '<div class="card"><h3>' + (r.kind === 'q' ? L('🧩 رتّب الكلمات واصنع السؤال', '🧩 Put the words in order to make the question') : L('🧩 الآن رتّب الجواب', '🧩 Now put the answer in order')) + '</h3>' +
+          '<div class="scene"><img src="' + IMG(p.k) + '" alt=""><div style="text-align:center">' + clock(p.h, 120) + '</div></div>' +
+          '<div class="help">' + (r.kind === 'q' ? L('السؤال يبدأ بـ <b>مَتَى</b> وينتهي بـ <b>؟</b>', 'The question starts with <b>مَتَى</b> and ends with <b>؟</b>') : L('الجواب يبدأ بـ <b>أَذْهَبُ</b>', 'The answer starts with <b>أَذْهَبُ</b> (I go)')) + '</div>' +
+          '<div class="line" data-line></div><div class="pool" data-pool>' + shuffle(r.words.map((w, j) => [w, j])).map(x => '<div class="chip" data-j="' + x[1] + '">' + x[0] + '</div>').join('') + '</div>' +
+          '<div class="fb" data-fb></div>' + meta(i, rounds.length, right) + '</div>';
+        let next = 0, miss = false;
+        g.querySelectorAll('[data-j]').forEach(c => c.onclick = () => {
+          if(+c.dataset.j === next){ g.querySelector('[data-line]').appendChild(c); c.onclick = null; c.style.borderColor = 'var(--ok)'; next++;
+            if(next === r.words.length){ ok(c); if(!miss) right++; mark('🧩 ' + r.words.join(' '), r.words.join(' '), !miss);
+              play(r.kind === 'q' ? 'q-' + p.k : 'a-' + p.k, () => { i++; setTimeout(draw, 500); }); }
+          } else { miss = true; bad(c); g.querySelector('[data-fb]').textContent = L('ليست هذه. أي كلمة تأتي بعد ذلك؟', 'Not this one. Which word comes next?'); }
+        });
+      };
+      draw();
+    },
+
+    /* 5 — where or when? (links to the last session: أَيْنَ) */
+    which(g){
+      const items = shuffle([
+        {s:'___ تَذْهَبُ إِلَى الْمَسْجِدِ؟', r:'أَذْهَبُ السَّاعَةَ الثَّالِثَةَ.', a:'mata', img:'mosque'},
+        {s:'___ الطَّبِيبُ؟', r:'الطَّبِيبُ فِي الشَّقَّةِ.', a:'ayna', img:'doctor'},
+        {s:'___ تَذْهَبُ إِلَى الْبَيْتِ؟', r:'أَذْهَبُ السَّاعَةَ الْوَاحِدَةَ.', a:'mata', img:'house'},
+        {s:'___ الْعَمُّ؟', r:'الْعَمُّ فِي الْمَسْجِدِ.', a:'ayna', img:'uncle'},
+        {s:'___ الْمُهَنْدِسُ؟', r:'الْمُهَنْدِسُ فِي الشَّقَّةِ.', a:'ayna', img:'engineer'},
+        {s:'___ تَذْهَبُ إِلَى الْمَدْرَسَةِ؟', r:'أَذْهَبُ السَّاعَةَ السَّابِعَةَ.', a:'mata', img:'school'}
+      ]);
+      let i = 0, right = 0;
+      const draw = () => {
+        if(i >= items.length){ finish('which'); g.innerHTML = '<div class="card end">📍⏰ ' + L('تعرف الفرق الآن! ', 'Now you know the difference! ') + right + ' / ' + items.length + nextBtn() + '</div>'; bindNext(g); if(window.TQFX) TQFX.win(); return; }
+        const it = items[i];
+        g.innerHTML = '<div class="card"><h3>' + L('📍 أَيْنَ أم ⏰ مَتَى؟ اقرأ الجواب أولًا', '📍 أَيْنَ or ⏰ مَتَى? Read the answer first') + '</h3>' +
+          '<div class="help">' + L('الجواب فيه <b>مكان</b> (فِي…) ← <b>أَيْنَ</b>. الجواب فيه <b>ساعة</b> ← <b>مَتَى</b>.', 'Answer has a <b>place</b> (فِي… = in) → <b>أَيْنَ</b>. Answer has a <b>time</b> (السَّاعَةَ) → <b>مَتَى</b>.') + '</div>' +
+          '<div class="scene"><img src="' + IMG(it.img) + '" alt=""><div></div></div>' +
+          '<div class="q">' + it.s.replace('___', '<span class="blank">؟؟</span>') + '<br><span style="color:#2E7D6B">— ' + it.r + '</span></div>' +
+          '<div class="two"><button class="opt" data-a="ayna">📍 أَيْنَ</button><button class="opt" data-a="mata">⏰ مَتَى</button></div>' +
+          '<div class="fb" data-fb></div>' + meta(i, items.length, right) + '</div>';
+        let miss = false, done = false;
+        g.querySelectorAll('[data-a]').forEach(b => b.onclick = () => {
+          if(done) return;
+          const w = it.a === 'mata' ? 'مَتَى' : 'أَيْنَ';
+          if(b.dataset.a === it.a){ done = true; b.classList.add('right'); ok(b); if(!miss) right++; mark('📍⏰ ' + it.s.replace('___', '…') + ' — ' + it.r, w, !miss);
+            g.querySelector('.blank').textContent = w; setTimeout(() => { i++; draw(); }, 1300); }
+          else { miss = true; b.classList.add('wrong'); bad(b); g.querySelector('[data-fb]').textContent = L('انظر إلى الجواب: مكان أم ساعة؟', 'Look at the answer: a place or a time?'); }
+        });
+      };
+      draw();
+    },
+
+    /* 6 — record: ask the questions with your own voice */
+    speak(g){
+      const picks = shuffle(P).slice(0, 3);
+      const mine = [
+        ['مَتَى تَسْتَيْقِظُ؟', 'When do you wake up?'], ['مَتَى تَنَامُ؟', 'When do you sleep?'],
+        ['مَتَى تُصَلِّي الْفَجْرَ؟', 'When do you pray Fajr?'], ['مَتَى تَذْهَبُ إِلَى الْمَسْجِدِ؟', 'When do you go to the mosque?']];
+      g.innerHTML = '<div class="card"><h3>' + L('🎙️ أنت المعلم الآن: اسأل بصوتك', '🎙️ Now you are the teacher: ask with your voice') + '</h3>' +
+        '<div class="help">' + L('١) انظر إلى الصورة والساعة. ٢) سجّل <b>السؤال</b> ثم <b>الجواب</b>. محتاج مساعدة؟ اضغط على السطر المخفي.', '1) Look at the picture and the clock. 2) Record the <b>question</b>, then the <b>answer</b>. Need help? Tap the hidden line.') + '</div>' +
+        picks.map((p, j) => '<div class="recItem"><div><img src="' + IMG(p.k) + '" alt=""><div style="text-align:center;margin-top:4px">' + clock(p.h, 70) + '</div></div><div>' +
+          '<div class="hint hide" data-h>' + Q(p) + '<br>' + A(p) + '</div>' +
+          '<div class="row" style="justify-content:flex-start"><button class="play" data-ex="' + p.k + '">🔊 ' + L('مثال', 'Example') + '</button><span data-r="' + j + '"></span></div></div></div>').join('') +
+        '<h3 style="margin-top:14px">' + L('👨‍👩‍👦 سؤالك أنت: اسأل أحدًا في البيت', '👨‍👩‍👦 Your own question: ask someone at home') + '</h3>' +
+        '<div class="help">' + L('اختر سؤالًا، اسأله لأبيك أو أمك أو أخيك، وسجّل السؤال وجوابه.', 'Choose a question. Ask your dad, mum or brother. Record the question and their answer.') + '</div>' +
+        '<div class="opts">' + mine.map((m, j) => '<button class="opt" data-m="' + j + '">' + m[0] + (en() ? '<small dir="ltr" style="display:block;font:600 .8rem var(--f-en);opacity:.8">' + m[1] + '</small>' : '') + '</button>').join('') + '</div>' +
+        '<div data-own style="margin-top:10px"></div>' + nextBtn() + '</div>';
+      g.querySelectorAll('[data-h]').forEach(h => h.onclick = () => h.classList.remove('hide'));
+      g.querySelectorAll('[data-ex]').forEach(b => b.onclick = () => play(['q-' + b.dataset.ex, 'a-' + b.dataset.ex]));
+      picks.forEach((p, j) => { const b = TQHW.recordButton(g.querySelector('[data-r="' + j + '"]'), '🎙️ ' + Q(p)); b.addEventListener('click', () => { if(!state.done.speak){ state.rec++; if(state.rec >= 2) finish('speak'); } }); });
+      g.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
+        g.querySelectorAll('[data-m]').forEach(x => x.classList.remove('right')); b.classList.add('right'); ok(b);
+        const box = g.querySelector('[data-own]'); box.innerHTML = '<div class="q">' + mine[+b.dataset.m][0] + '</div><div class="help">' + L('الجواب يبدأ بـ <b>السَّاعَةَ…</b> مثل: أَسْتَيْقِظُ السَّاعَةَ السَّادِسَةَ.', 'The answer has <b>السَّاعَةَ…</b> like: أَسْتَيْقِظُ السَّاعَةَ السَّادِسَةَ (I wake up at six).') + '</div><div data-or></div>';
+        TQHW.recordButton(box.querySelector('[data-or]'), '🎙️ ' + mine[+b.dataset.m][0] + ' (' + L('سؤالي', 'my question') + ')');
+      });
+      bindNext(g);
+    },
+
+    /* 7 — reward: catch the stars */
+    stars(g){
+      g.innerHTML = '<div class="card"><h3>' + L('🌟 مكافأة محقق الوقت: امسك ١٥ نجمة!', '🌟 Time detective reward: catch 15 stars!') + '</h3><div class="sky" data-sky></div><div class="fb" data-fb></div></div>';
+      const sky = g.querySelector('[data-sky]'); let got = 0, t;
+      const spawn = () => {
+        if(got >= 15) return;
+        const s = document.createElement('div'); s.className = 'star'; s.textContent = Math.random() < .2 ? '⏰' : '⭐';
+        s.style.left = (5 + Math.random() * 85) + '%'; s.style.top = (5 + Math.random() * 75) + '%';
+        s.onclick = () => { got++; s.style.transform = 'scale(1.8)'; ok(s); setTimeout(() => s.remove(), 150); g.querySelector('[data-fb]').textContent = '⭐ ' + got + ' / 15';
+          if(got >= 15){ clearInterval(t); sky.innerHTML = ''; finish('stars'); if(window.TQFX) TQFX.win();
+            const n = TQHW.name;
+            g.querySelector('.card').insertAdjacentHTML('beforeend', '<div class="end" style="margin-top:10px">🏆 ' + L('شكرًا ' + (n || 'يا بطل') + '! أنت الآن تعرف تسأل بـ <b class="ar">مَتَى</b>. سجّلت أسئلتك — المعلم سيسمعها ويرد عليك. 🌟', 'Thank you' + (n ? ', ' + n : '') + '! You can ask with <b class="ar">مَتَى</b> now. Your teacher will listen to your questions and reply. 🌟') +
+              '<div style="margin-top:6px"><b dir="ltr">⭐ ' + state.score + ' / ' + state.max + '</b></div></div>'); } };
+        sky.appendChild(s); setTimeout(() => s.remove(), 1700);
+      };
+      t = setInterval(spawn, 550); spawn();
+    }
+  };
+
+  function frame(){
+    document.documentElement.lang = TQHW.lang; document.documentElement.dir = en() ? 'ltr' : 'rtl';
+    document.getElementById('t').textContent = L('⏰ مَتَى؟ محقق الوقت', '⏰ مَتَى? The time detective');
+    const n = TQHW.name;
+    document.getElementById('hi').innerHTML = L('أهلًا ' + (n || '') + '! اليوم تتعلم تسأل عن الوقت بـ <b>مَتَى</b> — من الدرس ٣٢ في كتابك.', 'Hi ' + (n || '') + '! Today you learn to ask about time with <b class="ar">مَتَى</b> — from lesson 32 in your book.');
+    const lsw = document.getElementById('lsw'); if(!TQHW.embedded){ lsw.hidden = false; lsw.textContent = en() ? 'ع' : 'EN'; lsw.onclick = () => TQHW.setLang(en() ? 'ar' : 'en'); }
+  }
+  TQHW.on('lang', () => { frame(); go(state.cur); });
+  frame(); report(); go(0);
+})();
+</script>
+</body>
+</html>

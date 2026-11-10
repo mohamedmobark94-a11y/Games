@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>How to Pray · Homework</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Amiri:wght@400;700&display=swap">
+<!-- Homework for the lesson lessons/how-to-pray-girls.html: positions quiz, rakʿah counts, build a rakʿah, and two recordings.
+     Runs inside the student's homework link (app/hw.html); results go to the teacher with app/hwkit.js. No student names here. -->
+<style>
+:root{--bg:#FFF6FA;--ink:#3B2346;--soft:#7D6488;--line:#EBD8F0;--pink:#E86AA4;--pink2:#FBD3E6;--lav:#9B7BD8;--lav2:#E6DCFA;--gold:#E9A93B;--gold2:#FFF1D2;--mint:#3FB58F;--mint2:#DDF5EC;
+  --f:"Fredoka","Segoe UI",system-ui,sans-serif;--ar:"Amiri",serif}
+*{box-sizing:border-box}
+body{margin:0;padding:14px;color:var(--ink);font:500 17px/1.55 var(--f);background:radial-gradient(800px 400px at 100% 0,#FDE6F1 0,transparent 60%),var(--bg)}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.hero{display:flex;align-items:center;gap:14px;background:#fff;border:2px solid var(--line);border-radius:24px;padding:12px 16px}
+.hero img{width:86px;height:86px;object-fit:cover;border-radius:18px}
+.hero h1{margin:0;font-size:clamp(24px,5vw,34px);color:#B23A75;line-height:1.15}
+.hero p{margin:2px 0 0;color:var(--soft)}
+.card{background:#fff;border:2px solid var(--line);border-radius:24px;padding:16px}
+.h2{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:20px;color:var(--lav)}
+.h2 i{flex:none;width:32px;height:32px;border-radius:50%;background:var(--lav2);display:grid;place-items:center;font-style:normal;font-weight:700}
+.sub{margin:0 0 10px;color:var(--soft);font-size:15px}
+.bar{height:12px;background:var(--lav2);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--lav));transition:width .3s}
+.qa{font:700 clamp(28px,6vw,40px)/1.8 var(--ar);direction:rtl;text-align:center;background:linear-gradient(135deg,#FDE9F3,#EFE7FF);border-radius:18px;padding:6px 12px;margin:10px 0}
+.qt{text-align:center;color:var(--soft);margin-top:-6px;margin-bottom:10px}
+.pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.pic{border:3px solid var(--line);border-radius:18px;background:#fff;padding:8px;display:grid;place-items:center;gap:4px;min-height:150px}
+.pic img{max-height:110px;max-width:100%;object-fit:contain}
+.pic span{font-weight:700;font-size:15px}
+.pic.right{border-color:var(--mint);background:var(--mint2)}.pic.wrong{border-color:#F08A8A;background:#FFF0F0}
+.fb{text-align:center;font-weight:700;min-height:1.6em;margin-top:8px}
+.prs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+@media(max-width:560px){.prs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pr{border:3px solid var(--line);border-radius:18px;padding:8px 4px;text-align:center}
+.pr b{display:block;font-size:18px}.pr small{color:var(--soft);font:700 14px var(--ar)}
+.pr .k{display:flex;gap:4px;justify-content:center;margin-top:6px}
+.pr .k button{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:#fff;font-weight:700}
+.pr.right{border-color:var(--mint);background:var(--mint2)}.pr.wrong{border-color:#F08A8A}
+.tray{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chipP{border:3px solid var(--line);border-radius:16px;background:#fff;padding:4px 8px;display:grid;place-items:center;width:104px}
+.chipP img{height:70px;max-width:100%;object-fit:contain}.chipP span{font-size:13px;font-weight:700}
+.chipP.used{opacity:.25;pointer-events:none}
+.line{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:100px;border:3px dashed var(--lav2);border-radius:18px;padding:8px;margin-bottom:10px}
+.line .chipP{width:92px;border-color:var(--lav)}.line .chipP img{height:56px}
+.rec .say{font:700 clamp(20px,4vw,26px)/1.9 var(--ar);direction:rtl;text-align:center;background:var(--gold2);border-radius:16px;padding:6px 12px;margin-bottom:10px}
+.rec button{background:var(--pink);color:#fff;border:0;border-radius:14px;min-height:46px;padding:0 18px;font-weight:700}
+.rec audio{width:100%;margin-top:8px}
+.btn{min-height:46px;padding:0 18px;border:0;border-radius:14px;background:var(--lav);color:#fff;font-weight:700}
+.end{display:none;text-align:center;overflow:hidden;padding:0}
+.end.on{display:block}
+.end img{width:100%;max-height:340px;object-fit:cover;display:block}
+.end div{padding:12px 16px 16px}
+.end h3{margin:0;color:#B23A75;font-size:26px}
+</style>
+<link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg">
+</head>
+<body>
+<div class="wrap">
+  <div class="hero"><img src="../assets/img/prayer/hero.webp" alt=""><div><h1>How to Pray · Homework</h1><p id="hi"></p></div></div>
+  <div class="bar"><i id="prog"></i></div>
+
+  <section class="card"><h2 class="h2"><i>1</i>Where do we say it?</h2><p class="sub">Read the words, then tap the right position.</p><div id="q1"></div><div class="fb" id="f1"></div></section>
+  <section class="card"><h2 class="h2"><i>2</i>How many rakʿahs?</h2><p class="sub">Tap the number of rakʿahs for each prayer.</p><div class="prs" id="q2"></div><div class="fb" id="f2"></div></section>
+  <section class="card"><h2 class="h2"><i>3</i>Build one rakʿah</h2><p class="sub">Tap the pictures in the right order.</p><div class="line" id="line"></div><div class="tray" id="tray"></div><div class="fb" id="f3"></div></section>
+  <section class="card rec"><h2 class="h2"><i>4</i>Record the tashahhud</h2><p class="sub">Say the tashahhud by heart. Look at the words only if you need them.</p>
+    <div class="say">التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ</div><div id="r1"></div></section>
+  <section class="card rec"><h2 class="h2"><i>5</i>Teach someone at home</h2><p class="sub">In one minute, explain to someone at home what we say in rukūʿ, in sujood and between the two sujoods. Record it.</p><div id="r2"></div></section>
+  <section class="card end" id="end"><img src="../assets/img/prayer/reward.webp" alt=""><div><h3 id="endT">Well done!</h3><p style="margin:6px 0 0">You finished all the games. Now record, then send your homework.</p></div></section>
+</div>
+<script src="../app/hwkit.js"></script>
+<script src="../tq-fx.js"></script>
+<script>
+(function(){
+  const IMG = k => '../assets/img/salah-girl/' + k + '.webp';
+  const NM = {stand: 'Standing', ruku: 'Rukūʿ', sujud: 'Sujūd', sit: 'Sitting', tasleem: 'Tasleem', takbeer: 'Takbeer', qiyam: 'Standing'};
+  const $ = id => document.getElementById(id), fx = (f, el) => { if(window.TQFX && TQFX[f]) TQFX[f](el); };
+  const Q1 = [
+    {a: 'سُبْحَانَ رَبِّيَ الْعَظِيمِ', t: 'Subḥāna Rabbiyal-ʿAẓīm', k: 'ruku', o: ['ruku', 'sujud', 'sit']},
+    {a: 'سُبْحَانَ رَبِّيَ الْأَعْلَى', t: 'Subḥāna Rabbiyal-Aʿlā', k: 'sujud', o: ['stand', 'ruku', 'sujud']},
+    {a: 'رَبِّ اغْفِرْ لِي', t: 'Rabbighfir lī', k: 'sit', o: ['sit', 'sujud', 'stand']},
+    {a: 'رَبَّنَا وَلَكَ الْحَمْدُ', t: 'Rabbanā wa lakal-ḥamd', k: 'stand', o: ['ruku', 'stand', 'sit']},
+    {a: 'التَّحِيَّاتُ لِلَّهِ', t: 'At-taḥiyyātu lillāh', k: 'sit', o: ['stand', 'sujud', 'sit']},
+    {a: 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ', t: 'As-salāmu ʿalaykum wa raḥmatullāh', k: 'tasleem', o: ['tasleem', 'ruku', 'sujud']}
+  ];
+  const PR = [['Fajr', 'الفجر', 2], ['Ẓuhr', 'الظهر', 4], ['ʿAṣr', 'العصر', 4], ['Maghrib', 'المغرب', 3], ['ʿIshāʾ', 'العشاء', 4]];
+  const ORD = [['takbeer', 'Takbeer'], ['qiyam', 'Standing'], ['ruku', 'Rukūʿ'], ['stand', 'Rising'], ['sujud', 'Sujūd'], ['sit', 'Sitting'], ['sujud', 'Sujūd']];
+  let qi = 0, s1 = 0, tried1 = false; const r2 = {}; let ordDone = false, ordErr = 0; const det1 = [];
+
+  function report(){
+    const s2 = Object.values(r2).filter(x => x.ok).length, score = s1 + s2 + (ordDone ? 1 : 0), max = Q1.length + PR.length + 1;
+    const done = qi >= Q1.length && Object.keys(r2).length === PR.length && ordDone;
+    $('prog').style.width = ((Math.min(qi, Q1.length) + Object.keys(r2).length + (ordDone ? 1 : 0)) / max * 100) + '%';
+    $('end').classList.toggle('on', done);
+    TQHW.result({score, max, done, details: det1.concat(PR.map(p => r2[p[0]] ? {q: p[0] + ' · rakʿahs', a: String(r2[p[0]].a), ok: r2[p[0]].ok} : null).filter(Boolean))
+      .concat([{q: 'Build one rakʿah · ترتيب الركعة', a: ordDone ? 'done (' + ordErr + ' mistakes)' : 'not finished', ok: ordDone && ordErr === 0}])});
+  }
+  function drawQ1(){
+    if(qi >= Q1.length){ $('q1').innerHTML = '<div class="qa" style="font-family:var(--f);font-size:22px">' + s1 + ' / ' + Q1.length + ' ✓</div>'; $('f1').textContent = s1 === Q1.length ? 'All correct! Masha Allah 🌸' : 'Well done! Look again at the lesson for the ones you missed.'; return; }
+    const q = Q1[qi]; tried1 = false;
+    $('q1').innerHTML = '<div class="qa">' + q.a + '</div><div class="qt">' + q.t + '</div><div class="pics">' + q.o.map(k => '<button class="pic" type="button" data-k="' + k + '"><img src="' + IMG(k) + '" alt=""><span>' + NM[k] + '</span></button>').join('') + '</div>';
+    $('f1').textContent = (qi + 1) + ' / ' + Q1.length;
+  }
+  $('q1').onclick = e => { const b = e.target.closest('.pic'); if(!b || qi >= Q1.length) return; const q = Q1[qi], ok = b.dataset.k === q.k;
+    b.classList.add(ok ? 'right' : 'wrong');
+    if(!tried1){ det1.push({q: q.a, a: NM[b.dataset.k], ok}); if(ok) s1++; tried1 = true; }
+    if(ok){ fx('ok', b); $('q1').querySelectorAll('.pic').forEach(x => x.disabled = true); setTimeout(() => { qi++; drawQ1(); report(); }, 800); }
+    else { fx('bad', b); $('f1').textContent = 'Oops! Try again.'; }
+    report(); };
+  $('q2').innerHTML = PR.map(p => '<div class="pr" data-p="' + p[0] + '" data-r="' + p[2] + '"><b>' + p[0] + '</b><small>' + p[1] + '</small><div class="k">' + [2, 3, 4].map(n => '<button type="button" data-n="' + n + '">' + n + '</button>').join('') + '</div></div>').join('');
+  $('q2').onclick = e => { const b = e.target.closest('[data-n]'); if(!b) return; const pr = b.closest('.pr'), p = pr.dataset.p, ok = +b.dataset.n === +pr.dataset.r;
+    if(!r2[p]) r2[p] = {a: +b.dataset.n, ok};
+    if(ok){ pr.classList.add('right'); pr.querySelectorAll('button').forEach(x => x.disabled = true); fx('ok', b); } else { pr.classList.add('wrong'); fx('bad', b); }
+    if(PR.every(x => document.querySelector('.pr[data-p="' + x[0] + '"]').classList.contains('right'))) $('f2').textContent = 'All correct! 🌟';
+    report(); };
+  function setupOrd(){
+    let got = 0; const deck = ORD.map((x, i) => [x, i]).sort(() => Math.random() - .5);
+    $('tray').innerHTML = deck.map(([x, i]) => '<button class="chipP" type="button" data-o="' + i + '"><img src="' + IMG(x[0]) + '" alt=""><span>' + x[1] + '</span></button>').join('');
+    $('line').innerHTML = '';
+    $('tray').onclick = e => { const b = e.target.closest('.chipP'); if(!b || ordDone) return; const i = +b.dataset.o;
+      const ok = ORD[i][0] === ORD[got][0];
+      if(!ok){ ordErr++; fx('bad', b); $('f3').textContent = 'Oops! What comes next?'; report(); return; }
+      b.classList.add('used'); $('line').insertAdjacentHTML('beforeend', b.outerHTML.replace('chipP used', 'chipP')); got++; $('f3').textContent = ''; fx('ok', b);
+      if(got === ORD.length){ ordDone = true; $('f3').textContent = 'Perfect! A whole rakʿah! 🌟'; fx('win'); }
+      report(); };
+  }
+  $('hi').textContent = TQHW.name ? 'Hi ' + TQHW.name + '! Play, then record and send your homework.' : 'Play, then record and send your homework.';
+  TQHW.recordButton($('r1'), 'Tashahhud');
+  TQHW.recordButton($('r2'), 'Teach someone at home');
+  drawQ1(); setupOrd(); report();
+})();
+</script>
+</body>
+</html>

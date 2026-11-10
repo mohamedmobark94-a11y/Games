@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Letter Squads</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: one centred "journal page" card; each stage swaps inside it. Single light look by choice (pastel sticker journal). */
+:root{
+  --paper:#FFF4F6; --card:#FFFFFF; --ink:#3A1E48; --soft:#7A5C88;
+  --rose:#E4578C; --lilac:#9C7FE0; --mint:#3FB894; --sun:#E59A1A; --line:#F1D3DE;
+  --init:#D33F3A; --med:#D98A0B; --fin:#127F7F; --iso:#4E4E5A;
+  --door:#E2A33A; --belly:#E8607C; --trans:#4AA9E8; --plate:#36BFA8;
+  --display:"Fredoka","Nunito",system-ui,sans-serif;
+  --body:"Nunito",system-ui,sans-serif;
+  --ar:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;
+  background-image:radial-gradient(circle at 1px 1px,#F3D9E3 1.2px,transparent 0);background-size:22px 22px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px;
+  touch-action:manipulation;-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+button:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:20px;display:flex;align-items:center;gap:8px}
+.brand i{font-style:normal;display:inline-grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--rose);color:#fff;font-family:var(--ar);font-size:22px;transform:rotate(-6deg)}
+.spacer{flex:1}
+.pill{font-family:var(--display);font-weight:600;font-size:15px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:5px 12px;display:flex;align-items:center;gap:6px}
+.iconbtn{width:38px;height:38px;border-radius:12px;background:var(--card);border:2px solid var(--line);font-size:18px;display:grid;place-items:center}
+.progress{height:10px;background:#F6DDE6;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--lilac));border-radius:99px;transition:width .5s}
+.card{background:var(--card);border:2px solid var(--line);border-radius:26px;padding:22px 20px 24px;box-shadow:0 10px 0 #F6DDE6;position:relative;min-width:0}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose)}
+h1,h2{font-family:var(--display);font-weight:700;margin:4px 0 6px;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(28px,6vw,40px)} h2{font-size:clamp(22px,4.6vw,28px)}
+p{margin:6px 0;line-height:1.5;color:var(--soft)}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate}
+.btn{font-family:var(--display);font-weight:600;font-size:18px;background:var(--rose);color:#fff;border-radius:16px;padding:12px 22px;box-shadow:0 5px 0 #B93A69;transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #B93A69}
+.btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 5px 0 var(--line)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.center{text-align:center}
+.foot{display:flex;justify-content:flex-end;margin-top:18px}
+
+/* welcome */
+.names{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.name{background:var(--paper);border:3px solid var(--line);border-radius:22px;padding:16px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--display);font-weight:600;font-size:18px;transition:transform .15s}
+.name .em{font-size:38px}
+.name.sel{border-color:var(--rose);background:#FFE3EC;transform:translateY(-4px) rotate(-1.5deg)}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.legend span{font-family:var(--display);font-size:13px;font-weight:600;padding:4px 10px;border-radius:99px;color:#fff}
+
+/* squads */
+.squads{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.flip{perspective:900px;min-height:210px;display:block;width:100%;padding:0}
+.flip .in{position:relative;width:100%;height:100%;min-height:210px;transition:transform .55s;transform-style:preserve-3d}
+.flip.open .in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center}
+.face.front{color:#fff;font-family:var(--display);font-weight:700;font-size:20px}
+.face.front .big{font-size:52px;line-height:1}
+.face.front small{font-weight:500;font-size:13px;opacity:.9}
+.face.back{transform:rotateY(180deg);background:var(--card);border:3px solid currentColor}
+.face.back b{font-family:var(--display);font-size:16px}
+.face.back p{font-size:13.5px;color:var(--ink);margin:0}
+.face.back .ar{font-size:26px;color:var(--ink);letter-spacing:4px}
+.sq-door{background:var(--door)} .sq-belly{background:var(--belly)} .sq-trans{background:var(--trans)} .sq-plate{background:var(--plate)}
+.c-door{color:var(--door)} .c-belly{color:var(--belly)} .c-trans{color:var(--trans)} .c-plate{color:var(--plate)}
+
+/* detective */
+.word{font-family:var(--ar);direction:rtl;font-size:clamp(78px,20vw,120px);line-height:1.5;text-align:center;color:var(--ink);margin:4px 0 0}
+.tag{display:inline-block;font-family:var(--display);font-size:13px;font-weight:600;color:#fff;border-radius:99px;padding:3px 10px}
+.q{font-family:var(--display);font-weight:600;font-size:19px;margin:10px 0 8px;text-align:center}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.opt{background:var(--paper);border:3px solid var(--line);border-radius:18px;min-height:76px;font-family:var(--ar);font-size:40px;line-height:1;display:grid;place-items:center;transition:transform .12s}
+.opt:active{transform:scale(.96)}
+.opt.ok{background:#DDF6EE;border-color:var(--mint)}
+.opt.no{background:#FFE4E4;border-color:#E87A7A;animation:shake .35s}
+.sqopts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sqbtn{border-radius:16px;padding:12px 8px;color:#fff;font-family:var(--display);font-weight:600;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px;border:3px solid transparent;min-height:56px}
+.sqbtn.no{animation:shake .35s;opacity:.5}
+.sqbtn.ok{border-color:var(--ink)}
+.explain{margin-top:14px;background:#F7F1FF;border:2px dashed var(--lilac);border-radius:18px;padding:12px 14px;display:flex;gap:14px;align-items:center}
+.explain .morph{font-family:var(--ar);font-size:44px;direction:rtl;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.explain .morph em{font-style:normal;font-family:var(--display);font-size:20px;color:var(--lilac)}
+.explain p{margin:0;color:var(--ink);font-size:15px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+/* sorter */
+.trays{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.tray{border-radius:18px;padding:8px 6px 10px;color:#fff;min-height:118px;display:flex;flex-direction:column;align-items:center;gap:4px;border:3px solid transparent;transition:transform .12s}
+.tray.hint{border-color:var(--ink);transform:translateY(-3px)}
+.tray .t{font-family:var(--display);font-weight:700;font-size:14px;text-align:center;line-height:1.1}
+.tray .got{font-family:var(--ar);font-size:24px;direction:rtl;line-height:1.3;text-align:center;word-break:break-all}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px}
+.chip{background:var(--paper);border:3px solid var(--line);border-radius:16px;width:74px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--ar);line-height:1}
+.chip .a{font-size:36px} .chip .b{font-size:20px;color:var(--soft);margin-top:4px}
+.chip.pick{border-color:var(--rose);background:#FFE3EC;transform:translateY(-4px)}
+.chip.gone{visibility:hidden}
+
+/* build */
+.slots{font-family:var(--ar);direction:rtl;text-align:center;font-size:clamp(70px,18vw,104px);min-height:1.6em;line-height:1.5;border-bottom:3px dashed var(--line);margin-bottom:8px}
+.tiles{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;direction:rtl}
+.tile{width:70px;height:70px;border-radius:18px;background:#FFF;border:3px solid var(--lilac);font-family:var(--ar);font-size:40px;display:grid;place-items:center;box-shadow:0 5px 0 #DCCFF7}
+.tile.used{opacity:.25;pointer-events:none}
+
+/* bubbles */
+.pond{position:relative;height:380px;border-radius:22px;background:linear-gradient(180deg,#F4ECFF,#FFE9F0);overflow:hidden;border:2px solid var(--line);margin-top:10px}
+.bub{position:absolute;bottom:-90px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 30% 28%,#fff 0 14%,rgba(255,255,255,.55) 15% 40%,rgba(200,180,255,.35) 70%);border:2px solid rgba(156,127,224,.55);font-family:var(--ar);font-size:34px;display:grid;place-items:center;color:var(--ink);animation:rise linear forwards}
+.bub.pop{animation:pop .3s forwards}
+.bub.bad{border-color:#E87A7A;background:#FFE4E4}
+@keyframes rise{to{transform:translateY(-480px)}}
+@keyframes pop{to{transform:scale(1.6);opacity:0}}
+.timer{font-family:var(--display);font-weight:700;font-size:22px}
+
+/* cert */
+.cert{border:4px double var(--rose);border-radius:24px;padding:24px 18px;text-align:center;background:linear-gradient(160deg,#FFF 0 60%,#FDEBF2)}
+.cert .who{font-family:var(--display);font-weight:700;font-size:clamp(34px,8vw,48px);color:var(--rose);margin:6px 0}
+.stars{font-size:34px;letter-spacing:4px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media (max-width:520px){
+  .opts{grid-template-columns:repeat(2,1fr)}
+  .trays{grid-template-columns:repeat(2,1fr)}
+  .squads{grid-template-columns:1fr}
+  .names .em{font-size:30px}
+  .explain{flex-direction:column;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><i>ب</i> Letter Squads</div>
+    <div class="spacer"></div>
+    <div class="pill" title="Stars">⭐ <span id="stars">0</span></div>
+    <button class="iconbtn" id="snd" aria-label="Sound on or off">🔊</button>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="card" id="stage"></div>
+</div>
+<canvas class="confetti" id="conf"></canvas>
+
+<script src="../app/hwkit.js"></script>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const stage=$('#stage');
+let stars=0, soundOn=true, who=null, stepIdx=0, ac=null;
+
+/* ---------- letters & joining ---------- */
+const NONFWD='اأإآدذرزوؤةءى';
+const SQ={
+ door:{name:'DoorZ',em:'🚪',letters:'ادذرزو',rule:'They hold hands only with the letter BEFORE them. After a door, the next letter starts fresh.',ex:['ر','ـر']},
+ belly:{name:'Belly',em:'✂️',letters:'جحخصضلمعغ',rule:'A big belly and a tail. When they hold hands forward, the belly or tail gets cut. It comes back at the end.',ex:['ح','حـ']},
+ trans:{name:'Transformers',em:'🤖',letters:'هكعغ',rule:'They change their whole costume when they connect. Same letter, new look!',ex:['ه','ـهـ']},
+ plate:{name:'Broken plate',em:'🍽️',letters:'بتثني',rule:'The round plate breaks into a small tooth. The dots tell you who it is.',ex:['ب','ـبـ']}
+};
+const SQKEYS=['door','belly','trans','plate'];
+const EMO={Lina:'🌷',Kawthar:'🦋',Balgah:'🌙','لينا':'🌷','كوثر':'🦋','بلجا':'🌙'};
+function squadsOf(L){return SQKEYS.filter(k=>SQ[k].letters.includes(L));}
+function pos(w,i){
+  const prev=i>0?w[i-1]:null,next=w[i+1]||null,L=w[i];
+  const jp=!!prev&&!NONFWD.includes(prev)&&L!=='ء';
+  const jn=!!next&&!NONFWD.includes(L)&&next!=='ء';
+  return jp&&jn?'medial':jp?'final':jn?'initial':'isolated';
+}
+function form(L,p){
+  const door=NONFWD.includes(L);
+  if(p==='initial')return door?L:L+'ـ';
+  if(p==='medial')return door?'ـ'+L:'ـ'+L+'ـ';
+  if(p==='final')return 'ـ'+L;
+  return L;
+}
+const PCOL={initial:'var(--init)',medial:'var(--med)',final:'var(--fin)',isolated:'var(--iso)'};
+const READ=[['قلب',1],['نهر',1],['بيت',1],['مطر',2],['شيخ',2],['كتب',0]];
+const PNAME={initial:'Start',medial:'Middle',final:'End',isolated:'Alone'};
+const FAM=['بتثني','جحخ','صض','عغ','دذ','رز','هة','كل','فق','سش','طظ'];
+function lookalikes(L,n=4){
+  const out=[L];
+  const fam=FAM.find(f=>f.includes(L))||'';
+  for(const c of shuffle([...fam]))if(!out.includes(c)&&out.length<n)out.push(c);
+  const sq=squadsOf(L)[0];
+  for(const c of shuffle([...SQ[sq].letters]))if(!out.includes(c)&&out.length<n)out.push(c);
+  for(const c of shuffle([...'ابتثجحخدذرزسشصضطظعغفقكلمنهوي']))if(!out.includes(c)&&out.length<n)out.push(c);
+  return shuffle(out);
+}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
+function wordHTML(w,i,col){
+  /* colour only: no background or padding, so the letters stay joined */
+  return w.slice(0,i)+'<span style="color:'+col+'">'+w[i]+'</span>'+w.slice(i+1);
+}
+
+/* word pools: [word, index of the letter] — words from Al-Menhaj L1 p.44+ where possible */
+const POOL={
+ plate:[['قبل',1],['بعد',0],['عنب',2],['تمر',0],['متن',1],['بيت',1],['عين',2],['بنت',1],['مثل',1],['نبي',2],['يد',0]],
+ belly:[['نجم',1],['ثلج',2],['بحر',1],['رمح',2],['نخل',1],['شيخ',2],['قمر',1],['قلم',2],['قلب',1],['عمل',2],['صقر',0],['مصر',1],['بيض',2],['فضل',1]],
+ trans:[['نهر',1],['وجه',2],['هرم',0],['سكر',1],['ملك',2],['كتب',0],['بعد',1],['سبع',2],['عيد',0],['لغة',1],['بلغ',2]],
+ door:[['مطر',2],['برد',1],['يوم',1],['دلو',2],['نار',1],['باب',1],['عدم',1],['يمد',2],['أخذ',2],['نذر',1],['خبز',2],['ولد',2]]
+};
+
+/* ---------- results for the teacher (site homework link: app/hwkit.js) ---------- */
+const MAX=12*2+8+12+5; let score=0, final=false; const details=[];
+function report(done){ try{ if(window.TQHW) TQHW.result({score,max:MAX,done,details}); }catch(e){} }
+function log(q,a,ok){ if(final)return; if(ok===true)score++; details.push({q,a,ok}); report(false); }
+
+/* ---------- sound & stars ---------- */
+function beep(kind){
+  if(!soundOn)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==='suspended')ac.resume();
+    const notes=kind==='ok'?[660,880,1320]:kind==='win'?[523,659,784,1046,1318]:[220,180];
+    notes.forEach((f,k)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type=kind==='no'?'square':'triangle';o.frequency.value=f;
+      const t=ac.currentTime+k*0.09;
+      g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(kind==='no'?0.05:0.13,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+      o.connect(g).connect(ac.destination);o.start(t);o.stop(t+0.25);
+    });
+  }catch(e){}
+}
+function addStar(n=1){stars+=n;$('#stars').textContent=stars;}
+$('#snd').onclick=()=>{soundOn=!soundOn;$('#snd').textContent=soundOn?'🔊':'🔈';};
+
+/* confetti */
+const cv=$('#conf'),cx=cv.getContext('2d');let parts=[];
+function confetti(n=90){
+  cv.width=innerWidth;cv.height=innerHeight;
+  const cols=['#E4578C','#9C7FE0','#3FB894','#E59A1A','#4AA9E8','#FFC4D6'];
+  for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight/3,vx:(Math.random()-.5)*12,vy:-Math.random()*12-4,s:Math.random()*8+5,c:cols[i%cols.length],r:Math.random()*6,life:110});
+  if(parts.length===n)requestAnimationFrame(tick);
+}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.1;p.life--;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore();});
+  parts=parts.filter(p=>p.life>0&&p.y<cv.height+20);
+  if(parts.length)requestAnimationFrame(tick);else cx.clearRect(0,0,cv.width,cv.height);
+}
+
+/* ---------- stages ---------- */
+const STEPS=[welcome,meet,detective,shapes,sorter,builder,bubbles,finish];
+function go(i){stepIdx=i;$('#bar').style.width=(i/(STEPS.length-1)*100)+'%';stage.innerHTML='';window.scrollTo({top:0,behavior:'smooth'});STEPS[i]();}
+function next(){go(stepIdx+1);}
+function footer(label='Next ➜',enabled=true){
+  const f=document.createElement('div');f.className='foot';
+  const b=document.createElement('button');b.className='btn';b.textContent=label;b.disabled=!enabled;b.onclick=next;f.appendChild(b);stage.appendChild(f);return b;
+}
+
+function welcome(){
+  stage.innerHTML=`
+   <div class="eyebrow">Homework · Al-Menhaj · Connecting letters</div>
+   <h1>Become a Letter Detective 🔍</h1>
+   <p>Arabic letters change their shape when they hold hands. Your mission: find each letter, say what it was <b>before</b>, and explain <b>why</b> it changed.</p>
+   <div class="legend">
+     <span style="background:var(--init)">Start</span><span style="background:var(--med)">Middle</span><span style="background:var(--fin)">End</span><span style="background:var(--iso)">Alone</span>
+   </div>
+   <p style="margin-top:16px"><b style="color:var(--ink)">Who is playing today?</b></p>
+   <div class="names">
+     <button class="name" data-n="Lina"><span class="em">🌷</span>Lina</button>
+     <button class="name" data-n="Kawthar"><span class="em">🦋</span>Kawthar</button>
+     <button class="name" data-n="Balgah"><span class="em">🌙</span>Balgah</button>
+   </div>`;
+  const b=footer('Start ➜',false);
+  const site=(window.TQHW&&TQHW.name)||'';
+  if(site){ who=site; const nm=stage.querySelector('.names'); nm.previousElementSibling.remove();
+    nm.outerHTML='<h2 style="margin-top:14px">Hi '+site.replace(/[<>&]/g,'')+' '+(EMO[site]||'🌸')+'</h2>'; b.disabled=false; return; }
+  stage.querySelectorAll('.name').forEach(n=>n.onclick=()=>{
+    stage.querySelectorAll('.name').forEach(x=>x.classList.remove('sel'));n.classList.add('sel');who=n.dataset.n;b.disabled=false;beep('ok');
+  });
+}
+
+function meet(){
+  stage.innerHTML=`<div class="eyebrow">Step 1 · Meet the squads</div><h2>Tap every card to see its secret</h2>
+   <p>Every letter belongs to a squad. The squad tells you <b>why</b> the letter changes.</p><div class="squads"></div>`;
+  const box=stage.querySelector('.squads');const opened=new Set();
+  const b=footer('I know them ➜',false);
+  SQKEYS.forEach(k=>{
+    const s=SQ[k];const d=document.createElement('button');d.className='flip';d.setAttribute('aria-label',s.name);
+    d.innerHTML=`<div class="in"><div class="face front sq-${k}"><div class="big">${s.em}</div>${s.name}<small>tap me</small></div>
+      <div class="face back c-${k}"><b>${s.em} ${s.name}</b><div class="ar">${[...s.letters].join(' ')}</div><p>${s.rule}</p>
+      <div class="ar" style="font-size:30px">${s.ex[0]} ← ${s.ex[1]}</div></div></div>`;
+    d.onclick=()=>{d.classList.toggle('open');opened.add(k);beep('ok');if(opened.size===4)b.disabled=false;};
+    box.appendChild(d);
+  });
+}
+
+function detective(){
+  let rounds=[];
+  SQKEYS.forEach(k=>shuffle(POOL[k]).slice(0,3).forEach(r=>rounds.push(r)));
+  rounds=shuffle(rounds);let r=0;
+  const draw=()=>{
+    const [w,i]=rounds[r];const L=w[i],p=pos(w,i);
+    stage.innerHTML=`<div class="eyebrow">Step 2 · Letter Detective · ${r+1} / ${rounds.length}</div>
+      <h2>Look at the coloured letter</h2>
+      <div class="center"><span class="tag" style="background:${PCOL[p]}">${PNAME[p]} shape</span></div>
+      <div class="word">${wordHTML(w,i,PCOL[p])}</div>
+      <div class="q">1. What was this letter <u>before</u> it held hands?</div>
+      <div class="opts"></div><div id="part2"></div>`;
+    const opts=stage.querySelector('.opts');let tries=0,first=null;
+    lookalikes(L).forEach(c=>{
+      const o=document.createElement('button');o.className='opt';o.textContent=c;
+      o.onclick=()=>{
+        if(first===null)first=c;
+        if(c===L){log('Detective '+(r+1)+': what was the coloured letter in '+w+' ('+form(L,p)+')?',first+(tries?' → then '+L:''),tries===0);o.classList.add('ok');beep('ok');if(!tries)addStar();opts.querySelectorAll('.opt').forEach(x=>x.disabled=true);part2(w,i,L,p);}
+        else{tries++;o.classList.add('no');beep('no');setTimeout(()=>o.classList.remove('no'),400);}
+      };opts.appendChild(o);
+    });
+  };
+  const part2=(w,i,L,p)=>{
+    const box=stage.querySelector('#part2');const right=squadsOf(L);
+    box.innerHTML=`<div class="q">2. <span class="ar">${L}</span> → <span class="ar">${form(L,p)}</span> — Why does it look like this?</div><div class="sqopts"></div>`;
+    const so=box.querySelector('.sqopts');let tries=0,first=null;
+    SQKEYS.forEach(k=>{
+      const b=document.createElement('button');b.className='sqbtn sq-'+k;b.innerHTML=SQ[k].em+' '+SQ[k].name;
+      b.onclick=()=>{
+        if(first===null)first=SQ[k].name;
+        if(right.includes(k)){log('Why: '+L+' → '+form(L,p)+' in '+w,first+(tries?' → then '+SQ[k].name:''),tries===0);
+          b.classList.add('ok');beep('ok');if(!tries)addStar();so.querySelectorAll('.sqbtn').forEach(x=>x.disabled=true);
+          const ex=document.createElement('div');ex.className='explain';
+          ex.innerHTML=`<div class="morph"><span>${L}</span><em>←</em><span style="color:${PCOL[p]}">${form(L,p)}</span></div><p><b>${SQ[k].em} ${SQ[k].name}:</b> ${SQ[k].rule}${right.length>1?' (This letter is in two squads!)':''}</p>`;
+          box.appendChild(ex);
+          const f=document.createElement('div');f.className='foot';const nb=document.createElement('button');nb.className='btn';
+          nb.textContent=r<rounds.length-1?'Next word ➜':'Finish ➜';nb.onclick=()=>{r++;if(r<rounds.length)draw();else next();};
+          f.appendChild(nb);box.appendChild(f);nb.scrollIntoView({behavior:'smooth',block:'nearest'});
+        }else{tries++;b.classList.add('no');beep('no');setTimeout(()=>b.classList.remove('no'),400);}
+      };so.appendChild(b);
+    });
+    so.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  draw();
+}
+
+function shapes(){
+  const rounds=shuffle([['ه','medial'],['ع','medial'],['ك','initial'],['ب','medial'],['ح','initial'],['م','final'],['ي','medial'],['د','medial']]);
+  let r=0;
+  const draw=()=>{
+    const [L,p]=rounds[r];
+    const door=NONFWD.includes(L);
+    const all=door?['isolated','final']:['isolated','initial','medial','final'];
+    stage.innerHTML=`<div class="eyebrow">Step 3 · Costume Change · ${r+1} / ${rounds.length}</div>
+      <h2>Dress the letter for the <span style="color:${PCOL[p]}">${PNAME[p].toLowerCase()}</span> of a word</h2>
+      <div class="word" style="font-size:96px">${L}</div>
+      <div class="q">Which shape does <span class="ar">${L}</span> wear in the <b style="color:${PCOL[p]}">${PNAME[p]}</b>?</div>
+      <div class="opts"></div>`;
+    const opts=stage.querySelector('.opts');let tries=0,first=null;
+    const want=form(L,p);
+    shuffle(all).forEach(q=>{
+      const o=document.createElement('button');o.className='opt';o.textContent=form(L,q);
+      o.onclick=()=>{
+        if(first===null)first=form(L,q);
+        if(form(L,q)===want){log('Costume: '+L+' in the '+PNAME[p].toLowerCase(),first+(tries?' → then '+want:''),tries===0);o.classList.add('ok');beep('ok');if(!tries)addStar();opts.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+          setTimeout(()=>{r++;if(r<rounds.length)draw();else next();},850);}
+        else{tries++;o.classList.add('no');beep('no');setTimeout(()=>o.classList.remove('no'),400);}
+      };opts.appendChild(o);
+    });
+  };
+  draw();
+}
+
+function sorter(){
+  const letters=shuffle(['ب','ن','ت','ي','ج','ح','ص','م','ل','ه','ك','د','ر','و','ا','ز']).slice(0,12);
+  stage.innerHTML=`<div class="eyebrow">Step 4 · Squad Sorting</div><h2>Put every letter in her squad</h2>
+    <p>Tap a letter, then tap her squad. The small shape under each letter is a clue.</p>
+    <div class="trays"></div><div class="chips"></div>`;
+  const trays=stage.querySelector('.trays'),chips=stage.querySelector('.chips');let picked=null,left=letters.length;const miss={};
+  const b=footer('Next ➜',false);
+  SQKEYS.forEach(k=>{
+    const t=document.createElement('button');t.className='tray sq-'+k;t.innerHTML=`<div style="font-size:26px">${SQ[k].em}</div><div class="t">${SQ[k].name}</div><div class="got"></div>`;
+    t.onclick=()=>{
+      if(!picked)return;
+      const L=picked.dataset.l;
+      if(squadsOf(L).includes(k)){log('Sort: squad of '+L,(miss[L]?miss[L]+' → then ':'')+SQ[k].name,!miss[L]);t.querySelector('.got').textContent+=L+' ';picked.classList.add('gone');picked=null;addStar();beep('ok');left--;if(!left){b.disabled=false;confetti(60);}}
+      else{if(!miss[L])miss[L]=SQ[k].name;beep('no');t.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:300});}
+    };trays.appendChild(t);
+  });
+  letters.forEach(L=>{
+    const c=document.createElement('button');c.className='chip';c.dataset.l=L;
+    const p=NONFWD.includes(L)?'final':'medial';
+    c.innerHTML=`<span class="a">${L}</span><span class="b">${form(L,p)}</span>`;
+    c.onclick=()=>{chips.querySelectorAll('.chip').forEach(x=>x.classList.remove('pick'));c.classList.add('pick');picked=c;};
+    chips.appendChild(c);
+  });
+}
+
+function builder(){
+  const rounds=[
+    {w:'قلب',q:'What happened to the tail of ل?',a:'belly'},
+    {w:'ورد',q:'Why are all three letters apart?',a:'door'},
+    {w:'نهر',q:'Which squad changed her whole costume here?',a:'trans'},
+    {w:'بيت',q:'Why do ب and ي look like small teeth?',a:'plate'},
+    {w:'باب',q:'Why is there a gap after ا?',a:'door'}
+  ];let r=0;
+  const draw=()=>{
+    const R=rounds[r];const letters=[...R.w];let built='';
+    stage.innerHTML=`<div class="eyebrow">Step 5 · Word Builder · ${r+1} / ${rounds.length}</div>
+      <h2>Build the word <span class="ar" style="color:var(--rose)">${R.w}</span></h2>
+      <p>Tap the letters in order, from <b>right to left</b>, and watch them hold hands.</p>
+      <div class="slots" aria-live="polite">&nbsp;</div><div class="tiles"></div><div id="bq"></div>`;
+    const slots=stage.querySelector('.slots'),tiles=stage.querySelector('.tiles');
+    shuffle(letters.map((l,k)=>({l,k}))).forEach(({l})=>{
+      const t=document.createElement('button');t.className='tile';t.textContent=l;
+      t.onclick=()=>{
+        const need=letters[built.length];
+        if(l===need){built+=l;t.classList.add('used');slots.textContent=built;beep('ok');if(built.length===letters.length){addStar();ask();}}
+        else{beep('no');t.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:300});}
+      };tiles.appendChild(t);
+    });
+    const ask=()=>{
+      const box=stage.querySelector('#bq');
+      box.innerHTML=`<div class="q">${R.q}</div><div class="sqopts"></div>`;
+      const so=box.querySelector('.sqopts');let tries=0,first=null;
+      SQKEYS.forEach(k=>{
+        const b=document.createElement('button');b.className='sqbtn sq-'+k;b.innerHTML=SQ[k].em+' '+SQ[k].name;
+        b.onclick=()=>{
+          if(first===null)first=SQ[k].name;
+          if(k===R.a){log('Build '+R.w+': '+R.q,first+(tries?' → then '+SQ[k].name:''),tries===0);b.classList.add('ok');beep('ok');if(!tries)addStar();so.querySelectorAll('.sqbtn').forEach(x=>x.disabled=true);
+            setTimeout(()=>{r++;if(r<rounds.length)draw();else next();},1000);}
+          else{tries++;b.classList.add('no');beep('no');setTimeout(()=>b.classList.remove('no'),400);}
+        };so.appendChild(b);
+      });
+      so.scrollIntoView({behavior:'smooth',block:'nearest'});
+    };
+  };
+  draw();
+}
+
+function bubbles(){
+  const rounds=['plate','belly','trans'];let r=0;
+  const draw=()=>{
+    const k=rounds[r];let t=25,score=0,bad=0,alive=true;
+    stage.innerHTML=`<div class="eyebrow">Step 6 · Bubble Pop · ${r+1} / ${rounds.length}</div>
+      <div class="row"><h2 style="flex:1">Pop only the <span class="c-${k}">${SQ[k].em} ${SQ[k].name}</span> letters!</h2><div class="timer">⏱ <span id="tm">25</span></div></div>
+      <p>The letters are holding hands, so look closely. Popped: <b id="sc">0</b></p>
+      <div class="pond"></div>`;
+    const pond=stage.querySelector('.pond');
+    const all='ابتثجحخدرزسشصضطعغفقكلمنهوي';
+    const spawn=()=>{
+      if(!alive)return;
+      const good=Math.random()<.5;
+      const pool=good?SQ[k].letters:[...all].filter(c=>!squadsOf(c).includes(k)).join('');
+      const L=pool[Math.floor(Math.random()*pool.length)];
+      const p=NONFWD.includes(L)?'final':['initial','medial','final'][Math.floor(Math.random()*3)];
+      const b=document.createElement('button');b.className='bub';b.textContent=form(L,p);
+      b.style.left=(Math.random()*(pond.clientWidth-84))+'px';b.style.animationDuration=(5+Math.random()*2.5)+'s';
+      b.onclick=()=>{
+        if(squadsOf(L).includes(k)){score++;stage.querySelector('#sc').textContent=score;beep('ok');b.classList.add('pop');setTimeout(()=>b.remove(),300);}
+        else{bad++;beep('no');b.classList.add('bad');b.disabled=true;}
+      };
+      b.addEventListener('animationend',e=>{if(e.animationName==='rise')b.remove();});
+      pond.appendChild(b);
+    };
+    const sp=setInterval(spawn,900);spawn();
+    const tm=setInterval(()=>{
+      t--;const el=stage.querySelector('#tm');if(el)el.textContent=t;
+      if(t<=0){
+        clearInterval(sp);clearInterval(tm);alive=false;log('Bubble pop: '+SQ[k].name,score+' popped, '+bad+' wrong pops',null);addStar(Math.min(3,Math.floor(score/3)));
+        pond.innerHTML=`<div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px"><div><div style="font-size:54px">🫧</div><h2>${score} popped!</h2></div></div>`;
+        const f=document.createElement('div');f.className='foot';const nb=document.createElement('button');nb.className='btn';
+        nb.textContent=r<rounds.length-1?'Next round ➜':'See my result ➜';nb.onclick=()=>{r++;if(r<rounds.length)draw();else next();};
+        f.appendChild(nb);stage.appendChild(f);
+      }
+    },1000);
+  };
+  draw();
+}
+
+function finish(){
+  const em=EMO[who]||'🌸';
+  const lvl=stars>=45?3:stars>=30?2:1;
+  const d=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  stage.innerHTML=`<div class="cert">
+     <div class="eyebrow">Certificate · Letter Squads</div>
+     <div style="font-size:44px">${em}</div>
+     <div class="who">${who||'Letter Detective'}</div>
+     <p style="color:var(--ink);font-size:18px">is an official <b>Letter Detective</b>. She knows why Arabic letters change when they hold hands.</p>
+     <div class="stars">${'⭐'.repeat(lvl)}${'☆'.repeat(3-lvl)}</div>
+     <p><b style="color:var(--rose);font-size:22px">${stars}</b> stars collected · ${d}</p>
+     <div class="ar" style="font-size:30px;color:var(--rose);margin-top:6px">أَحْسَنْتِ يَا بَطَلَة!</div>
+   </div>
+   <div id="recbox" class="center" style="margin-top:16px" hidden>
+     <h2>🎙️ Last step: read to your teacher</h2>
+     <p>Read these words out loud. Say the name of each coloured letter, then read the word.</p>
+     <div class="word" style="font-size:54px;line-height:1.7">${READ.map(([w,i])=>wordHTML(w,i,PCOL[pos(w,i)])).join(' &nbsp;·&nbsp; ')}</div>
+     <div id="recbtn"></div>
+     <p>Then press <b>Send</b> at the bottom of your homework page. ✉️</p>
+   </div>
+   <p class="center" id="shot" style="margin-top:14px;color:var(--ink)">📸 Take a screenshot of this page and send it to your teacher.</p>
+   <div class="row" style="justify-content:center;margin-top:10px"><button class="btn ghost" id="again">Play again</button></div>`;
+  beep('win');confetti(140);
+  if(!final){ final=true; report(true); }
+  if(window.TQHW&&TQHW.embedded){ $('#recbox').hidden=false; $('#shot').hidden=true; try{TQHW.recordButton($('#recbtn'),'Reading: connected letters');}catch(e){} }
+  $('#again').onclick=()=>{stars=0;$('#stars').textContent=0;go(1);};
+}
+
+go(0);
+})();
+</script>
+
+</body>
+</html>

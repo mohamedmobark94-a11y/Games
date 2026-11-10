@@ -60,6 +60,8 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
   const steps = [];
   H.tasks.forEach(k => { if(k.t === 'classify') k.items.forEach(it => steps.push({k, it})); else if(k.t === 'mcq') steps.push({k}); });
   let qi = 0, right = 0, picked = null; const details = [];
+  /* multiple-choice options come in a random order, so the right answer is not always first (classify buttons stay fixed) */
+  const order = (s, opts) => { if(!s.ord){ s.ord = opts.map((_, j) => j); if(s.k.t === 'mcq') for(let i = s.ord.length - 1; i > 0; i--){ const r = Math.random() * (i + 1) | 0; [s.ord[i], s.ord[r]] = [s.ord[r], s.ord[i]]; } } return s.ord; };
   function draw(){
     document.documentElement.lang = TQHW.lang; document.documentElement.dir = TQHW.lang === 'en' ? 'ltr' : 'rtl';
     document.getElementById('t').textContent = T(H.title);
@@ -69,14 +71,14 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
     if(qi >= steps.length){ g.innerHTML = steps.length ? '<div class="card end">' + (E() ? 'Well done! Finished 🌟' : 'أحسنت! خلّصت 🌟') + '<div style="margin-top:6px"><b dir="ltr">' + right + ' / ' + steps.length + '</b></div></div>' : ''; return; }
     const s = steps[qi], k = s.k, opts = k.t === 'classify' ? k.options : k.opts, a = k.t === 'classify' ? s.it.a : k.a, why = k.t === 'classify' ? s.it.why : k.why;
     g.innerHTML = '<div class="card"><div class="small">' + (qi + 1) + ' / ' + steps.length + (k.ask ? ' · ' + T(k.ask) : '') + '</div>' +
-      (k.t === 'classify' ? '<div class="word">' + s.it.w + (s.it.ref ? '<small>' + T(s.it.ref) + '</small>' : '') + '</div>' : '<div class="q">' + T(k.q) + '</div>') +
-      '<div class="opts">' + opts.map((o, j) => '<button class="opt" data-j="' + j + '">' + T(o) + '</button>').join('') + '</div>' +
+      (k.t === 'classify' ? '<div class="word"' + (typeof s.it.w === 'object' && E() ? ' dir="ltr" style="font-family:var(--f-en);font-size:1.4em"' : '') + '>' + T(s.it.w) + (s.it.ref ? '<small>' + T(s.it.ref) + '</small>' : '') + '</div>' : '<div class="q">' + T(k.q) + '</div>') +
+      '<div class="opts">' + order(s, opts).map(j => '<button class="opt" data-j="' + j + '">' + T(opts[j]) + '</button>').join('') + '</div>' +
       (picked != null && why ? '<div class="why">' + T(why) + '</div>' : '') + '</div>';
     g.querySelectorAll('[data-j]').forEach(b => b.onclick = () => answer(+b.dataset.j, a, opts, s));
   }
   function answer(j, a, opts, s){
     if(picked != null) return; picked = j; const ok = j === a; if(ok) right++;
-    details.push({q: s.it ? s.it.w : T(s.k.q).replace(/<[^>]+>/g, ''), a: (opts[j].ar || T(opts[j])) + (ok ? '' : ' (الصح: ' + (opts[a].ar || T(opts[a])) + ')'), ok});
+    details.push({q: s.it ? (typeof s.it.w === 'object' ? (s.it.w.ar || T(s.it.w)) : s.it.w) : T(s.k.q).replace(/<[^>]+>/g, ''), a: (opts[j].ar || T(opts[j])) + (ok ? '' : ' (الصح: ' + (opts[a].ar || T(opts[a])) + ')'), ok});
     TQHW.result({score: right, max: steps.length, done: qi + 1 >= steps.length, details});
     draw();
     document.querySelectorAll('[data-j]').forEach(x => { x.disabled = true; const n = +x.dataset.j; if(n === a) x.classList.add('right'); else if(n === j) x.classList.add('wrong'); });
@@ -88,12 +90,27 @@ h2{margin:0;color:var(--gold);font-size:1.25rem;flex:1}
     const box = document.getElementById('recs'); box.innerHTML = '';
     H.tasks.filter(k => k.t === 'record').forEach(k => {
       const c = document.createElement('div'); c.className = 'card';
-      c.innerHTML = '<div class="q">🎙️ ' + T(k.label) + '</div>' + (k.text ? '<div class="ayat">' + k.text + '</div>' : '') + (k.ref ? '<div class="small">' + T(k.ref) + '</div>' : '') +
-        (k.say ? '<div class="small" style="margin-top:6px">' + T(k.say) + '</div>' : '') + '<div data-rb style="margin-top:8px"></div>';
+      c.innerHTML = '<div class="q" data-l>' + (/🎙/.test(T(k.label)) ? '' : '🎙️ ') + T(k.label) + '</div>' + (k.text ? '<div class="ayat">' + k.text + '</div>' : '') + (k.ref ? '<div class="small" data-r>' + T(k.ref) + '</div>' : '') +
+        (k.say ? '<div class="small" style="margin-top:6px" data-s>' + T(k.say) + '</div>' : '') + '<div data-rb style="margin-top:8px"></div>';
+      c.__k = k;
       box.appendChild(c); TQHW.recordButton(c.querySelector('[data-rb]'), (k.label && (k.label.ar || k.label)) || 'recording');
     });
   }
-  TQHW.on('lang', () => { draw(); });
+  /* a language switch only changes the words, so recordings already made stay */
+  function relabelRecs(){ document.querySelectorAll('#recs .card').forEach(c => { const k = c.__k; if(!k) return;
+    const l = c.querySelector('[data-l]'), r = c.querySelector('[data-r]'), sy = c.querySelector('[data-s]');
+    if(l) l.textContent = (/🎙/.test(T(k.label)) ? '' : '🎙️ ') + T(k.label); if(r) r.textContent = T(k.ref); if(sy) sy.textContent = T(k.say); }); }
+  TQHW.on('lang', () => { draw(); relabelRecs(); langBtn(); });
+  /* opened from a public link (not inside the homework page): its own ع / EN button, top corner */
+  function langBtn(){
+    if(TQHW.embedded) return;
+    let b = document.getElementById('tqLangSw');
+    if(!b){ b = document.createElement('button'); b.id = 'tqLangSw'; b.type = 'button';
+      b.style.cssText = 'position:fixed;bottom:14px;inset-inline-start:14px;z-index:50;min-height:42px;padding:0 16px;border-radius:999px;border:2px solid #c99a3f;background:#fff;color:#0e4d3c;font:800 16px Cairo,sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.12)';
+      b.onclick = () => TQHW.setLang(TQHW.lang === 'en' ? 'ar' : 'en'); document.body.appendChild(b); }
+    b.textContent = TQHW.lang === 'en' ? 'عربي' : 'English';
+  }
+  langBtn();
   draw(); drawRecs();
   if(!steps.length) TQHW.result({score: null, max: null, done: true, details: []});
 })();

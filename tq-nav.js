@@ -9,7 +9,7 @@
   var t=function(k){return T[k][lang==='ar'?0:1]};
 
   var css=document.createElement('style');
-  css.textContent='#tqBar{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:6px;padding:6px max(10px,env(safe-area-inset-right,0px)) 6px max(10px,env(safe-area-inset-left,0px));padding-top:calc(6px + env(safe-area-inset-top,0px));background:rgba(11,30,45,.94);backdrop-filter:blur(8px);border-bottom:2px solid #E2B85C;font:700 15px/1 "Baloo Bhaijaan 2","Segoe UI",system-ui,sans-serif;direction:ltr;box-shadow:0 2px 12px rgba(0,0,0,.25)}'+
+  css.textContent='#tqBar{flex-wrap:wrap;position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:6px;padding:6px max(10px,env(safe-area-inset-right,0px)) 6px max(10px,env(safe-area-inset-left,0px));padding-top:calc(6px + env(safe-area-inset-top,0px));background:rgba(11,30,45,.94);backdrop-filter:blur(8px);border-bottom:2px solid #E2B85C;font:700 15px/1 "Baloo Bhaijaan 2","Segoe UI",system-ui,sans-serif;direction:ltr;box-shadow:0 2px 12px rgba(0,0,0,.25)}'+
   '#tqBar a,#tqBar button{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:2px solid #2A5675;background:#12304A;color:#F4EBD6;text-decoration:none;font:inherit;cursor:pointer;white-space:nowrap}'+
   '#tqBar a:hover,#tqBar button:hover{border-color:#E2B85C}'+
   '#tqBar .home{background:#E2B85C;border-color:#E2B85C;color:#10263A}'+
@@ -31,10 +31,10 @@
     var home='../'+(dir==='lessons'?'#lessons':'');
     bar.setAttribute('aria-label',t('nav'));
     bar.innerHTML='<a class="home" href="'+home+'"><img src="../assets/brand/emblem.svg" alt="" style="width:26px;height:26px;margin:-4px 0"> <span class="lbl">'+t('home')+'</span></a>'+
-      '<button type="button" id="tqBack">← <span class="lbl">'+t('back')+'</span></button>'+
+      '<button type="button" id="tqBack" aria-label="'+t('back')+'">← <span class="lbl">'+t('back')+'</span></button>'+
       '<a class="tch" href="../teacher.html" title="'+t('teacher')+'">👩‍🏫 <span class="lbl">'+t('teacher')+'</span></a>'+
       '<span class="sp"></span>'+
-      (nextHref?'<a href="'+nextHref+'" id="tqNext"><span class="lbl">'+t('next')+'</span> ▶</a>':'')+
+      (nextHref?'<a href="'+nextHref+'" id="tqNext" aria-label="'+t('next')+'"><span class="lbl">'+t('next')+'</span> ▶</a>':'')+
       '<button type="button" id="tqLang" aria-label="Language / اللغة">🌐 '+t('other')+'</button>';
     document.getElementById('tqBack').onclick=function(){
       var same=false;try{same=document.referrer&&new URL(document.referrer).origin===location.origin}catch(e){}
