@@ -66,6 +66,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     <button class="tab" data-v="students">👥 الطلاب<span class="badge" id="nSend" hidden></span></button>
     <button class="tab" data-v="lessons">📚 الدروس</button>
     <button class="tab" data-v="plans">🗂️ الخطط</button>
+    <button class="tab" data-v="monthly">📊 الشهري</button>
     <button class="tab" data-v="mushaf">📖 المصحف</button>
     <button class="tab" data-v="games">🎮 الألعاب</button>
     <button class="tab" id="out">خروج</button>
@@ -210,7 +211,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     view = v; document.querySelectorAll('.tab[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
     $('pend').hidden = v !== 'inbox';   // «دروس جديدة — ابعت اللينك» lives in التسليمات
     document.body.classList.toggle('full', v === 'report' || v === 'mushaf');
-    ({inbox, new: newView, list: listView, students: studentsView, report: reportView, lessons: lessonsView, plans: plansView, games: gamesView, mushaf: mushafView})[v]();
+    ({inbox, new: newView, list: listView, students: studentsView, report: reportView, lessons: lessonsView, plans: plansView, monthly: monthlyView, games: gamesView, mushaf: mushafView})[v]();
   }
 
   /* ---------- 📝 the report generator (kept private: it carries student names) ---------- */
@@ -932,6 +933,49 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       d.querySelectorAll('[data-mwa]').forEach(b => { const v = mine[+b.dataset.mwa].data; b.href = 'https://wa.me/?text=' + encodeURIComponent((v.text || '') + (v.test_url ? '\n\n📝 ' + (v.lang === 'ar' ? 'اختبار الشهر' : 'Monthly test') + ': ' + v.test_url : '')); });
       d.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));
     }catch(e){}
+  }
+
+  /* ---------- 📊 monthly: the summaries + tests the monthly task writes (docs monthly), and every report of the month (session_reports) ---------- */
+  async function monthlyView(pick){
+    app.innerHTML = '<div class="card muted">بيحمّل…</div>';
+    const now = new Date(), ym = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    const [m, a, p] = await Promise.all([
+      db.from('docs').select('id,data').eq('collection', 'monthly').order('id', {ascending: false}).limit(400),
+      db.from('session_reports').select('id,student_id,student_key,report_date,session,data,text').gte('report_date', ym(new Date(now.getFullYear(), now.getMonth() - 11, 1)) + '-01').order('report_date', {ascending: false}).limit(2000),
+      db.from('kv').select('key,value').like('key', 'phone:%')]);
+    if(view !== 'monthly') return;
+    const sums = m.data || [], reps = a.error ? null : (a.data || []), phone = {};
+    (p.data || []).forEach(x => phone[x.key.slice(6)] = String(x.value || '').replace(/[^0-9]/g, ''));
+    const monthOf = x => x.data.month || x.id.slice(0, 7);
+    const months = [...new Set([ym(now)].concat(sums.map(monthOf), (reps || []).map(r => r.report_date.slice(0, 7))))].sort().reverse();
+    const M = pick && months.indexOf(pick) >= 0 ? pick : (sums.length ? monthOf(sums[0]) : months[0]);
+    const mine = sums.filter(x => monthOf(x) === M), rm = (reps || []).filter(r => r.report_date.slice(0, 7) === M);
+    const byStu = {}; rm.forEach(r => (byStu[r.student_id || r.student_key] = byStu[r.student_id || r.student_key] || []).push(r));
+    const stuOf = k => students.find(s => s.id === k || s.slug === k || (s.keys || []).indexOf(k) >= 0);
+    const fullText = v => (v.text || '') + (v.test_url ? '\n\n📝 ' + (v.lang === 'ar' ? 'اختبار الشهر' : 'Monthly test') + ': ' + v.test_url : '');
+    const SEC = [['lesson', '📖'], ['tajwid', '🎵'], ['arabic', '🔤'], ['islamic', '🕌'], ['hw', '📝'], ['arabichw', '📝'], ['islamichw', '📝'], ['notes', '🗒️']];
+    let h = '<div class="card"><div class="row"><h2 style="margin:0">📊 الشهري</h2><select id="mPick" style="margin-inline-start:auto;width:auto">' +
+      months.map(x => '<option' + (x === M ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+      '<p class="small muted" style="margin:6px 0 0">ملخص الشهر واختباره بيتعملوا تلقائي يوم ١ من كل شهر من كل تقارير الشهر. تحت: كل التقارير اللي اتحفظت في الشهر لكل طالب.</p></div>';
+    h += '<h2>📨 ملخصات واختبارات ' + esc(M) + ' (' + mine.length + ')</h2>' + (mine.length ? mine.map((x, i) => { const v = x.data, st = v.stats || {}, s = stuOf(v.slug) || {};
+      return '<div class="card"><div class="row"><b>' + esc(v.name || v.slug) + '</b><span class="muted small">' + (st.lessons || 0) + ' درس · ' + (st.homework_done || 0) + '/' + (st.homework_sent || 0) + ' واجب' + (st.avg_score != null ? ' · ' + st.avg_score + '%' : '') + '</span></div>' +
+        '<div class="small" style="white-space:pre-wrap;margin:6px 0;max-height:220px;overflow:auto;background:var(--bg2,#f6f8f7);border-radius:8px;padding:8px" dir="auto">' + esc(v.text || '') + '</div>' +
+        '<div class="row"><button class="btn ok sm" data-mcopy="' + i + '">📋 انسخ الملخص</button>' +
+        (v.test_url ? '<button class="btn ghost sm" data-copy="' + esc(v.test_url) + '">🔗 لينك الاختبار</button><a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(v.test_url) + '">👁 افتح الاختبار</a>' : '') +
+        '<a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/' + (phone[s.id] || '') + '?text=' + encodeURIComponent(fullText(v)) + '">🟢 واتساب</a></div></div>'; }).join('')
+      : '<div class="card muted">لسه مفيش ملخص لشهر ' + esc(M) + '. بيتعمل تلقائي يوم ١ من الشهر اللي بعده.</div>');
+    h += '<h2>🗂️ أرشيف تقارير ' + esc(M) + '</h2>';
+    if(!reps) h += '<div class="card muted">الأرشيف لسه مش متفعّل.</div>';
+    else if(!rm.length) h += '<div class="card muted">مفيش تقارير محفوظة في الشهر ده.</div>';
+    else h += Object.keys(byStu).map(k => { const list = byStu[k].sort((x, y) => x.report_date < y.report_date ? -1 : x.report_date > y.report_date ? 1 : x.session - y.session), s = stuOf(k);
+      return '<details class="card"><summary style="cursor:pointer"><b>' + esc(s ? nm(s) : (list[0].data.student || k)) + '</b> <span class="muted small">· ' + list.length + ' حصة</span></summary>' +
+        list.map(r => { const d = r.data || {};
+          return '<div class="item" style="margin-top:8px"><div class="row"><b>' + esc(r.report_date) + '</b><span class="muted small">حصة ' + (r.session || '?') + (d.subject ? ' · ' + esc(d.subject) : '') + (d.rating ? ' · ⭐ ' + esc(d.rating) : '') + '</span></div>' +
+            SEC.map(([f, ic]) => Array.isArray(d[f]) && d[f].length ? '<div class="small" dir="auto">' + ic + ' ' + d[f].map(esc).join(' · ') + '</div>' : '').join('') + '</div>'; }).join('') + '</details>'; }).join('');
+    app.innerHTML = h;
+    $('mPick').onchange = e => monthlyView(e.target.value);
+    app.querySelectorAll('[data-mcopy]').forEach(b => b.onclick = () => copy(fullText(mine[+b.dataset.mcopy].data)));
+    app.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));
   }
 
   /* ---------- ✏️ new homework / test ---------- */
