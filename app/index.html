@@ -487,6 +487,48 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         out.querySelectorAll('[data-fx]').forEach(o => { if(issues[+o.dataset.fx.split(':')[0]].i === x.i) o.disabled = true, o.title = 'اضغط «راجع» تاني بعد التصليح'; }); });
     };
   }
+  /* Runs inside the report generator page too: in «📅 دروس اليوم», next to every student who has hidden homework from the last 14 days,
+     a «👁 اظهر الواجب» button that shows all of it on his page at once (released = true). Needs the site's database (gen-shim). */
+  function genHwShow(){
+    if(window.__tqHw) return; window.__tqHw = true;
+    const sb = window.__tqSb, L = document.getElementById('tdList'); if(!sb || !L) return;
+    const fold = v => String(v || '').trim().toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
+    let byName = null, busy = false;
+    async function load(){
+      const c = new Date(new Date(Date.now() - 6 * 3600e3).toLocaleString('en-US', {timeZone: 'Africa/Cairo'}));
+      const today = c.getFullYear() + '-' + String(c.getMonth() + 1).padStart(2, '0') + '-' + String(c.getDate()).padStart(2, '0');
+      const [d, s, t] = await Promise.all([
+        sb.from('docs').select('id,data').eq('collection', 'days').lte('id', today).order('id', {ascending: false}).limit(1),
+        sb.from('students').select('id,slug,keys,name_ar,name_en'),
+        sb.from('assignment_targets').select('id,student_id,assignments(title)').eq('released', false).gt('sent_at', new Date(Date.now() - 14 * 864e5).toISOString())]);
+      const items = ((d.data || [])[0] || {data: {}}).data.items || [], S = s.data || [], hid = {};
+      (t.data || []).forEach(x => (hid[x.student_id] = hid[x.student_id] || []).push(x));
+      byName = {};
+      items.forEach(it => { const k = it.key || '';
+        const st = S.find(x => k && (x.slug === k || (x.keys || []).indexOf(k) >= 0)) || S.find(x => fold(x.name_ar) && (fold(x.name_ar) === fold(it.name) || fold(x.name_ar).split(' ')[0] === fold(it.name)));
+        if(st && hid[st.id]) byName[fold(it.name)] = hid[st.id]; });
+    }
+    function paint(){
+      if(!byName) return;
+      L.querySelectorAll('.td-row').forEach(row => {
+        if(row.querySelector('[data-hwshow]')) return;
+        const nmEl = row.querySelector('.td-nm'), nm = nmEl && nmEl.firstChild ? fold(nmEl.firstChild.textContent) : '', list = byName[nm];
+        if(!list || !list.length) return;
+        const b = document.createElement('button'); b.type = 'button'; b.dataset.hwshow = '1';
+        b.style.cssText = 'margin:6px 0 2px;width:100%;padding:9px;border:1.5px solid #b45309;border-radius:10px;background:#fff7ed;color:#7c2d12;font:inherit;font-weight:700;cursor:pointer';
+        b.textContent = '👁 اظهر الواجب (' + list.length + ' مخفي: ' + list.map(x => x.assignments ? x.assignments.title : '').filter(Boolean).slice(0, 2).join(' · ') + ')';
+        b.onclick = async e => {
+          e.preventDefault(); e.stopPropagation(); if(b.disabled) return; b.disabled = true; b.textContent = '⏳ …';
+          const r = await sb.from('assignment_targets').update({released: true}).in('id', list.map(x => x.id));
+          if(r.error){ b.disabled = false; b.textContent = '⚠️ ' + r.error.message; return; }
+          list.length = 0; b.textContent = '✓ الواجب ظاهر دلوقتي في صفحته'; b.style.background = '#e8f4ee'; b.style.color = '#0e4d3c'; b.style.borderColor = '#177a5b';
+        };
+        const hd = row.querySelector('.td-hd'); (hd || row.firstChild).after(b);
+      });
+    }
+    new MutationObserver(() => { if(!busy) paint(); }).observe(L, {childList: true, subtree: true});
+    busy = true; load().then(() => { busy = false; paint(); }, e => { busy = false; console.warn('hwShow', e); });
+  }
   /* Runs inside the report generator page too: who-is-who fixes. The name list itself is private (kv 'genAliases'):
      {drop:{id:[tokens]}, add:{id:[tokens]}, ids:[{id, phrases, tokens, first}]}; accents are ignored in names. */
   function genNameFixes(A){
@@ -704,7 +746,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     }catch(e){ console.warn('gen-shim swap', e); }
     /* small fixes for the stored generator (skipped automatically once the stored file already contains them) */
     let aliases = null; try{ aliases = JSON.parse(await kvGet('genAliases')); }catch(e){}
-    const fix = '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400);setTimeout(' + genMic.toString() + ',600);setTimeout(' + genCheck.toString() + ',700)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
+    const fix = '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400);setTimeout(' + genMic.toString() + ',600);setTimeout(' + genCheck.toString() + ',700);setTimeout(' + genHwShow.toString() + ',800)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
     html = /<\/body>/i.test(html) ? html.replace(/<\/body>(?![\s\S]*<\/body>)/i, fix + '</body>') : html + fix;
     genUrl = URL.createObjectURL(new Blob([html], {type: 'text/html;charset=utf-8'}));
     if(view === 'report') reportView();
@@ -727,7 +769,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     const list = window.__inboxAll ? all : all.filter(x => x.status === 'submitted');
     const more = done ? '<button class="btn ghost sm" id="inbAll" style="margin-top:10px">' + (window.__inboxAll ? '🙈 اخفي اللي اتراجع' : '📂 اعرض اللي اتراجع (' + done + ')') + '</button>' : '';
     const wire = () => { const b = $('inbAll'); if(b) b.onclick = () => { window.__inboxAll = !window.__inboxAll; inbox(); }; };
-    if(!list.length){ app.innerHTML = '<div class="card"><h2>📥 التسليمات</h2><p class="muted">' + (all.length ? 'مفيش واجبات مستنية ردّك ✓' : 'لسه مفيش حد سلّم. اعمل واجب جديد وابعت اللينك للطالب.') + '</p>' + more + '</div>'; wire(); addMonthly(); return; }
+    if(!list.length){ app.innerHTML = '<div class="card"><h2>📥 التسليمات</h2><p class="muted">' + (all.length ? 'مفيش واجبات مستنية ردّك ✓' : 'لسه مفيش حد سلّم. اعمل واجب جديد وابعت اللينك للطالب.') + '</p>' + more + '</div>'; wire(); addMonthly(); addOverdue(); return; }
     const paths = list.flatMap(x => x.audio_paths || []);
     const urls = {};
     if(paths.length){ const u = await db.storage.from('recordings').createSignedUrls(paths, 3600); (u.data || []).forEach(x => { if(x.signedUrl) urls[x.path] = x.signedUrl; }); }
@@ -749,7 +791,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         '<div data-vbox>' + (x.feedback_audio ? '<audio controls preload="none" data-vpath="' + esc(x.feedback_audio) + '"></audio>' : '') + '</div>' +
         '<div class="row" style="margin-top:8px"><button class="btn ok sm" data-act="reviewed">✅ تمام</button><button class="btn bad sm" data-act="redo">🔁 يعيد</button><button class="btn ghost sm" data-copy="' + esc(pageOf(s) || linkOf(t.token)) + '">🔗 صفحة الطالب</button></div></div>';
     }).join('') + more;
-    wire(); addMonthly();
+    wire(); addMonthly(); addOverdue();
     /* 💬 ready encouragement: adds a warm line to the reply box in the student's language (edit it freely) */
     app.querySelectorAll('[data-tpl]').forEach(b => b.onclick = () => {
       const c = b.closest('[data-id]'), ta = c.querySelector('[data-fb]'), x = list.find(y => String(y.id) === c.dataset.id) || {}, s = ((x.assignment_targets || {}).students) || {}, p = TPL[+b.dataset.tpl];
@@ -835,6 +877,45 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   }
 
   /* 📊 monthly summaries + monthly tests, made on the 1st of each month by the scheduled task (docs 'monthly', id YYYY-MM-<slug>) */
+  /* ⏰ «ما سلّموش»: homework shown to the student more than 3 days ago (and less than 30) with nothing handed in, one line per student,
+     with a ready WhatsApp reminder (student's language) that carries his fixed page link. «✓ اتفكّر» hides him for 3 days (kv nudged:<id>). */
+  async function addOverdue(){
+    try{
+      const now = Date.now(), D = 864e5;
+      const [r, n, p] = await Promise.all([
+        db.from('assignment_targets').select('id,sent_at,students(id,name_ar,name_en,lang,portal_token,active),assignments(title),submissions(id)')
+          .eq('released', true).lt('sent_at', new Date(now - 3 * D).toISOString()).gt('sent_at', new Date(now - 30 * D).toISOString()).order('sent_at', {ascending: false}),
+        db.from('kv').select('key,value').like('key', 'nudged:%'),
+        db.from('kv').select('key,value').like('key', 'phone:%')]);
+      if(r.error) return;
+      const nudged = {}, phone = {};
+      (n.data || []).forEach(x => nudged[x.key.slice(7)] = x.value);
+      (p.data || []).forEach(x => phone[x.key.slice(6)] = String(x.value || '').replace(/[^0-9]/g, ''));
+      const by = {};
+      (r.data || []).forEach(t => { const s = t.students; if(!s || s.active === false || (t.submissions || []).length) return;
+        if(nudged[s.id] && now - new Date(nudged[s.id]) < 3 * D) return;
+        (by[s.id] = by[s.id] || {s, items: []}).items.push(t); });
+      const rows = Object.values(by).sort((a, b) => new Date(a.items[a.items.length - 1].sent_at) - new Date(b.items[b.items.length - 1].sent_at));
+      const old = $('overdue'); if(old) old.remove();
+      if(!rows.length || !app.isConnected || view !== 'inbox') return;
+      const first = v => (v || '').split(' ')[0];
+      const msgOf = x => { const s = x.s, link = pageOf(s) + nq(s), t = x.items[0].assignments ? x.items[0].assignments.title : '', more = x.items.length - 1;
+        const ar = 'السلام عليكم 🌷\nيا ' + first(s.name_ar) + '، عندك واجب مستنيك: «' + t + '»' + (more ? ' و' + more + ' كمان' : '') + '.\nخمس دقايق بس ⏱️ — كله في صفحتك:\n' + link;
+        const en = 'Assalamu alaikum 🌷\n' + first(s.name_en || s.name_ar) + ', your homework is waiting: "' + t + '"' + (more ? ' (+' + more + ' more)' : '') + '.\nIt takes only 5 minutes ⏱️ Open your page:\n' + link;
+        return s.lang === 'ar' ? ar : s.lang === 'both' ? ar.replace('\n' + link, '') + '\n\n' + en : en; };
+      const d = document.createElement('div'); d.id = 'overdue'; d.className = 'card'; d.style.cssText = 'border:2px solid #d9822b';
+      d.innerHTML = '<h2 style="margin-top:0">⏰ ما سلّموش <span class="muted small">(' + rows.length + ' — واجب ظاهر من أكتر من ٣ أيام ومفيش تسليم)</span></h2>' +
+        rows.map((x, i) => { const s = x.s, oldest = x.items[x.items.length - 1].sent_at, days = Math.floor((now - new Date(oldest)) / D);
+          return '<div class="item row" data-od="' + s.id + '" style="margin-top:8px;align-items:center"><div style="flex:1;min-width:180px"><b>' + esc(nm(s)) + '</b>' +
+            '<div class="small muted">' + x.items.length + ' واجب · أقدمهم من ' + days + ' يوم: ' + esc(x.items.map(t => t.assignments ? t.assignments.title : '').filter(Boolean).slice(0, 3).join(' · ')) + '</div></div>' +
+            (pageOf(s) ? '<a class="btn wa sm" target="_blank" rel="noopener" data-odwa="' + i + '" href="https://wa.me/' + (phone[s.id] || '') + '?text=' + encodeURIComponent(msgOf(x)) + '">🟢 واتساب</a>' : '<span class="small muted">مفيش لينك صفحة</span>') +
+            ' <button class="btn ghost sm" data-odok="' + s.id + '">✓ اتفكّر</button></div>'; }).join('');
+      app.prepend(d);
+      d.querySelectorAll('[data-odok]').forEach(b => b.onclick = async () => {
+        await kvSet('nudged:' + b.dataset.odok, new Date().toISOString());
+        const row = b.closest('[data-od]'); row.remove(); if(!d.querySelector('[data-od]')) d.remove(); flash('اتخفى ٣ أيام ✓'); });
+    }catch(e){ console.warn('overdue', e); }
+  }
   async function addMonthly(){
     try{
       const r = await db.from('docs').select('id,data').eq('collection', 'monthly').order('id', {ascending: false}).limit(60);
@@ -846,7 +927,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
           '<div class="small" style="white-space:pre-wrap;margin:6px 0;max-height:140px;overflow:auto;background:var(--bg2,#f6f8f7);border-radius:8px;padding:8px" dir="auto">' + esc(v.text || '') + '</div>' +
           '<div class="row"><button class="btn ok sm" data-mcopy="' + i + '">📋 انسخ الملخص</button>' + (v.test_url ? '<button class="btn ghost sm" data-copy="' + esc(v.test_url) + '">🔗 لينك الاختبار</button><a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(v.test_url) + '">👁 افتح الاختبار</a>' : '') +
           '<a class="btn ghost sm" target="_blank" rel="noopener" data-mwa="' + i + '">🟢 واتساب</a></div></div>'; }).join('');
-      app.prepend(d);
+      const od = $('overdue'); if(od && od.parentNode === app) od.after(d); else app.prepend(d);
       d.querySelectorAll('[data-mcopy]').forEach(b => b.onclick = () => { const v = mine[+b.dataset.mcopy].data; copy((v.text || '') + (v.test_url ? '\n\n📝 ' + (v.lang === 'ar' ? 'اختبار الشهر' : 'Monthly test') + ': ' + v.test_url : '')); });
       d.querySelectorAll('[data-mwa]').forEach(b => { const v = mine[+b.dataset.mwa].data; b.href = 'https://wa.me/?text=' + encodeURIComponent((v.text || '') + (v.test_url ? '\n\n📝 ' + (v.lang === 'ar' ? 'اختبار الشهر' : 'Monthly test') + ': ' + v.test_url : '')); });
       d.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.dataset.copy));

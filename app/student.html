@@ -40,6 +40,13 @@ ul{margin:6px 0;padding-inline-start:22px}
 .ov .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card2);border-bottom:1px solid var(--line)}
 .ov iframe{flex:1;border:0;width:100%;background:#fff}
 .card.new{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok)}
+.rw{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.rw .stat b{font-size:1.7rem}
+.bdg{display:flex;gap:8px;margin-top:8px}
+.bdg div{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px 4px;text-align:center;font-size:.85rem}
+.bdg div i{display:block;font-style:normal;font-size:1.9rem;line-height:1.2}
+.bdg .off{opacity:.45;filter:grayscale(1)}
+.bdg .on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
 </style>
 <link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg"><link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
 </head>
@@ -73,7 +80,7 @@ ul{margin:6px 0;padding-inline-start:22px}
     const hwUrl = t => new URL('app/hw.html?t=' + t, TQ.site).href;
     const stLabel = h => !h.last ? ['todo', T('لسه', 'To do')] : h.last.status === 'redo' ? ['redo', T('أعِد المحاولة', 'Try again')] : h.last.status === 'reviewed' ? ['reviewed', T('المعلم راجعه ✓', 'Checked ✓')] : ['submitted', T('اتبعت', 'Sent')];
     let h = '<div class="hd"><div class="muted">' + T('صفحة', 'The page of') + '</div><h1>' + esc(name) + ' 🌱</h1><div class="stats">' +
-      '<div class="stat"><b>' + L.length + '</b>' + T('درس', 'lessons') + '</div><div class="stat"><b>' + todo.length + '</b>' + T('واجب مستني', 'homework to do') + '</div><div class="stat"><b>' + (avg != null ? avg + '%' : '—') + '</b>' + T('متوسط الدرجات', 'average score') + '</div></div></div>';
+      '<div class="stat"><b>' + L.length + '</b>' + T('درس', 'lessons') + '</div><div class="stat"><b>' + todo.length + '</b>' + T('واجب مستني', 'homework to do') + '</div><div class="stat"><b>' + (avg != null ? avg + '%' : '—') + '</b>' + T('متوسط الدرجات', 'average score') + '</div></div>' + rewards(hw) + '</div>';
     if(todo.length) h += '<a class="btn" style="width:100%;justify-content:center;font-size:1.15rem;min-height:56px;margin-top:14px" href="' + hwUrl(todo[0].token) + '">▶ ' + T('ابدأ واجبك الحالي: ', 'Start your current homework: ') + esc(todo[0].title) + '</a>';
     h += '<h2>📝 ' + T('الواجبات', 'Homework') + '</h2>' + (hw.length ? hw.map(x => { const st = stLabel(x);
       return '<div class="card' + (st[0] === 'todo' || st[0] === 'redo' ? ' todo' : '') + '"><div class="row"><b>' + esc(x.title) + '</b><span class="st ' + st[0] + '">' + st[1] + '</span><span class="date">' + fmt(x.sent_at) + '</span></div>' +
@@ -106,6 +113,24 @@ ul{margin:6px 0;padding-inline-start:22px}
     app.innerHTML = h;
     app.querySelectorAll('[data-fbv]').forEach(a => db.storage.from('recordings').createSignedUrl(a.dataset.fbv, 21600).then(u => { if(u.data) a.src = u.data.signedUrl; }));
     app.querySelectorAll('[data-cr]').forEach(b => b.onclick = () => openCr(b.dataset.cr, b));
+  }
+  /* ⭐ stars + 🔥 streak + badges at 3, 5 and 10 homework handed in one after another.
+     Numbers come from get_portal (rewards); if it is not there, they are worked out from the homework list. */
+  function rewards(hw){
+    let R = P.rewards;
+    if(!R){
+      const old = Date.now() - 3 * 864e5, list = hw.filter(x => x.last || new Date(x.sent_at) < old);   // newest first
+      let streak = 0, best = 0, run = 0;
+      list.forEach((x, i) => { if(x.last){ run++; if(streak === i) streak = run; } else run = 0; best = Math.max(best, run); });
+      R = {stars: Math.round(hw.reduce((a, x) => a + (x.last && +x.last.score || 0), 0)), streak, best_streak: best, done: hw.filter(x => x.last).length};
+    }
+    const B = [[3, '🥉', 'بطل الثلاثة', 'Three in a row'], [5, '🥈', 'بطل الخمسة', 'Five in a row'], [10, '🏆', 'بطل العشرة', 'Ten in a row']];
+    const next = B.find(b => (R.best_streak || 0) < b[0]);
+    return '<div class="rw"><div class="stat"><b>⭐ ' + (R.stars || 0) + '</b>' + T('نجومك', 'your stars') + '</div>' +
+      '<div class="stat"><b>🔥 ' + (R.streak || 0) + '</b>' + T('واجبات ورا بعض', 'homework in a row') + '</div></div>' +
+      '<div class="bdg">' + B.map(b => { const on = (R.best_streak || 0) >= b[0];
+        return '<div class="' + (on ? 'on' : 'off') + '"><i>' + b[1] + '</i>' + T(b[2], b[3]) + '</div>'; }).join('') + '</div>' +
+      (next ? '<div class="small muted" style="margin-top:6px;text-align:center">' + T('سلّم ' + (next[0] - (R.streak || 0)) + ' واجب كمان ورا بعض وتاخد ' + next[1], 'Hand in ' + (next[0] - (R.streak || 0)) + ' more in a row to earn ' + next[1]) + '</div>' : '');
   }
   async function openCr(id, b){
     const old = b ? b.innerHTML : ''; if(b){ b.disabled = true; b.textContent = '⏳ …'; }
