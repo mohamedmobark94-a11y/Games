@@ -652,7 +652,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
             ar: 'اسمع كل جزء بالعدد المطلوب وتابع الكلمة اللي بتنوّر مع القارئ' + (record ? '، وبعدين سمّع بصوتك وسجّل.' : '.'),
             en: 'Listen to each part the number of times shown and follow the word that lights up' + (record ? ', then recite and record yourself.' : '.')}, items}}).select().single();
           if(a.error) throw a.error;
-          const t = await sb.from('assignment_targets').insert({assignment_id: a.data.id, student_id: sid}).select('token').single();
+          const t = await sb.from('assignment_targets').insert({assignment_id: a.data.id, student_id: sid, released: true}).select('token').single();
           if(t.error) throw t.error;
           const link = (window.TQ && TQ.site ? TQ.site : 'https://mohamedmobark94-a11y.github.io/Games/') + 'app/hw.html?t=' + t.data.token;
           const stu = students.find(x => x.id === sid) || {}, ar = stu.lang === 'ar';
@@ -706,6 +706,12 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   }
 
   /* ---------- 📥 submissions ---------- */
+  const TPL = [
+    ['🌟 ممتاز', 'ما شاء الله، شغل ممتاز يا {n}! 🌟 واضح إنك اتعبت وركّزت. كمّل كده، بارك الله فيك.', 'Masha’Allah, excellent work, {n}! 🌟 I can see you tried hard. Keep going, barakAllahu feek.'],
+    ['👏 كويس', 'أحسنت يا {n}! 👏 شغل كويس، وفاضل حاجات بسيطة نظبطها مع بعض في الحصة الجاية.', 'Well done, {n}! 👏 Good job. A few small things are left; we will fix them together next lesson.'],
+    ['🎙️ تلاوة حلوة', 'تلاوتك حلوة يا {n} 🎙️ صوتك واضح وبتحاول تطبّق الأحكام. استمر!', 'Your recitation is lovely, {n} 🎙️ Clear voice, and you are applying the rules. Keep it up!'],
+    ['💪 حاول تاني', 'شكرًا إنك حاولت يا {n} 💪 الغلط جزء من التعلّم. جرّب تاني وهتتحسن إن شاء الله.', 'Thank you for trying, {n} 💪 Mistakes are part of learning. Try again and you will improve, in shā’ Allāh.'],
+    ['🤲 دعاء', 'جزاك الله خيرًا، وزادك الله علمًا ونفعك به 🤲', 'Jazāk Allāhu khayran. May Allah increase you in knowledge and benefit you with it 🤲']];
   async function inbox(){
     app.innerHTML = '<div class="card muted">بيحمّل…</div>';
     const r = await db.from('submissions').select('*, assignment_targets(token, students(id,name_ar,name_en,lang), assignments(id,title,kind,content))').order('submitted_at', {ascending: false}).limit(80);
@@ -733,11 +739,19 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         (wrong.length ? '<div class="small muted">غلط في: ' + wrong.map(m => { const it = items[m.i] || {}; const o = (it.options || [])[m.chose]; return 'س' + (m.i + 1) + (o != null ? ' (اختار «' + esc(typeof o === 'object' ? o.ar : o) + '»)' : ' (ما جاوبش)'); }).join('، ') + '</div>' : '') +
         rec.map(p => { const it = items[p.i] || {}; return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (p.label ? ' · ' + esc(p.label) : it.say ? ' · ' + esc(it.say) : it.title ? ' · ' + esc(it.title) : '') + '</div>' + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') + (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') + '</div>'; }).join('') +
         '<label>ردّك للطالب</label><textarea data-fb>' + esc(x.feedback || '') + '</textarea>' +
+        '<div class="row" style="margin-top:6px;gap:6px;flex-wrap:wrap"><span class="small muted">💬 كلمات تشجيع جاهزة:</span>' + TPL.map((p, k) => '<button type="button" class="chip" data-tpl="' + k + '">' + p[0] + '</button>').join('') + '</div>' +
         '<div class="row" style="margin-top:6px;align-items:center"><button type="button" class="btn ghost sm" data-vrec>🎙️ سجّل ردّ صوتي</button><button type="button" class="btn ghost sm" data-dict>🗣️ اتكلم ويتكتب</button><button type="button" class="btn ghost sm" data-polish>✨ حوّلها رسالة للطالب</button><span class="small muted" data-vst></span></div>' +
         '<div data-vbox>' + (x.feedback_audio ? '<audio controls preload="none" data-vpath="' + esc(x.feedback_audio) + '"></audio>' : '') + '</div>' +
         '<div class="row" style="margin-top:8px"><button class="btn ok sm" data-act="reviewed">✅ تمام</button><button class="btn bad sm" data-act="redo">🔁 يعيد</button><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">🔗 لينك الطالب</button></div></div>';
     }).join('') + more;
     wire(); addMonthly();
+    /* 💬 ready encouragement: adds a warm line to the reply box in the student's language (edit it freely) */
+    app.querySelectorAll('[data-tpl]').forEach(b => b.onclick = () => {
+      const c = b.closest('[data-id]'), ta = c.querySelector('[data-fb]'), x = list.find(y => String(y.id) === c.dataset.id) || {}, s = ((x.assignment_targets || {}).students) || {}, p = TPL[+b.dataset.tpl];
+      const first = v => (v || '').split(' ')[0], ar = p[1].replace('{n}', first(s.name_ar || s.name_en)), en = p[2].replace('{n}', first(s.name_en || s.name_ar));
+      const txt = s.lang === 'ar' ? ar : s.lang === 'both' ? ar + '\n' + en : en;
+      ta.value = (ta.value.trim() ? ta.value.trim() + '\n' : '') + txt; ta.focus();
+    });
     /* 🎙️ voice reply: recorded here, saved next to the student's recordings as <token>/fb-<submission>.webm */
     const vp = [...app.querySelectorAll('[data-vpath]')].map(a => a.dataset.vpath);
     if(vp.length){ db.storage.from('recordings').createSignedUrls(vp, 3600).then(u => (u.data || []).forEach(x => { const a = app.querySelector('[data-vpath="' + x.path + '"]'); if(a && x.signedUrl) a.src = x.signedUrl; })); }
@@ -849,6 +863,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       '<div class="card"><h2>الأسئلة والتسميع</h2><div id="items">' + d.items.map(itemForm).join('') + '</div>' +
       '<div class="row" style="margin-top:10px"><button class="btn ghost" id="addQ">➕ سؤال اختيارات</button><button class="btn ghost" id="addR">🎙️ تسميع بالصوت</button><button class="btn ghost" id="addL">🎧 واجب قرآن (استماع + تسميع)</button><button class="btn ghost" id="addP">🧩 صفحة واجب تفاعلية</button></div></div>' +
       '<div class="card"><h2>لمين؟</h2><div class="row" id="who">' + students.filter(s => s.active).map(s => '<button class="chip' + (d.who.includes(s.id) ? ' on' : '') + '" data-s="' + s.id + '">' + esc(s.name_ar) + '</button>').join('') + '</div>' +
+      '<label class="row" style="color:var(--ink);margin-top:12px"><input type="checkbox" id="f_rel" style="width:auto"> يظهر للطالب فورًا (لو سيبتها فاضية الواجب يتحفظ مخفي لحد ما تظهره)</label>' +
       '<div class="row" style="margin-top:14px"><button class="btn" id="save">💾 احفظ وطلّع اللينكات</button><button class="btn ghost" id="reset">ابدأ من الأول</button></div><div id="out2"></div></div>';
     const sync = () => {
       d.title = $('f_title').value; d.kind = $('f_kind').value; d.subject = $('f_subject').value; d.due_date = $('f_due').value; d.page_url = $('f_url').value.trim(); d.intro = $('f_intro').value;
@@ -891,9 +906,10 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       const a = await db.from('assignments').insert({title: d.title.trim(), kind: d.kind, subject: d.subject || null, page_url: d.page_url || null, due_date: d.due_date || null,
         content: {intro: d.intro ? {ar: d.intro} : undefined, items}, max_score: mcqN || null}).select().single();
       if(a.error) return alert(a.error.message);
-      const t = await db.from('assignment_targets').insert(d.who.map(id => ({assignment_id: a.data.id, student_id: id}))).select('token, students(name_ar,name_en)');
+      const rel = !!($('f_rel') && $('f_rel').checked);
+      const t = await db.from('assignment_targets').insert(d.who.map(id => ({assignment_id: a.data.id, student_id: id, released: rel}))).select('token, students(name_ar,name_en)');
       if(t.error) return alert(t.error.message);
-      $('out2').innerHTML = '<h2 style="margin-top:16px">✅ اتحفظ — ابعت لكل طالب لينكه</h2>' + linksTable(t.data, a.data.title);
+      $('out2').innerHTML = '<h2 style="margin-top:16px">✅ اتحفظ — ' + (rel ? 'ابعت لكل طالب لينكه' : '🙈 الواجب مخفي عن الطالب لحد ما تظهره من 📚 الواجبات') + '</h2>' + linksTable(t.data, a.data.title);
       bindLinks(); draft = blank();
     };
   }
@@ -940,12 +956,16 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   /* ---------- 📚 all assignments ---------- */
   async function listView(){
     app.innerHTML = '<div class="card muted">بيحمّل…</div>';
-    const r = await db.from('assignments').select('id,title,kind,subject,due_date,created_at, assignment_targets(token, students(name_ar,name_en), submissions(score,max_score,status,submitted_at))').order('created_at', {ascending: false}).limit(60);
+    const r = await db.from('assignments').select('id,title,kind,subject,due_date,created_at, assignment_targets(id, released, token, students(name_ar,name_en), submissions(score,max_score,status,submitted_at))').order('created_at', {ascending: false}).limit(60);
     if(r.error){ app.innerHTML = '<div class="card">' + esc(r.error.message) + '</div>'; return; }
     app.innerHTML = '<h2>📚 الواجبات والاختبارات</h2>' + ((r.data || []).map(a => '<div class="card"><div class="row"><b style="font-size:1.1rem">' + esc(a.title) + '</b><span class="muted small">' + (a.kind === 'test' ? 'اختبار' : 'واجب') + (a.subject ? ' · ' + esc(a.subject) : '') + ' · ' + day(a.created_at) + '</span></div>' +
       '<table>' + a.assignment_targets.map(t => { const subs = (t.submissions || []).sort((x, y) => y.submitted_at.localeCompare(x.submitted_at)), last = subs[0];
-        return '<tr><td>' + esc(nm(t.students)) + '</td><td>' + (last ? (last.max_score ? last.score + '/' + last.max_score + ' ' : '') + '<span class="st ' + last.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[last.status] + '</span>' + (subs.length > 1 ? ' <span class="small muted">(' + subs.length + ' محاولات)</span>' : '') : '<span class="muted">لسه ما سلّمش</span>') + '</td><td style="white-space:nowrap"><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">📋 اللينك</button></td></tr>'; }).join('') + '</table></div>').join('') || '<div class="card muted">لسه مفيش واجبات.</div>');
+        return '<tr><td>' + esc(nm(t.students)) + '</td><td>' + (last ? (last.max_score ? last.score + '/' + last.max_score + ' ' : '') + '<span class="st ' + last.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[last.status] + '</span>' + (subs.length > 1 ? ' <span class="small muted">(' + subs.length + ' محاولات)</span>' : '') : '<span class="muted">لسه ما سلّمش</span>') + '</td><td style="white-space:nowrap"><button class="btn sm ' + (t.released ? 'ok' : 'bad') + '" data-rel="' + t.id + '" data-on="' + (t.released ? 1 : 0) + '">' + (t.released ? '👁 ظاهر للطالب' : '🙈 مخفي — اظهره') + '</button> <button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">📋 اللينك</button></td></tr>'; }).join('') + '</table></div>').join('') || '<div class="card muted">لسه مفيش واجبات.</div>');
     bindLinks();
+    app.querySelectorAll('[data-rel]').forEach(b => b.onclick = async () => {
+      const on = b.dataset.on === '1', u = await db.from('assignment_targets').update({released: !on}).eq('id', b.dataset.rel);
+      if(u.error) return alert(u.error.message); flash(on ? 'اتخفى عن الطالب' : 'ظهر للطالب ✓'); listView();
+    });
   }
 
   /* ---------- 👥 students ---------- */
