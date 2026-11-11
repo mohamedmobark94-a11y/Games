@@ -88,6 +88,8 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   const nm = s => s ? (s.name_ar + (s.name_en ? ' · ' + s.name_en : '')) : '';
   const day = d => d ? new Date(d).toLocaleString('ar-EG', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) : '';
   const linkOf = tok => HW + '?t=' + tok;
+  /* first name in the link text, so a parent with two kids can tell the links apart in WhatsApp (the pages ignore it) */
+  const nq = s => s && s.name_en ? '&n=' + encodeURIComponent(s.name_en.split(' ')[0].toLowerCase()) : '';
   const copy = async t => { try{ await navigator.clipboard.writeText(t); flash('اتنسخ ✓'); }catch(_){ prompt('انسخ:', t); } };
 
   /* ---------- sign in ---------- */
@@ -947,7 +949,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       '<label>صوت قدوة (لينك mp3، اختياري)</label><input data-k="ref" dir="ltr" value="' + esc(it.ref_audio || '') + '"></div>';
   }
   function linksTable(rows, title){
-    return '<table>' + rows.map(r => { const s = r.students || {}, url = linkOf(r.token);
+    return '<table>' + rows.map(r => { const s = r.students || {}, url = linkOf(r.token) + nq(s);
       const msg = 'السلام عليكم ' + (s.name_ar || '') + ' 🌱\n' + title + '\n' + url + '\n\nAssalamu alaikum ' + (s.name_en || '') + ', here is your homework: ' + url;
       return '<tr><td><b>' + esc(nm(s)) + '</b><div class="link">' + esc(url) + '</div></td><td style="white-space:nowrap"><button class="btn ghost sm" data-copy="' + esc(url) + '">📋 نسخ</button> <a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">واتساب</a></td></tr>'; }).join('') + '</table>';
   }
@@ -985,7 +987,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         h += '<div class="card"><h2>سجل ' + esc(s.name_ar) + '</h2><p class="muted">' + rows.length + ' واجب · ' + rows.filter(t => (t.submissions || []).length).length + ' اتسلّم' + (avg != null ? ' · متوسط الدرجات ' + avg + '%' : '') + '</p><table>' +
           rows.map(t => { const subs = (t.submissions || []).sort((x, y) => y.submitted_at.localeCompare(x.submitted_at)), last = subs[0];
             return '<tr><td>' + esc(t.assignments.title) + '<div class="small muted">' + day(t.assignments.created_at) + '</div></td><td>' + (last ? (last.max_score ? last.score + '/' + last.max_score + ' ' : '') + '<span class="st ' + last.status + '">' + ({submitted: 'جديد', reviewed: 'اتراجع', redo: 'يعيد'})[last.status] + '</span>' : '<span class="muted">لسه</span>') + '</td><td><button class="btn ghost sm" data-copy="' + esc(linkOf(t.token)) + '">📋</button></td></tr>'; }).join('') + '</table></div>';
-        const portal = PORTAL + '?k=' + s.portal_token;
+        const portal = PORTAL + '?k=' + s.portal_token + nq(s);
         const pmsg = 'السلام عليكم 🌱\nصفحة ' + s.name_ar + ': الدروس والواجبات والتقارير في مكان واحد\n' + portal + '\n\nAssalamu alaikum, this is ' + (s.name_en || '') + '’s page: lessons, homework and reports in one place:\n' + portal;
         h = h.replace('<div class="card"><h2>سجل ', '<div class="card"><h2>🔗 صفحة ' + esc(s.name_ar) + ' (للطالب وولي الأمر)</h2><p class="small muted">لينك ثابت: كل دروسه وواجباته ودرجاته وآخر تقرير. من غير تسجيل دخول، ومن غير الخطة أو ملاحظاتك.</p><div class="link">' + esc(portal) + '</div><div class="row" style="margin-top:8px"><button class="btn ghost sm" data-copy="' + esc(portal) + '">📋 نسخ</button><a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(pmsg) + '">واتساب</a><a class="btn ghost sm" target="_blank" rel="noopener" href="' + esc(portal) + '">👁️ افتحها</a><button class="btn ghost sm" data-golessons="' + s.id + '">📚 دروسه</button><button class="btn ghost sm" data-goplan="' + esc(s.slug) + '">🗂️ خطته</button></div></div><div class="card"><h2>سجل ');
         h += await lessonsHtml(s.keys || [s.slug], 12);

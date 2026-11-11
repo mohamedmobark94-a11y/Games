@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>صفحتي · My page — Mohamed Mubarak</title>
-<text y='.9em' font-size='90'>📖</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap">
 <style>
 :root{color-scheme:dark;--bg:#0B1E2D;--card:#163A57;--card2:#12304A;--ink:#F4EBD6;--muted:#B4C5D3;--line:#2A5675;--gold:#E2B85C;--ok:#2ECC71;--bad:#F1948A;
@@ -124,7 +124,8 @@ ul{margin:6px 0;padding-inline-start:22px}
     if(k.length < 24){ app.innerHTML = '<div class="msg">' + 'اللينك ناقص — اطلب اللينك من المعلم.<br>This link is incomplete — ask your teacher for the link.' + '</div>'; return; }
     const r = await db.rpc('get_portal', {p_token: k});
     if(r.error || !r.data){ app.innerHTML = '<div class="msg">' + 'اللينك ده مش شغال — اطلب لينك جديد من المعلم.<br>This link does not work — ask your teacher for a new one.' + '</div>'; return; }
-    P = r.data; lang = ls('tq-lang') || (P.student.lang === 'ar' ? 'ar' : 'en'); draw();
+    P = r.data; try{ document.title = (P.student.name_en || P.student.name_ar) + ' · ' + document.title; }catch(_){}
+    lang = ls('tq-lang') || (P.student.lang === 'ar' ? 'ar' : 'en'); draw();
     if(location.hash === '#corrections'){ const el = document.getElementById('corrections'); if(el) el.scrollIntoView({block: 'start'});
       const c = (P.corrections || [])[0]; if(c) openCr(c.id, app.querySelector('[data-cr]')); }
   })();

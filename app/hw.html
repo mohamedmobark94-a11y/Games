@@ -376,6 +376,7 @@ audio{width:100%;margin-top:8px}
     const r = await db.rpc('get_assignment', {p_token: token});
     if(r.error || !r.data){ setLang((navigator.language || '').indexOf('ar') === 0 ? 'ar' : 'en'); $('app').innerHTML = '<div class="msg">' + L('bad') + '<br>' + T.bad[1] + '</div>'; return; }
     A = r.data;
+    try{ const sn = A.student && (A.student.name_en || A.student.name_ar); if(sn) document.title = sn + ' · ' + document.title; }catch(_){}
     if(A.locked){ setLang(A.student && A.student.lang === 'ar' ? 'ar' : 'en'); $('app').innerHTML = '<div class="msg">' + L('locked') + '<br>' + T.locked[1] + '</div>'; return; }
     let saved = null; try{ saved = localStorage.getItem('tq-lang'); }catch(_){}
     setLang(saved || (A.student && A.student.lang === 'ar' ? 'ar' : 'en'));
