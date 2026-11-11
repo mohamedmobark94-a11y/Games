@@ -314,7 +314,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       text = text.replace(/\s*(سطر جديد|new line)\s*/gi, ' ').trim(); if(!text) return;
       const to = $g('micTo').value;
       if(to === 'encourage'){ const e = $g('encourage'); if(e){ e.value = (e.value.trim() ? e.value.trim() + ' ' : '') + text; e.dispatchEvent(new Event('input', {bubbles: true})); } }
-      else { try{ window.addItem(to, text); if(window.setToggle) window.setToggle(to, true); }catch(e){ console.warn(e); } }
+      else { try{ if(window.__tqHand) window.__tqHand(to); window.addItem(to, text); if(window.setToggle) window.setToggle(to, true); }catch(e){ console.warn(e); } }
       try{ window.render(); }catch(e){} try{ window.saveDraft(); }catch(e){}
     };
     const stop = () => { on = false; try{ rec && rec.stop(); }catch(e){} $g('micGo').textContent = '🎙️ ابدأ الكلام'; $g('micGo').style.background = '#b42318'; };
@@ -393,7 +393,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         window.__tidyUsed = used;
         let n = 0;
         Object.keys(secs).forEach(k => { const v = r && r[k]; if(k === 'encourage'){ if(typeof v === 'string' && v.trim()){ $g('encourage').value = v.trim(); $g('encourage').dispatchEvent(new Event('input', {bubbles: true})); n++; } return; }
-          if(Array.isArray(v) && v.length){ window.clearList(k); v.forEach(x => { if(String(x).trim()) window.addItem(k, String(x).trim()); }); n++; } });
+          if(Array.isArray(v) && v.length){ window.clearList(k); v.forEach(x => { if(String(x).trim()) window.addItem(k, String(x).trim()); }); if(window.__tqHand) window.__tqHand(k); n++; } });
         try{ window.render(); window.saveDraft(); }catch(e){}
         out.innerHTML = n ? '<span style="color:#177a5b;font-weight:700">✓ اترتّب بـ ' + used + '. راجع السطور، وبعدين اضغط «✅ راجع التقرير».</span>' : '<span style="color:#9c3f3f">مرجعش ترتيب — جرّب تاني.</span>';
       }catch(e){
