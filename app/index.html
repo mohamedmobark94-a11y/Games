@@ -49,6 +49,10 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
 .full .wrap{max-width:none;padding:0}
 @keyframes subIn{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
 #genFrame{display:block;width:100%;height:calc(100vh - 58px);border:0;background:#fff}
+.genbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;padding:4px 12px;min-height:34px;border-bottom:1px solid var(--line)}
+.genbar+#genFrame{height:calc(100vh - 58px - 54px)}
+.genbar label{white-space:nowrap}.genbar .btn{min-height:0;padding:3px 12px;font-size:.85rem}
+@media(max-width:760px){.genbar>.muted{display:none}}
 .md h2,.md h3,.md h4,.md h5{margin:14px 0 6px;color:var(--gold)}.md p{margin:4px 0}.md .mdq{border-inline-start:3px solid var(--gold);padding:2px 10px;color:var(--muted);margin:6px 0}
 .mdt{margin:8px 0;font-size:.9rem;background:var(--card2);border-radius:10px;overflow:hidden}.mdt th{color:var(--gold)}.md code{background:var(--card2);padding:0 4px;border-radius:4px}
 .flash{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#10263A;font-weight:800;border-radius:99px;padding:8px 18px;z-index:99}
@@ -729,8 +733,44 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       });
     });
   }
+  /* ⬆ a new copy of the generator (the .html from claude.ai) replaces private/generator.html.
+     The current file is kept first as generator-YYYY-MM-DD-HHMM.html; nothing is deleted. */
+  const genBar = '<div class="genbar"><span class="small muted">المولّد اللي بيفتح هنا نسخة محفوظة في الموقع.</span>' +
+    '<label class="btn ghost sm" style="cursor:pointer">⬆ ارفع نسخة مولّد جديدة<input type="file" id="genUp" accept=".html,.htm,text/html" hidden></label><span id="genUpSt" class="small"></span></div>';
+  async function genUpload(file){
+    const st = $('genUpSt'), say = (t, c) => { st.textContent = t; st.style.color = c || ''; };
+    if(!file) return;
+    let html = await file.text();
+    /* a page saved from claude.ai comes wrapped in a small outer page: keep the generator itself */
+    const inner = html.search(/\n\s*<!DOCTYPE html>/i);
+    if(/^\s*<!doctype html><html><head><meta charset=utf8>/i.test(html) && inner > 0){
+      html = html.slice(inner).trim().replace(/<\/body><\/html>\s*<\/body><\/html>\s*$/i, '</body></html>');
+    }
+    if(html.length < 300000 || html.indexOf('id="student"') < 0 || html.indexOf('id="list-lesson"') < 0){
+      say('⚠️ الملف ده مش المولّد (اختار ملف تقرير الحصة .html اللي نزّلته من claude.ai).', 'var(--bad)'); return; }
+    const kb = Math.round(html.length / 1024);
+    if(!confirm('ترفع «' + file.name + '» (' + kb + ' KB) مكان المولّد الحالي؟\nالنسخة القديمة هتتحفظ باسم تاني قبل الرفع.')) { say(''); return; }
+    const d = new Date(), p = n => String(n).padStart(2, '0');
+    const backup = 'generator-' + d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '.html';
+    say('⏳ بحفظ نسخة من القديم…');
+    const cp = await db.storage.from('private').copy('generator.html', backup);
+    if(cp.error && !/not.?found/i.test(cp.error.message)){ say('⚠️ معرفتش أحفظ نسخة من القديم، فما رفعتش حاجة: ' + cp.error.message, 'var(--bad)'); return; }
+    say('⏳ برفع الجديد…');
+    const up = await db.storage.from('private').upload('generator.html', new Blob([html], {type: 'text/html; charset=utf-8'}),
+      {upsert: true, contentType: 'text/html; charset=utf-8', cacheControl: '0'});
+    if(up.error){ say('⚠️ الرفع فشل: ' + up.error.message + (cp.error ? '' : ' (القديم لسه مكانه، ونسخته في ' + backup + ')'), 'var(--bad)'); return; }
+    /* check what is stored now, then open the new copy */
+    const chk = await db.storage.from('private').download('generator.html');
+    const got = chk.error ? -1 : (await chk.data.text()).length;
+    if(got !== html.length){ say('⚠️ الرفع خلص بس الملف المحفوظ مش مطابق (' + got + ' بدل ' + html.length + '). جرّب تاني.', 'var(--bad)'); return; }
+    if(genUrl) URL.revokeObjectURL(genUrl); genUrl = null;
+    flash('✓ المولّد الجديد اترفع'); reportView();
+    setTimeout(() => { const s2 = $('genUpSt'); if(s2){ s2.textContent = '✓ اترفع (' + kb + ' KB)' + (cp.error ? '' : ' — القديم محفوظ باسم ' + backup); s2.style.color = 'var(--ok)'; } }, 50);
+  }
   async function reportView(){
-    if(genUrl){ app.innerHTML = '<iframe id="genFrame" src="' + genUrl + '" title="تقرير الحصة" allow="microphone; clipboard-write"></iframe>'; return; }
+    if(genUrl){ app.innerHTML = genBar + '<iframe id="genFrame" src="' + genUrl + '" title="تقرير الحصة" allow="microphone; clipboard-write"></iframe>';
+      $('genUp').onchange = e => { genUpload(e.target.files[0]).catch(err => { $('genUpSt').textContent = '⚠️ ' + (err && err.message || err); }); e.target.value = ''; };
+      return; }
     app.innerHTML = '<div class="card muted" style="margin:16px">بيفتح المولّد…</div>';
     const r = await db.storage.from('private').download('generator.html');
     if(r.error){ app.innerHTML = '<div class="card" style="margin:16px">معرفتش أفتح المولّد: ' + esc(r.error.message) + '</div>'; return; }
