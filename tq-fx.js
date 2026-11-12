@@ -5,7 +5,8 @@
      TQFX.bad(el)       wrong answer: one of several soft "oops" sounds + shake (no voice)
      TQFX.win()         finished a game / the lesson: fanfare + sparkles + confetti (no voice)
      TQFX.tap()         small click (cards, chips)        TQFX.whoosh()  page/station change
-     TQFX.say(key)      play a recorded line: a bank key ('listen','repeat','alone', …) or a path under assets/voice/<voice>/
+     TQFX.cue(key)      the class steps as soft bells: 'listen' · 'repeat' · 'alone' (TQFX.say with these keys plays the bell too)
+     TQFX.say(key)      play a recorded line: a bank key or a path under assets/voice/<voice>/
      TQFX.ayah(s, a)    Husary (al-Mushaf al-Mu'allim) from everyayah.com
      TQFX.muted / TQFX.setMuted(bool)   remembered per device (localStorage 'tq-sound')
    The voice is pre-recorded (tools/voice.py, Kokoro), never the browser's speech engine. */
@@ -53,6 +54,15 @@
     tap(){ note(1200, 0, .05, 'sine', .07); },
     whoosh(){ note(300, 0, .22, 'sine', .05, 900); }
   };
+  /* the three class steps are soft bells, not a spoken voice (Mohamed 2026-11-12):
+     listen = a calm two-tone "ding-dong" · repeat = two quick notes · alone = three rising notes */
+  const bell = (f, t, v) => { note(f, t, 1.1, 'sine', v); note(f * 2, t, .6, 'sine', v * .25); note(f * 3, t, .3, 'sine', v * .08); };
+  const CUE = {
+    listen(){ bell(880, 0, .14); bell(659, .32, .14); },
+    repeat(){ bell(659, 0, .12); bell(880, .16, .12); },
+    alone(){ bell(587, 0, .11); bell(740, .14, .11); bell(988, .28, .12); }
+  };
+  function cue(k){ if(!muted && CUE[k]) CUE[k](); }
 
   /* --- recorded voice --- */
   function play(url, force){
@@ -63,7 +73,7 @@
   /* Arabic lessons/homework never play the English voice */
   const isAr = () => { try{ return (window.DECK && window.DECK.lang === 'ar') || (window.TQHW && TQHW.lang === 'ar') || document.documentElement.lang === 'ar'; }catch(_){ return false; } };
   const voiceUrl = k => ROOT + 'assets/voice/' + VOICE + '/' + k + '.mp3';
-  function say(k, force){ const b = BANK[k]; if(b && isAr()) return null; return play(voiceUrl(b ? pick(b) : k), force !== false); }
+  function say(k, force){ if(CUE[k]){ cue(k); return null; } const b = BANK[k]; if(b && isAr()) return null; return play(voiceUrl(b ? pick(b) : k), force !== false); }
 
   /* --- confetti / sparkles on a full-screen canvas --- */
   let cv = null, parts = [], raf = 0;
@@ -101,7 +111,7 @@
     bad(el, quiet){ if(!muted) SFX.bad(); anim(el, 'shake'); },
     win(quiet){ if(!muted) SFX.win(); for(let i = 0; i < 4; i++) setTimeout(() => burst(innerWidth * (.2 + .2 * i), innerHeight * .35, 45, 7, 6), i * 160); },
     tap(){ if(!muted) SFX.tap(); }, whoosh(){ if(!muted) SFX.whoosh(); },
-    say, play: url => play(url, true), url: voiceUrl,
+    say, cue, play: url => play(url, true), url: voiceUrl,
     /* for games that already have their own tones: add only the spoken praise / "oops" and the win confetti.
        With a level — TQFX.cheer('small'|'mid'|'big', slug) — it is the encouragement with the student's name (below). */
     cheer(k, slug, o){ if(LEVELS[k]) return cheerName(k, slug, o); if(k === 'win'){ for(let i = 0; i < 4; i++) setTimeout(() => burst(innerWidth * (.2 + .2 * i), innerHeight * .35, 45, 7, 6), i * 160); setTimeout(() => v('win', true), 500); } else v(k, false);

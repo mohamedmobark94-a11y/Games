@@ -25,6 +25,8 @@
 - **التحضير بيتعمل من الاستخدام الأسبوعي** (محادثة Claude عادية/Cowork/مهمة مجدولة) كـ«بيانات» حسب `docs claude/lesson-protocol`: الدرس صف في `docs decks` ويتعرض على `lessons/deck.html?d=<id>`، والواجب صف في `docs hwpages` ويتعرض على `hw/play.html?h=<id>`. شات Claude Code ده لتطوير الموقع بس (رصيد محدود).
 - كل الدروس والواجبات بتتعمل هنا وتتنشر على الموقع (مش Artifacts على claude.ai).
 - اقرأ الخطة أولًا ← درس تفاعلي + واجب تفاعلي + ورقة عمل + وسام.
+- **من 2026-11-12 كل درس جديد على `lessons/styles/tq-kit.html`** (صف decks `{style:'tq-kit', theme, lang, title, body}` ← `lessons/page.html?d=`؛ الثيمات kid-boy/kid-girl/teen/adult؛ المرجع بلوك BUILDERS في الملف والتفاصيل في `docs claude/lesson-protocol`). الستايلات القديمة للدروس القديمة بس.
+- خطوات «اسمع ← ردّد ← اقرأ وحدك» رنّات جرس (`TQFX.cue('listen'|'repeat'|'alone')`)، مش صوت كلام (طلب محمد).
 - **الدرس:** صفحة في `lessons/` (بدون أسماء طلاب) على **محرك الشرائح** `assets/deck/` (`window.DECK` = بيانات الشرائح؛ مثال كامل: `lessons/madd-asli-fari.html`) + `tq-fx.js` + GSAP + رسومات Fluent 3D (`assets/img/fluent/`)، والستايل حسب سن الطالب ومستواه (`th-night` للكبار؛ الكرتوني للصغار)، ويتسجل في `docs/lessons` (id `YYYY-MM-DD-<key>`، وفيه `url`) فيظهر في صفحة الطالب الثابتة (`app/student.html?k=`) وفي تنبيه الإرسال.
 - **الواجب:** صفحة في `hw/` منسوخة من `hw/_template.html` وبتستخدم `app/hwkit.js`:
   `TQHW.result({score, max, done, details:[{q, a, ok}]})` بعد كل خطوة، و`TQHW.recordButton(el, label)` للتسجيل، و`TQHW.lang` / `TQHW.on('lang')` للغة، و`TQHW.name` لاسم الطالب. ممنوع `100vh`.

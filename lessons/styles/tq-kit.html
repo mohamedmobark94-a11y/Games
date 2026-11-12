@@ -403,7 +403,7 @@ function ayah(s,a,cb){if(MUTED){cb&&setTimeout(cb,300);return}stopAud();const p3
 function audio(src,cb){if(MUTED){cb&&cb();return}stopAud();const au=new Audio(IMG(src));curAud=au;au.onended=()=>cb&&cb();au.onerror=()=>cb&&cb();au.play().catch(()=>{})}
 const hear=(x,cb)=>{if(!x)return;if(Array.isArray(x))ayah(x[0],x[1],cb);else audio(x,cb)};
 /* recorded English classroom lines (Kokoro George via tq-fx.js); never for Arabic-only lessons */
-const voice=k=>{if(LANG!=='ar'&&W.TQFX&&TQFX.say)try{TQFX.say(k)}catch(_){}};
+const voice=k=>{if(W.TQFX)try{TQFX.cue?TQFX.cue(k):LANG!=='ar'&&TQFX.say(k)}catch(_){}};
 
 /* ---------- feedback ---------- */
 let toastT=0;
