@@ -74,7 +74,11 @@
 .tk-fh{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin:0 -8px 8px;padding:7px 10px;background:#c99a3f;color:#fff;border-radius:16px 16px 0 0;font:800 14px 'Cairo',sans-serif}
 .tk-fh span{flex:1;cursor:pointer}
 .tk-fh button{border:0;border-radius:8px;background:rgba(255,255,255,.2);color:#fff;font:800 12.5px 'Cairo',sans-serif;cursor:pointer;padding:3px 9px}
-.tk-float.min{width:auto;padding:0}.tk-float.min .tk-fh{margin:0;border-radius:16px}.tk-float.min .tk{display:none}
+.tk-float.dock-side{border-radius:16px}.tk-float.dock-fade:not(:hover){opacity:.35}
+.tk-float.min{width:auto!important;padding:0;max-height:none!important;overflow:visible}
+.tk-float.min .tk-fh{flex-direction:column;gap:6px;padding:9px 6px;border-radius:16px}
+.tk-float.min #tkTitle{font-size:0;line-height:1}.tk-float.min #tkTitle::before{content:'🧰';font-size:20px}
+.tk-float.min .tk-fh button{padding:4px 6px}.tk-float.min .tk-fh{margin:0;border-radius:16px}.tk-float.min .tk{display:none}
 .tk-show{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .tk-show div{max-width:min(860px,90vw);padding:26px 44px;border-radius:30px;background:linear-gradient(135deg,#fff7e0,#ffe7f1);border:4px solid #f3c969;box-shadow:0 20px 60px rgba(0,0,0,.28);text-align:center;font:800 clamp(30px,6vw,68px)/1.25 'Cairo','Plus Jakarta Sans',sans-serif;color:#7a3d00;animation:tkin 2.6s ease forwards}
 .tk-show i{display:block;font-style:normal;font-size:.9em;margin-bottom:6px}
@@ -221,12 +225,24 @@
     const f = document.createElement('div'); f.id = 'tkFloat'; f.className = 'tk-float'; f.dir = 'rtl';
     f.innerHTML = '<div class="tk-fh"><span id="tkTitle" title="صغّر / كبّر · Fold"></span><button id="tkTlB" title="إشارة المرور (G / Y / R) · Traffic light">🚦</button><button id="tkMute" title="كتم كل الأصوات · Mute (Alt+0)"></button><button id="tkLangB" title="اللغة · Language"></button><button id="tkMin" title="صغّر · Fold">—</button></div>';
     document.body.appendChild(f); mount(f);
-    const set = m => { f.classList.toggle('min', m); f.querySelector('#tkMin').textContent = m ? '▢' : '—'; try{ localStorage.setItem('tk-min', m ? '1' : ''); }catch(_){} };
+    const paintMin = m => { f.classList.toggle('min', m); f.querySelector('#tkMin').textContent = m ? '▢' : '—'; };
+    let dock = null, hidden = false;
+    /* docked like the corrector panel (assets/panel-dock.js): a column on the right that pushes the page aside,
+       folded = the small gold bar in its corner; drag the gold header to the other side, resize from the inner edge */
+    if(window.TQDock){
+      const ls = {get: (k, d) => { try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(_){ return d; } }, set: (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(_){} }};
+      let wasMin = false; try{ wasMin = !!localStorage.getItem('tk-min'); }catch(_){}
+      dock = TQDock.attach({panel: f, handles: [f.querySelector('.tk-fh')], store: ls, key: 'tk-dock', modes: ['side', 'mini'], minW: 230, strip: 52,
+        def: {side: 'right', w: 272, mode: wasMin ? 'mini' : 'side'},
+        isShown: () => !hidden, toggle: () => { hidden = !hidden; f.style.display = hidden ? 'none' : ''; },
+        onChange: st => paintMin(st.mode === 'mini')});
+    }
+    const set = m => { if(dock) dock.mode(m ? 'mini' : 'side'); else paintMin(m); try{ localStorage.setItem('tk-min', m ? '1' : ''); }catch(_){} };
     f.querySelector('#tkTitle').onclick = f.querySelector('#tkMin').onclick = () => set(!f.classList.contains('min'));
     f.querySelector('#tkLangB').onclick = () => setLang(LANG === 'en' ? 'ar' : 'en');
     f.querySelector('#tkTlB').onclick = toggleLight;
     f.querySelector('#tkMute').onclick = toggleMute; paintMute();
-    try{ if(localStorage.getItem('tk-min')) set(true); }catch(_){}
+    if(!dock){ try{ if(localStorage.getItem('tk-min')) set(true); }catch(_){} }
     render();
     let off = false; try{ off = !!localStorage.getItem('tk-tl-off'); }catch(_){}
     if(!off) light(); syncTlBtn();

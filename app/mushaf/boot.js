@@ -62,6 +62,11 @@
     $('qpMode').onclick = () => dock.mode(); $('qpFlip').onclick = () => dock.flip(); $('qpFade').onclick = () => dock.fade(); $('qpReset').onclick = () => dock.reset();
     $('qpMiniRec').onclick = () => { st.blur(); key('F8'); }; $('qpMiniOpen').onclick = () => dock.mode('side');
     $('qpMin').addEventListener('click', () => dock.refresh());
+    // the viewer ends where the free space ends (the toolbar may wrap when the panels take the sides)
+    const stage = $('mzStage');
+    const fitStage = () => { if(!stage) return; const b = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dock-b')) || 0;
+      const top = stage.getBoundingClientRect().top + scrollY; stage.style.minHeight = "0"; stage.style.height = Math.max(280, Math.round(innerHeight - top - b - 12)) + 'px'; };
+    addEventListener('resize', fitStage); setTimeout(fitStage, 300);
     // the bottom bar: drag the mistakes list sideways
     const L = $('mzList'); let lx = null;
     L.addEventListener('pointerdown', e => { if(!side.classList.contains('dock-bottom') || e.target.closest('button')) return; lx = {x: e.clientX, s: L.scrollLeft}; });
