@@ -160,7 +160,7 @@
       const r = await sb.from('docs').select('id,data').eq('collection', 'lessons').like('id', day + '-%');
       const rows = (r.data || []).filter(x => x.data);
       const keys = [call('studentIdOf', name)].concat(st ? [st.slug].concat(st.keys || []) : []).filter(Boolean);
-      const key = x => x.id.slice(day.length + 1);
+      const key = x => x.id.slice(day.length + 1).replace(/-\d+$/, '');   // "-2"/"-8" suffixes: same student
       return rows.find(x => keys.indexOf(key(x)) >= 0)
         || rows.find(x => call('sameStudent', x.data.student, name))
         || rows.find(x => st && [st.name_en, st.name_ar].some(n => n && fold(n) === fold(x.data.student))) || null;
