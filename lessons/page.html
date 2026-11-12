@@ -28,7 +28,12 @@
   if(!html && data.style){
     /* a student's own lesson style lives in lessons/styles/<style>.html; the lesson body goes where <!--LESSON--> is */
     try{ const st = await (await fetch('styles/' + encodeURIComponent(data.style) + '.html', {cache: 'no-cache'})).text(); const k = st.indexOf('<!--LESSON-->');
-      if(k > 0) html = st.slice(0, k) + (data.body || '') + st.slice(k + 13); }catch(_){}
+      if(k > 0) html = st.slice(0, k) + (data.body || '') + st.slice(k + 13);
+      /* tq-kit (and any style with a DECK marker) also gets the deck settings: theme, lang, title, g */
+      const dk = html.indexOf('<!--DECK-->');
+      if(dk > 0){ const meta = {id, theme: data.theme, lang: data.lang, title: data.title, g: data.g};
+        html = html.slice(0, dk) + 'window.TQDECK=' + JSON.stringify(meta).replace(/</g, '\\u003c') + ';' + html.slice(dk + 11); }
+    }catch(_){}
   }
   if(!html && data.engine){
     let st = null; try{ st = (await db.rpc('get_deck', {p_id: data.engine})).data; }catch(_){}
