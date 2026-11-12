@@ -737,6 +737,19 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
      The current file is kept first as generator-YYYY-MM-DD-HHMM.html; nothing is deleted. */
   const genBar = '<div class="genbar"><span class="small muted">المولّد اللي بيفتح هنا نسخة محفوظة في الموقع.</span>' +
     '<label class="btn ghost sm" style="cursor:pointer">⬆ ارفع نسخة مولّد جديدة<input type="file" id="genUp" accept=".html,.htm,text/html" hidden></label><span id="genUpSt" class="small"></span></div>';
+  /* the stored generator, always fresh: a plain download can come back from the browser's cache as the copy from before
+     the last upload, so it is read through a short-lived signed link with the cache switched off */
+  async function genRead(){
+    try{
+      const s = await db.storage.from('private').createSignedUrl('generator.html', 60);
+      if(!s.error && s.data && s.data.signedUrl){
+        const res = await fetch(s.data.signedUrl, {cache: 'no-store'});
+        if(res.ok) return {text: await res.text()};
+      }
+    }catch(e){ console.warn('genRead', e); }
+    const r = await db.storage.from('private').download('generator.html');   // fallback
+    return r.error ? {error: r.error} : {text: await r.data.text()};
+  }
   async function genUpload(file){
     const st = $('genUpSt'), say = (t, c) => { st.textContent = t; st.style.color = c || ''; };
     if(!file) return;
@@ -760,8 +773,8 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       {upsert: true, contentType: 'text/html; charset=utf-8', cacheControl: '0'});
     if(up.error){ say('⚠️ الرفع فشل: ' + up.error.message + (cp.error ? '' : ' (القديم لسه مكانه، ونسخته في ' + backup + ')'), 'var(--bad)'); return; }
     /* check what is stored now, then open the new copy */
-    const chk = await db.storage.from('private').download('generator.html');
-    const got = chk.error ? -1 : (await chk.data.text()).length;
+    const chk = await genRead();
+    const got = chk.error ? -1 : chk.text.length;
     if(got !== html.length){ say('⚠️ الرفع خلص بس الملف المحفوظ مش مطابق (' + got + ' بدل ' + html.length + '). جرّب تاني.', 'var(--bad)'); return; }
     if(genUrl) URL.revokeObjectURL(genUrl); genUrl = null;
     flash('✓ المولّد الجديد اترفع'); reportView();
@@ -772,9 +785,9 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       $('genUp').onchange = e => { genUpload(e.target.files[0]).catch(err => { $('genUpSt').textContent = '⚠️ ' + (err && err.message || err); }); e.target.value = ''; };
       return; }
     app.innerHTML = '<div class="card muted" style="margin:16px">بيفتح المولّد…</div>';
-    const r = await db.storage.from('private').download('generator.html');
+    const r = await genRead();
     if(r.error){ app.innerHTML = '<div class="card" style="margin:16px">معرفتش أفتح المولّد: ' + esc(r.error.message) + '</div>'; return; }
-    let html = await r.data.text();
+    let html = r.text;
     /* the stored generator carries its own (older) copy of gen-shim.js: swap in the site's current one */
     try{
       const sh = await (await fetch(new URL('app/gen-shim.js', TQ.site).href + '?v=' + Date.now(), {cache: 'no-store'})).text();
