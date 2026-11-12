@@ -683,7 +683,9 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
           const t = await sb.from('assignment_targets').insert({assignment_id: a.data.id, student_id: sid, released: true}).select('token').single();
           if(t.error) throw t.error;
           const stu = students.find(x => x.id === sid) || {}, ar = stu.lang === 'ar';
-          const link = pageOf(stu) || ((window.TQ && TQ.site ? TQ.site : 'https://mohamedmobark94-a11y.github.io/Games/') + 'app/hw.html?t=' + t.data.token);
+          const site = (window.TQ && TQ.site ? TQ.site : 'https://mohamedmobark94-a11y.github.io/Games/');
+          /* this function is injected into the generator frame: no outer helpers here */
+          const link = stu.portal_token ? site + 'app/student.html?k=' + stu.portal_token : site + 'app/hw.html?t=' + t.data.token;
           const msg = ar ? 'السلام عليكم ' + (stu.name_ar || '') + ' 🌿\nفيه واجب قرآن جديد في صفحتك: اسمع وتابع الكلمات، وبعدين سمّع وسجّل صوتك:\n' + link
             : 'Assalamu alaikum ' + (stu.name_en || stu.name_ar || '') + ' 🌿\nNew Qur\'an homework is on your page: listen and follow the words, then recite and record:\n' + link;
           go.textContent = '✓ اتبعت'; go.style.background = '#1e7a3c';
