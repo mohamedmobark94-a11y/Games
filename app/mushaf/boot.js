@@ -43,5 +43,31 @@
   new MutationObserver(sync).observe(document.getElementById('mzTools'), {subtree: true, attributes: true, attributeFilter: ['class']});
   sync();
 
+  // 7-أ: side / bottom bar / mini — the panel docks and the page makes room (assets/panel-dock.js)
+  if(window.TQDock){
+    $('qpMin').insertAdjacentHTML('beforebegin', '<button type="button" id="qpMode" title="شكل اللوحة: جانبية ← شريط تحت ← صغيرة">▮</button><button type="button" id="qpFlip" title="انقل اللوحة للناحية التانية">⇆</button><button type="button" id="qpFade" title="شفافة لما الماوس يبعد عنها">👻</button><button type="button" id="qpReset" title="↺ رجّع المكان والمقاس">↺</button>');
+    $('qpMin').title = 'اخفي (F2)';
+    const mini = document.createElement('div'); mini.className = 'qp-mini'; mini.title = 'اسحبها لأي مكان';
+    mini.innerHTML = '<b id="qpMiniN">0</b><button type="button" id="qpMiniRec">🔴 سجّل غلطة <kbd>F8</kbd></button><button type="button" class="pl" id="qpMiniOpen" title="كبّر اللوحة">▢</button>';
+    side.appendChild(mini);
+    const cnt = $('mzCount'); const syncN = () => { $('qpMiniN').textContent = cnt.textContent; };
+    new MutationObserver(syncN).observe(cnt, {childList: true, characterData: true, subtree: true}); syncN();
+    const ls = {get: (k, d) => { try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(_){ return d; } }, set: (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(_){} }};
+    let hidden = false;
+    const ICON = {side: '▮', bottom: '▬', mini: '•'};
+    const dock = TQDock.attach({panel: side, handles: [hd, mini], store: ls, key: 'mz-dock',
+      isShown: () => !hidden && !side.classList.contains('min'),
+      toggle: () => { hidden = !hidden; side.style.display = hidden ? 'none' : ''; },
+      onChange: s => { $('qpMode').textContent = ICON[s.mode]; $('qpFlip').style.display = s.mode === 'side' ? '' : 'none'; $('qpFade').style.opacity = s.fade ? '1' : '.55'; }});
+    $('qpMode').onclick = () => dock.mode(); $('qpFlip').onclick = () => dock.flip(); $('qpFade').onclick = () => dock.fade(); $('qpReset').onclick = () => dock.reset();
+    $('qpMiniRec').onclick = () => { st.blur(); key('F8'); }; $('qpMiniOpen').onclick = () => dock.mode('side');
+    $('qpMin').addEventListener('click', () => dock.refresh());
+    // the bottom bar: drag the mistakes list sideways
+    const L = $('mzList'); let lx = null;
+    L.addEventListener('pointerdown', e => { if(!side.classList.contains('dock-bottom') || e.target.closest('button')) return; lx = {x: e.clientX, s: L.scrollLeft}; });
+    L.addEventListener('pointermove', e => { if(lx) L.scrollLeft = lx.s - (e.clientX - lx.x); });
+    addEventListener('pointerup', () => { lx = null; });
+  }
+
   if(window.__mzStart) window.__mzStart();
 })();
