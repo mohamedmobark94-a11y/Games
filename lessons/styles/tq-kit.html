@@ -150,8 +150,10 @@ body[data-theme="adult"] .kick,body[data-theme="teen"] .kick{background:transpar
 .ccard.open .cm{opacity:1}
 .ccard .tap{position:absolute;top:10px;inset-inline-end:12px;font-size:22px;opacity:.6}
 /* order */
-.oslots{display:flex;flex-direction:column;gap:12px}
-.oslot{display:flex;gap:16px;align-items:center;padding:10px 18px;min-height:66px;border-radius:var(--r);border:3px dashed var(--line);font-size:28px}
+.ord{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.ord .opool{flex-direction:column;align-items:stretch;justify-content:flex-start}
+.oslots{display:flex;flex-direction:column;gap:10px}
+.oslot{display:flex;gap:16px;align-items:center;padding:6px 16px;min-height:58px;border-radius:var(--r);border:3px dashed var(--line);font-size:28px}
 .oslot b{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--line);font-size:24px;flex:none}
 .oslot.f{border-style:solid;border-color:var(--ok);background:var(--card)}
 .oslot.f b{background:var(--ok);color:#fff}
@@ -440,7 +442,7 @@ W.hook=o=>add(o,()=>`${o.text?`<p class="lead">${L(o.text)}</p>`:''}
  el=>{$$('.opt',el).forEach(b=>b.onclick=()=>{const x=o.opts[+b.dataset.i];if(x.ok){b.classList.add('right');fx.ok(b);setTimeout(()=>{$('[data-qa]',el).hidden=true;$('[data-rv]',el).hidden=false;win(el);intro($('[data-rv]',el))},800)}
   else{b.classList.add('wrong');fx.bad(b,x.msg?L(x.msg):'');setTimeout(()=>b.classList.remove('wrong'),900)}});$('[data-go]',el).onclick=()=>go(cur+1)},{layout:'hero'});
 
-W.text=o=>add(o,()=>`${o.big?`<div class="big q" style="text-align:center">${o.big}</div>`:''}${o.text?`<div class="rich">${L(o.text)}</div>`:''}
+W.text=o=>add(o,()=>`${o.big?`<div class="big q" style="text-align:center;font-size:${o.big.length>60?52:o.big.length>25?72:110}px">${o.big}</div>`:''}${o.text?`<div class="rich">${L(o.text)}</div>`:''}
  ${o.points?`<ul class="pts">${o.points.map(p=>`<li class="${o.steps?'hid':''}"><span class="pe">${isObj(p)&&p.e?p.e:'•'}</span><span>${L(isObj(p)&&p.t!=null?p.t:p)}</span></li>`).join('')}</ul>`:''}
  ${o.steps&&o.points?`<div><button class="btn sm" data-more>${L(UI.next)} ＋</button></div>`:''}${o.rule?`<div class="rule">${L(o.rule)}</div>`:''}`,
  el=>{const b=$('[data-more]',el);if(b)b.onclick=()=>{const h=$('.pts li.hid',el);if(h){h.classList.remove('hid');fx.tap();intro(h)}if(!$('.pts li.hid',el)){b.hidden=true;win(el)}}});
@@ -449,7 +451,7 @@ W.cards=o=>add(o,()=>{const n=o.items.length,c=o.cols||(n<=4?n:n<=6?3:4);return 
  ${x.img?pic(x.img,'sq'):x.e?`<div class="ce">${x.e}</div>`:''}${x.w?`<div class="cw q">${x.w}</div>`:''}${x.t?`<div class="ct">${L(x.t)}</div>`:''}${x.m?`<div class="cm">${L(x.m)}</div><span class="tap">👆</span>`:''}</button>`).join('')}</div>${o.rule?`<div class="rule">${L(o.rule)}</div>`:''}`},
  el=>{const seen=new Set();$$('.ccard',el).forEach(b=>b.onclick=()=>{const i=+b.dataset.i,x=o.items[i];b.classList.add('open');if(x.ay||x.src)hear(x.ay||x.src);if(!seen.has(i)){seen.add(i);fx.tap();anim(b,'bounce')}if(seen.size===o.items.length)win(el)})});
 
-W.orderSteps=o=>add(o,()=>`<div class="chip" style="align-self:center">${L(o.sub||UI.tapOrder)}</div><div class="oslots">${o.items.map((_,i)=>`<div class="oslot"><b>${AN(i+1)}</b><span></span></div>`).join('')}</div><div class="opool"></div>`,
+W.orderSteps=o=>add(o,()=>`<div class="chip" style="align-self:center">${L(o.sub||UI.tapOrder)}</div><div class="ord"><div class="oslots">${o.items.map((_,i)=>`<div class="oslot"><b>${AN(i+1)}</b><span></span></div>`).join('')}</div><div class="opool"></div></div>`,
  el=>{let pos=0;const sl=$$('.oslot',el),pool=$('.opool',el);pool.innerHTML=shuffle(o.items.map((t,i)=>[t,i])).map(([t,i])=>`<button class="tile ${qc(t)}" data-i="${i}">${L(t)}</button>`).join('');
   $$('.tile',pool).forEach(b=>b.onclick=()=>{if(+b.dataset.i===pos){sl[pos].querySelector('span').innerHTML=b.innerHTML;sl[pos].classList.add('f');b.remove();pos++;fx.tap();if(pos===o.items.length)win(el)}else fx.bad(b)})});
 
@@ -568,12 +570,14 @@ W.storyScenes=o=>add(o,()=>`<div class="story"><div class="pic">${o.scenes.map((
   pv.onclick=()=>{if(i>0){i--;show();fx.tap()}};nx.onclick=()=>{if(i<sc.length-1){i++;show();fx.tap()}};show()},{noImg:true});
 
 /* ---------- motion ---------- */
-function intro(el){if(RM||!W.gsap||!el)return;gsap.from(el,{y:18,opacity:0,duration:.45,ease:'power2.out'})}
+/* always fromTo with explicit end values (a repeated gsap.from on a running tween would freeze the element invisible) */
+function show(t,from,o){t=(Array.isArray(t)?t:[t]).filter(Boolean);if(!t.length)return;gsap.killTweensOf(t);gsap.fromTo(t,from,Object.assign({x:0,y:0,opacity:1,duration:.45,ease:'power2.out',clearProps:'transform,opacity'},o))}
+function intro(el){if(RM||!W.gsap||!el)return;show(el,{y:18,opacity:0})}
 function enterAnim(el){if(RM||!W.gsap)return;const hero=el.classList.contains('hero');
- const img=$$(':scope > .hbg .ph img, :scope > .sp .ph img, :scope .rw .ph img',el);img.forEach(i=>gsap.fromTo(i,{scale:1.1},{scale:1,duration:hero?9:6,ease:'sine.out'}));
- if(hero)gsap.from($('.glass',el),{x:LANG==='en'?-60:60,opacity:0,duration:.7,ease:'power3.out'});
- gsap.from($$('.sh > *',el),{y:22,opacity:0,stagger:.07,duration:.45,ease:'power2.out'});
- const kids=$$(':scope .body > *',el).slice(0,8);gsap.from(kids,{y:28,opacity:0,stagger:.06,duration:.45,delay:.12,ease:'power2.out',clearProps:'transform,opacity'})}
+ const img=$$(':scope > .hbg .ph img, :scope > .sp .ph img, :scope .rw .ph img',el);img.forEach(i=>{gsap.killTweensOf(i,'scale');gsap.fromTo(i,{scale:1.1},{scale:1,duration:hero?9:6,ease:'sine.out'})});
+ if(hero)show($('.glass',el),{x:LANG==='en'?-60:60,opacity:0},{duration:.7,ease:'power3.out'});
+ show($$('.sh > *',el),{y:22,opacity:0},{stagger:.07});
+ show($$(':scope .body > *',el).slice(0,8),{y:28,opacity:0},{stagger:.06,delay:.12})}
 /* parallax: the picture follows the pointer a little */
 stage.addEventListener('pointermove',e=>{if(RM||!W.gsap)return;const el=$$('.slide')[cur];if(!el)return;const r=stage.getBoundingClientRect(),dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;
  $$(':scope > .hbg .ph .bl, :scope > .sp .ph .bl',el).forEach(b=>gsap.to(b,{x:-dx*30,y:-dy*20,duration:1}));$$(':scope > .hbg .ph img, :scope > .sp .ph img',el).forEach(b=>gsap.to(b,{x:dx*14,y:dy*10,duration:1}))});
