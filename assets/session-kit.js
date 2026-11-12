@@ -54,6 +54,11 @@
 .tk-tabs{display:flex;gap:4px;margin-bottom:7px}
 .tk-tabs button{flex:1;min-height:30px;border:0;border-radius:9px;background:#eef6f1;color:#0e4d3c;font:800 12.5px 'Cairo',sans-serif;cursor:pointer}
 .tk-tabs button.on{background:#0e4d3c;color:#fff}
+.tk-lvl{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.tk-lvl button{min-height:46px;border:0;border-radius:12px;font:800 13px/1.2 'Cairo',sans-serif;cursor:pointer;color:#fff;background:#177a5b}
+.tk-lvl button:nth-child(2){background:#c99a3f}.tk-lvl button:nth-child(3){background:#7c2d92}
+.tk-lvl button i{display:block;font-style:normal;font-size:19px}.tk-lvl kbd{font:700 9.5px monospace;opacity:.8}
+.tk-who{text-align:center;font-size:12px;color:#6b7d74;font-weight:700;margin:-2px 0 6px}
 .tk-cheer{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .tk-cheer button{min-height:44px;border:1.5px solid #f1e2bf;border-radius:11px;background:#fffaf0;color:#5c4409;font:700 13px/1.25 'Cairo',sans-serif;cursor:pointer;padding:4px 6px}
 .tk-cheer button:hover{border-color:#c99a3f}
@@ -77,7 +82,7 @@
 `;
   const fx = (k, el) => { try{ if(window.TQFX && TQFX[k]) TQFX[k](el); }catch(_){} };
   let ac = null;
-  function bells(fr){ try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if(ac.state === 'suspended') ac.resume();
+  function bells(fr){ if(quiet()) return; try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if(ac.state === 'suspended') ac.resume();
       (fr || [880, 988, 1318]).forEach((f, i) => { const t = i * .35, o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f;
         g.gain.setValueAtTime(.0001, ac.currentTime + t); g.gain.exponentialRampToValueAtTime(.22, ac.currentTime + t + .02);
         g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + t + .9); o.connect(g).connect(ac.destination); o.start(ac.currentTime + t); o.stop(ac.currentTime + t + 1); });
@@ -125,6 +130,8 @@
     const card = (k, title, body) => '<div class="tk-c' + (fold(k) ? ' off' : '') + '" data-k="' + k + '"><div class="tk-h"><b>' + title + '</b><button class="tk-fold">' + (fold(k) ? '▸' : '▾') + '</button></div><div class="tk-b">' + body + '</div></div>';
     const lens = [[30, T('30ث', '30s')], [60, T('1د', '1m')], [90, T('1.5د', '1.5m')], [120, T('2د', '2m')], [180, T('3د', '3m')], [300, T('5د', '5m')]];
     return card('cheer', T('💬 التشجيع', '💬 Encourage'),
+        '<div class="tk-lvl"><button data-lvl="small"><i>👍</i>' + T('صغيرة', 'Small') + ' <kbd>Alt+1</kbd></button><button data-lvl="mid"><i>⭐</i>' + T('باسمه', 'With name') + ' <kbd>Alt+2</kbd></button><button data-lvl="big"><i>🏆</i>' + T('ختام', 'Finale') + ' <kbd>Alt+3</kbd></button></div>' +
+        '<div class="tk-who" id="tkWho"></div>' +
         '<div class="tk-tabs">' + [['praise', T('مدح', 'Praise')], ['push', T('تحفيز', 'Push')], ['focus', T('تركيز', 'Focus')]].map(x => '<button data-tab="' + x[0] + '"' + (state.tab === x[0] ? ' class="on"' : '') + '>' + x[1] + '</button>').join('') + '</div>' +
         '<div class="tk-cheer">' + CHEER[state.tab].map((c, i) => '<button data-ch="' + i + '"><i>' + c[0] + '</i>' + T(c[1], c[2]) + '</button>').join('') + '</div>' +
         '<label class="tk-opt"><input type="checkbox" id="tkVoice"' + (voiceOn ? ' checked' : '') + '> ' + T('صوت إنجليزي (في وضع EN)', 'English voice') + '</label>') +
@@ -151,6 +158,8 @@
     w.querySelectorAll('.tk-h').forEach(h => h.onclick = () => { const c = h.closest('.tk-c'); c.classList.toggle('off'); h.querySelector('.tk-fold').textContent = c.classList.contains('off') ? '▸' : '▾';
       try{ localStorage.setItem('tk-off-' + c.dataset.k, c.classList.contains('off') ? '1' : ''); }catch(_){} });
     /* encouragement */
+    w.querySelectorAll('[data-lvl]').forEach(b => b.onclick = () => cheer(b.dataset.lvl));
+    paintWho();
     w.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { state.tab = b.dataset.tab; render(); });
     w.querySelectorAll('[data-ch]').forEach(b => b.onclick = () => { const c = CHEER[state.tab][+b.dataset.ch]; show(c[0], T(c[1], c[2])); speak(c[3]); if(state.tab === 'praise') fx('win'); });
     $('tkVoice').onchange = e => { voiceOn = e.target.checked; try{ localStorage.setItem('tk-voice', voiceOn ? '' : 'off'); }catch(_){} };
@@ -210,12 +219,13 @@
   function float(){
     if(document.getElementById('tkFloat')) return;
     const f = document.createElement('div'); f.id = 'tkFloat'; f.className = 'tk-float'; f.dir = 'rtl';
-    f.innerHTML = '<div class="tk-fh"><span id="tkTitle" title="صغّر / كبّر · Fold"></span><button id="tkTlB" title="إشارة المرور (G / Y / R) · Traffic light">🚦</button><button id="tkLangB" title="اللغة · Language"></button><button id="tkMin" title="صغّر · Fold">—</button></div>';
+    f.innerHTML = '<div class="tk-fh"><span id="tkTitle" title="صغّر / كبّر · Fold"></span><button id="tkTlB" title="إشارة المرور (G / Y / R) · Traffic light">🚦</button><button id="tkMute" title="كتم كل الأصوات · Mute (Alt+0)"></button><button id="tkLangB" title="اللغة · Language"></button><button id="tkMin" title="صغّر · Fold">—</button></div>';
     document.body.appendChild(f); mount(f);
     const set = m => { f.classList.toggle('min', m); f.querySelector('#tkMin').textContent = m ? '▢' : '—'; try{ localStorage.setItem('tk-min', m ? '1' : ''); }catch(_){} };
     f.querySelector('#tkTitle').onclick = f.querySelector('#tkMin').onclick = () => set(!f.classList.contains('min'));
     f.querySelector('#tkLangB').onclick = () => setLang(LANG === 'en' ? 'ar' : 'en');
     f.querySelector('#tkTlB').onclick = toggleLight;
+    f.querySelector('#tkMute').onclick = toggleMute; paintMute();
     try{ if(localStorage.getItem('tk-min')) set(true); }catch(_){}
     render();
     let off = false; try{ off = !!localStorage.getItem('tk-tl-off'); }catch(_){}
@@ -288,8 +298,8 @@
   }
   function unsignal(c){ if(SIG_COL[c] && sig[c] > 0){ sig[c]--; saveSig(); } if(held){ held = false; setOn(null); } }
   function student(name, key){ name = String(name || '').trim(); key = String(key || '').trim();
-    if(name === sig.name && sig.date === day()){ if(key && key !== sig.key){ sig.key = key; saveSig(); } return; }
-    sig = {date: day(), name, key, green: 0, yellow: 0, red: 0}; greenRun = 0; saveSig(); }
+    if(name === sig.name && sig.date === day()){ if(key && key !== sig.key){ sig.key = key; saveSig(); } paintWho(); return; }
+    sig = {date: day(), name, key, green: 0, yellow: 0, red: 0}; greenRun = 0; saveSig(); paintWho(); }
   function light(show){
     if(TL){ if(show === false){ TL.remove(); TL = null; } return TL; }
     if(show === false) return null;
@@ -320,5 +330,23 @@
     e.preventDefault(); e.stopPropagation(); signal(c);
   }, true);
 
-  window.TQKit = {mount, float, setLang, light, toggleLight, signal, unsignal, student, signals, onSignals: fn => { sigFns.push(fn); }, bells};
+  /* 7-ب: encouragement with the student's name — 👍 small · ⭐ phrase + name · 🏆 end of class (TQFX.cheer) */
+  function who(){ const k = sig.key || sig.name; try{ return (window.TQFX && TQFX.person && (TQFX.person(k) || TQFX.person(sig.name))) || null; }catch(_){ return null; } }
+  function paintWho(){ const el = document.getElementById('tkWho'); if(!el) return; const p = who();
+    el.textContent = !sig.name ? T('اكتب اسم الطالب في المصحح', 'Type the student name in the corrector')
+      : '👤 ' + sig.name + (p ? (p.lang === 'ar' ? T(' · نص عربي + مؤثر', ' · Arabic text + sound') : (p.url ? T(' · بصوت اسمه', ' · says the name') : T(' · من غير ملف اسم', ' · no name clip'))) : ''); }
+  function cheer(level){ try{ if(window.TQFX && TQFX.cheer){ const p = who(); return TQFX.cheer(level, p ? p.slug : (sig.key || sig.name), {lang: LANG}); } }catch(_){}
+    show(level === 'big' ? '🏆' : '⭐', T('ممتاز!', 'Excellent!')); }
+  function paintMute(){ const b = document.getElementById('tkMute'); if(b) b.textContent = quiet() ? '🔇' : '🔊'; }
+  function toggleMute(){ try{ if(window.TQFX) TQFX.setMuted(!TQFX.muted); }catch(_){} paintMute(); }
+  document.addEventListener('tq-sound', paintMute);
+  document.addEventListener('tk-streak', () => cheer('mid'));   // 5 greens in a row
+  document.addEventListener('keydown', e => {
+    if(!e.altKey || e.ctrlKey || e.metaKey) return;
+    const k = {Digit1: 'small', Digit2: 'mid', Digit3: 'big', Numpad1: 'small', Numpad2: 'mid', Numpad3: 'big'}[e.code];
+    if(k){ e.preventDefault(); e.stopPropagation(); cheer(k); return; }
+    if(e.code === 'Digit0' || e.code === 'Numpad0'){ e.preventDefault(); e.stopPropagation(); toggleMute(); }
+  }, true);
+
+  window.TQKit = {cheer, refresh: paintWho, mount, float, setLang, light, toggleLight, signal, unsignal, student, signals, onSignals: fn => { sigFns.push(fn); }, bells};
 })();
