@@ -91,6 +91,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script src="quran-data.js"></script>
+<script src="days.js"></script>
 <script>
 (function(){
   const esc = TQ.esc, $ = id => document.getElementById(id), app = $('app');
@@ -180,45 +181,12 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   /* ask once for system notifications, on the teacher's first click (browsers only ask after a click) */
   document.addEventListener('click', function askNotif(){ document.removeEventListener('click', askNotif, true);
     try{ if('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }catch(e){} }, true);
-  /* «دروس اليوم» safety net: the nightly task builds today's list from Google Calendar. If it did not run (e.g. usage limit),
-     build it from the weekly roster (kv deskRoster, kept in line with the calendar) so the tab never shows an old day.
-     Private rules in kv 'dayRules': {skip:[names with no lesson prep], keys:{name:planKey}, times:{name:{weekday:'HH:MM'}}}. */
+  /* «دروس اليوم»: the site builds each teaching day (06:00 → 06:00 Cairo) itself from the weekly roster, with every
+     student's last report, and keeps one-off changes (extra / moved / cancelled classes). The logic is in days.js,
+     shared with the report generator (its «➕ حصة استثنائية / نقل موعد» box). */
   async function ensureToday(){
-    try{
-      const now = new Date(Date.now() - 6 * 3600e3), cairo = new Date(now.toLocaleString('en-US', {timeZone: 'Africa/Cairo'}));   // a day = 06:00 → 06:00
-      const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-      const id = iso(cairo);
-      const ex = await db.from('docs').select('data').eq('collection', 'days').eq('id', id).maybeSingle();
-      if(ex.error) return;
-      const R = JSON.parse(await kvGet('deskRoster') || '{}'), rules = JSON.parse(await kvGet('dayRules') || '{}');
-      const skip = new Set(rules.skip || []), keys = rules.keys || {}, times = rules.times || {};
-      const wd = cairo.getDay(), tw = (wd + 1) % 7, hm = h => +h.slice(0, 2) * 60 + +h.slice(3, 5);
-      const end = (t, m) => { const x = (hm(t) + (m || 30)) % 1440; return String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0'); };
-      const items = [];
-      (R.students || []).forEach(s => {
-        if(!/^\d\d:\d\d$/.test(s.time || '')) return;
-        const at = d => (times[s.name] && times[s.name][d]) || s.time;
-        if((s.days || []).includes(wd) && hm(at(wd)) >= 360) items.push({ord: hm(at(wd)), s, t: at(wd), tom: false});
-        if((s.days || []).includes(tw) && hm(at(tw)) < 360) items.push({ord: 1440 + hm(at(tw)), s, t: at(tw), tom: true});
-      });
-      items.sort((a, b) => a.ord - b.ord);
-      const DN = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-      const MN = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-      const data = {id, label: DN[wd] + ' ' + cairo.getDate() + ' ' + MN[cairo.getMonth()] + ' ' + cairo.getFullYear(), updated: new Date().toLocaleTimeString('en-GB', {timeZone: 'Africa/Cairo', hour: '2-digit', minute: '2-digit'}),
-        auto: 'roster', items: items.map(x => ({key: keys[x.s.name] || x.s.id, name: x.s.name, time: (x.tom ? 'غدًا ' + DN[tw] + ' ' : '') + x.t + '–' + end(x.t, x.s.mins),
-          note: skip.has(x.s.name) ? 'مراجعة قرآن فقط — بدون تحضير' : 'من الجدول الأسبوعي', need: false, status: ''}))};
-      if(ex.data){   // the day already exists (a lesson was prepared for it): add only the sessions it is missing, keep everything else as it is
-        const cur = ex.data.data || {}, have = new Set((cur.items || []).map(x => x.key)), add = data.items.filter(x => !have.has(x.key));
-        if(!add.length) return;
-        const ord = t => { const m = String(t || '').match(/(\d\d):(\d\d)/); return m ? (/غد/.test(t) ? 1440 : 0) + hm(m[1] + ':' + m[2]) : 9999; };
-        const items = (cur.items || []).concat(add).sort((p, q) => ord(p.time) - ord(q.time));
-        await db.from('docs').upsert({collection: 'days', id, data: Object.assign({}, cur, {items, label: cur.label || data.label})});
-        return;
-      }
-      await db.from('docs').insert({collection: 'days', id, data});
-    }catch(e){ console.warn('ensureToday', e); }
-  }
-  document.querySelectorAll('.tab[data-v]').forEach(b => b.onclick = () => go(b.dataset.v));
+    try{ await TQDays.kit(db).ensure(); }catch(e){ console.warn('ensureToday', e); }
+  }  document.querySelectorAll('.tab[data-v]').forEach(b => b.onclick = () => go(b.dataset.v));
   function go(v){
     view = v; document.querySelectorAll('.tab[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
     $('pend').hidden = v !== 'inbox';   // «دروس جديدة — ابعت اللينك» lives in التسليمات
@@ -806,9 +774,12 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         else html = html.replace(/<head[^>]*>/i, m => m + '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"><\/script><script src="' + new URL('app/config.js', TQ.site).href + '"><\/script><script>' + sh + '<\/script>');
       }
     }catch(e){ console.warn('gen-shim swap', e); }
+    /* «دروس اليوم» inside the generator: the box «➕ حصة استثنائية / نقل موعد» (days.js, same code as this page) */
+    let daysJs = '';
+    try{ daysJs = await (await fetch('days.js?v=' + Date.now(), {cache: 'no-store'})).text(); if(daysJs.indexOf('<\/script') >= 0) daysJs = ''; }catch(e){ console.warn('days.js', e); }
     /* small fixes for the stored generator (skipped automatically once the stored file already contains them) */
     let aliases = null; try{ aliases = JSON.parse(await kvGet('genAliases')); }catch(e){}
-    const fix = '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400);setTimeout(' + genMic.toString() + ',600);setTimeout(' + genCheck.toString() + ',700);setTimeout(' + genHwShow.toString() + ',800)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
+    const fix = (daysJs ? '<script>' + daysJs + '<\/script>' : '') + '<script>(' + genFixes.toString() + ')();window.addEventListener("load",function(){setTimeout(' + genLayout.toString() + ',400);setTimeout(' + genMic.toString() + ',600);setTimeout(' + genCheck.toString() + ',700);setTimeout(' + genHwShow.toString() + ',800);setTimeout(function(){if(window.TQDays)TQDays.ui(window.__tqSb)},900)});(' + genNameFixes.toString() + ')(' + JSON.stringify(aliases).replace(/</g, '\\u003c') + ');<\/script>';
     html = /<\/body>/i.test(html) ? html.replace(/<\/body>(?![\s\S]*<\/body>)/i, fix + '</body>') : html + fix;
     genUrl = URL.createObjectURL(new Blob([html], {type: 'text/html;charset=utf-8'}));
     if(view === 'report') reportView();

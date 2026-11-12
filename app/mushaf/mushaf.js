@@ -205,7 +205,12 @@
     if(a === 'fitw') fit('w'); if(a === 'fitp') fit('p');
     if(a === 'clear'){ ink$[page] = []; drawInk(); }
   });
-  function setTool(t){ tool = t; document.querySelectorAll('#page-mushaf [data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  /* 🚦 the traffic light (assets/session-kit.js): a mistake being marked = red until it is saved */
+  let kitRed = false;
+  const kit = (f, a, o) => { try{ if(window.TQKit && TQKit[f]) TQKit[f](a, o); }catch(_){} };
+  function setTool(t){ if(t === 'mark' && tool !== 'mark' && !kitRed){ kitRed = true; kit('signal', 'red', {hold: true}); }
+    else if(t !== 'mark' && kitRed){ kitRed = false; kit('unsignal', 'red'); }
+    tool = t; document.querySelectorAll('#page-mushaf [data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
     stage.style.cursor = t === 'hand' ? 'grab' : (t === 'mark' ? 'crosshair' : 'crosshair'); }
   setTool('hand');
 
@@ -234,12 +239,13 @@
   let pending = null, cat = null, rec = null, recBlob = null, recTimer = null, recStart = 0;
   function openPop(r){
     pending = r; cat = null; recBlob = null;
+    if(!kitRed){ kitRed = true; kit('signal', 'red', {hold: true}); }
     document.querySelectorAll('.mz-cats button').forEach(b => b.classList.remove('on'));
     $('mzMemo').value = ''; $('mzRecPlay').hidden = true; $('mzRecT').textContent = '';
     $('mzRecBtn').textContent = '🎙️ سجّل التصحيح بصوتك'; $('mzRecBtn').classList.remove('rec');
     $('mzPop').hidden = false;
   }
-  function closePop(){ stopRec(true); $('mzPop').hidden = true; rectEl.hidden = true; pending = null; }
+  function closePop(){ if(kitRed){ kitRed = false; kit('unsignal', 'red'); } stopRec(true); $('mzPop').hidden = true; rectEl.hidden = true; pending = null; }
   document.querySelector('.mz-cats').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if(!b) return;
     cat = b.dataset.cat; document.querySelectorAll('.mz-cats button').forEach(x => x.classList.toggle('on', x === b)); });
   $('mzCancel').addEventListener('click', closePop);
@@ -281,6 +287,7 @@
     if(!cat){ $('mzRecT').textContent = 'اختار نوع الخطأ الأول.'; return; }
     if(rec){ stopRec(); setTimeout(() => $('mzSave').click(), 250); return; }
     const m = {n: ++seq, page, rect: pending, cat, note: $('mzMemo').value.trim(), audio: recBlob, t: new Date(), surah: surahOfPage(page)};
+    if(kitRed){ kitRed = false; kit('signal', 'off'); }
     marks.push(m); $('mzPop').hidden = true; rectEl.hidden = true; pending = null; drawMarks(); renderList();
   });
 
@@ -372,13 +379,13 @@
     try{
       const items = await buildItems();
       const sid0 = (typeof studentIdOf === 'function') ? studentIdOf(name) : name;
-      const data = {student:name, studentId:sid0, date:todayISO(), created:Date.now(),
+      const data = {student:name, studentId:sid0, date:todayISO(), created:Date.now(), signals: (window.TQKit && TQKit.signals) ? TQKit.signals() : undefined,
         items: marks.map(m => ({n:m.n, page:m.page, madaniPage:m.page - OFFSET, surah:m.surah, surahName:SNAME(m.surah), cat:m.cat, note:m.note, voice:!!m.audio}))};
       const html = reportHTML(name, items).replace(/<\/body>(?![\s\S]*<\/body>)/, '<script type="application/json" id="mzData">' + JSON.stringify(data).replace(/</g, '\\u003c') + '<\/script></body>');
       const file = 'Correction_' + name.replace(/[^\w\u0600-\u06FF]+/g, '_') + '_' + todayISO() + '.html';
       // keep the session for the lesson tasks: what went wrong, where
       try{ if(DB){ const sid = (typeof studentIdOf === 'function') ? studentIdOf(name) : name;
-        await DB.doc('corrections/' + todayISO() + '-' + sid + '-' + Date.now()).set({student:name, studentId:sid, date:todayISO(), created:Date.now(),
+        await DB.doc('corrections/' + todayISO() + '-' + sid + '-' + Date.now()).set({student:name, studentId:sid, date:todayISO(), created:Date.now(), signals: data.signals || null,
           items: marks.map(m => ({n:m.n, page:m.page, madaniPage:m.page - OFFSET, surah:m.surah, surahName:SNAME(m.surah), cat:m.cat, note:m.note, voice:!!m.audio}))}); } }catch(_){}
       let saved = false;
       try{ const dl = (typeof claude !== 'undefined' && claude.use) ? await claude.use('downloads') : null;

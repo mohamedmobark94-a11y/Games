@@ -111,3 +111,28 @@ body{background:#f5f3ec;color:#16241e;font-family:'Cairo','Segoe UI',Tahoma,syst
 .qp-one{grid-template-columns:1fr!important}
 .mz-list{max-height:30vh}
 .mz-it{background:#f9fcfa}
+/* 7-أ: the panel docks — side / bottom bar / mini (assets/panel-dock.js); the page makes room for it */
+.mz-stage{height:calc(100vh - 128px - var(--dock-b,0px))}
+.mz-side{transition:opacity .25s}
+.mz-side.dock-fade:not(:hover){opacity:.35}
+.mz-side.dock-side .qp-hd,.qp-mini{cursor:grab;touch-action:none}
+.qp-hd button{padding:2px 7px}
+.qp-mini{display:none;align-items:center;gap:6px;padding:6px 8px}
+.qp-mini b{min-width:28px;height:28px;border-radius:14px;background:#0e4d3c;color:#fff;font:800 14px/28px 'Cairo',sans-serif;text-align:center}
+.qp-mini button{border:0;border-radius:18px;padding:6px 12px;font:800 13px 'Cairo',sans-serif;cursor:pointer;background:#b91c1c;color:#fff;white-space:nowrap}
+.qp-mini button.pl{background:#e7f4ee;color:#0e4d3c;padding:6px 9px}
+.mz-side.dock-mini{border-radius:26px;padding:0;width:auto!important;max-height:none!important;overflow:visible}
+.mz-side.dock-mini>*:not(.qp-mini):not(.dock-grip){display:none!important}.mz-side.dock-mini .qp-mini{display:flex}
+.mz-side.dock-bottom{flex-direction:row;overflow-x:auto;overflow-y:hidden;border-radius:14px 14px 0 0;padding:0;align-items:stretch}
+.mz-side.dock-bottom>*{flex:0 0 auto}
+.mz-side.dock-bottom .qp-hd{position:static;flex-direction:column;justify-content:center;border-radius:14px 0 0 0;width:118px;text-align:center}
+.mz-side.dock-bottom .qp-sub{flex:0}
+.mz-side.dock-bottom .mz-card{width:220px;overflow:auto}
+.mz-side.dock-bottom .qp-acts{grid-template-columns:1fr;align-content:center;width:170px;padding:6px}
+.mz-side.dock-bottom .mz-card:has(#mzList){width:auto;display:flex;flex-direction:row;gap:8px;align-items:flex-start}
+.mz-side.dock-bottom .mz-card:has(#mzList)>*{flex:0 0 auto}
+.mz-side.dock-bottom .mz-list{flex-direction:row;max-height:none;width:min(42vw,520px);overflow-x:auto;overflow-y:hidden;cursor:grab}
+.mz-side.dock-bottom .mz-it{min-width:180px}
+.mz-side.dock-bottom .mz-keys,.mz-side.dock-bottom #mzFromPc{display:none!important}
+.mz-side.dock-bottom .qp-row{grid-template-columns:1fr;width:170px;margin:0}
+.mz-side.dock-bottom .mz-note{max-width:240px}

@@ -13,6 +13,26 @@
     return s.data.session;
   })();
 
+  /* 🚦 the traffic-light counter of the day (kv «signals:<YYYY-MM-DD>:<student key>», written by the correctors)
+     goes into the saved report as data.signals = {green, yellow, red} */
+  const slugOf = n => String(n || '').toLowerCase().replace(/(^|\s)(الشيخ|شيخ|sheikh|shaikh|brother|sister)(?=\s|$)/g, ' ').replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '');
+  async function withSignals(id, data){
+    try{
+      if(!data || typeof data !== 'object') return data;
+      const m = String(data.date || '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if(!m) return data;
+      const iso = m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0');
+      const r = await sb.from('kv').select('key,value').like('key', 'signals:' + iso + ':%'); if(r.error || !r.data || !r.data.length) return data;
+      const want = new Set([id, data.studentId, data.student].filter(Boolean).flatMap(x => [String(x).toLowerCase(), slugOf(x)]));
+      let ids = []; try{ if(typeof window.studentIdOf === 'function' && data.student) ids = [window.studentIdOf(data.student)]; }catch(_){}
+      ids.forEach(x => x && want.add(String(x).toLowerCase()));
+      const hit = r.data.find(x => { let v = {}; try{ v = JSON.parse(x.value); }catch(_){} const k = x.key.slice(('signals:' + iso + ':').length);
+        return want.has(k.toLowerCase()) || want.has(slugOf(k)) || (v.name && (want.has(String(v.name).toLowerCase()) || want.has(slugOf(v.name)))); });
+      if(!hit) return data;
+      const v = JSON.parse(hit.value);
+      return Object.assign({}, data, {signals: {green: +v.green || 0, yellow: +v.yellow || 0, red: +v.red || 0}});
+    }catch(_){ return data; }
+  }
+
   const split = path => { const i = String(path).indexOf('/'); return [path.slice(0, i), path.slice(i + 1)]; };
   const snapDoc = (id, row) => ({id, exists: !!row, data: () => row ? row.data : undefined});
 
@@ -21,7 +41,7 @@
     return {
       id,
       async get(){ await ready; const r = await sb.from('docs').select('data').eq('collection', col).eq('id', id).maybeSingle(); if(r.error) throw r.error; return snapDoc(id, r.data); },
-      async set(data){ await ready; const r = await sb.from('docs').upsert({collection: col, id, data}); if(r.error) throw r.error; },
+      async set(data){ await ready; if(col === 'reports') data = await withSignals(id, data); const r = await sb.from('docs').upsert({collection: col, id, data}); if(r.error) throw r.error; },
       async update(patch){
         await ready;
         const cur = await sb.from('docs').select('data').eq('collection', col).eq('id', id).maybeSingle();

@@ -9,7 +9,7 @@
   window.claude.use('db').then(d => { DB = d; }).catch(() => {});
   (async () => {
     try{
-      const st = await sb.from('students').select('slug,name_ar,name_en,keys').eq('active', true); window.__mzStudents = st.data || [];
+      const st = await sb.from('students').select('slug,name_ar,name_en,keys,lang').eq('active', true); window.__mzStudents = st.data || [];
       const dl = document.getElementById('mzStudentList');
       if(!dl){ const l = document.createElement('datalist'); l.id = 'mzStudentList'; l.innerHTML = window.__mzStudents.map(s => '<option value="' + TQ.esc(s.name_en || s.name_ar) + '">' + TQ.esc(s.name_ar) + '</option>').join(''); document.body.appendChild(l); const inp = document.getElementById('mzStudent'); if(inp) inp.setAttribute('list', 'mzStudentList'); }
       const paths = Array.from({length: 640}, (_, i) => 'pages/page-' + String(i + 1).padStart(3, '0') + '.webp');

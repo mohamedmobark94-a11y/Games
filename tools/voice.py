@@ -3,7 +3,10 @@
 
   pip install kokoro-onnx soundfile        (ffmpeg must be installed)
   python3 tools/voice.py bank                                  # the shared lines: praise, oops, class phrases
+  python3 tools/voice.py bank excellent beautiful_recitation   # only these lines of the bank
   python3 tools/voice.py lesson madd-asli-fari lines.json      # one lesson: {"s1": "text", ...} -> assets/voice/<voice>/lessons/<name>/s1.mp3
+  python3 tools/voice.py names names.json <out_dir>            # name clips {"slug": "Name"} -> <out_dir>/<slug>.mp3 (TQFX.cheer)
+                                                               # never inside the repo: the add-on folder + Storage private/voice/names/
 
 Model files are downloaded once into ~/.cache/tq-voice from the kokoro-onnx GitHub release.
 Arabic is not spoken by this voice: Qur'an audio is Husary from everyayah.com (TQFX.ayah).
@@ -22,6 +25,7 @@ BANK = {
     'oops_try_again': 'Oops! Try again.', 'not_quite': 'Not quite. Have another look.', 'almost': 'Almost! Try once more.',
     'look_again': 'Hmm, look again.',
     'you_did_it': 'You did it! Amazing work.', 'amazing_work': 'Wonderful! You finished it all.',
+    'beautiful_recitation': 'Beautiful recitation!',
     'listen_carefully': 'Listen carefully.', 'repeat_after_me': 'Repeat after me.', 'read_alone': 'Now, read alone.',
 }
 
@@ -39,17 +43,25 @@ def make(lines, out_dir):
     k = model(); os.makedirs(out_dir, exist_ok=True)
     for key, text in lines.items():
         samples, sr = k.create(text, voice=VOICE_ID, speed=SPEED, lang=LANG)
-        with tempfile.NamedTemporaryFile(suffix='.wav') as w:
-            sf.write(w.name, samples, sr)
-            subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', w.name, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse',
+        fd, wav = tempfile.mkstemp(suffix='.wav'); os.close(fd)   # (Windows can not reopen an open temp file)
+        try:
+            sf.write(wav, samples, sr)
+            subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', wav, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse',
                             '-ac', '1', '-b:a', '48k', os.path.join(out_dir, key + '.mp3')], check=True)
+        finally:
+            os.remove(wav)
         print(key, '·', text)
 
 if __name__ == '__main__':
     base = os.path.join(ROOT, 'assets', 'voice', VOICE_DIR)
     if len(sys.argv) >= 2 and sys.argv[1] == 'bank':
-        make(BANK, base)
+        keys = sys.argv[2:]
+        make({k: v for k, v in BANK.items() if not keys or k in keys}, base)
     elif len(sys.argv) == 4 and sys.argv[1] == 'lesson':
         make(json.load(open(sys.argv[3], encoding='utf-8')), os.path.join(base, 'lessons', sys.argv[2]))
+    elif len(sys.argv) == 4 and sys.argv[1] == 'names':
+        out = os.path.abspath(sys.argv[3])
+        if out.startswith(ROOT + os.sep): sys.exit('name clips never go inside the repo')
+        make(json.load(open(sys.argv[2], encoding='utf-8')), out)
     else:
         print(__doc__)

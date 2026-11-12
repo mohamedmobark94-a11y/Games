@@ -54,6 +54,11 @@
 .tk-tabs{display:flex;gap:4px;margin-bottom:7px}
 .tk-tabs button{flex:1;min-height:30px;border:0;border-radius:9px;background:#eef6f1;color:#0e4d3c;font:800 12.5px 'Cairo',sans-serif;cursor:pointer}
 .tk-tabs button.on{background:#0e4d3c;color:#fff}
+.tk-lvl{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.tk-lvl button{min-height:46px;border:0;border-radius:12px;font:800 13px/1.2 'Cairo',sans-serif;cursor:pointer;color:#fff;background:#177a5b}
+.tk-lvl button:nth-child(2){background:#c99a3f}.tk-lvl button:nth-child(3){background:#7c2d92}
+.tk-lvl button i{display:block;font-style:normal;font-size:19px}.tk-lvl kbd{font:700 9.5px monospace;opacity:.8}
+.tk-who{text-align:center;font-size:12px;color:#6b7d74;font-weight:700;margin:-2px 0 6px}
 .tk-cheer{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .tk-cheer button{min-height:44px;border:1.5px solid #f1e2bf;border-radius:11px;background:#fffaf0;color:#5c4409;font:700 13px/1.25 'Cairo',sans-serif;cursor:pointer;padding:4px 6px}
 .tk-cheer button:hover{border-color:#c99a3f}
@@ -69,7 +74,11 @@
 .tk-fh{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin:0 -8px 8px;padding:7px 10px;background:#c99a3f;color:#fff;border-radius:16px 16px 0 0;font:800 14px 'Cairo',sans-serif}
 .tk-fh span{flex:1;cursor:pointer}
 .tk-fh button{border:0;border-radius:8px;background:rgba(255,255,255,.2);color:#fff;font:800 12.5px 'Cairo',sans-serif;cursor:pointer;padding:3px 9px}
-.tk-float.min{width:auto;padding:0}.tk-float.min .tk-fh{margin:0;border-radius:16px}.tk-float.min .tk{display:none}
+.tk-float.dock-side{border-radius:16px}.tk-float.dock-fade:not(:hover){opacity:.35}
+.tk-float.min{width:auto!important;padding:0;max-height:none!important;overflow:visible}
+.tk-float.min .tk-fh{flex-direction:column;gap:6px;padding:9px 6px;border-radius:16px}
+.tk-float.min #tkTitle{font-size:0;line-height:1}.tk-float.min #tkTitle::before{content:'🧰';font-size:20px}
+.tk-float.min .tk-fh button{padding:4px 6px}.tk-float.min .tk-fh{margin:0;border-radius:16px}.tk-float.min .tk{display:none}
 .tk-show{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .tk-show div{max-width:min(860px,90vw);padding:26px 44px;border-radius:30px;background:linear-gradient(135deg,#fff7e0,#ffe7f1);border:4px solid #f3c969;box-shadow:0 20px 60px rgba(0,0,0,.28);text-align:center;font:800 clamp(30px,6vw,68px)/1.25 'Cairo','Plus Jakarta Sans',sans-serif;color:#7a3d00;animation:tkin 2.6s ease forwards}
 .tk-show i{display:block;font-style:normal;font-size:.9em;margin-bottom:6px}
@@ -77,7 +86,7 @@
 `;
   const fx = (k, el) => { try{ if(window.TQFX && TQFX[k]) TQFX[k](el); }catch(_){} };
   let ac = null;
-  function bells(fr){ try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if(ac.state === 'suspended') ac.resume();
+  function bells(fr){ if(quiet()) return; try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if(ac.state === 'suspended') ac.resume();
       (fr || [880, 988, 1318]).forEach((f, i) => { const t = i * .35, o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f;
         g.gain.setValueAtTime(.0001, ac.currentTime + t); g.gain.exponentialRampToValueAtTime(.22, ac.currentTime + t + .02);
         g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + t + .9); o.connect(g).connect(ac.destination); o.start(ac.currentTime + t); o.stop(ac.currentTime + t + 1); });
@@ -125,6 +134,8 @@
     const card = (k, title, body) => '<div class="tk-c' + (fold(k) ? ' off' : '') + '" data-k="' + k + '"><div class="tk-h"><b>' + title + '</b><button class="tk-fold">' + (fold(k) ? '▸' : '▾') + '</button></div><div class="tk-b">' + body + '</div></div>';
     const lens = [[30, T('30ث', '30s')], [60, T('1د', '1m')], [90, T('1.5د', '1.5m')], [120, T('2د', '2m')], [180, T('3د', '3m')], [300, T('5د', '5m')]];
     return card('cheer', T('💬 التشجيع', '💬 Encourage'),
+        '<div class="tk-lvl"><button data-lvl="small"><i>👍</i>' + T('صغيرة', 'Small') + ' <kbd>Alt+1</kbd></button><button data-lvl="mid"><i>⭐</i>' + T('باسمه', 'With name') + ' <kbd>Alt+2</kbd></button><button data-lvl="big"><i>🏆</i>' + T('ختام', 'Finale') + ' <kbd>Alt+3</kbd></button></div>' +
+        '<div class="tk-who" id="tkWho"></div>' +
         '<div class="tk-tabs">' + [['praise', T('مدح', 'Praise')], ['push', T('تحفيز', 'Push')], ['focus', T('تركيز', 'Focus')]].map(x => '<button data-tab="' + x[0] + '"' + (state.tab === x[0] ? ' class="on"' : '') + '>' + x[1] + '</button>').join('') + '</div>' +
         '<div class="tk-cheer">' + CHEER[state.tab].map((c, i) => '<button data-ch="' + i + '"><i>' + c[0] + '</i>' + T(c[1], c[2]) + '</button>').join('') + '</div>' +
         '<label class="tk-opt"><input type="checkbox" id="tkVoice"' + (voiceOn ? ' checked' : '') + '> ' + T('صوت إنجليزي (في وضع EN)', 'English voice') + '</label>') +
@@ -151,6 +162,8 @@
     w.querySelectorAll('.tk-h').forEach(h => h.onclick = () => { const c = h.closest('.tk-c'); c.classList.toggle('off'); h.querySelector('.tk-fold').textContent = c.classList.contains('off') ? '▸' : '▾';
       try{ localStorage.setItem('tk-off-' + c.dataset.k, c.classList.contains('off') ? '1' : ''); }catch(_){} });
     /* encouragement */
+    w.querySelectorAll('[data-lvl]').forEach(b => b.onclick = () => cheer(b.dataset.lvl));
+    paintWho();
     w.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { state.tab = b.dataset.tab; render(); });
     w.querySelectorAll('[data-ch]').forEach(b => b.onclick = () => { const c = CHEER[state.tab][+b.dataset.ch]; show(c[0], T(c[1], c[2])); speak(c[3]); if(state.tab === 'praise') fx('win'); });
     $('tkVoice').onchange = e => { voiceOn = e.target.checked; try{ localStorage.setItem('tk-voice', voiceOn ? '' : 'off'); }catch(_){} };
@@ -210,13 +223,146 @@
   function float(){
     if(document.getElementById('tkFloat')) return;
     const f = document.createElement('div'); f.id = 'tkFloat'; f.className = 'tk-float'; f.dir = 'rtl';
-    f.innerHTML = '<div class="tk-fh"><span id="tkTitle" title="صغّر / كبّر · Fold"></span><button id="tkLangB" title="اللغة · Language"></button><button id="tkMin" title="صغّر · Fold">—</button></div>';
+    f.innerHTML = '<div class="tk-fh"><span id="tkTitle" title="صغّر / كبّر · Fold"></span><button id="tkTlB" title="إشارة المرور (G / Y / R) · Traffic light">🚦</button><button id="tkMute" title="كتم كل الأصوات · Mute (Alt+0)"></button><button id="tkLangB" title="اللغة · Language"></button><button id="tkMin" title="صغّر · Fold">—</button></div>';
     document.body.appendChild(f); mount(f);
-    const set = m => { f.classList.toggle('min', m); f.querySelector('#tkMin').textContent = m ? '▢' : '—'; try{ localStorage.setItem('tk-min', m ? '1' : ''); }catch(_){} };
+    const paintMin = m => { f.classList.toggle('min', m); f.querySelector('#tkMin').textContent = m ? '▢' : '—'; };
+    let dock = null, hidden = false;
+    /* docked like the corrector panel (assets/panel-dock.js): a column on the right that pushes the page aside,
+       folded = the small gold bar in its corner; drag the gold header to the other side, resize from the inner edge */
+    if(window.TQDock){
+      const ls = {get: (k, d) => { try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(_){ return d; } }, set: (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(_){} }};
+      let wasMin = false; try{ wasMin = !!localStorage.getItem('tk-min'); }catch(_){}
+      dock = TQDock.attach({panel: f, handles: [f.querySelector('.tk-fh')], store: ls, key: 'tk-dock', modes: ['side', 'mini'], minW: 230, strip: 52,
+        def: {side: 'right', w: 272, mode: wasMin ? 'mini' : 'side'},
+        isShown: () => !hidden, toggle: () => { hidden = !hidden; f.style.display = hidden ? 'none' : ''; },
+        onChange: st => paintMin(st.mode === 'mini')});
+    }
+    const set = m => { if(dock) dock.mode(m ? 'mini' : 'side'); else paintMin(m); try{ localStorage.setItem('tk-min', m ? '1' : ''); }catch(_){} };
     f.querySelector('#tkTitle').onclick = f.querySelector('#tkMin').onclick = () => set(!f.classList.contains('min'));
     f.querySelector('#tkLangB').onclick = () => setLang(LANG === 'en' ? 'ar' : 'en');
-    try{ if(localStorage.getItem('tk-min')) set(true); }catch(_){}
+    f.querySelector('#tkTlB').onclick = toggleLight;
+    f.querySelector('#tkMute').onclick = toggleMute; paintMute();
+    if(!dock){ try{ if(localStorage.getItem('tk-min')) set(true); }catch(_){} }
     render();
+    let off = false; try{ off = !!localStorage.getItem('tk-tl-off'); }catch(_){}
+    if(!off) light(); syncTlBtn();
   }
-  window.TQKit = {mount, float, setLang};
+  /* ---------- 🚦 traffic light: a signal the student sees on the shared screen ----------
+     TQKit.light()                  shows it (float() does this too); draggable, its place is remembered
+     TQKit.signal('green'|'yellow'|'red'|'off', {hold, count})
+                                    hold: stays on until signal('off') (the corrector's «سجّل غلطة» / F8)
+     TQKit.unsignal('red')          takes one back (a cancelled mistake)
+     TQKit.student(name, key)       a new student (or a new day) starts the counter from zero
+     TQKit.signals()                {green, yellow, red} this session → the report's data.signals
+     TQKit.onSignals(fn)            fn({green, yellow, red, name, key, date}) after every change
+     Keys G / Y / R (also ل / غ / ق on an Arabic keyboard), never while typing in a box. */
+  const tlCss = `
+.tk-tl{position:fixed;z-index:2147482600;display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px 8px 7px;border-radius:26px;background:#1d2724;border:3px solid #3a4a44;box-shadow:0 10px 30px rgba(0,0,0,.3);cursor:grab;user-select:none;touch-action:none;font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif;direction:ltr}
+.tk-tl.drag{cursor:grabbing}
+.tk-tl i{display:block;width:70px;height:70px;border-radius:50%;background:#4b5753;box-shadow:inset 0 -6px 12px rgba(0,0,0,.35);transition:background .15s,box-shadow .15s,transform .15s;cursor:pointer}
+.tk-tl i.g.on{background:radial-gradient(circle at 38% 35%,#b9ffc9,#22c55e 55%,#13803d);box-shadow:0 0 34px 8px rgba(34,197,94,.75)}
+.tk-tl i.y.on{background:radial-gradient(circle at 38% 35%,#fff3b0,#facc15 55%,#c79200);box-shadow:0 0 34px 8px rgba(250,204,21,.7);animation:tkpulse .6s ease-in-out infinite alternate}
+.tk-tl i.r.on{background:radial-gradient(circle at 38% 35%,#ffc4c4,#ef4444 55%,#a31414);box-shadow:0 0 34px 8px rgba(239,68,68,.75)}
+.tk-tl i.on{transform:scale(1.06)}
+@keyframes tkpulse{to{transform:scale(.94);filter:brightness(1.15)}}
+.tk-tl.shake{animation:tkjolt .45s}
+@keyframes tkjolt{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.tk-tl b{display:flex;gap:7px;font:800 12px/1 'Plus Jakarta Sans',sans-serif;color:#e8efe9;padding:2px 2px 0}
+.tk-tl b span{display:flex;align-items:center;gap:2px}
+.tk-tl b em{font-style:normal;width:8px;height:8px;border-radius:50%;display:inline-block}
+.tk-tl .x{position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;border:0;background:#fff;color:#1d2724;font:800 12px/22px sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.3);display:none;padding:0}
+.tk-tl:hover .x{display:block}
+.tk-flash{position:fixed;inset:0;pointer-events:none;z-index:2147482590;animation:tkflash .7s ease-out forwards}
+@keyframes tkflash{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+`;
+  const SIG_COL = {green: ['g', '#22c55e', 'rgba(34,197,94,.55)'], yellow: ['y', '#facc15', 'rgba(250,204,21,.5)'], red: ['r', '#ef4444', 'rgba(239,68,68,.55)']};
+  const day = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  let sig = {date: day(), name: '', key: '', green: 0, yellow: 0, red: 0};
+  try{ const s = JSON.parse(localStorage.getItem('tk-sig') || 'null'); if(s && s.date === day()) sig = Object.assign(sig, s); }catch(_){}
+  let TL = null, tlTimer = null, held = false, greenRun = 0;
+  const sigFns = [];
+  const quiet = () => { try{ return !!(window.TQFX && TQFX.muted); }catch(_){ return false; } };
+  function tones(list, type){ if(quiet()) return; try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if(ac.state === 'suspended') ac.resume();
+      list.forEach(([f, t, d, v, to]) => { const o = ac.createOscillator(), g = ac.createGain(), at = ac.currentTime + t; o.type = type || 'sine'; o.frequency.setValueAtTime(f, at);
+        if(to) o.frequency.exponentialRampToValueAtTime(to, at + d); g.gain.setValueAtTime(.0001, at); g.gain.exponentialRampToValueAtTime(v || .18, at + .02);
+        g.gain.exponentialRampToValueAtTime(.0001, at + d); o.connect(g).connect(ac.destination); o.start(at); o.stop(at + d + .05); });
+    }catch(_){} }
+  const SIG_SND = {
+    green: () => tones([[659, 0, .16, .16], [880, .1, .16, .16], [1175, .2, .32, .14]], 'triangle'),        // short rising chime
+    yellow: () => tones([[587, 0, .22, .13], [587, .28, .3, .11]], 'sine'),                                   // neutral double tone
+    red: () => tones([[494, 0, .3, .12, 440], [392, .26, .45, .11, 370]], 'sine')                              // calm low alert, not a buzzer
+  };
+  const saveSig = () => { try{ localStorage.setItem('tk-sig', JSON.stringify(sig)); }catch(_){} paintCount(); const o = signals(); o.name = sig.name; o.key = sig.key; o.date = sig.date; sigFns.forEach(f => { try{ f(o); }catch(_){} }); };
+  const signals = () => ({green: sig.green, yellow: sig.yellow, red: sig.red});
+  function paintCount(){ if(!TL) return; const b = TL.querySelector('b'); if(b) b.innerHTML = ['green', 'yellow', 'red'].map(k => '<span><em style="background:' + SIG_COL[k][1] + '"></em>' + sig[k] + '</span>').join(''); }
+  function setOn(c){ if(!TL) return; TL.querySelectorAll('i').forEach(i => i.classList.toggle('on', !!c && i.classList.contains(SIG_COL[c][0]))); }
+  function signal(c, o){
+    o = o || {}; light();
+    if(sig.date !== day()){ sig = {date: day(), name: sig.name, key: sig.key, green: 0, yellow: 0, red: 0}; }
+    clearTimeout(tlTimer);
+    if(!SIG_COL[c]){ held = false; setOn(null); return; }
+    held = !!o.hold; setOn(c);
+    if(o.count !== false){ sig[c]++; saveSig(); }
+    greenRun = c === 'green' ? greenRun + 1 : 0;
+    if(SIG_SND[c]) SIG_SND[c]();
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const f = document.createElement('div'); f.className = 'tk-flash'; f.style.boxShadow = 'inset 0 0 0 14px ' + SIG_COL[c][2] + ',inset 0 0 90px 30px ' + SIG_COL[c][2]; document.body.appendChild(f); setTimeout(() => f.remove(), 800);
+      if(c === 'red'){ TL.classList.remove('shake'); void TL.offsetWidth; TL.classList.add('shake'); }
+    }
+    if(c === 'green' && greenRun === 5){ greenRun = 0; document.dispatchEvent(new CustomEvent('tk-streak', {detail: {name: sig.name, key: sig.key}})); }
+    if(!held){ let sec = 2.5; try{ sec = +localStorage.getItem('tk-tl-sec') || 2.5; }catch(_){} tlTimer = setTimeout(() => setOn(null), sec * 1000); }
+  }
+  function unsignal(c){ if(SIG_COL[c] && sig[c] > 0){ sig[c]--; saveSig(); } if(held){ held = false; setOn(null); } }
+  function student(name, key){ name = String(name || '').trim(); key = String(key || '').trim();
+    if(name === sig.name && sig.date === day()){ if(key && key !== sig.key){ sig.key = key; saveSig(); } paintWho(); return; }
+    sig = {date: day(), name, key, green: 0, yellow: 0, red: 0}; greenRun = 0; saveSig(); paintWho(); }
+  function light(show){
+    if(TL){ if(show === false){ TL.remove(); TL = null; } return TL; }
+    if(show === false) return null;
+    if(!document.getElementById('tk-tl-css')){ const s = document.createElement('style'); s.id = 'tk-tl-css'; s.textContent = tlCss; (document.head || document.documentElement).appendChild(s); }
+    TL = document.createElement('div'); TL.className = 'tk-tl'; TL.id = 'tkLight'; TL.title = 'G أخضر · Y أصفر · R أحمر — اسحبها لأي مكان';
+    TL.innerHTML = '<button class="x" title="اخفي الإشارة (ترجع من زر 🚦)">✕</button><i class="r" data-c="red"></i><i class="y" data-c="yellow"></i><i class="g" data-c="green"></i><b></b>';
+    let pos = null; try{ pos = JSON.parse(localStorage.getItem('tk-tl-pos') || 'null'); }catch(_){}
+    const place = p => { const w = TL.offsetWidth || 92, h = TL.offsetHeight || 260; TL.style.left = Math.max(0, Math.min(innerWidth - w, p.x)) + 'px'; TL.style.top = Math.max(0, Math.min(innerHeight - h, p.y)) + 'px'; };
+    document.body.appendChild(TL); place(pos || {x: 16, y: 90}); paintCount();
+    addEventListener('resize', () => { if(TL) place({x: TL.offsetLeft, y: TL.offsetTop}); });
+    let d = null;
+    TL.addEventListener('pointerdown', e => { if(e.target.closest('.x')) return; d = {x: e.clientX, y: e.clientY, l: TL.offsetLeft, t: TL.offsetTop, moved: false, el: e.target}; TL.setPointerCapture(e.pointerId); });
+    TL.addEventListener('pointermove', e => { if(!d) return; const dx = e.clientX - d.x, dy = e.clientY - d.y; if(!d.moved && Math.abs(dx) + Math.abs(dy) < 5) return; d.moved = true; TL.classList.add('drag'); place({x: d.l + dx, y: d.t + dy}); });
+    TL.addEventListener('pointerup', () => { if(!d) return; const g = d; d = null; TL.classList.remove('drag');
+      if(g.moved){ try{ localStorage.setItem('tk-tl-pos', JSON.stringify({x: TL.offsetLeft, y: TL.offsetTop})); }catch(_){} return; }
+      const c = g.el.closest && g.el.closest('[data-c]'); if(c) signal(c.dataset.c); });
+    TL.querySelector('.x').onclick = () => { try{ localStorage.setItem('tk-tl-off', '1'); }catch(_){} light(false); syncTlBtn(); };
+    return TL;
+  }
+  function syncTlBtn(){ const b = document.getElementById('tkTlB'); if(b) b.style.opacity = TL ? '1' : '.55'; }
+  function toggleLight(){ const on = !TL; try{ localStorage.setItem('tk-tl-off', on ? '' : '1'); }catch(_){} light(on); syncTlBtn(); }
+  const SIG_KEYS = {g: 'green', 'ل': 'green', y: 'yellow', 'غ': 'yellow', r: 'red', 'ق': 'red'};
+  document.addEventListener('keydown', e => {
+    if(e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+    const c = SIG_KEYS[String(e.key).toLowerCase()]; if(!c) return;
+    const typing = (e.composedPath ? e.composedPath() : [e.target]).some(n => n && (n.tagName === 'INPUT' || n.tagName === 'TEXTAREA' || n.tagName === 'SELECT' || n.isContentEditable));
+    if(typing) return;
+    e.preventDefault(); e.stopPropagation(); signal(c);
+  }, true);
+
+  /* 7-ب: encouragement with the student's name — 👍 small · ⭐ phrase + name · 🏆 end of class (TQFX.cheer) */
+  function who(){ const k = sig.key || sig.name; try{ return (window.TQFX && TQFX.person && (TQFX.person(k) || TQFX.person(sig.name))) || null; }catch(_){ return null; } }
+  function paintWho(){ const el = document.getElementById('tkWho'); if(!el) return; const p = who();
+    el.textContent = !sig.name ? T('اكتب اسم الطالب في المصحح', 'Type the student name in the corrector')
+      : '👤 ' + sig.name + (p ? (p.lang === 'ar' ? T(' · نص عربي + مؤثر', ' · Arabic text + sound') : (p.url ? T(' · بصوت اسمه', ' · says the name') : T(' · من غير ملف اسم', ' · no name clip'))) : ''); }
+  function cheer(level){ try{ if(window.TQFX && TQFX.cheer){ const p = who(); return TQFX.cheer(level, p ? p.slug : (sig.key || sig.name), {lang: LANG}); } }catch(_){}
+    show(level === 'big' ? '🏆' : '⭐', T('ممتاز!', 'Excellent!')); }
+  function paintMute(){ const b = document.getElementById('tkMute'); if(b) b.textContent = quiet() ? '🔇' : '🔊'; }
+  function toggleMute(){ try{ if(window.TQFX) TQFX.setMuted(!TQFX.muted); }catch(_){} paintMute(); }
+  document.addEventListener('tq-sound', paintMute);
+  document.addEventListener('tk-streak', () => cheer('mid'));   // 5 greens in a row
+  document.addEventListener('keydown', e => {
+    if(!e.altKey || e.ctrlKey || e.metaKey) return;
+    const k = {Digit1: 'small', Digit2: 'mid', Digit3: 'big', Numpad1: 'small', Numpad2: 'mid', Numpad3: 'big'}[e.code];
+    if(k){ e.preventDefault(); e.stopPropagation(); cheer(k); return; }
+    if(e.code === 'Digit0' || e.code === 'Numpad0'){ e.preventDefault(); e.stopPropagation(); toggleMute(); }
+  }, true);
+
+  window.TQKit = {cheer, refresh: paintWho, mount, float, setLang, light, toggleLight, signal, unsignal, student, signals, onSignals: fn => { sigFns.push(fn); }, bells};
 })();
