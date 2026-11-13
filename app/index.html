@@ -278,6 +278,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         '<select id="micLang" style="padding:9px 10px;border:1.5px solid #e3ece7;border-radius:8px;font:inherit"><option value="auto">لغة التقرير</option><option value="ar-EG">عربي</option><option value="en-GB">English</option></select></div>' +
         '<button type="button" id="micGo" style="margin-top:10px;width:100%;padding:13px;border:0;border-radius:10px;background:#b42318;color:#fff;font:700 15px inherit;cursor:pointer">🎙️ ابدأ الكلام</button>' +
         '<div id="micLive" style="margin-top:8px;min-height:20px;font-size:13.5px;color:#4d6459;line-height:1.6"></div>' +
+        '<div id="micLog" style="display:none;margin-top:6px;background:#fff;border:1px solid #f3c4c4;border-radius:8px;padding:8px 10px;font-size:13.5px;line-height:1.7;color:#16241e"></div>' +
         '<div style="font-size:11.5px;color:#8a978f;margin-top:4px">كل ما تسكت ثانية، الجملة بتنزل سطر لوحدها في الجزء اللي اخترته. قول «سطر جديد» أو اسكت شوية بين النقط.</div>'
         : '<div style="font-size:13px;color:#9c3f3f">المتصفح ده مش بيدعم الكتابة بالصوت. افتح الموقع من Edge أو Chrome.</div>') + '</div>';
     form.prepend(box);
@@ -293,18 +294,34 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     const put = text => {
       text = text.replace(/\s*(سطر جديد|new line)\s*/gi, ' ').trim(); if(!text) return;
       const to = $g('micTo').value;
-      if(to === 'encourage'){ const e = $g('encourage'); if(e){ e.value = (e.value.trim() ? e.value.trim() + ' ' : '') + text; e.dispatchEvent(new Event('input', {bubbles: true})); } }
-      else { try{ if(window.__tqHand) window.__tqHand(to); window.addItem(to, text); if(window.setToggle) window.setToggle(to, true); }catch(e){ console.warn(e); } }
+      let field = null;
+      if(to === 'encourage'){ const e = $g('encourage'); if(e){ e.value = (e.value.trim() ? e.value.trim() + ' ' : '') + text; field = e; try{ if(window.setToggle) window.setToggle('encourage', true); }catch(_){} e.dispatchEvent(new Event('input', {bubbles: true})); } }
+      else { try{ if(window.__tqHand) window.__tqHand(to); window.addItem(to, text); if(window.setToggle) window.setToggle(to, true); const l = document.querySelectorAll('#list-' + to + ' textarea'); field = l[l.length - 1] || null; }catch(e){ console.warn(e); } }
       try{ window.render(); }catch(e){} try{ window.saveDraft(); }catch(e){}
+      /* show the teacher that it was written, and where: the words stay in the voice box, and the field opens and flashes */
+      got++;
+      const name = ($g('micTo').selectedOptions[0] || {}).textContent || '';
+      const log = $g('micLog'); log.style.display = 'block';
+      const row = document.createElement('div'); row.dir = 'auto'; row.textContent = '✓ ' + name + ': ' + text; log.appendChild(row); while(log.children.length > 4) log.firstChild.remove();
+      if(field){ const sec = field.closest('.section'); if(sec) sec.classList.remove('collapsed');
+        field.style.transition = 'box-shadow .3s'; field.style.boxShadow = '0 0 0 4px rgba(46,196,182,.55)'; setTimeout(() => { field.style.boxShadow = ''; }, 1600); }
     };
+    let got = 0;
+    const ERR = {'network': 'خدمة تحويل الصوت مش واصلة (النت أو المتصفح). جرّب تاني، أو افتح الموقع من Chrome.', 'audio-capture': 'مفيش مايك شغال. اتأكد إن المايك متوصل ومش مستخدم في برنامج تاني.',
+      'language-not-supported': 'اللغة دي مش مدعومة في المتصفح ده. غيّر اللغة من القايمة.', 'no-speech': 'مش سامع صوت. قرّب من المايك واتكلم.'};
     const stop = () => { on = false; try{ rec && rec.stop(); }catch(e){} $g('micGo').textContent = '🎙️ ابدأ الكلام'; $g('micGo').style.background = '#b42318'; };
     $g('micGo').onclick = () => {
-      if(on){ stop(); $g('micLive').textContent = 'وقف ✓'; return; }
+      if(on){ stop(); $g('micLive').textContent = 'وقف ✓ (' + got + ' جملة اتكتبت)'; return; }
+      got = 0;
       rec = new SR(); rec.lang = lang(); rec.continuous = true; rec.interimResults = true;
       rec.onresult = ev => { let live = '';
         for(let i = ev.resultIndex; i < ev.results.length; i++){ const r = ev.results[i]; if(r.isFinal) put(r[0].transcript); else live += r[0].transcript; }
-        $g('micLive').textContent = live ? '… ' + live : '🔴 بيسمع…'; };
-      rec.onerror = e => { if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){ stop(); $g('micLive').textContent = 'افتح إذن المايك للموقع (القفل جنب العنوان).'; } };
+        $g('micLive').textContent = live ? '… ' + live : (on ? '🔴 بيسمع… كمّل' : 'وقف ✓ (' + got + ' جملة اتكتبت)'); };
+      rec.onerror = e => {
+        if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){ stop(); $g('micLive').textContent = 'افتح إذن المايك للموقع (القفل جنب العنوان).'; }
+        else if(e.error === 'no-speech'){ $g('micLive').textContent = '🔴 ' + ERR['no-speech']; }
+        else if(ERR[e.error]){ stop(); $g('micLive').innerHTML = '<span style="color:#b42318">⚠️ ' + ERR[e.error] + '</span>'; }
+        else if(e.error !== 'aborted'){ $g('micLive').textContent = '⚠️ ' + e.error; } };
       rec.onend = () => { if(on){ try{ rec.start(); }catch(e){} } };   // keeps listening until you press stop
       on = true; try{ rec.start(); }catch(e){}
       $g('micGo').textContent = '⏹ وقّف'; $g('micGo').style.background = '#111'; $g('micLive').textContent = '🔴 بيسمع… اتكلم';
