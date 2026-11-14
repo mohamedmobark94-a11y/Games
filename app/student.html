@@ -71,6 +71,20 @@ ul{margin:6px 0;padding-inline-start:22px}
     return isNaN(x) ? String(d) : x.toLocaleDateString(lang === 'en' ? 'en-GB' : 'ar-EG', {weekday: 'short', day: 'numeric', month: 'short'}); };
   lb.onclick = () => { lang = lang === 'en' ? 'ar' : 'en'; ls('tq-lang', lang); draw(); };
 
+  /* the Qur'an homework sent from the generator (subject «قرآن») around the report's day, shown inside «Latest report» */
+  const SAR = {}; try{ window.TQQ.surahs.forEach((x, i) => SAR[x[0]] = x[1]); }catch(_){}
+  function quranHw(r, hw, hwUrl){
+    const m = String(r.date || '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if(!m) return '';
+    const day = Date.UTC(+m[3], m[2] - 1, +m[1]), lo = day - 4 * 3600e3, hi = day + 30 * 3600e3;
+    const q = hw.filter(x => /قرآن|qur/i.test((x.subject || '') + ' ' + (x.title || '')) && x.sent_at && +new Date(x.sent_at) >= lo && +new Date(x.sent_at) <= hi);
+    if(!q.length) return '';
+    const label = x => { const part = String(x.title || '').split('·').pop().trim(), mm = part.match(/^(.+?)\s+([\d–\-]+)$/);
+      if(lang !== 'en') return x.title;
+      return 'Qur\'an homework · ' + (mm && SAR[mm[1]] ? 'Surah ' + SAR[mm[1]] + ' ' + mm[2] : part); };
+    return '<div style="margin-top:6px"><b>📖 ' + T('واجب القرآن', 'Qur\'an homework') + '</b><ul>' +
+      q.map(x => '<li dir="auto"><a href="' + hwUrl(x.token) + '" style="color:inherit;font-weight:700">' + esc(label(x)) + '</a>' + (x.last ? ' ✓' : '') + '</li>').join('') + '</ul></div>';
+  }
+
   function draw(){
     document.documentElement.lang = lang; document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl'; lb.textContent = lang === 'en' ? 'عربي' : 'English';
     const s = P.student, name = lang === 'en' ? (s.name_en || s.name_ar) : s.name_ar;
@@ -101,7 +115,7 @@ ul{margin:6px 0;padding-inline-start:22px}
       const sec = (ic, ar, en, a) => Array.isArray(a) && a.length ? '<div style="margin-top:6px"><b>' + ic + ' ' + T(ar, en) + '</b><ul>' + a.map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul></div>' : '';
       h += '<h2>📄 ' + T('آخر تقرير', 'Latest report') + '</h2><div class="card"><div class="row"><b>' + esc(r.subject || '') + '</b>' + (r.session ? '<span class="muted small">' + T('الحصة ', 'Session ') + esc(r.session) + '</span>' : '') + '<span class="date">' + fmt(r.date) + '</span></div>' +
         (r.rating ? '<div class="small">⭐ ' + esc(r.rating) + '</div>' : '') + sec('📖', 'الدرس', 'Lesson', r.lesson) + sec('🎵', 'التجويد', 'Tajweed', r.tajwid) + sec('🔤', 'العربي', 'Arabic', r.arabic) + sec('🕌', 'الإسلاميات', 'Islamic studies', r.islamic) +
-        sec('📝', 'الواجب', 'Homework', [].concat(r.hw || [], r.arabichw || [], r.islamichw || [])) + (r.encourage ? '<div class="fb">🌟 ' + esc(r.encourage) + '</div>' : '') + '</div>';
+        sec('📝', 'الواجب', 'Homework', [].concat(r.hw || [], r.arabichw || [], r.islamichw || [])) + quranHw(r, hw, hwUrl) + (r.encourage ? '<div class="fb">🌟 ' + esc(r.encourage) + '</div>' : '') + '</div>';
     }
     h += '<h2>📚 ' + T('دروسي', 'My lessons') + '</h2>' + (L.length ? L.map(l => '<div class="card"><div class="row"><b>' + esc(l.title || '') + '</b><span class="date">' + fmt(l.date) + '</span></div>' +
         (Array.isArray(l.summary) && l.summary.length ? '<ul class="small">' + l.summary.map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul>' : '') +
