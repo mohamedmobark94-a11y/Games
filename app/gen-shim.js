@@ -207,10 +207,18 @@
       const done = [], kept = [];
       filling = true;
       try{
+        /* «املأ من الدرس»: the subject parts left from the last report (Arabic, Islamic Studies, tajwīd and their homework) go,
+           so the report holds today's lesson only; the Qur'an part (where he stopped, revision) is kept */
+        if(force) ['arabic', 'arabichw', 'islamic', 'islamichw', 'tajwid'].forEach(k => { if($g('list-' + k)){ call('clearList', k); call('setToggle', k, false); } });
         const a = contentOf(L);
-        if(a.length){ if(force || !hand.lesson){ call('clearList', 'lesson'); a.forEach(x => call('addItem', 'lesson', x)); call('setToggle', 'lesson', true); hand.lesson = false; done.push('محتوى الدرس'); } else kept.push('محتوى الدرس'); }
-        const h = lines(L.homework);
-        if(h.length){ if(force || !hand.hw){ call('clearList', 'hw'); h.forEach(x => call('addItem', 'hw', x)); call('setToggle', 'hw', true); hand.hw = false; done.push('الواجب'); } else kept.push('الواجب'); }
+        /* each line goes to its own part of the report («Islamic Studies: …» → Islamic Studies, «Tajwīd: …» → Tajwīd), like the generator's own import */
+        const route = (x, fb, isHw) => { const r = call('routeLine', x, fb, isHw); return r && r.key && $g('list-' + r.key) ? r : {key: fb, text: x}; };
+        const fill = (arr, fb, isHw) => { const cleared = {};
+          arr.map(x => route(x, fb, isHw)).forEach(r => { if(!cleared[r.key]){ cleared[r.key] = 1; call('clearList', r.key); } call('addItem', r.key, r.text); call('setToggle', r.key, true); }); };
+        if(a.length){ if(force || !hand.lesson){ fill(a, 'lesson', false); hand.lesson = false; done.push('محتوى الدرس'); } else kept.push('محتوى الدرس'); }
+        const ar = (call('effectiveLang') || 'en') === 'ar';
+        const h = [ar ? (L.homework_ar || L.homework) : (L.homework_en || L.homework)].map(lines).find(x => x.length && isAr(x) === ar) || [];
+        if(h.length){ if(force || !hand.hw){ fill(h, 'hw', true); hand.hw = false; done.push('الواجب'); } else kept.push('الواجب'); }
         const f = $g('hwLink'), url = pageOf(current.st);
         if(url){
           if(force || f.dataset.hand !== '1' || f.dataset.tqPage === '1' || !f.value.trim()){
