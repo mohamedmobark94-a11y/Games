@@ -281,8 +281,12 @@ body[data-theme="adult"] .kick,body[data-theme="teen"] .kick{background:transpar
 #pen{position:absolute;inset:0;z-index:15;pointer-events:none;touch-action:none}
 #pen.on{pointer-events:auto;cursor:crosshair}
 #fxc{position:absolute;inset:0;z-index:35;pointer-events:none}
-#penbar{position:absolute;z-index:21;top:84px;inset-inline-end:22px;display:none;gap:8px}
+#penbar{position:absolute;z-index:21;top:84px;inset-inline-end:22px;display:none;gap:8px;padding:8px;border-radius:var(--rb);background:var(--card);box-shadow:var(--sh)}
 #penbar.on{display:flex}
+#penbar .ic.sel{outline:3px solid var(--acc);outline-offset:2px}
+#penbar .sw{width:30px;height:30px;border-radius:50%;display:block;margin:auto;border:2px solid rgba(255,255,255,.6)}
+#board{position:absolute;inset:72px 0 84px;z-index:14;background:#FBFAF6;display:none}
+#board.on{display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -300,7 +304,18 @@ body[data-theme="adult"] .kick,body[data-theme="teen"] .kick{background:transpar
   <button class="ic" id="bNotes" title="Teacher notes (N)">📝</button>
   <button class="ic" id="bFs" title="Full screen">⛶</button>
  </header>
- <div id="penbar"><button class="ic" id="bPenClr" title="Clear">🧽</button></div>
+ <div id="penbar">
+  <button class="ic sel" data-p="pen" data-c="#E5484D" title="Red pen"><i class="sw" style="background:#E5484D"></i></button>
+  <button class="ic" data-p="pen" data-c="#2F80ED" title="Blue pen"><i class="sw" style="background:#2F80ED"></i></button>
+  <button class="ic" data-p="pen" data-c="#1F9D55" title="Green pen"><i class="sw" style="background:#1F9D55"></i></button>
+  <button class="ic" data-p="pen" data-c="#F2C46D" title="Gold pen"><i class="sw" style="background:#F2C46D"></i></button>
+  <button class="ic" data-p="hl" data-c="#FFE14D" title="Highlighter">🖍️</button>
+  <button class="ic" data-p="laser" title="Laser">🔴</button>
+  <button class="ic" data-p="board" title="Whiteboard (W)">⬜</button>
+  <button class="ic" data-p="undo" title="Undo">↩️</button>
+  <button class="ic" data-p="clear" id="bPenClr" title="Clear">🧽</button>
+ </div>
+ <div id="board"></div>
  <nav id="nav"><button class="nb ghost" id="bPrev"></button><div id="dots"></div><span id="cnt"></span><button class="nb" id="bNext"></button></nav>
  <canvas id="pen" width="1600" height="900"></canvas>
  <canvas id="fxc" width="1600" height="900"></canvas>
@@ -598,7 +613,7 @@ function render(){stopAud();const old=$$('.slide');old[cur]&&S[cur]&&S[cur].x.le
  $('#dots').innerHTML=S.map((_,i)=>`<i data-i="${i}"></i>`).join('');$$('#dots i').forEach(d=>d.onclick=()=>go(+d.dataset.i));
  go(Math.min(cur,S.length-1),true)}
 function go(i,quiet){if(i<0||i>=S.length)return;const els=$$('.slide');if(els[cur]&&i!==cur){S[cur].x.leave&&S[cur].x.leave(els[cur]);stopAud()}
- els.forEach((el,k)=>el.classList.toggle('on',k===i));cur=i;const el=els[i];if(!quiet)fx.tap();enterAnim(el);S[i].x.enter&&S[i].x.enter(el);
+ els.forEach((el,k)=>el.classList.toggle('on',k===i));cur=i;document.dispatchEvent(new Event('tqkit:slide'));const el=els[i];if(!quiet)fx.tap();enterAnim(el);S[i].x.enter&&S[i].x.enter(el);
  $$('#dots i').forEach((d,k)=>d.classList.toggle('on',k===i));$('#cnt').textContent=AN(i+1)+' / '+AN(S.length);
  $('#bPrev').disabled=i===0;$('#bNext').disabled=i===S.length-1;notes();try{localStorage.setItem('tqkit-at:'+key(),i)}catch(_){}}
 const key=()=>CFG.id||L1(CFG.title||'')||location.search;
@@ -606,7 +621,7 @@ function notes(){const n=$('#notes'),o=(S[cur]||{}).o||{};const say=o.say?(Array
  n.innerHTML=`<b>${AN(cur+1)}. ${L1(o.title||o.kick||'')}</b>${o.min?` · ⏱ ${QN(o.min)} د`:''}<div>${o.note||'—'}</div>${say.map(s=>`<div class="say">🗣 ${s}</div>`).join('')}`}
 function fit(){const k=Math.min(innerWidth/1600,innerHeight/900);stage.style.setProperty('--s',k)}
 addEventListener('resize',fit);
-addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;const rtl=LANG!=='en';
+addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;{const k=e.key.toLowerCase();if(k==='d'){$('#bPen').click();return}if(k==='w'){toggleBoard();return}if((e.ctrlKey||e.metaKey)&&k==='z'){strokes().pop();redraw();return}}const rtl=LANG!=='en';
  if(e.key==='ArrowRight')go(cur+(rtl?-1:1));else if(e.key==='ArrowLeft')go(cur+(rtl?1:-1));else if(e.key==='PageDown'||e.key===' ')go(cur+1),e.preventDefault();else if(e.key==='PageUp')go(cur-1);
  else if(e.key==='n'||e.key==='N')$('#bNotes').click();else if(e.key==='f'||e.key==='F')$('#bFs').click()});
 $('#bPrev').onclick=()=>go(cur-1);$('#bNext').onclick=()=>go(cur+1);
@@ -614,13 +629,39 @@ $$('#lseg button').forEach(b=>b.onclick=()=>{LANG=b.dataset.l;try{localStorage.s
 $('#bNotes').onclick=()=>{const n=$('#notes');n.hidden=!n.hidden;$('#bNotes').classList.toggle('on',!n.hidden)};
 $('#bSnd').onclick=()=>{MUTED=!MUTED;try{localStorage.setItem('tq-sound',MUTED?'off':'on')}catch(_){}if(W.TQFX&&TQFX.setMuted)TQFX.setMuted(MUTED);$('#bSnd').textContent=MUTED?'🔇':'🔊';if(MUTED)stopAud()};
 $('#bFs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(_){}};
-/* pen */
-const pen=$('#pen'),pc=pen.getContext('2d');let drawing=false;
-$('#bPen').onclick=()=>{const on=!pen.classList.contains('on');pen.classList.toggle('on',on);$('#bPen').classList.toggle('on',on);$('#penbar').classList.toggle('on',on)};
-$('#bPenClr').onclick=()=>pc.clearRect(0,0,1600,900);
-const pp=e=>{const r=pen.getBoundingClientRect();return[(e.clientX-r.left)/r.width*1600,(e.clientY-r.top)/r.height*900]};
-pen.addEventListener('pointerdown',e=>{drawing=true;const[x,y]=pp(e);pc.beginPath();pc.moveTo(x,y);pc.lineWidth=7;pc.lineCap=pc.lineJoin='round';pc.strokeStyle=getComputedStyle(document.body).getPropertyValue('--bad')||'#e33'});
-pen.addEventListener('pointermove',e=>{if(!drawing)return;const[x,y]=pp(e);pc.lineTo(x,y);pc.stroke()});addEventListener('pointerup',()=>drawing=false);
+/* pen: pressure, pen tablet + touch + mouse, palm rejection, highlighter, laser, whiteboard, per-slide ink */
+const pen=$('#pen'),pc=pen.getContext('2d'),penbar=$('#penbar'),board=$('#board');
+let tool='pen',color='#E5484D',ink={},drawing=null,lastPen=0,laser=[],penId=null;
+const inkKey=()=>cur+(board.classList.contains('on')?'b':''),strokes=()=>ink[inkKey()]||(ink[inkKey()]=[]);
+const pp=e=>{const r=pen.getBoundingClientRect();return[(e.clientX-r.left)/r.width*1600,(e.clientY-r.top)/r.height*900,e.pointerType==='pen'&&e.pressure>0?e.pressure:.5]};
+function drawSt(st){pc.save();pc.lineCap=pc.lineJoin='round';pc.strokeStyle=st.c;pc.globalAlpha=st.hl?.35:1;
+ if(st.p.length===1){const a=st.p[0];pc.fillStyle=st.c;pc.beginPath();pc.arc(a[0],a[1],st.hl?13:1+3.5*a[2]*2,0,7);pc.fill()}
+ for(let i=1;i<st.p.length;i++){const a=st.p[i-1],b=st.p[i];pc.lineWidth=st.hl?26:2+8*b[2];pc.beginPath();pc.moveTo(a[0],a[1]);pc.lineTo(b[0],b[1]);pc.stroke()}pc.restore()}
+function redraw(){pc.clearRect(0,0,1600,900);strokes().forEach(drawSt);laser.forEach((p,i)=>{pc.fillStyle='rgba(255,40,40,'+(i/laser.length)+')';pc.beginPath();pc.arc(p[0],p[1],9,0,7);pc.fill()})}
+function penOpen(on){pen.classList.toggle('on',on);$('#bPen').classList.toggle('on',on);penbar.classList.toggle('on',on);if(!on&&board.classList.contains('on'))toggleBoard()}
+function toggleBoard(){board.classList.toggle('on');if(board.classList.contains('on')&&!pen.classList.contains('on'))penOpen(true);redraw()}
+$('#bPen').onclick=()=>penOpen(!pen.classList.contains('on'));
+penbar.onclick=e=>{const b=e.target.closest('button');if(!b)return;const p=b.dataset.p;
+ if(p==='pen'||p==='hl'){tool=p;color=b.dataset.c}else if(p==='laser')tool='laser';else if(p==='board'){toggleBoard();return}
+ else if(p==='undo'){strokes().pop();redraw();return}else if(p==='clear'){ink[inkKey()]=[];redraw();return}
+ $$('button',penbar).forEach(x=>x.classList.toggle('sel',x===b))};
+pen.addEventListener('pointerdown',e=>{
+ if(e.pointerType==='pen')lastPen=Date.now();else if(e.pointerType==='touch'&&Date.now()-lastPen<2000)return; /* palm */
+ if(e.pointerType==='mouse'&&e.button!==0)return;
+ e.preventDefault();try{pen.setPointerCapture(e.pointerId)}catch(_){}penId=e.pointerId;
+ const eraser=e.pointerType==='pen'&&(e.button===5||(e.buttons&32));
+ if(eraser){drawing='erase';return}
+ if(tool==='laser'){drawing='laser';return}
+ drawing={c:color,hl:tool==='hl',p:[pp(e)]};strokes().push(drawing);redraw()});
+pen.addEventListener('pointermove',e=>{if(!drawing||e.pointerId!==penId)return;e.preventDefault();
+ const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e],pts=(evs.length?evs:[e]).map(pp);
+ if(drawing==='laser'){laser.push(...pts);while(laser.length>18)laser.shift();redraw();return}
+ if(drawing==='erase'){const[x,y]=pts[pts.length-1];ink[inkKey()]=strokes().filter(st=>!st.p.some(q=>Math.hypot(q[0]-x,q[1]-y)<22));redraw();return}
+ drawing.p.push(...pts);redraw()},{passive:false});
+const penUp=e=>{if(e&&penId!==null&&e.pointerId!==penId)return;if(drawing==='laser'){laser=[];}drawing=null;penId=null;redraw()};
+pen.addEventListener('pointerup',penUp);pen.addEventListener('pointercancel',penUp);pen.addEventListener('lostpointercapture',penUp);
+pen.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('tqkit:slide',redraw);
 
 /* ---------- catalogue (shown when the page has no lesson body) ---------- */
 function catalogue(){
