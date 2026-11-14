@@ -134,7 +134,7 @@
      When a student is chosen in the report, the lesson saved for the report's date (docs lessons, id YYYY-MM-DD-<key>)
      fills «Lesson Content» (its summary / headlines; headlines_en for an English report), «Homework», and the link box
      with the student's own page (student.html?k=…, not the homework link). A part the teacher wrote himself is never
-     written over (typing, voice typing or ✨ tidy all count); «↺ من الدرس» fills all three again on purpose. */
+     written over (typing, voice typing or ✨ tidy all count); Nothing is filled until the teacher presses «⬇ املأ من الدرس» (the last report stays visible). */
   function lessonFill(){
     const $g = id => document.getElementById(id);
     if(window.__tqLessonFill || !$g('student') || !$g('list-lesson') || !$g('list-hw') || !$g('hwLink')) return;
@@ -198,7 +198,7 @@
     const bar = document.createElement('div'); bar.id = 'tqFromLesson';
     bar.style.cssText = 'display:none;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;padding:8px 10px;border:1.5px solid #c99a3f;border-radius:9px;background:#fffdf6;font-size:12.5px;line-height:1.55;direction:rtl;text-align:right';
     bar.innerHTML = '<span id="tqFlMsg" style="flex:1;min-width:160px;color:#5c4409"></span>' +
-      '<button type="button" id="tqFlGo" style="border:1.5px solid #c99a3f;background:#fff;color:#8a6620;border-radius:8px;padding:4px 11px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap">↺ من الدرس</button>';
+      '<button type="button" id="tqFlGo" style="border:1.5px solid #c99a3f;background:#fff;color:#8a6620;border-radius:8px;padding:4px 11px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap">⬇ املأ من الدرس</button>';
     sec.prepend(bar);
     const say = (html, can) => { bar.style.display = html ? 'flex' : 'none'; $g('tqFlMsg').innerHTML = html; $g('tqFlGo').disabled = !can; $g('tqFlGo').style.opacity = can ? 1 : .45; };
 
@@ -226,7 +226,7 @@
       const L = current.lesson, [done, kept] = res || [[], []];
       say('📚 درس ' + esc(current.day) + ': <b>' + esc(L.title || current.id) + '</b>' +
         (done.length ? ' — اتملى: ' + esc(done.join(' · ')) : '') +
-        (kept.length ? '<br><span style="color:#8a978f">سبت اللي كتبته بإيدك في: ' + esc(kept.join(' · ')) + ' (اضغط ↺ لو عايز الدرس مكانه)</span>' : ''), true);
+        (kept.length ? '<br><span style="color:#8a978f">سبت اللي كتبته بإيدك في: ' + esc(kept.join(' · ')) + ' (اضغط «املأ من الدرس» تاني لو عايز الدرس مكانه)</span>' : ''), true);
     }
 
     let lastKey = '', seen = '', busy = false;
@@ -245,7 +245,8 @@
         if(k !== String($g('student').value || '').trim() + '|' + reportDay()){ lastKey = ''; return; }   // changed meanwhile: look again
         if(!row){ say('<span style="color:#8a978f">مفيش درس متسجّل لـ' + esc(name) + ' يوم ' + esc(day) + ' — التقرير ماتغيّرش.</span>', false); return; }
         current = {id: row.id, day, lesson: row.data, st};
-        report(put(false));
+        /* no auto fill: the last report stays on screen (where the student stopped, Quran review…) until the teacher asks */
+        say('📚 فيه درس جاهز ' + esc(day) + ': <b>' + esc(row.data.title || row.id) + '</b><br><span style="color:#8a978f">التقرير اللي قدامك هو القديم — اضغط «⬇ املأ من الدرس» لما تحب تحط ملخص الدرس الجديد والواجب ولينك صفحة الطالب.</span>', true);
       }catch(e){ console.warn('lessonFill', e); }
       finally{ busy = false; }
     }
