@@ -71,6 +71,18 @@ ul{margin:6px 0;padding-inline-start:22px}
     return isNaN(x) ? String(d) : x.toLocaleDateString(lang === 'en' ? 'en-GB' : 'ar-EG', {weekday: 'short', day: 'numeric', month: 'short'}); };
   lb.onclick = () => { lang = lang === 'en' ? 'ar' : 'en'; ls('tq-lang', lang); draw(); };
 
+  /* «واجب القرآن · 15 نوفمبر · النصر 1» reads «Qur'an homework · 15 Nov · Surah An-Nasr 1» on an English page */
+  const MAR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'], MEN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function hwTitle(x){
+    const t = String((x && x.title) || '');
+    if(lang !== 'en' || !/^واجب القرآن/.test(t)) return t;
+    return t.split('·').map(p => p.trim()).map((p, i) => {
+      if(i === 0) return 'Qur\'an homework';
+      const d = p.match(/^(\d{1,2})\s+(\S+)$/); if(d && MAR.indexOf(d[2]) >= 0) return d[1] + ' ' + MEN[MAR.indexOf(d[2])];
+      const mm = p.match(/^(.+?)\s+([\d–\-]+)$/), nm = mm ? mm[1] : p;
+      return (mm || SAR[p]) && SAR[nm] ? 'Surah ' + SAR[nm] + (mm ? ' ' + mm[2] : '') : p;
+    }).join(' · ');
+  }
   /* the Qur'an homework sent from the generator (subject «قرآن») around the report's day, shown inside «Latest report» */
   const SAR = {}; try{ window.TQQ.surahs.forEach((x, i) => SAR[x[0]] = x[1]); }catch(_){}
   function quranHw(r, hw, hwUrl){
@@ -78,9 +90,7 @@ ul{margin:6px 0;padding-inline-start:22px}
     const day = Date.UTC(+m[3], m[2] - 1, +m[1]), lo = day - 4 * 3600e3, hi = day + 30 * 3600e3;
     const q = hw.filter(x => /قرآن|qur/i.test((x.subject || '') + ' ' + (x.title || '')) && x.sent_at && +new Date(x.sent_at) >= lo && +new Date(x.sent_at) <= hi);
     if(!q.length) return '';
-    const label = x => { const part = String(x.title || '').split('·').pop().trim(), mm = part.match(/^(.+?)\s+([\d–\-]+)$/);
-      if(lang !== 'en') return x.title;
-      return 'Qur\'an homework · ' + (mm && SAR[mm[1]] ? 'Surah ' + SAR[mm[1]] + ' ' + mm[2] : part); };
+    const label = hwTitle;
     return '<div style="margin-top:6px"><b>📖 ' + T('واجب القرآن', 'Qur\'an homework') + '</b><ul>' +
       q.map(x => '<li dir="auto"><a href="' + hwUrl(x.token) + '" style="color:inherit;font-weight:700">' + esc(label(x)) + '</a>' + (x.last ? ' ✓' : '') + '</li>').join('') + '</ul></div>';
   }
@@ -95,9 +105,9 @@ ul{margin:6px 0;padding-inline-start:22px}
     const stLabel = h => !h.last ? ['todo', T('لسه', 'To do')] : h.last.status === 'redo' ? ['redo', T('أعِد المحاولة', 'Try again')] : h.last.status === 'reviewed' ? ['reviewed', T('المعلم راجعه ✓', 'Checked ✓')] : ['submitted', T('اتبعت', 'Sent')];
     let h = '<div class="hd"><div class="muted">' + T('صفحة', 'The page of') + '</div><h1>' + esc(name) + ' 🌱</h1><div class="stats">' +
       '<div class="stat"><b>' + L.length + '</b>' + T('درس', 'lessons') + '</div><div class="stat"><b>' + todo.length + '</b>' + T('واجب مستني', 'homework to do') + '</div><div class="stat"><b>' + (avg != null ? avg + '%' : '—') + '</b>' + T('متوسط الدرجات', 'average score') + '</div></div>' + rewards(hw) + '</div>';
-    if(todo.length) h += '<a class="btn" style="width:100%;justify-content:center;font-size:1.15rem;min-height:56px;margin-top:14px" href="' + hwUrl(todo[0].token) + '">▶ ' + T('ابدأ واجبك الحالي: ', 'Start your current homework: ') + esc(todo[0].title) + '</a>';
+    if(todo.length) h += '<a class="btn" style="width:100%;justify-content:center;font-size:1.15rem;min-height:56px;margin-top:14px" href="' + hwUrl(todo[0].token) + '">▶ ' + T('ابدأ واجبك الحالي: ', 'Start your current homework: ') + esc(hwTitle(todo[0])) + '</a>';
     h += '<h2>📝 ' + T('الواجبات', 'Homework') + '</h2>' + (hw.length ? hw.map(x => { const st = stLabel(x);
-      return '<div class="card' + (st[0] === 'todo' || st[0] === 'redo' ? ' todo' : '') + '"><div class="row"><b>' + esc(x.title) + '</b><span class="st ' + st[0] + '">' + st[1] + '</span><span class="date">' + fmt(x.sent_at) + '</span></div>' +
+      return '<div class="card' + (st[0] === 'todo' || st[0] === 'redo' ? ' todo' : '') + '"><div class="row"><b>' + esc(hwTitle(x)) + '</b><span class="st ' + st[0] + '">' + st[1] + '</span><span class="date">' + fmt(x.sent_at) + '</span></div>' +
         (x.due_date ? '<div class="small muted">' + T('آخر ميعاد: ', 'Due: ') + fmt(x.due_date) + '</div>' : '') +
         (x.last && x.last.max_score ? '<div><b style="color:var(--ok);font-size:1.2rem">' + x.last.score + ' / ' + x.last.max_score + '</b></div>' : '') +
         (x.last && x.last.feedback ? '<div class="fb">💬 ' + esc(x.last.feedback) + '</div>' : '') +
