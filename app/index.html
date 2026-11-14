@@ -724,6 +724,12 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     ['Previous report', 'What I taught', 'AI helpers', 'Arabic', 'Islamic', 'Extra Notes', 'Custom addition'].forEach(t => {
       secs.filter(s => { const h = s.querySelector('.section-head h3'); return h && h.textContent.indexOf(t) >= 0; }).forEach(s => {
         const items = s.querySelectorAll('.item-list textarea'); const used = [...items].some(x => x.value.trim());
+        if(t === 'Previous report'){
+          /* «paste an old report»: folded, but kept FIRST in the form with an Arabic title so it is easy to find */
+          s.classList.add('collapsed'); form.prepend(s);
+          const h = s.querySelector('.section-head h3'); if(h && h.textContent.indexOf('الصق') < 0) h.innerHTML = '📄 الصق تقرير قديم واشتغل عليه · Previous report';
+          return;
+        }
         if(!used){ s.classList.add('collapsed'); form.appendChild(s); }   // the generator's own click on the title opens it
       });
     });
