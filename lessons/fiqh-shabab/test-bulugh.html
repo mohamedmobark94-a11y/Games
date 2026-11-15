@@ -1,0 +1,472 @@
+<!doctype html><html lang="ar"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<title>اختبار البلوغ ومراتب الدين وغض البصر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800;900&display=swap">
+<style>
+/* Layout: navy header with timer, one question card at a time, side map of questions (drawer on phones); course navy & gold. */
+:root{
+  --navy:#14374A; --deep:#0B2431; --gold:#C9A35A; --gold-soft:#EBDDBB; --gold-ink:#86662A;
+  --mist:#E8EEF1; --paper:#FFFFFF; --ground:#F3F6F8; --text:#1D2B33; --muted:#5E6E77; --line:#D6DFE4;
+  --ok:#2E8B5A; --ok-soft:#E1F3E8; --bad:#C2453A; --bad-soft:#F9E4E1; --flag:#D98E04;
+  --f-ui:"Cairo","Segoe UI",Tahoma,sans-serif; --f-h:"Amiri","Traditional Arabic",serif;
+  color-scheme:light;
+}
+html,body{min-height:100%}
+body{margin:0;background:var(--ground);color:var(--text);font-family:var(--f-ui);direction:rtl}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+button,input,select{font-family:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px}
+
+/* header */
+header{background:var(--navy);color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;border-bottom:3px solid var(--gold)}
+header .wrap{display:flex;align-items:center;gap:14px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.brand .seal{width:42px;height:42px;border-radius:50%;border:2px solid var(--gold);display:grid;place-items:center;flex:none;background:var(--deep)}
+.brand .seal svg{width:22px;height:22px;stroke:var(--gold)}
+.brand b{display:block;font:800 18px/1.3 var(--f-ui)}
+.brand small{display:block;font:600 13px/1.3 var(--f-ui);color:#A9C1CD}
+.timer{display:flex;align-items:center;gap:8px;background:var(--deep);border:1px solid #2A5266;border-radius:30px;padding:6px 14px;font:800 18px/1 var(--f-ui);font-variant-numeric:tabular-nums}
+.timer svg{width:18px;height:18px;stroke:var(--gold)}
+.timer.warn{border-color:var(--bad);color:#FFD2CC}
+.hprog{flex-basis:100%;height:6px;background:#0E2A38;border-radius:4px;overflow:hidden}
+.hprog i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+
+/* start */
+.start{padding-block:28px 40px}
+.hero{background:var(--navy);color:#fff;border-radius:24px;padding:30px 28px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:#0F2C3B;left:-160px;top:-220px}
+.hero:after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;border:2px solid var(--gold);right:-170px;bottom:-200px}
+.hero:before,.hero:after{z-index:0}
+.hero>*{position:relative;z-index:1}
+.hero .eb{color:var(--gold);font:700 15px/1.5 var(--f-ui)}
+.hero h1{margin:4px 0 6px;font:900 clamp(30px,5vw,44px)/1.3 var(--f-ui);text-wrap:balance}
+.hero p{margin:0;color:#CFE0E8;font:600 17px/1.8 var(--f-ui);max-width:62ch}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.stat{background:rgba(255,255,255,.07);border:1px solid #2A5266;border-radius:14px;padding:10px 16px;min-width:110px}
+.stat b{display:block;font:900 26px/1.1 var(--f-ui);color:var(--gold)}
+.stat span{font:700 14px/1.4 var(--f-ui);color:#CFE0E8}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;margin-top:20px}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:22px}
+.panel h2{margin:0 0 12px;font:800 21px/1.4 var(--f-ui);color:var(--navy)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font:700 15px/1.4 var(--f-ui);color:var(--muted)}
+.field input{border:2px solid var(--line);border-radius:12px;padding:12px 14px;font:700 18px/1.4 var(--f-ui);color:var(--navy);background:#fff}
+.field input:focus{border-color:var(--gold);outline:0}
+.rules{margin:0;padding:0 20px 0 0;display:flex;flex-direction:column;gap:8px;font:600 16px/1.7 var(--f-ui)}
+.rules b{color:var(--navy)}
+.units{display:flex;flex-direction:column;gap:8px}
+.unit{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:12px;background:var(--mist)}
+.unit .ic{width:36px;height:36px;border-radius:50%;background:var(--navy);display:grid;place-items:center;flex:none}
+.unit .ic svg{width:18px;height:18px;stroke:var(--gold)}
+.unit span{font:700 15.5px/1.4 var(--f-ui);color:var(--navy);flex:1}
+.unit em{font-style:normal;font:800 13px/1 var(--f-ui);color:var(--gold-ink);background:#fff;border-radius:20px;padding:5px 9px}
+.btn{border:0;border-radius:14px;padding:13px 24px;font:800 18px/1.2 var(--f-ui);background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--deep)}
+.btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn svg{width:20px;height:20px}
+.err{color:var(--bad);font:700 14px/1.4 var(--f-ui);min-height:20px}
+
+/* exam */
+.exam{display:grid;grid-template-columns:1fr 290px;gap:20px;padding-block:22px 110px;align-items:start}
+@media (max-width:900px){.exam{grid-template-columns:1fr}}
+.qcard{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:24px;min-width:0}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.sec{display:inline-flex;align-items:center;gap:8px;background:var(--mist);color:var(--navy);border-radius:30px;padding:6px 12px 6px 14px;font:800 14px/1.2 var(--f-ui)}
+.sec svg{width:16px;height:16px;stroke:var(--gold-ink)}
+.qn{font:800 14px/1 var(--f-ui);color:var(--muted)}
+.qtype{font:700 13px/1 var(--f-ui);color:var(--gold-ink);background:#FBF5E8;border:1px solid var(--gold-soft);border-radius:20px;padding:5px 10px}
+.qtext{font:800 clamp(21px,3vw,27px)/1.75 var(--f-ui);color:var(--navy);margin:4px 0 18px;text-wrap:pretty}
+.qtext .h{font-family:var(--f-h);font-weight:700}
+.opts{display:grid;gap:12px}
+.opt{display:flex;align-items:center;gap:14px;text-align:right;border:2px solid var(--line);background:#fff;border-radius:16px;padding:14px 16px;font:700 19px/1.6 var(--f-ui);color:var(--text);width:100%;transition:border-color .15s,background .15s}
+.opt:hover{border-color:#B8C7CF}
+.opt b{flex:none;width:38px;height:38px;border-radius:50%;background:var(--mist);color:var(--navy);display:grid;place-items:center;font:900 17px/1 var(--f-ui)}
+.opt.sel{border-color:var(--navy);background:#EEF4F7}
+.opt.sel b{background:var(--navy);color:#fff}
+.tf{grid-template-columns:1fr 1fr}
+.tf .opt{justify-content:center;font-size:22px;padding:18px}
+.tf .opt svg{width:26px;height:26px}
+.hint{font:600 15px/1.6 var(--f-ui);color:var(--muted);margin:-8px 0 14px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--mist);margin-bottom:10px}
+@media (max-width:560px){.mrow{grid-template-columns:1fr}}
+.mrow .l{font:800 18px/1.5 var(--f-ui);color:var(--navy)}
+.mrow select{width:100%;border:2px solid var(--line);border-radius:12px;padding:10px 12px;font:700 16px/1.5 var(--f-ui);color:var(--text);background:#fff}
+.mrow select.done{border-color:var(--navy)}
+.order{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:640px){.order{grid-template-columns:1fr}}
+.order h4{margin:0 0 8px;font:800 15px/1.4 var(--f-ui);color:var(--muted)}
+.pool,.seq{display:flex;flex-direction:column;gap:8px;min-height:60px;border-radius:16px;padding:10px;border:2px dashed var(--line)}
+.seq{border-color:var(--gold-soft);background:#FFFCF5}
+.chipq{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font:700 17px/1.5 var(--f-ui);color:var(--text);text-align:right}
+.chipq b{flex:none;width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--deep);display:grid;place-items:center;font:900 15px/1 var(--f-ui)}
+.seq .empty,.pool .empty{font:600 14px/1.5 var(--f-ui);color:var(--muted);padding:6px}
+.qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap}
+.flagb{background:#fff;border:2px solid var(--line);color:var(--muted);border-radius:12px;padding:9px 14px;font:800 15px/1 var(--f-ui);display:inline-flex;gap:6px;align-items:center}
+.flagb svg{width:18px;height:18px}
+.flagb.on{border-color:var(--flag);color:var(--flag);background:#FFF6E3}
+.side{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:18px;position:sticky;top:96px}
+@media (max-width:900px){.side{position:static}}
+.side h3{margin:0 0 10px;font:800 16px/1.4 var(--f-ui);color:var(--navy)}
+.map{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;direction:rtl}
+@media (max-width:900px){.map{grid-template-columns:repeat(10,1fr)}}
+.map button{aspect-ratio:1;border-radius:9px;border:2px solid var(--line);background:#fff;font:800 13px/1 var(--f-ui);color:var(--muted);position:relative;padding:0}
+.map button.ans{background:var(--navy);border-color:var(--navy);color:#fff}
+.map button.cur{outline:3px solid var(--gold);outline-offset:1px}
+.map button.fl:after{content:"";position:absolute;top:-4px;left:-4px;width:10px;height:10px;border-radius:50%;background:var(--flag);border:2px solid #fff}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font:700 12.5px/1.4 var(--f-ui);color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-1px;margin-left:5px;border:2px solid var(--line)}
+.counts{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font:700 15px/1.8 var(--f-ui)}
+.counts b{color:var(--navy)}
+.bottombar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);z-index:15;padding-bottom:env(safe-area-inset-bottom,0px);backdrop-filter:blur(6px)}
+.bottombar .wrap{display:flex;gap:10px;align-items:center;padding-block:12px}
+.bottombar .sp{flex:1}
+@media (max-width:560px){.bottombar .wrap{gap:8px}.bottombar .btn{padding:11px 14px;font-size:16px}.bottombar .btn svg{display:none}}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(8,27,37,.6);display:grid;place-items:center;z-index:40;padding:16px}
+.mbox{background:#fff;border-radius:22px;padding:26px;max-width:460px;width:100%;border-top:6px solid var(--gold)}
+.mbox h3{margin:0 0 8px;font:900 24px/1.4 var(--f-ui);color:var(--navy)}
+.mbox p{margin:0 0 18px;font:600 17px/1.8 var(--f-ui);color:var(--text)}
+.mbox .row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* results */
+.results{padding-block:24px 50px}
+.cert{background:var(--navy);color:#fff;border-radius:26px;padding:28px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;border:3px solid var(--gold);position:relative;overflow:hidden}
+.cert:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;border:2px solid rgba(201,163,90,.5);left:-180px;bottom:-220px}
+@media (max-width:640px){.cert{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.ring{position:relative;width:190px;height:190px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .v{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .v b{display:block;font:900 54px/1 var(--f-ui);color:#fff;direction:ltr}
+.ring .v span{font:700 15px/1.4 var(--f-ui);color:#A9C1CD}
+.cert .eb{color:var(--gold);font:800 15px/1.5 var(--f-ui)}
+.cert h2{margin:2px 0 6px;font:900 clamp(26px,4vw,36px)/1.3 var(--f-ui)}
+.cert .grade{display:inline-block;background:var(--gold);color:var(--deep);border-radius:30px;padding:6px 18px;font:900 20px/1.3 var(--f-ui);margin:4px 0 10px}
+.cert p{margin:0;color:#CFE0E8;font:600 16px/1.8 var(--f-ui)}
+.cert .dua{font:700 21px/1.8 var(--f-h);color:var(--gold-soft);margin-top:8px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+@media (max-width:820px){.rgrid{grid-template-columns:1fr}}
+.brow{display:grid;grid-template-columns:150px 1fr 54px;gap:10px;align-items:center;margin-bottom:10px}
+.brow span{font:700 14.5px/1.35 var(--f-ui);color:var(--navy)}
+.brow .tr{height:14px;background:var(--mist);border-radius:8px;overflow:hidden}
+.brow .tr i{display:block;height:100%;border-radius:8px;background:var(--navy);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.brow .tr i.lo{background:var(--bad)}
+.brow .tr i.hi{background:var(--ok)}
+.brow b{font:800 14px/1 var(--f-ui);color:var(--muted);direction:ltr;text-align:left;font-variant-numeric:tabular-nums}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+textarea.copybox{width:100%;min-height:150px;margin-top:10px;border:2px solid var(--line);border-radius:12px;padding:10px;font:600 16px/1.7 var(--f-ui);direction:rtl}
+.review{margin-top:20px}
+.review h2{font:800 22px/1.4 var(--f-ui);color:var(--navy);margin:0 0 10px}
+.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filters button{border:2px solid var(--line);background:#fff;border-radius:30px;padding:7px 14px;font:800 14px/1 var(--f-ui);color:var(--muted)}
+.filters button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ritem{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:12px;border-right:6px solid var(--ok)}
+.ritem.bad{border-right-color:var(--bad)}
+.ritem.part{border-right-color:var(--flag)}
+.ritem .top{display:flex;justify-content:space-between;gap:10px;font:800 13px/1.4 var(--f-ui);color:var(--muted);margin-bottom:6px}
+.ritem .q{font:800 18px/1.7 var(--f-ui);color:var(--navy)}
+.ritem .ans{font:700 16px/1.8 var(--f-ui);margin-top:6px}
+.ritem .ans .you{color:var(--bad)}
+.ritem .ans .right{color:var(--ok)}
+.ritem .ev{margin-top:8px;background:#FBF5E8;border-radius:12px;padding:10px 14px;font:600 15px/1.8 var(--f-ui);color:var(--text)}
+.ritem .ev b{color:var(--gold-ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* iPad / touch */
+*{-webkit-tap-highlight-color:transparent}
+button,select,.flip,.chip,.opt,.mopt,.qopt{touch-action:manipulation}
+html,body{overscroll-behavior:none}
+
+.en{display:block;direction:ltr;text-align:left;unicode-bidi:isolate;font:600 .8em/1.55 "Segoe UI",system-ui,-apple-system,sans-serif;color:var(--muted);margin-top:3px}
+.en.i{display:inline;margin-inline-start:8px;margin-top:0;font-size:.78em;white-space:normal}
+.qtext .en{font-size:17px;font-weight:600;line-height:1.6;margin-top:8px}
+.hero .en,header .en{color:#CFE0E8}
+.hero h1+.en{font-size:19px;margin:-2px 0 8px;color:var(--gold-soft)}
+.hero p .en{margin-top:8px;font-size:.85em}
+.opt .en{margin-top:2px}
+.opt>span{min-width:0}
+.chipq .en{margin-top:2px}
+.btn .en.i,.opt .en.i{color:inherit;opacity:.85}
+.btn.gold .en.i{color:var(--deep)}
+.noen .hen{display:none}
+.langb{border:1px solid #2A5266;background:var(--deep);color:#fff;border-radius:30px;padding:7px 14px;font:700 14px/1 var(--f-ui)}
+.langb[aria-pressed="false"]{opacity:.65}
+.ritem .en{font-size:.82em}
+.ritem .ev .en{margin-top:5px}
+</style>
+
+<header><div class="wrap">
+  <div class="brand"><div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5c3-1.5 7-1.5 10 1 3-2.5 7-2.5 10-1v14c-3-1.5-7-1.5-10 1-3-2.5-7-2.5-10-1z"/><path d="M12 6v14"/></svg></div>
+   <div><b>اخْتِبَارُ فِقْهِ الشَّبَابِ</b><small>فقه الشباب (الدرسان الأول والثاني) · مراتب الدين والبلوغ وغض البصر<span class="en i hen" style="display:block;margin:0">Fiqh for Youth Exam · Lessons 1 and 2</span></small></div></div>
+  <button class="langb" id="langb" type="button" aria-pressed="true">عربي + English</button>
+  <div class="timer" id="timer" hidden><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg><span id="tleft">30:00</span></div>
+  <div class="hprog" id="hprog" hidden><i></i></div>
+</div></header>
+
+<main id="root"></main>
+
+<script>
+(function(){
+const MIN=35;          // مدة الاختبار بالدقائق
+const PER=2.5;           // درجة كل سؤال (40 × 2.5 = 100)
+const KEY='fiqh-exam-1-2-v1';
+
+const ICON={
+ layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+ moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+ eye:'<path d="M3 3l18 18"/><path d="M10.6 5.1A10.9 10.9 0 0 1 12 5c5 0 9 4.5 10 7-.4 1-1.3 2.4-2.6 3.7M6.6 6.6C4.4 8 2.8 10 2 12c1 2.5 5 7 10 7 1.7 0 3.3-.5 4.7-1.3"/>',
+ shirt:'<path d="M8 3l-5 3 2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>',
+ mosque:'<path d="M12 3c-3 2-5 4-5 7h10c0-3-2-5-5-7z"/><path d="M4 21V11h16v10M10 21v-5h4v5M2 21h20"/>',
+ ball:'<circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 4.5h-5L8 10z"/>',
+ hands:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5a5 5 0 0 1 5.5 5"/>',
+ gavel:'<path d="M14 4l6 6M11 7l6 6M12.5 5.5l-6 6 3 3 6-6M8 13l-6 6 2 2 6-6"/>',
+ check:'<path d="M4 12.5l5 5L20 6.5"/>', x:'<path d="M6 6l12 12M18 6L6 18"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ arrowR:'<path d="M5 12h14M13 6l6 6-6 6"/>', arrowL:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+ copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+ redo:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>'
+};
+const I=(n,a='')=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${a}>${ICON[n]}</svg>`;
+
+const SECS=[
+ ['مَرَاتِبُ الدِّينِ','layers'],
+ ['البُلُوغُ وَعَلَامَاتُهُ','moon'],
+ ['غَضُّ البَصَرِ وَحِفْظُ الفَرْجِ','eye']
+];
+
+/* t: mcq | tf | match | order ;  a = index of right option (mcq) / true|false (tf) ; fix = don't shuffle options */
+const Q=[
+ // 0 مراتب الدين
+ {s:0,t:'mcq',q:'مَنِ «الضَّيْفُ الغَرِيبُ» الَّذِي جَاءَ يَسْأَلُ النَّبِيَّ ﷺ عَنِ الدِّينِ؟',o:['جِبْرِيلُ عَلَيْهِ السَّلَامُ','عُمَرُ بْنُ الخَطَّابِ','رَجُلٌ مِنَ اليَمَنِ','أَبُو بَكْرٍ الصِّدِّيقُ'],a:0,ev:'قَالَ النَّبِيُّ ﷺ: «فَإِنَّهُ جِبْرِيلُ أَتَاكُمْ يُعَلِّمُكُمْ دِينَكُمْ» [مسلم]. كَانَ مَلَكًا جَاءَ فِي صُورَةِ بَشَرٍ.'},
+ {s:0,t:'mcq',q:'بَعْدَ أَنْ ذَهَبَ الضَّيْفُ، لِمَنْ قَالَ النَّبِيُّ ﷺ: «أَتَدْرِي مَنِ السَّائِلُ؟»',o:['عُمَرَ بْنِ الخَطَّابِ','عَلِيِّ بْنِ أَبِي طَالِبٍ','أَبِي هُرَيْرَةَ','عَائِشَةَ'],a:0,ev:'قَالَ ﷺ لِعُمَرَ: «يَا عُمَرُ، أَتَدْرِي مَنِ السَّائِلُ؟» قَالَ: اللهُ وَرَسُولُهُ أَعْلَمُ. قَالَ: «فَإِنَّهُ جِبْرِيلُ» [مسلم].'},
+ {s:0,t:'order',q:'رَتِّبْ مَرَاتِبَ الدِّينِ مِنَ الطَّابَقِ الأَوَّلِ إِلَى الأَعْلَى:',items:['الإِسْلَامُ','الإِيمَانُ','الإِحْسَانُ'],ev:'الدِّينُ ثَلَاثُ مَرَاتِبَ مُتَصَاعِدَةٍ: الإِسْلَامُ، ثُمَّ الإِيمَانُ، ثُمَّ الإِحْسَانُ وَهُوَ أَعْلَاهَا.'},
+ {s:0,t:'match',q:'صِلْ كُلَّ مَرْتَبَةٍ بِتَعْرِيفِهَا:',pairs:[['الإِسْلَامُ','الاسْتِسْلَامُ لِلهِ بِالتَّوْحِيدِ، وَالانْقِيَادُ لَهُ بِالطَّاعَةِ'],['الإِيمَانُ','التَّصْدِيقُ القَلْبِيُّ وَالاعْتِقَادُ البَاطِنُ'],['الإِحْسَانُ','أَنْ تَعْبُدَ اللهَ كَأَنَّكَ تَرَاهُ']],ev:'وَتَمَامُ تَعْرِيفِ الإِحْسَانِ: «أَنْ تَعْبُدَ اللهَ كَأَنَّكَ تَرَاهُ، فَإِنْ لَمْ تَكُنْ تَرَاهُ فَإِنَّهُ يَرَاكَ».'},
+ {s:0,t:'mcq',q:'مَحَلُّ الإِيمَانِ (مَكَانُهُ) هُوَ:',o:['القَلْبُ','الجَوَارِحُ (اليَدُ وَالرِّجْلُ…)','اللِّسَانُ فَقَطْ','المَسْجِدُ'],a:0,ev:'الإِيمَانُ أَعْمَالٌ خَفِيَّةٌ فِي القَلْبِ لَا يَعْلَمُهَا إِلَّا اللهُ، وَالإِسْلَامُ أَعْمَالٌ ظَاهِرَةٌ بِالجَوَارِحِ يَرَاهَا النَّاسُ.'},
+ {s:0,t:'order',q:'رَتِّبْ أَرْكَانَ الإِسْلَامِ الخَمْسَةَ كَمَا جَاءَتْ فِي حَدِيثِ جِبْرِيلَ:',items:['الشَّهَادَتَانِ','إِقَامُ الصَّلَاةِ','إِيتَاءُ الزَّكَاةِ','صَوْمُ رَمَضَانَ','حَجُّ البَيْتِ'],ev:'«الإِسْلَامُ أَنْ تَشْهَدَ أَنْ لَا إِلَهَ إِلَّا اللهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللهِ، وَتُقِيمَ الصَّلَاةَ، وَتُؤْتِيَ الزَّكَاةَ، وَتَصُومَ رَمَضَانَ، وَتَحُجَّ البَيْتَ إِنِ اسْتَطَعْتَ إِلَيْهِ سَبِيلًا» [مسلم].'},
+ {s:0,t:'mcq',q:'أَيُّ هَذِهِ لَيْسَ مِنْ أَرْكَانِ الإِسْلَامِ؟',o:['الإِيمَانُ بِالمَلَائِكَةِ','إِقَامُ الصَّلَاةِ','صَوْمُ رَمَضَانَ','حَجُّ البَيْتِ'],a:0,ev:'الإِيمَانُ بِالمَلَائِكَةِ مِنْ أَرْكَانِ «الإِيمَانِ» السِّتَّةِ، لَا مِنْ أَرْكَانِ الإِسْلَامِ.'},
+ {s:0,t:'mcq',q:'كَمْ رُكْنًا لِلْإِيمَانِ؟',o:['سِتَّةٌ','خَمْسَةٌ','ثَلَاثَةٌ','رُكْنٌ وَاحِدٌ'],a:0,ev:'«أَنْ تُؤْمِنَ بِاللهِ، وَمَلَائِكَتِهِ، وَكُتُبِهِ، وَرُسُلِهِ، وَاليَوْمِ الآخِرِ، وَتُؤْمِنَ بِالقَدَرِ خَيْرِهِ وَشَرِّهِ» [مسلم].'},
+ {s:0,t:'mcq',q:'أَيُّ هَذِهِ مِنْ أَرْكَانِ الإِيمَانِ؟',o:['الإِيمَانُ بِالقَدَرِ خَيْرِهِ وَشَرِّهِ','إِيتَاءُ الزَّكَاةِ','صَوْمُ رَمَضَانَ','حَجُّ البَيْتِ'],a:0,ev:'الزَّكَاةُ وَالصَّوْمُ وَالحَجُّ مِنْ أَرْكَانِ الإِسْلَامِ، وَالقَدَرُ مِنْ أَرْكَانِ الإِيمَانِ.'},
+ {s:0,t:'tf',q:'الإِحْسَانُ رُكْنٌ وَاحِدٌ فَقَطْ، وَهُوَ أَعْلَى مَرَاتِبِ الدِّينِ.',a:true,ev:'الإِحْسَانُ رُكْنٌ وَاحِدٌ، لَكِنَّهُ الأَصْعَبُ وَالأَجْمَلُ، وَهُوَ مَقَامُ الكَمَالِ وَالإِتْقَانِ.'},
+ {s:0,t:'tf',q:'كُلُّ مُسْلِمٍ قَدْ وَصَلَ إِلَى مَرْتَبَةِ الإِحْسَانِ.',a:false,ev:'كُلُّ مُحْسِنٍ مُؤْمِنٌ وَمُسْلِمٌ بِالضَّرُورَةِ، لَكِنْ لَيْسَ كُلُّ مُسْلِمٍ وَصَلَ إِلَى الإِحْسَانِ.'},
+ {s:0,t:'mcq',q:'فِي «دَوَائِرِ الدِّينِ»: أَوْسَعُ دَائِرَةٍ هِيَ… وَأَضْيَقُهَا هِيَ…',o:['الإِسْلَامُ أَوْسَعُهَا، وَالإِحْسَانُ أَضْيَقُهَا','الإِحْسَانُ أَوْسَعُهَا، وَالإِسْلَامُ أَضْيَقُهَا','الإِيمَانُ أَوْسَعُهَا، وَالإِسْلَامُ أَضْيَقُهَا','كُلُّهَا بِنَفْسِ الحَجْمِ'],a:0,ev:'الهَدَفُ أَنْ نَرْتَقِيَ مِنَ الدَّائِرَةِ الوَاسِعَةِ (الإِسْلَامِ) إِلَى المَرْكَزِ المُضِيءِ (الإِحْسَانِ).'},
+ // 1 البلوغ (فقه الشباب 1–9)
+ {s:1,t:'mcq',q:'مَعْنَى «البُلُوغِ» فِي اللُّغَةِ:',o:['الوُصُولُ وَالانْتِهَاءُ','الكَلَامُ وَالنُّطْقُ','القُوَّةُ وَالطُّولُ','العِلْمُ وَالفَهْمُ'],a:0,ev:'يُقَالُ: بَلَغَ الشَّيْءُ يَبْلُغُ بُلُوغًا: وَصَلَ وَانْتَهَى.'},
+ {s:1,t:'mcq',q:'مَعْنَى «البُلُوغِ» فِي الاصْطِلَاحِ (فِي الشَّرْعِ):',o:['انْتِهَاءُ حَدِّ الصِّغَرِ؛ لِيَكُونَ الشَّخْصُ أَهْلًا لِلتَّكَالِيفِ الشَّرْعِيَّةِ','أَنْ يَحْفَظَ الشَّخْصُ القُرْآنَ كُلَّهُ','أَنْ يَتَزَوَّجَ الشَّخْصُ','أَنْ يَبْلُغَ الشَّخْصُ 21 سَنَةً'],a:0,ev:'إِذَا بَلَغَ الشَّابُّ صَارَ «مُكَلَّفًا»: تَجِبُ عَلَيْهِ الصَّلَاةُ وَالصَّوْمُ، وَيُحَاسَبُ عَلَى أَعْمَالِهِ.'},
+ {s:1,t:'mcq',q:'عَلَامَاتُ البُلُوغِ المُشْتَرَكَةُ بَيْنَ الذَّكَرِ وَالأُنْثَى:',o:['الاحْتِلَامُ','الإِنْبَاتُ','بُلُوغُ خَمْسَ عَشْرَةَ سَنَةً قَمَرِيَّةً','كُلُّ مَا سَبَقَ'],a:3,fix:1,ev:'العَلَامَاتُ المُشْتَرَكَةُ ثَلَاثٌ: الاحْتِلَامُ، وَالإِنْبَاتُ، وَبُلُوغُ خَمْسَ عَشْرَةَ سَنَةً.'},
+ {s:1,t:'mcq',q:'مَا هُوَ «الإِنْبَاتُ»؟',o:['ظُهُورُ شَعْرِ العَانَةِ الَّذِي يَحْتَاجُ إِلَى الحَلْقِ','ظُهُورُ الأَسْنَانِ','طُولُ الجِسْمِ','ظُهُورُ شَعْرِ الرَّأْسِ'],a:0,ev:'الإِنْبَاتُ: ظُهُورُ شَعْرِ العَانَةِ الَّذِي يَحْتَاجُ فِي إِزَالَتِهِ إِلَى الحَلْقِ.'},
+ {s:1,t:'mcq',q:'إِذَا لَمْ تَظْهَرْ عَلَامَةٌ أُخْرَى، يَبْلُغُ الإِنْسَانُ عِنْدَ تَمَامِ:',o:['15 سَنَةً قَمَرِيَّةً','12 سَنَةً','18 سَنَةً','21 سَنَةً'],a:0,ev:'لِحَدِيثِ ابْنِ عُمَرَ: «عَرَضَنِي رَسُولُ اللهِ ﷺ يَوْمَ أُحُدٍ وَأَنَا ابْنُ أَرْبَعَ عَشْرَةَ فَلَمْ يُجِزْنِي، وَعَرَضَنِي يَوْمَ الخَنْدَقِ وَأَنَا ابْنُ خَمْسَ عَشْرَةَ فَأَجَازَنِي» [متفق عليه].'},
+ {s:1,t:'mcq',q:'العَلَامَتَانِ الخَاصَّتَانِ بِالأُنْثَى هُمَا:',o:['الحَيْضُ وَالحَمْلُ','الإِنْبَاتُ وَالاحْتِلَامُ','الطُّولُ وَالوَزْنُ','الصَّوْتُ وَالشَّعْرُ'],a:0,ev:'لِحَدِيثِ «لَا يَقْبَلُ اللهُ صَلَاةَ حَائِضٍ إِلَّا بِخِمَارٍ»، وَالمُرَادُ بِالحَائِضِ: البَالِغَةُ.'},
+ {s:1,t:'tf',q:'إِذَا احْتَلَمَ الشَّابُّ فِي نَوْمِهِ وَلَمْ يَجِدْ مَنِيًّا، فَلَا غُسْلَ عَلَيْهِ.',a:true,ev:'الحُكْمُ مُتَعَلِّقٌ بِخُرُوجِ المَنِيِّ؛ فَإِنْ لَمْ يَجِدْ مَنِيًّا فَلَا غُسْلَ عَلَيْهِ.'},
+ {s:1,t:'tf',q:'اسْتَيْقَظَ فَوَجَدَ مَنِيًّا، وَلَا يَذْكُرُ أَنَّهُ احْتَلَمَ: فَعَلَيْهِ الغُسْلُ.',a:true,ev:'إِنِ اسْتَيْقَظَ فَوَجَدَ بَلَلًا وَلَا يَذْكُرُ احْتِلَامًا: فَعَلَيْهِ الاغْتِسَالُ إِنْ كَانَ البَلَلُ مَنِيًّا.'},
+ {s:1,t:'tf',q:'إِذَا أَحَسَّ أَنَّهُ يُوشِكُ أَنْ يُنْزِلَ، وَلَمْ يُنْزِلْ، فَعَلَيْهِ الغُسْلُ.',a:false,ev:'لَا شَيْءَ عَلَيْهِ إِلَّا إِذَا أَنْزَلَ فِعْلًا.'},
+ {s:1,t:'match',q:'صِلْ كُلَّ وَاحِدٍ بِصِفَتِهِ:',pairs:[['المَنِيُّ','أَبْيَضُ غَلِيظٌ، يَخْرُجُ بِدَفْقٍ عِنْدَ اشْتِدَادِ الشَّهْوَةِ'],['المَذْيُ','رَقِيقٌ شَفَّافٌ، يَخْرُجُ بِلَا دَفْقٍ عِنْدَ الشَّهْوَةِ أَوِ التَّفْكِيرِ'],['الوَدْيُ','أَبْيَضُ ثَخِينٌ، يَخْرُجُ بَعْدَ البَوْلِ']],ev:'الوَدْيُ لَيْسَ لَهُ عَلَاقَةٌ بِالشَّهْوَةِ.'},
+ {s:1,t:'match',q:'صِلْ كُلَّ وَاحِدٍ بِحُكْمِهِ:',pairs:[['المَنِيُّ','يُوجِبُ الغُسْلَ الكَامِلَ'],['المَذْيُ','يُوجِبُ الوُضُوءَ وَغَسْلَ الذَّكَرِ فَقَطْ'],['الوَدْيُ','حُكْمُهُ حُكْمُ البَوْلِ: يُوجِبُ الوُضُوءَ']],ev:'المَنِيُّ وَحْدَهُ يُوجِبُ الغُسْلَ، أَمَّا المَذْيُ وَالوَدْيُ فَيُوجِبَانِ الوُضُوءَ.'},
+ {s:1,t:'order',q:'رَتِّبْ صِفَةَ الغُسْلِ الكَامِلِ مِنَ الجَنَابَةِ:',items:['النِّيَّةُ وَالبَسْمَلَةُ','غَسْلُ اليَدَيْنِ ثَلَاثًا، ثُمَّ الفَرْجِ','الوُضُوءُ كَوُضُوءِ الصَّلَاةِ','إِفَاضَةُ المَاءِ عَلَى الرَّأْسِ ثَلَاثًا','إِفَاضَةُ المَاءِ عَلَى الجَسَدِ بِالأَيْمَنِ ثُمَّ الأَيْسَرِ','غَسْلُ القَدَمَيْنِ'],ev:'هَذِهِ هِيَ الصِّفَةُ الكَامِلَةُ لِلْغُسْلِ. وَالنِّيَّةُ مَحَلُّهَا القَلْبُ.'},
+ {s:1,t:'mcq',q:'لِلْغُسْلِ صِفَتَانِ: كَامِلَةٌ وَمُجْزِئَةٌ. الصِّفَةُ المُجْزِئَةُ (أَقَلُّ مَا يَكْفِي) هِيَ:',o:['النِّيَّةُ، وَتَعْمِيمُ الجَسَدِ كُلِّهِ بِالمَاءِ','غَسْلُ الرَّأْسِ فَقَطْ','الوُضُوءُ فَقَطْ','غَسْلُ اليَدَيْنِ وَالقَدَمَيْنِ'],a:0,ev:'يَكْفِي أَنْ يَنْوِيَ، ثُمَّ يُعَمِّمَ جَسَدَهُ كُلَّهُ بِالمَاءِ. وَالأَفْضَلُ الصِّفَةُ الكَامِلَةُ.'},
+
+ // 2 غض البصر وحفظ الفرج (الدرس الثاني)
+ {s:2,t:'mcq',q:'مَا مَعْنَى «غَضِّ البَصَرِ»؟',o:['إِنْزَالُ العَيْنِ وَصَرْفُهَا عَنِ الحَرَامِ','إِغْلَاقُ العَيْنَيْنِ دَائِمًا','النَّوْمُ مُبَكِّرًا','النَّظَرُ إِلَى السَّمَاءِ فَقَطْ'],a:0,ev:'غَضُّ البَصَرِ: إِنْزَالُ العَيْنِ وَصَرْفُهَا عَنِ الحَرَامِ، وَلَيْسَ إِغْلَاقَهَا دَائِمًا؛ فَالآيَةُ فِيهَا «مِنْ أَبْصَارِهِمْ».'},
+ {s:2,t:'mcq',q:'فِي أَيِّ سُورَةٍ جَاءَ قَوْلُهُ تَعَالَى: ﴿قُل لِّلْمُؤْمِنِينَ يَغُضُّوا مِنْ أَبْصَارِهِمْ وَيَحْفَظُوا فُرُوجَهُمْ﴾؟',o:['النُّورِ','البَقَرَةِ','الكَهْفِ','يس'],a:0,ev:'﴿قُل لِّلْمُؤْمِنِينَ يَغُضُّوا مِنْ أَبْصَارِهِمْ وَيَحْفَظُوا فُرُوجَهُمْ ۚ ذَٰلِكَ أَزْكَىٰ لَهُمْ ۗ إِنَّ اللَّهَ خَبِيرٌ بِمَا يَصْنَعُونَ﴾ [النُّورُ: 30].'},
+ {s:2,t:'mcq',q:'مَا مَعْنَى كَلِمَةِ ﴿أَزْكَىٰ لَهُمْ﴾ فِي الآيَةِ؟',o:['أَطْهَرُ لَهُمْ وَأَنْقَى لِقُلُوبِهِمْ','أَسْرَعُ لَهُمْ','أَغْنَى لَهُمْ','أَقْوَى لِأَجْسَامِهِمْ'],a:0,ev:'﴿أَزْكَىٰ﴾ = أَطْهَرُ: قَلْبٌ أَنْظَفُ وَأَقْوَى. وَخَتَمَ اللهُ الآيَةَ بِقَوْلِهِ: ﴿إِنَّ اللَّهَ خَبِيرٌ بِمَا يَصْنَعُونَ﴾ أَيْ يَرَاكَ وَيَعْلَمُ حَتَّى فِي غُرْفَتِكَ.'},
+ {s:2,t:'tf',q:'الأَمْرُ بِغَضِّ البَصَرِ لِلرِّجَالِ فَقَطْ، وَلَا تُؤْمَرُ بِهِ النِّسَاءُ.',a:false,ev:'قَالَ تَعَالَى بَعْدَ الآيَةِ: ﴿وَقُل لِّلْمُؤْمِنَاتِ يَغْضُضْنَ مِنْ أَبْصَارِهِنَّ﴾ [النُّورُ: 31]، فَالأَمْرُ لِلرِّجَالِ وَالنِّسَاءِ.'},
+ {s:2,t:'mcq',q:'قَالَ ﷺ لِعَلِيٍّ رَضِيَ اللهُ عَنْهُ: «يَا عَلِيُّ، لَا تُتْبِعِ النَّظْرَةَ النَّظْرَةَ، فَإِنَّ لَكَ الأُولَى، وَلَيْسَتْ لَكَ الآخِرَةُ». مَاذَا نَفْهَمُ مِنْهُ؟',o:['النَّظْرَةُ الأُولَى فَجْأَةً بِلَا قَصْدٍ لَا إِثْمَ فِيهَا، وَالثَّانِيَةُ بِاخْتِيَارِكَ عَلَيْكَ فِيهَا إِثْمٌ','النَّظْرَتَانِ كِلْتَاهُمَا جَائِزَتَانِ','النَّظْرَةُ الأُولَى حَرَامٌ وَالثَّانِيَةُ جَائِزَةٌ','لَا فَرْقَ بَيْنَ النَّظْرَتَيْنِ'],a:0,ev:'رَوَاهُ أَبُو دَاوُدَ وَالتِّرْمِذِيُّ، وَحَسَّنَهُ الأَلْبَانِيُّ. النَّظْرَةُ الأُولَى فَجْأَةً لَا إِثْمَ فِيهَا، أَمَّا تَكْرَارُ النَّظَرِ أَوْ إِطَالَتُهُ فَبِاخْتِيَارِكَ.'},
+ {s:2,t:'mcq',q:'رَأَيْتَ فَجْأَةً شَيْئًا حَرَامًا عَلَى هَاتِفِكَ. مَا الَّذِي تَفْعَلُهُ فِي «قَاعِدَةِ الثَّانِيَةِ الوَاحِدَةِ»؟',o:['أَصْرِفُ عَيْنِي وَأُغْلِقُهُ فَوْرًا','أُكْمِلُ النَّظَرَ قَلِيلًا','أَحْفَظُهُ فِي هَاتِفِي','أُرْسِلُهُ لِصَدِيقِي'],a:0,ev:'قَالَ جَرِيرٌ رَضِيَ اللهُ عَنْهُ: سَأَلْتُ النَّبِيَّ ﷺ عَنْ نَظْرَةِ الفَجْأَةِ «فَأَمَرَنِي أَنْ أَصْرِفَ بَصَرِي» [مسلم]. وَالحِفْظُ وَالإِرْسَالُ تَكْرَارٌ لِلنَّظَرِ وَنَشْرٌ لِلحَرَامِ.'},
+ {s:2,t:'match',q:'صِلْ كُلَّ وَاحِدَةٍ بِحُكْمِ النَّظَرِ إِلَيْهَا:',pairs:[['الزَّوْجَةُ','يَجُوزُ النَّظَرُ إِلَيْهَا فِي كُلِّ حَالٍ'],['المَحَارِمُ (الأُمُّ وَالأُخْتُ وَالعَمَّةُ…)','يَجُوزُ النَّظَرُ إِلَى مَا يَظْهَرُ مِنْهُنَّ عَادَةً'],['المَرْأَةُ الأَجْنَبِيَّةُ','لَا يَجُوزُ، وَأَصْرِفُ بَصَرِي إِلَّا لِضَرُورَةٍ كَالطَّبِيبِ']],ev:'الأَجْنَبِيَّةُ هِيَ مَنْ لَيْسَتْ زَوْجَةً وَلَا مَحْرَمًا، وَلَا يَجُوزُ النَّظَرُ إِلَيْهَا إِلَّا لِضَرُورَةٍ.'},
+ {s:2,t:'tf',q:'الصُّورَةُ عَلَى الشَّاشَةِ لَيْسَتْ كَالشَّارِعِ، فَلَا حَرَجَ فِي النَّظَرِ إِلَيْهَا.',a:false,ev:'الشَّاشَةُ مِثْلُ الشَّارِعِ: الصُّوَرُ وَالفِيدْيُوهَاتُ وَالأَلْعَابُ وَالإِعْلَانَاتُ لَهَا نَفْسُ الحُكْمِ.'},
+ {s:2,t:'mcq',q:'مَاذَا سَأَلَ النَّبِيُّ ﷺ الشَّابَّ الَّذِي جَاءَهُ يَطْلُبُ الإِذْنَ فِي الزِّنَا؟',o:['«أَتُحِبُّهُ لِأُمِّكَ؟»','«كَمْ عُمْرُكَ؟»','«أَيْنَ تَسْكُنُ؟»','«لِمَاذَا تَقُولُ هَذَا؟»'],a:0,ev:'سَأَلَهُ ﷺ بِرِفْقٍ: «أَتُحِبُّهُ لِأُمِّكَ؟»، ثُمَّ لِأُخْتِهِ وَعَمَّتِهِ وَخَالَتِهِ، ثُمَّ دَعَا لَهُ: «اللَّهُمَّ اغْفِرْ ذَنْبَهُ، وَطَهِّرْ قَلْبَهُ، وَحَصِّنْ فَرْجَهُ» [أحمد، وصححه الألباني].'},
+ {s:2,t:'mcq',q:'قَالَ ﷺ: «يَا مَعْشَرَ الشَّبَابِ، مَنِ اسْتَطَاعَ مِنْكُمُ البَاءَةَ فَلْيَتَزَوَّجْ… وَمَنْ لَمْ يَسْتَطِعْ فَعَلَيْهِ بِالصَّوْمِ». مَا مَعْنَى «البَاءَةِ»؟',o:['القُدْرَةُ عَلَى الزَّوَاجِ','الخَوْفُ مِنَ اللهِ','كَثْرَةُ المَالِ فَقَطْ','السَّفَرُ'],a:0,ev:'مُتَّفَقٌ عَلَيْهِ. البَاءَةُ = القُدْرَةُ عَلَى الزَّوَاجِ، وَالوِجَاءُ = حِمَايَةٌ، فَالصَّوْمُ يَحْمِي الشَّابَّ.'},
+ {s:2,t:'mcq',q:'مَا حُكْمُ العَادَةِ السِّرِّيَّةِ عِنْدَ جُمْهُورِ العُلَمَاءِ (أَكْثَرِهِمْ)؟',o:['حَرَامٌ','مُبَاحَةٌ','سُنَّةٌ','وَاجِبَةٌ'],a:0,ev:'قَالَ تَعَالَى: ﴿وَالَّذِينَ هُمْ لِفُرُوجِهِمْ حَافِظُونَ … فَمَنِ ابْتَغَىٰ وَرَاءَ ذَٰلِكَ فَأُولَٰئِكَ هُمُ الْعَادُونَ﴾ [المُؤْمِنُونَ: 5–7]. وَالبَدِيلُ الشَّرْعِيُّ: الزَّوَاجُ عِنْدَ القُدْرَةِ، وَقَبْلَهُ الصَّوْمُ.'},
+ {s:2,t:'mcq',q:'أَيُّ هَذِهِ الأُمُورِ يَحْمِيكَ مِنَ الوُقُوعِ فِي الحَرَامِ؟',o:['وَضْعُ الهَاتِفِ خَارِجَ غُرْفَةِ النَّوْمِ لَيْلًا','الجُلُوسُ وَحْدَكَ مَعَ المَلَلِ وَالهَاتِفِ','مُتَابَعَةُ حِسَابَاتٍ تَنْشُرُ صُوَرًا سَيِّئَةً','السَّهَرُ عَلَى الهَاتِفِ فِي الظَّلَامِ'],a:0,ev:'اللَّيْلُ وَالوَحْدَةُ وَالمَلَلُ مِنْ أَوْقَاتِ الخَطَرِ. وَمِنَ الحِمَايَةِ أَيْضًا: بَرْنَامَجُ فِلْتَر، وَالرِّيَاضَةُ، وَالصُّحْبَةُ الصَّالِحَةُ، وَالصَّلَاةُ فِي وَقْتِهَا، وَالصَّوْمُ.'},
+ {s:2,t:'order',q:'رَتِّبْ خُطُوَاتِ التَّوْبَةِ كَمَا جَاءَتْ فِي الدَّرْسِ:',items:['أَتْرُكُ الذَّنْبَ الآنَ','أَنْدَمُ فِي قَلْبِي','أَعْزِمُ أَلَّا أَرْجِعَ','أَفْعَلُ حَسَنَةً: صَلَاةً أَوْ صَدَقَةً أَوْ قُرْآنًا'],ev:'التَّوْبَةُ: تَرْكُ الذَّنْبِ، وَالنَّدَمُ، وَالعَزْمُ عَلَى عَدَمِ العَوْدَةِ، ثُمَّ إِتْبَاعُ السَّيِّئَةِ بِحَسَنَةٍ.'},
+ {s:2,t:'tf',q:'إِذَا وَقَعَ الشَّابُّ فِي الذَّنْبِ، فَإِنَّ اللهَ لَا يَغْفِرُ لَهُ أَبَدًا.',a:false,ev:'﴿قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ ۚ إِنَّ اللَّهَ يَغْفِرُ الذُّنُوبَ جَمِيعًا﴾ [الزُّمَرُ: 53].'},
+ {s:2,t:'mcq',q:'قَالَ تَعَالَى: ﴿إِنَّ السَّمْعَ وَالْبَصَرَ وَالْفُؤَادَ كُلُّ أُولَٰئِكَ كَانَ عَنْهُ مَسْئُولًا﴾. مَاذَا نَتَعَلَّمُ مِنْهَا؟',o:['العَيْنُ أَمَانَةٌ وَسَيَسْأَلُنَا اللهُ عَنْهَا','العَيْنُ مِلْكٌ لَنَا نَفْعَلُ بِهَا مَا نُرِيدُ','لَا حِسَابَ عَلَى النَّظَرِ','السُّؤَالُ عَنِ اللِّسَانِ فَقَطْ'],a:0,ev:'[الإِسْرَاءُ: 36]. اللهُ أَعْطَانَا السَّمْعَ وَالبَصَرَ وَالقَلْبَ أَمَانَةً، وَسَيَسْأَلُنَا عَنْهَا.'}
+];
+
+const QE=[{"q": "Who was the “strange guest” who came to ask the Prophet ﷺ about the religion?", "o": ["Jibreel (Gabriel), peace be upon him", "Umar ibn al-Khattab", "A man from Yemen", "Abu Bakr as-Siddiq"], "ev": "The Prophet ﷺ said: “It was Jibreel; he came to teach you your religion” [Muslim]. He was an angel who came in the form of a man."}, {"q": "After the guest left, to whom did the Prophet ﷺ say: “Do you know who the questioner was?”", "o": ["Umar ibn al-Khattab", "Ali ibn Abi Talib", "Abu Hurayrah", "Aisha"], "ev": "He ﷺ said to Umar: “O Umar, do you know who the questioner was?” He said: Allah and His Messenger know best. He said: “It was Jibreel” [Muslim]."}, {"q": "Arrange the levels of the religion from the first floor to the highest:", "items": ["Islam", "Iman (faith)", "Ihsan (excellence)"], "ev": "The religion has three rising levels: Islam, then Iman, then Ihsan, which is the highest."}, {"q": "Match each level with its definition:", "pairs": [["Islam", "Submitting to Allah through Tawheed and obeying Him"], ["Iman", "Belief of the heart and inner conviction"], ["Ihsan", "To worship Allah as if you see Him"]], "ev": "The rest of the definition of Ihsan: “…to worship Allah as if you see Him, and if you do not see Him, then He sees you.”"}, {"q": "The place of Iman (faith) is:", "o": ["The heart", "The limbs (hand, foot…)", "The tongue only", "The mosque"], "ev": "Iman is hidden deeds of the heart that only Allah knows. Islam is outward deeds of the limbs that people can see."}, {"q": "Arrange the five pillars of Islam as they came in the Hadith of Jibreel:", "items": ["The two testimonies of faith", "Establishing the prayer", "Paying zakah", "Fasting Ramadan", "Hajj to the House"], "ev": "“Islam is that you testify that there is no god but Allah and that Muhammad is the Messenger of Allah, establish the prayer, pay the zakah, fast Ramadan, and perform Hajj to the House if you are able” [Muslim]."}, {"q": "Which of these is NOT a pillar of Islam?", "o": ["Belief in the angels", "Establishing the prayer", "Fasting Ramadan", "Hajj to the House"], "ev": "Belief in the angels is one of the six pillars of Iman, not of Islam."}, {"q": "How many pillars does Iman have?", "o": ["Six", "Five", "Three", "One pillar"], "ev": "“To believe in Allah, His angels, His books, His messengers, the Last Day, and to believe in the divine decree (qadar), its good and its bad” [Muslim]."}, {"q": "Which of these is a pillar of Iman?", "o": ["Belief in the divine decree, its good and its bad", "Paying zakah", "Fasting Ramadan", "Hajj to the House"], "ev": "Zakah, fasting and Hajj are pillars of Islam, while belief in the decree is a pillar of Iman."}, {"q": "Ihsan is only one pillar, and it is the highest level of the religion.", "ev": "Ihsan is one pillar, but it is the hardest and the most beautiful. It is the level of perfection and excellence."}, {"q": "Every Muslim has reached the level of Ihsan.", "ev": "Every person of Ihsan is necessarily a believer and a Muslim, but not every Muslim has reached Ihsan."}, {"q": "In the “circles of the religion”, the widest circle is… and the narrowest is…", "o": ["Islam is the widest, Ihsan is the narrowest", "Ihsan is the widest, Islam is the narrowest", "Iman is the widest, Islam is the narrowest", "All of them are the same size"], "ev": "The goal is to rise from the wide circle (Islam) to the shining center (Ihsan)."}, {"q": "The meaning of “bulugh” (puberty) in the Arabic language:", "o": ["Arriving and reaching the end", "Speaking and pronouncing", "Strength and height", "Knowledge and understanding"], "ev": "It is said: balagha ash-shay’u yablughu bulughan: the thing arrived and reached its end."}, {"q": "The meaning of “bulugh” (puberty) in the Shariah:", "o": ["The end of childhood, so that the person becomes responsible for the religious duties", "Memorizing the whole Quran", "Getting married", "Reaching 21 years old"], "ev": "When a young man reaches puberty he becomes “mukallaf” (accountable): prayer and fasting become obligatory on him and he is held accountable for his deeds."}, {"q": "The signs of puberty shared by males and females:", "o": ["Wet dream (ihtilam)", "Growth of pubic hair (inbat)", "Reaching fifteen lunar years", "All of the above"], "ev": "There are three shared signs: ihtilam, inbat, and reaching fifteen years."}, {"q": "What is “inbat”?", "o": ["The growth of pubic hair that needs shaving", "The growth of teeth", "Height of the body", "The growth of head hair"], "ev": "Inbat: the appearance of pubic hair that needs a razor to remove."}, {"q": "If no other sign appears, a person reaches puberty at the completion of:", "o": ["15 lunar years", "12 years", "18 years", "21 years"], "ev": "From the hadith of Ibn Umar: “The Messenger of Allah ﷺ presented me on the day of Uhud when I was fourteen and did not accept me, and presented me on the day of the Trench when I was fifteen and accepted me” [agreed upon]."}, {"q": "The two signs specific to females are:", "o": ["Menstruation and pregnancy", "Inbat and ihtilam", "Height and weight", "Voice and hair"], "ev": "From the hadith: “Allah does not accept the prayer of a haa’id except with a head-covering.” The haa’id here means a woman who has reached puberty."}, {"q": "If a young man has a wet dream in his sleep but finds no semen, he does not need to do ghusl.", "ev": "The ruling depends on semen coming out. If he finds no semen, no ghusl is required."}, {"q": "He woke up and found semen, and does not remember having a wet dream: he must do ghusl.", "ev": "If he wakes up and finds wetness without remembering a dream, he must do ghusl if the wetness is semen."}, {"q": "If he felt he was about to ejaculate but did not, he must do ghusl.", "ev": "Nothing is required unless he actually ejaculated."}, {"q": "Match each one with its description:", "pairs": [["Mani (semen)", "White and thick, comes out in spurts at peak desire"], ["Madhy (pre-seminal fluid)", "Thin and clear, comes out without spurting at desire or at thinking about it"], ["Wadi", "White and thick, comes out after urination"]], "ev": "Wadi has nothing to do with desire."}, {"q": "Match each one with its ruling:", "pairs": [["Mani (semen)", "Requires the full ghusl"], ["Madhy (pre-seminal fluid)", "Requires wudu and washing the private part only"], ["Wadi", "Same ruling as urine: requires wudu"]], "ev": "Only mani requires ghusl. Madhy and wadi require wudu."}, {"q": "Arrange the complete way of ghusl from janabah:", "items": ["Intention and saying bismillah", "Wash the hands three times, then the private part", "Wudu like the wudu for prayer", "Pour water over the head three times", "Pour water over the body, right side then left", "Wash the feet"], "ev": "This is the complete way of ghusl. The intention is in the heart."}, {"q": "Ghusl has two forms: complete and sufficient. The sufficient form (the minimum) is:", "o": ["The intention, and covering the whole body with water", "Washing the head only", "Wudu only", "Washing the hands and feet"], "ev": "It is enough to intend, then cover the whole body with water. The complete form is better."}, {"q": "What does “ghadd al-basar” (lowering the gaze) mean?", "o": ["Lowering the eye and turning it away from the haram", "Keeping the eyes closed all the time", "Sleeping early", "Looking only at the sky"], "ev": "Lowering the gaze means lowering the eye and turning it away from what is haram. It does not mean keeping it closed all the time, because the verse says “min absarihim” (from their gaze)."}, {"q": "In which surah did Allah say: “Tell the believing men to lower their gaze and guard their private parts”?", "o": ["An-Nur", "Al-Baqarah", "Al-Kahf", "Ya-Sin"], "ev": "“Tell the believing men to lower their gaze and guard their private parts. That is purer for them. Indeed, Allah is Aware of what they do.” [An-Nur: 30]."}, {"q": "What is the meaning of “azka lahum” in the verse?", "o": ["Purer for them and cleaner for their hearts", "Faster for them", "Richer for them", "Stronger for their bodies"], "ev": "“Azka” means purer: a cleaner and stronger heart. Allah ended the verse with “Indeed, Allah is Aware of what they do”: He sees you and knows, even in your room."}, {"q": "The command to lower the gaze is for men only, and women are not commanded with it.", "ev": "Allah said after the verse: “And tell the believing women to lower their gaze” [An-Nur: 31]. The command is for men and women."}, {"q": "The Prophet ﷺ said to Ali: “O Ali, do not follow a glance with another glance, for the first is yours but the second is not.” What do we understand from it?", "o": ["The first sudden glance without intention carries no sin; the second, by choice, carries sin", "Both glances are permitted", "The first glance is haram and the second is permitted", "There is no difference between the two glances"], "ev": "Narrated by Abu Dawud and at-Tirmidhi; al-Albani graded it hasan. The sudden first glance carries no sin, while repeating or prolonging the look is by your own choice."}, {"q": "You suddenly see something haram on your phone. What do you do by the “One-Second Rule”?", "o": ["I turn my eyes away and close it immediately", "I keep looking for a little while", "I save it on my phone", "I send it to my friend"], "ev": "Jarir (may Allah be pleased with him) said: I asked the Prophet ﷺ about a sudden glance, “and he commanded me to turn my gaze away” [Muslim]. Saving it or sending it is repeating the look and spreading the haram."}, {"q": "Match each woman with the ruling on looking at her:", "pairs": [["The wife", "It is permitted to look at her in every case"], ["Mahrams (mother, sister, aunt…)", "It is permitted to look at what normally shows of them"], ["The non-mahram woman", "Not permitted; I lower my gaze, except for a necessity such as a doctor"]], "ev": "A non-mahram woman is one who is neither a wife nor a mahram. It is not permitted to look at her except for a necessity."}, {"q": "A picture on a screen is not like the street, so there is no harm in looking at it.", "ev": "The screen is like the street: pictures, videos, games and ads have the same ruling."}, {"q": "What did the Prophet ﷺ ask the young man who came asking permission to commit zina?", "o": ["“Would you like it for your mother?”", "“How old are you?”", "“Where do you live?”", "“Why do you say this?”"], "ev": "He ﷺ asked him gently: “Would you like it for your mother?”, then for his sister, his paternal aunt and his maternal aunt. Then he prayed for him: “O Allah, forgive his sin, purify his heart, and protect his chastity” [Ahmad, authenticated by al-Albani]."}, {"q": "The Prophet ﷺ said: “O young men, whoever among you is able to marry, let him marry… and whoever is not able, let him fast.” What is the meaning of “ba’ah”?", "o": ["The ability to marry", "Fear of Allah", "Having a lot of money only", "Travel"], "ev": "Agreed upon. Ba’ah means the ability to marry, and wija’ means protection: fasting protects the young man."}, {"q": "What is the ruling on masturbation according to the majority of scholars?", "o": ["Haram", "Permissible", "Sunnah", "Obligatory"], "ev": "Allah said: “And those who guard their private parts… but whoever seeks beyond that, those are the transgressors” [Al-Mu’minun: 5–7]. The lawful alternative: marriage when able, and before it, fasting."}, {"q": "Which of these protects you from falling into the haram?", "o": ["Putting the phone outside the bedroom at night", "Sitting alone with boredom and the phone", "Following accounts that post bad pictures", "Staying up on the phone in the dark"], "ev": "Night, loneliness and boredom are danger times. Other protections: a filter program, sports, good friends, praying on time, and fasting."}, {"q": "Arrange the steps of repentance as they came in the lesson:", "items": ["I leave the sin now", "I feel regret in my heart", "I resolve not to return", "I do a good deed: prayer, charity or Quran"], "ev": "Repentance: leaving the sin, regret, the resolve not to return, then following the bad deed with a good one."}, {"q": "If a young man falls into a sin, Allah will never forgive him.", "ev": "“Say: O My servants who have transgressed against themselves, do not despair of the mercy of Allah. Indeed, Allah forgives all sins” [Az-Zumar: 53]."}, {"q": "Allah said: “Indeed, the hearing, the sight and the heart — about all those one will be questioned.” What do we learn from it?", "o": ["The eye is a trust, and Allah will ask us about it", "The eye is ours to use as we like", "There is no accountability for looking", "Only the tongue is questioned"], "ev": "[Al-Isra: 36]. Allah gave us hearing, sight and heart as a trust, and He will ask us about them."}];
+const SECS_EN=["Levels of the Religion", "Puberty and Its Signs", "Lowering the Gaze and Guarding the Chastity"];
+const TYPE_EN={"mcq": "Multiple choice", "tf": "True or false", "match": "Matching", "order": "Ordering"};
+let EN=true;try{const v=localStorage.getItem(KEY+'-en');if(v!==null)EN=v==='1'}catch(e){}
+let SCREEN='start';
+const E=(t,c='')=>EN&&t?`<span class="en ${c}" dir="ltr" lang="en">${t}</span>`:'';
+const TYPE={mcq:'اخْتِيَارٌ مِنْ مُتَعَدِّدٍ',tf:'صَحٌّ أَمْ خَطَأٌ',match:'تَوْصِيلٌ',order:'تَرْتِيبٌ'};
+const LET=['أ','ب','ج','د'];
+const root=document.getElementById('root');
+const $=s=>document.querySelector(s);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* state */
+let S=null; // {name,group,start,end,order:[qi],optOrder:{qi:[...]},ans:{},flags:{},cur,done}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){return null}}
+
+/* ---------- start screen ---------- */
+function startScreen(){SCREEN='start';
+ $('#timer').hidden=true;$('#hprog').hidden=true;
+ const prev=load();
+ const counts=SECS.map((_,i)=>Q.filter(q=>q.s===i).length);
+ root.innerHTML=`<div class="wrap start">
+ <section class="hero"><div class="eb">اخْتِبَارُ الدَّرْسَيْنِ الأَوَّلِ وَالثَّانِي${E('Exam on Lessons 1 and 2','i')}</div><h1>مَرَاتِبُ الدِّينِ وَالبُلُوغُ وَغَضُّ البَصَرِ</h1>${E('Levels of the Religion · Puberty · Lowering the Gaze')}
+  <p>اخْتِبَارٌ عَلَى دُرُوسِ «مَرَاتِبِ الدِّينِ» وَ«البُلُوغِ وَعَلَامَاتِهِ» وَ«غَضِّ البَصَرِ وَحِفْظِ الفَرْجِ». اقْرَأْ كُلَّ سُؤَالٍ جَيِّدًا، ثُمَّ اخْتَرِ الإِجَابَةَ. بِالتَّوْفِيقِ إِنْ شَاءَ اللهُ.${E('An exam on the lessons “Levels of the Religion”, “Puberty and Its Signs” and “Lowering the Gaze and Guarding the Chastity”. Read each question carefully, then choose the answer. Good luck, in sha Allah.')}</p>
+  <div class="stats"><div class="stat"><b>${Q.length}</b><span>سُؤَالًا${E('questions')}</span></div><div class="stat"><b>100</b><span>الدَّرَجَةُ الكُلِّيَّةُ${E('total score')}</span></div><div class="stat"><b>${MIN}</b><span>دَقِيقَةً${E('minutes')}</span></div><div class="stat"><b>${SECS.length}</b><span>أَقْسَامٍ${E('sections')}</span></div></div>
+ </section>
+ <div class="grid2">
+  <section class="panel"><h2>بَيَانَاتُ الطَّالِبِ${E('Student details','i')}</h2>
+   <div class="field"><label for="sname">الاسْمُ الكَامِلُ${E('Full name','i')}</label><input id="sname" autocomplete="name" placeholder="اكْتُبِ اسْمَكَ هُنَا / Write your name here" value="${esc(prev&&!prev.done?prev.name:'')}"></div>
+   <div class="field"><label for="sgroup">المَجْمُوعَةُ أَوِ الفَصْلُ (اخْتِيَارِيٌّ)${E('Group or class (optional)','i')}</label><input id="sgroup" placeholder="مِثَالٌ: مَجْمُوعَةُ السَّبْتِ" value="${esc(prev&&!prev.done?prev.group||'':'')}"></div>
+   <h2 style="margin-top:6px">التَّعْلِيمَاتُ${E('Instructions','i')}</h2>
+   <ol class="rules">
+    <li>عِنْدَكَ <b>${MIN} دَقِيقَةً</b>. عِنْدَمَا يَنْتَهِي الوَقْتُ، يُسَلَّمُ الاخْتِبَارُ وَحْدَهُ.${E(`You have ${MIN} minutes. When time is up, the exam is submitted automatically.`)}</li>
+    <li>كُلُّ سُؤَالٍ = <b>${PER} دَرَجَةٍ</b>. فِي «التَّوْصِيلِ» وَ«التَّرْتِيبِ» تَأْخُذُ جُزْءًا مِنَ الدَّرَجَةِ عَلَى كُلِّ جُزْءٍ صَحِيحٍ.${E(`Each question = ${PER} marks. In matching and ordering you get part of the mark for each correct part.`)}</li>
+    <li>تَسْتَطِيعُ الرُّجُوعَ لِأَيِّ سُؤَالٍ، وَوَضْعَ <b>عَلَامَةِ مُرَاجَعَةٍ</b> عَلَى السُّؤَالِ.${E('You can go back to any question and mark it for review.')}</li>
+    <li>بَعْدَ التَّسْلِيمِ تَرَى دَرَجَتَكَ، وَالإِجَابَةَ الصَّحِيحَةَ مَعَ الدَّلِيلِ.${E('After submitting you see your score, and the correct answer with the evidence.')}</li>
+   </ol>
+  </section>
+  <section class="panel"><h2>أَقْسَامُ الاخْتِبَارِ${E('Exam sections','i')}</h2><div class="units">
+   ${SECS.map((s,i)=>`<div class="unit"><div class="ic">${I(s[1])}</div><span>${s[0]}${E(SECS_EN[i])}</span><em>${counts[i]} ${counts[i]>10?'سُؤَالًا':'أَسْئِلَةٍ'}</em></div>`).join('')}
+  </div></section>
+ </div>
+ <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px">
+  ${prev&&!prev.done?`<button class="btn gold" id="resume">أَكْمِلِ الاخْتِبَارَ السَّابِقَ${E('Continue previous exam','i')} ${I('arrowL')}</button><button class="btn ghost" id="go">ابْدَأْ مِنْ جَدِيدٍ${E('Start over','i')}</button>`:`<button class="btn gold" id="go">ابْدَأِ الاخْتِبَارَ${E('Start the exam','i')} ${I('arrowL')}</button>`}
+  <span class="err" id="err"></span>
+ </div></div>`;
+ $('#go').onclick=()=>{const n=$('#sname').value.trim();if(n.length<3){$('#err').textContent='اكْتُبِ اسْمَكَ أَوَّلًا (3 أَحْرُفٍ عَلَى الأَقَلِّ). / Write your name first (at least 3 letters).';$('#sname').focus();return}
+  // shuffle questions inside each section, keep section order; shuffle options
+  const order=[];SECS.forEach((_,si)=>shuffle(Q.map((q,i)=>i).filter(i=>Q[i].s===si)).forEach(i=>order.push(i)));
+  const optOrder={};Q.forEach((q,i)=>{if(q.t==='mcq')optOrder[i]=q.fix?[0,1,2,3]:shuffle([0,1,2,3]);if(q.t==='match')optOrder[i]=shuffle(q.pairs.map((_,k)=>k));if(q.t==='order')optOrder[i]=shuffle(q.items.map((_,k)=>k))});
+  S={name:n,group:$('#sgroup').value.trim(),start:Date.now(),end:Date.now()+MIN*60000,order,optOrder,ans:{},flags:{},cur:0,done:false};save();examScreen()};
+ const r=$('#resume');if(r)r.onclick=()=>{S=prev;if(Date.now()>=S.end){finish();return}examScreen()};
+}
+
+/* ---------- exam ---------- */
+let tick=null;
+function answered(qi){const q=Q[qi],a=S.ans[qi];if(a==null)return false;
+ if(q.t==='match')return q.pairs.every((_,k)=>a[k]!=null&&a[k]!=='');
+ if(q.t==='order')return a.length===q.items.length;return true}
+function examScreen(){SCREEN='exam';
+ $('#timer').hidden=false;$('#hprog').hidden=false;
+ root.innerHTML=`<div class="wrap exam"><section class="qcard" id="qcard" aria-live="polite"></section>
+ <aside class="side"><h3>خَرِيطَةُ الأَسْئِلَةِ${E('Question map','i')}</h3><div class="map" id="map"></div>
+  <div class="legend"><span><i style="background:var(--navy);border-color:var(--navy)"></i>أُجِيبَ${E('Answered','i')}</span><span><i></i>لَمْ يُجَبْ${E('Not answered','i')}</span><span><i style="background:var(--flag);border-color:var(--flag);border-radius:50%"></i>لِلْمُرَاجَعَةِ${E('For review','i')}</span></div>
+  <div class="counts" id="counts"></div></aside></div>
+ <div class="bottombar"><div class="wrap"><button class="btn ghost" id="prev">${I('arrowR')} السَّابِقُ${E('Previous','i')}</button><div class="sp"></div><button class="btn" id="next">التَّالِي${E('Next','i')} ${I('arrowL')}</button><button class="btn gold" id="submit">تَسْلِيمٌ${E('Submit','i')}</button></div></div>`;
+ $('#prev').onclick=()=>go(S.cur-1);$('#next').onclick=()=>go(S.cur+1);$('#submit').onclick=confirmSubmit;
+ clearInterval(tick);tick=setInterval(updTimer,500);updTimer();render();
+}
+function updTimer(){const ms=Math.max(0,S.end-Date.now());const m=Math.floor(ms/60000),s=Math.floor(ms/1000)%60;
+ $('#tleft').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('#timer').classList.toggle('warn',ms<5*60000);
+ if(ms<=0){clearInterval(tick);finish()}}
+function go(i){if(i<0||i>=S.order.length)return;S.cur=i;save();render();window.scrollTo({top:0,behavior:'smooth'})}
+function render(){
+ const qi=S.order[S.cur],q=Q[qi],a=S.ans[qi];
+ let body='';
+ if(q.t==='mcq'){body=`<div class="opts">${S.optOrder[qi].map((k,pos)=>`<button class="opt ${a===k?'sel':''}" data-k="${k}"><b>${LET[pos]}</b><span>${q.o[k]}${E(QE[qi].o[k])}</span></button>`).join('')}</div>`}
+ else if(q.t==='tf'){body=`<div class="opts tf"><button class="opt ${a===true?'sel':''}" data-tf="1">${I('check')} <span>صَحٌّ${E('True','i')}</span></button><button class="opt ${a===false?'sel':''}" data-tf="0">${I('x')} <span>خَطَأٌ${E('False','i')}</span></button></div>`}
+ else if(q.t==='match'){const rights=S.optOrder[qi];const cur=a||{};
+  body=`<p class="hint">اخْتَرْ مِنَ القَائِمَةِ المَعْنَى المُنَاسِبَ لِكُلِّ كَلِمَةٍ.${E('Choose the matching meaning for each word from the list.')}</p>${q.pairs.map((p,k)=>`<div class="mrow"><span class="l">${p[0]}${E(QE[qi].pairs[k][0])}</span><select data-k="${k}" class="${cur[k]!=null&&cur[k]!==''?'done':''}" aria-label="${esc(p[0])}"><option value="">— اخْتَرْ / Choose —</option>${rights.map(r=>`<option value="${r}" ${String(cur[k])===String(r)?'selected':''}>${q.pairs[r][1]}${EN?' / '+QE[qi].pairs[r][1]:''}</option>`).join('')}</select></div>`).join('')}`}
+ else if(q.t==='order'){const seq=a||[];const pool=S.optOrder[qi].filter(k=>!seq.includes(k));
+  body=`<p class="hint">اضْغَطْ عَلَى الخُطُوَاتِ بِالتَّرْتِيبِ. لِلتَّعْدِيلِ: اضْغَطْ عَلَى الخُطْوَةِ فِي «تَرْتِيبِكَ» لِتُرْجِعَهَا.${E('Tap the steps in order. To change, tap a step in “Your order” to put it back.')}</p>
+  <div class="order"><div><h4>الخُطُوَاتُ${E('Steps','i')}</h4><div class="pool">${pool.length?pool.map(k=>`<button class="chipq" data-add="${k}">${q.items[k]}${E(QE[qi].items[k])}</button>`).join(''):'<span class="empty">تَمَّ! ✓ Done!</span>'}</div></div>
+  <div><h4>تَرْتِيبُكَ${E('Your order','i')}</h4><div class="seq">${seq.length?seq.map((k,n)=>`<button class="chipq" data-rm="${n}"><b>${n+1}</b><span>${q.items[k]}${E(QE[qi].items[k])}</span></button>`).join(''):'<span class="empty">ابْدَأْ بِالضَّغْطِ عَلَى الخُطْوَةِ الأُولَى. / Tap the first step to begin.</span>'}</div></div></div>`}
+ const sec=SECS[q.s];
+ $('#qcard').innerHTML=`<div class="qhead"><span class="sec">${I(sec[1])}${sec[0]}${E(SECS_EN[q.s],'i')}</span><span class="qtype">${TYPE[q.t]}${E(TYPE_EN[q.t],'i')}</span></div>
+  <div class="qn">سُؤَالٌ ${S.cur+1} مِنْ ${S.order.length}${E(`Question ${S.cur+1} of ${S.order.length}`,'i')}</div>
+  <div class="qtext">${q.q}${E(QE[qi].q)}</div>${body}
+  <div class="qfoot"><button class="flagb ${S.flags[qi]?'on':''}" id="flag">${I('flag')} ${S.flags[qi]?'عَلَيْهِ عَلَامَةُ مُرَاجَعَةٍ':'ضَعْ عَلَامَةَ مُرَاجَعَةٍ'}${E(S.flags[qi]?'Marked for review':'Mark for review','i')}</button><span class="qn">${PER} دَرَجَةٍ${E(`${PER} marks`,'i')}</span></div>`;
+ const card=$('#qcard');
+ card.querySelectorAll('[data-k].opt').forEach(b=>b.onclick=()=>{S.ans[qi]=+b.dataset.k;save();render()});
+ card.querySelectorAll('[data-tf]').forEach(b=>b.onclick=()=>{S.ans[qi]=b.dataset.tf==='1';save();render()});
+ card.querySelectorAll('select').forEach(sl=>sl.onchange=()=>{const cur=Object.assign({},S.ans[qi]||{});cur[sl.dataset.k]=sl.value===''?null:+sl.value;S.ans[qi]=cur;save();render()});
+ card.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{S.ans[qi]=(S.ans[qi]||[]).concat(+b.dataset.add);save();render()});
+ card.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{const s=(S.ans[qi]||[]).slice();s.splice(+b.dataset.rm,1);S.ans[qi]=s.length?s:null;save();render()});
+ $('#flag').onclick=()=>{S.flags[qi]=!S.flags[qi];save();render()};
+ $('#prev').disabled=S.cur===0;$('#next').disabled=S.cur===S.order.length-1;
+ // map
+ $('#map').innerHTML=S.order.map((qq,n)=>`<button class="${answered(qq)?'ans':''} ${n===S.cur?'cur':''} ${S.flags[qq]?'fl':''}" data-n="${n}" aria-label="سؤال ${n+1}">${n+1}</button>`).join('');
+ $('#map').querySelectorAll('button').forEach(b=>b.onclick=()=>go(+b.dataset.n));
+ const done=S.order.filter(answered).length,fl=S.order.filter(x=>S.flags[x]).length;
+ $('#counts').innerHTML=`أُجِيبَ: <b>${done}</b> مِنْ ${S.order.length}<br>لِلْمُرَاجَعَةِ: <b>${fl}</b>${E(`Answered: ${done} of ${S.order.length} · For review: ${fl}`)}`;
+ $('#hprog i').style.width=(done/S.order.length*100)+'%';
+}
+function confirmSubmit(){
+ const left=S.order.filter(x=>!answered(x)).length;
+ const m=document.createElement('div');m.className='modal';
+ m.innerHTML=`<div class="mbox" role="dialog" aria-modal="true"><h3>تَسْلِيمُ الاخْتِبَارِ؟${E('Submit the exam?','i')}</h3><p>${left?`بَقِيَ <b style="color:var(--bad)">${left}</b> ${left>10?'سُؤَالًا':'أَسْئِلَةٍ'} بِدُونِ إِجَابَةٍ. هَلْ تُرِيدُ التَّسْلِيمَ الآنَ؟`:'أَجَبْتَ عَنْ كُلِّ الأَسْئِلَةِ. بَعْدَ التَّسْلِيمِ لَا يُمْكِنُ التَّعْدِيلُ.'}${E(left?`${left} unanswered. Do you want to submit now?`:'You answered every question. After submitting you cannot change your answers.')}</p>
+ <div class="row"><button class="btn gold" id="yes">نَعَمْ، سَلِّمْ${E('Yes, submit','i')}</button><button class="btn ghost" id="no">رُجُوعٌ لِلْأَسْئِلَةِ${E('Back to questions','i')}</button></div></div>`;
+ document.body.appendChild(m);m.querySelector('#yes').focus();
+ m.querySelector('#no').onclick=()=>m.remove();m.onclick=e=>{if(e.target===m)m.remove()};
+ m.querySelector('#yes').onclick=()=>{m.remove();finish()};
+}
+
+/* ---------- grading ---------- */
+function grade(qi){const q=Q[qi],a=S.ans[qi];
+ if(q.t==='mcq')return a===q.a?1:0;
+ if(q.t==='tf')return a===q.a?1:0;
+ if(q.t==='match'){if(!a)return 0;let c=0;q.pairs.forEach((_,k)=>{if(a[k]===k)c++});return c/q.pairs.length}
+ if(q.t==='order'){if(!a)return 0;let c=0;q.items.forEach((_,k)=>{if(a[k]===k)c++});return c/q.items.length}
+ return 0}
+const LABEL_EN=p=>p>=90?'Excellent':p>=80?'Very good':p>=65?'Good':p>=50?'Acceptable':'Needs review';
+function label(p){return p>=90?'مُمْتَازٌ':p>=80?'جَيِّدٌ جِدًّا':p>=65?'جَيِّدٌ':p>=50?'مَقْبُولٌ':'يَحْتَاجُ مُرَاجَعَةً'}
+
+function finish(){SCREEN='res';
+ clearInterval(tick);S.done=true;S.finishedAt=S.finishedAt||Date.now();save();
+ $('#timer').hidden=true;$('#hprog').hidden=true;
+ const g={};S.order.forEach(qi=>g[qi]=grade(qi));
+ let total=Math.round(S.order.reduce((t,qi)=>t+g[qi]*PER,0)*2)/2;
+ const pct=total;const used=Math.round((S.finishedAt-S.start)/60000);
+ const secs=SECS.map((s,i)=>{const qs=Q.map((q,k)=>k).filter(k=>Q[k].s===i);const got=qs.reduce((t,k)=>t+g[k],0);return {name:s[0],en:SECS_EN[i],got,max:qs.length,p:Math.round(got/qs.length*100)}});
+ const date=new Date(S.finishedAt).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
+ const nOk=S.order.filter(x=>g[x]===1).length,nBad=S.order.filter(x=>g[x]===0).length,nPart=S.order.length-nOk-nBad;
+ const summary=`نتيجة اختبار البلوغ ومراتب الدين وغض البصر / Result: Levels of the Religion, Puberty, Lowering the Gaze\nالاسم: ${S.name}${S.group?'\nالمجموعة: '+S.group:''}\nالدرجة: ${total} / 100 (${label(pct).replace(/[ً-ْ]/g,'')})\nالتاريخ: ${date} · الوقت: ${used} دقيقة\n`+secs.map(s=>`- ${s.name.replace(/[ً-ْ]/g,'')}: ${s.p}%`).join('\n');
+ const C=2*Math.PI*52;
+ root.innerHTML=`<div class="wrap results">
+ <section class="cert"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#0E2A38" stroke-width="12"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#C9A35A" stroke-width="12" stroke-linecap="round" stroke-dasharray="0 ${C}" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1)"/></svg><div class="v"><div><b>${total}</b><span>مِنْ 100${E('out of 100')}</span></div></div></div>
+  <div><div class="eb">نَتِيجَةُ اخْتِبَارِ فِقْهِ الشَّبَابِ${E('Fiqh for Youth Exam Result','i')}</div><h2>${esc(S.name)}</h2><span class="grade">${label(pct)}${E(LABEL_EN(pct),'i')}</span>
+   <p>${S.group?esc(S.group)+' · ':''}${date} · الوَقْتُ: ${used} دَقِيقَةً<br>صَحِيحٌ: ${nOk} · جُزْئِيٌّ: ${nPart} · خَطَأٌ أَوْ بِدُونِ إِجَابَةٍ: ${nBad}${E(`Correct: ${nOk} · Partial: ${nPart} · Wrong or unanswered: ${nBad}`)}</p>
+   <div class="dua">«مَنْ يُرِدِ اللهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ»</div></div></section>
+ <div class="rgrid">
+  <section class="panel"><h2>النَّتِيجَةُ فِي كُلِّ قِسْمٍ${E('Result in each section','i')}</h2>${secs.map(s=>`<div class="brow"><span>${s.name}${E(s.en)}</span><div class="tr"><i class="${s.p<50?'lo':s.p>=85?'hi':''}" data-w="${s.p}" style="width:0"></i></div><b>${s.p}%</b></div>`).join('')}</section>
+  <section class="panel"><h2>أَرْسِلْ نَتِيجَتَكَ لِلْمُعَلِّمِ${E('Send your result to the teacher','i')}</h2><p style="margin:0 0 12px;font:600 15.5px/1.8 var(--f-ui);color:var(--muted)">انْسَخِ النَّتِيجَةَ وَأَرْسِلْهَا لِلْمُعَلِّمِ عَلَى وَاتْسَاب، أَوْ خُذْ صُورَةً (سكرين شوت) لِهَذِهِ الصَّفْحَةِ.${E('Copy the result and send it to the teacher on WhatsApp, or take a screenshot of this page.')}</p>
+   <div class="actions"><button class="btn" id="copy">${I('copy')} نَسْخُ النَّتِيجَةِ${E('Copy result','i')}</button><button class="btn ghost" id="again">${I('redo')} اخْتِبَارٌ جَدِيدٌ${E('New exam','i')}</button></div>
+   <textarea class="copybox" id="cbox" readonly aria-label="نص النتيجة">${esc(summary)}</textarea><div class="err" id="cmsg" style="color:var(--ok)"></div></section>
+ </div>
+ <section class="review"><h2>مُرَاجَعَةُ الإِجَابَاتِ${E('Review of answers','i')}</h2>
+  <div class="filters"><button class="on" data-f="all">الكُلُّ (${S.order.length})${E('All','i')}</button><button data-f="bad">الأَخْطَاءُ (${nBad+nPart})${E('Mistakes','i')}</button><button data-f="ok">الصَّحِيحُ (${nOk})${E('Correct','i')}</button></div>
+  <div id="rlist"></div></section></div>`;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{$('#arc').setAttribute('stroke-dasharray',`${C*pct/100} ${C}`);document.querySelectorAll('.brow i').forEach(i=>i.style.width=i.dataset.w+'%')}));
+ $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary);$('#cmsg').textContent='تَمَّ النَّسْخُ ✓'}catch(e){const t=$('#cbox');t.focus();t.select();$('#cmsg').textContent='النَّصُّ مُحَدَّدٌ: اضْغَطْ «نَسْخ» مِنْ لَوْحَةِ المَفَاتِيحِ.'}};
+ $('#again').onclick=()=>{const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mbox"><h3>اخْتِبَارٌ جَدِيدٌ؟</h3><p>سَتُحْذَفُ هَذِهِ النَّتِيجَةُ مِنْ هَذَا الجِهَازِ. انْسَخْهَا أَوَّلًا إِنْ لَمْ تُرْسِلْهَا.</p><div class="row"><button class="btn gold" id="y">نَعَمْ</button><button class="btn ghost" id="n">إِلْغَاءٌ</button></div></div>`;document.body.appendChild(m);
+  m.querySelector('#n').onclick=()=>m.remove();m.querySelector('#y').onclick=()=>{m.remove();try{localStorage.removeItem(KEY)}catch(e){}S=null;startScreen();window.scrollTo(0,0)}};
+ function ansText(qi){const q=Q[qi],a=S.ans[qi];
+  const X=QE[qi];
+  if(q.t==='mcq')return {you:a==null?'—':q.o[a]+E(X.o[a]),right:q.o[q.a]+E(X.o[q.a])};
+  if(q.t==='tf')return {you:a==null?'—':(a?'صَحٌّ'+E('True','i'):'خَطَأٌ'+E('False','i')),right:q.a?'صَحٌّ'+E('True','i'):'خَطَأٌ'+E('False','i')};
+  if(q.t==='match')return {you:a?q.pairs.map((p,k)=>p[0]+' ← '+(a[k]!=null?q.pairs[a[k]][1]:'—')+E(X.pairs[k][0]+' ← '+(a[k]!=null?X.pairs[a[k]][1]:'—'),'i')).join('<br>'):'—',right:q.pairs.map((p,k)=>p[0]+' ← '+p[1]+E(X.pairs[k][0]+' ← '+X.pairs[k][1],'i')).join('<br>')};
+  if(q.t==='order')return {you:a?a.map(k=>q.items[k]).join(' ← ')+E(a.map(k=>X.items[k]).join(' → '),'i'):'—',right:q.items.join(' ← ')+E(X.items.join(' → '),'i')};}
+ function list(f){$('#rlist').innerHTML=S.order.map((qi,n)=>({qi,n})).filter(({qi})=>f==='all'||(f==='ok'?g[qi]===1:g[qi]<1)).map(({qi,n})=>{const q=Q[qi],t=ansText(qi),v=g[qi];
+  return `<article class="ritem ${v===1?'':v===0?'bad':'part'}"><div class="top"><span>سُؤَالٌ ${n+1} · ${SECS[q.s][0]}${E(`Question ${n+1} · ${SECS_EN[q.s]}`,'i')}</span><span>${Math.round(v*PER*10)/10} / ${PER}</span></div>
+  <div class="q">${q.q}${E(QE[qi].q)}</div><div class="ans">${v===1?`<span class="right">✓ ${t.right}</span>`:`<span class="you">إِجَابَتُكَ${E('Your answer','i')}: ${t.you}</span><br><span class="right">الصَّوَابُ${E('Correct','i')}: ${t.right}</span>`}</div>
+  <div class="ev"><b>الدَّلِيلُ${E('Evidence','i')}: </b>${q.ev}${E(QE[qi].ev)}</div></article>`}).join('')||'<p class="hint">لَا يُوجَدُ. / None.</p>'}
+ list('all');
+ document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');list(b.dataset.f)});
+ window.scrollTo(0,0);
+}
+
+const lb=document.getElementById('langb');
+lb.onclick=()=>{EN=!EN;try{localStorage.setItem(KEY+'-en',EN?'1':'0')}catch(e){}document.documentElement.classList.toggle('noen',!EN);lb.setAttribute('aria-pressed',EN?'true':'false');lb.textContent=EN?'عربي + English':'عربي فقط';
+ if(SCREEN==='start'){const a=document.getElementById('sname'),b=document.getElementById('sgroup');const va=a?a.value:'',vb=b?b.value:'';startScreen();if(va)document.getElementById('sname').value=va;if(vb)document.getElementById('sgroup').value=vb}
+ else if(SCREEN==='exam'){render()} else if(SCREEN==='res'){finish()}};
+if(!EN){document.documentElement.classList.add('noen');lb.setAttribute('aria-pressed','false');lb.textContent='عربي فقط'}
+/* boot */
+const prev=load();
+if(prev&&prev.done){S=prev;finish()}else startScreen();
+})();
+</script>
+</body></html>
