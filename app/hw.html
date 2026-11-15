@@ -58,7 +58,7 @@ audio{width:100%;margin-top:8px}
   <div id="items"></div>
   <div id="after"></div>
 </div>
-<div class="bar" id="bar" hidden><button class="btn" id="send" type="button"></button></div>
+<div class="bar" id="bar" hidden><input id="gname" type="text" hidden autocomplete="name" style="font:inherit;font-size:1.05rem;padding:10px 14px;border-radius:14px;border:2px solid var(--gold);background:var(--card);color:var(--ink);min-width:0;flex:1;max-width:320px;margin-inline-end:8px"><button class="btn" id="send" type="button"></button></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
@@ -79,6 +79,7 @@ audio{width:100%;margin-top:8px}
     record: ['🎙️ سجّل صوتك', '🎙️ Record your voice'], stop: ['⏹ إيقاف', '⏹ Stop'], again: ['🔁 سجّل تاني', '🔁 Record again'],
     nomic: ['المتصفح ما سمحش بالميكروفون. اسمح بالميكروفون وجرّب تاني.', 'The browser did not allow the microphone. Please allow it and try again.'],
     missing: ['فاضل أسئلة ما جاوبتهاش. تسلّم كده؟', 'Some questions have no answer. Send anyway?'],
+    gname: ['✍️ اكتب اسمك هنا', '✍️ Write your name here'], needName: ['دي حلقة جماعية: اكتب اسمك قبل التسليم علشان المعلم يعرف مين اللي سلّم.', 'This is a group class: write your name before sending so the teacher knows who sent it.'],
     done: ['✅ اتسلّم! جزاك الله خيرًا', '✅ Sent! Jazāk Allāhu khayran'],
     score: ['درجتك', 'Your score'], heard: ['المعلم هيسمع تسجيلك ويرد عليك.', 'Your teacher will listen to your recording and reply.'],
     teacher: ['ملاحظة المعلم على آخر مرة', "Teacher's note on your last try"], redo: ['المعلم طلب تعيد الواجب', 'Your teacher asked you to do it again'],
@@ -140,6 +141,10 @@ audio{width:100%;margin-top:8px}
     });
     $('after').innerHTML = sent ? sentBox : '';
     $('bar').hidden = sent || !items.length; $('send').textContent = L('send');
+    /* group class (content.group): every student writes his own name with the homework */
+    { const g = $('gname'), grp = !!(A.content && A.content.group); g.hidden = !grp || sent; g.placeholder = L('gname');
+      $('bar').style.display = grp && !sent ? 'flex' : ''; $('bar').style.alignItems = 'center'; $('bar').style.justifyContent = 'center';
+      if(grp && !g.value){ try{ g.value = localStorage.getItem('tq-gname') || ''; }catch(_){} } }
     lit = '';
   }
 
@@ -329,6 +334,9 @@ audio{width:100%;margin-top:8px}
   }
 
   $('send').onclick = async () => {
+    const grp = !!(A.content && A.content.group), gname = ($('gname').value || '').trim();
+    if(grp && !gname){ alert(L('needName')); $('gname').focus(); return; }
+    if(grp) try{ localStorage.setItem('tq-gname', gname); }catch(_){}
     const items = (A.content && A.content.items) || [];
     const mcq = items.map((it, i) => [it, i]).filter(x => x[0].type === 'mcq');
     if(mcq.some(x => chosen[x[1]] == null) && !confirm(L('missing'))) return;
@@ -356,7 +364,7 @@ audio{width:100%;margin-top:8px}
       const right = mcq.filter(x => chosen[x[1]] === x[0].answer).length;
       const listen = qs.map(x => ({i: x[1], reps: x[0].reps, reps_done: st(x[1]).done ? x[0].reps : Math.max(0, (st(x[1]).reps_done || 0)), done: !!st(x[1]).done}));
       const page = pg.map(x => Object.assign({i: x[1]}, pageRes[x[1]] || {score: null, max: null, done: false, details: []}));
-      const answers = {listen, mcq: mcq.map(x => ({i: x[1], chose: chosen[x[1]] == null ? null : chosen[x[1]], right: chosen[x[1]] === x[0].answer})), recite, page};
+      const answers = {name: grp ? gname : undefined, listen, mcq: mcq.map(x => ({i: x[1], chose: chosen[x[1]] == null ? null : chosen[x[1]], right: chosen[x[1]] === x[0].answer})), recite, page};
       const pMax = page.reduce((t, p) => t + (p.max || 0), 0), pScore = page.reduce((t, p) => t + (p.max ? (p.score || 0) : 0), 0);
       const tot = right + pScore, totMax = mcq.length + pMax;
       const r = await db.rpc('submit_assignment', {p_token: token, p_score: totMax ? tot : null, p_max: totMax || null,
