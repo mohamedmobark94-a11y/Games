@@ -11,7 +11,7 @@
      Opened on its own (no body), the page shows a catalogue of every activity; ?theme=kid-girl switches the theme.
      Builder reference: the comment block "BUILDERS" in the script. -->
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ===== theme tokens ===== */
 :root{--s:1}
@@ -24,17 +24,18 @@ body[data-theme="kid-girl"]{--bg:#FFF0F7;--bg2:#F1E6FF;--card:#FFFFFF;--card2:#F
  --sh:0 8px 0 rgba(176,63,123,.08),0 18px 36px rgba(90,42,108,.12);--bsh:0 7px 0 var(--pri-d);--glass:rgba(255,255,255,.84);--chrome:rgba(255,255,255,.72);
  --deco:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cg fill='%23E05AA0' fill-opacity='.10'%3E%3Cpath d='M30 40c-6-8-20-4-16 8 3 7 16 14 16 14s13-7 16-14c4-12-10-16-16-8z'/%3E%3Ccircle cx='120' cy='110' r='7'/%3E%3Cpath d='M110 30l4 9 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1z'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(160deg,#FFEAF4,#F3EAFF 55%,#E8FBF8)}
 body[data-theme="teen"]{--bg:#1E252D;--bg2:#252E38;--card:#2A333E;--card2:#323C48;--ink:#EEF2F5;--muted:#A8B4C1;--pri:#5FB3A1;--pri-d:#3E8778;--on-pri:#0E1C1A;--acc:#E3A869;--acc-d:#B07E46;--warm:#E3A869;--ok:#6CC59A;--bad:#E57D70;--line:#3A4552;
- --r:18px;--rb:12px;--fh:"IBM Plex Sans Arabic",system-ui,sans-serif;--fb:"IBM Plex Sans Arabic",system-ui,sans-serif;--fw:600;--hw:700;
+ --r:18px;--rb:12px;--fh:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;--fb:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;--fw:500;--hw:600;
  --sh:0 14px 34px rgba(0,0,0,.32);--bsh:0 4px 0 var(--pri-d);--glass:rgba(30,37,45,.80);--chrome:rgba(24,30,37,.74);
  --deco:radial-gradient(ellipse at 15% 0%,rgba(95,179,161,.18),transparent 55%),radial-gradient(ellipse at 100% 100%,rgba(227,168,105,.12),transparent 50%),linear-gradient(180deg,#1E252D,#1A2027)}
-body[data-theme="adult"]{--bg:#0B1626;--bg2:#10203A;--card:#12233A;--card2:#172B47;--ink:#F3EAD7;--muted:#B7AE9B;--pri:#C9A45C;--pri-d:#97783B;--on-pri:#0B1626;--acc:#6E9BC9;--acc-d:#4A739E;--warm:#C9A45C;--ok:#7CC49A;--bad:#D9766B;--line:#2A3E5C;
- --r:14px;--rb:8px;--fh:"Amiri",serif;--fb:"IBM Plex Sans Arabic",system-ui,sans-serif;--fw:500;--hw:700;
+body[data-theme="adult"]{--bg:#0B1626;--bg2:#10203A;--card:#12233A;--card2:#172B47;--ink:#E8E2D4;--muted:#B7AE9B;--pri:#C9A45C;--pri-d:#97783B;--on-pri:#0B1626;--acc:#6E9BC9;--acc-d:#4A739E;--warm:#C9A45C;--ok:#7CC49A;--bad:#D9766B;--line:#2A3E5C;
+ --r:14px;--rb:8px;--fh:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;--fb:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;--fw:400;--hw:600;
  --sh:0 18px 40px rgba(0,0,0,.40);--bsh:0 3px 0 var(--pri-d);--glass:rgba(11,22,38,.80);--chrome:rgba(8,16,28,.78);
  --deco:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M60 18l10 24 24 10-24 10-10 24-10-24-24-10 24-10z' fill='none' stroke='%23C9A45C' stroke-opacity='.07' stroke-width='1.5'/%3E%3C/svg%3E"),radial-gradient(ellipse at 50% -10%,#173057,#0B1626 65%)}
 
 /* ===== frame ===== */
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+body[data-theme="adult"],body[data-theme="teen"]{line-height:1.75}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--fb);font-weight:var(--fw);-webkit-tap-highlight-color:transparent}
 #app{position:fixed;inset:0;background:var(--bg)}
 #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform:translate(-50%,-50%) scale(var(--s));transform-origin:50% 50%;overflow:hidden;background:var(--deco);background-color:var(--bg);font-size:30px;line-height:1.5}
