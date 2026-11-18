@@ -112,6 +112,7 @@ ul{margin:6px 0;padding-inline-start:22px}
         (x.last && x.last.max_score ? '<div><b style="color:var(--ok);font-size:1.2rem">' + x.last.score + ' / ' + x.last.max_score + '</b></div>' : '') +
         (x.last && x.last.feedback ? '<div class="fb">💬 ' + esc(x.last.feedback) + '</div>' : '') +
         (x.last && x.last.feedback_audio ? '<div class="fb">🎧 ' + T('رد المعلم الصوتي', 'Your teacher\'s voice reply') + '<audio controls preload="none" style="width:100%;margin-top:4px" data-fbv="' + esc(x.last.feedback_audio) + '"></audio></div>' : '') +
+        ((x.last && x.last.notes) || []).filter(n => n && n.audio).map(n => '<div class="fb">🎧 <b>' + esc(n.q || '') + '</b><audio controls preload="none" style="width:100%;margin-top:4px" data-fbv="' + esc(n.audio) + '"></audio></div>').join('') +
         '<div class="row" style="margin-top:8px"><a class="btn' + (st[0] === 'todo' || st[0] === 'redo' ? '' : ' ghost') + '" href="' + hwUrl(x.token) + '">' + (st[0] === 'todo' ? T('ابدأ الواجب ▶', 'Start ▶') : T('افتح', 'Open')) + '</a></div></div>'; }).join('')
       : '<div class="card muted">' + T('مفيش واجبات لسه.', 'No homework yet.') + '</div>');
     const C = P.corrections || [];

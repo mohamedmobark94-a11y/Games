@@ -860,7 +860,9 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
             (q && tx(q.say) ? '<div style="font-weight:700;margin:4px 0" dir="auto">❓ ' + esc(norm(tx(q.say))) + '</div>' : '') +
             (q && tx(q.text) ? '<div class="ayah">' + esc(norm(tx(q.text))) + '</div>' : it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') +
             (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') +
-            '<textarea data-note="' + esc(p.path) + '" data-q="' + esc(q && tx(q.say) ? norm(tx(q.say)) : norm(p.label || it.say || ('تسجيل ' + (p.i + 1)))) + '" rows="2" placeholder="✏️ تعليق / تصحيح على التسجيل ده (اختياري)" style="margin-top:6px;min-height:52px">' + esc(note) + '</textarea></div>'; }).join('') +
+            '<textarea data-note="' + esc(p.path) + '" data-q="' + esc(q && tx(q.say) ? norm(tx(q.say)) : norm(p.label || it.say || ('تسجيل ' + (p.i + 1)))) + '" rows="2" placeholder="✏️ تعليق / تصحيح على التسجيل ده (اختياري)" style="margin-top:6px;min-height:52px">' + esc(note) + '</textarea>' +
+            '<div class="row" style="margin-top:4px;align-items:center"><button type="button" class="btn ghost sm" data-nrec="' + esc(p.path) + '">🎙️ ردّ صوتي على التسجيل ده</button><span class="small muted" data-nst></span></div>' +
+            '<div data-nbox>' + ((((x.item_notes || {}).audio) || {})[p.path] ? '<audio controls preload="none" data-vpath="' + esc(x.item_notes.audio[p.path]) + '" data-naud="' + esc(x.item_notes.audio[p.path]) + '"></audio>' : '') + '</div></div>'; }).join('') +
         '<label>ردّك للطالب</label><textarea data-fb>' + esc(((x.item_notes || {}).general != null ? x.item_notes.general : x.feedback) || '') + '</textarea>' +
         '<div class="row" style="margin-top:6px;gap:6px;flex-wrap:wrap"><span class="small muted">💬 كلمات تشجيع جاهزة:</span>' + TPL.map((p, k) => '<button type="button" class="chip" data-tpl="' + k + '">' + p[0] + '</button>').join('') + '</div>' +
         '<div class="row" style="margin-top:6px;align-items:center"><button type="button" class="btn ghost sm" data-vrec>🎙️ سجّل ردّ صوتي</button><button type="button" class="btn ghost sm" data-dict>🗣️ اتكلم ويتكتب</button><button type="button" class="btn ghost sm" data-polish>✨ حوّلها رسالة للطالب</button><span class="small muted" data-vst></span></div>' +
@@ -897,6 +899,27 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         box.innerHTML = '<audio controls src="' + URL.createObjectURL(blob) + '"></audio>';
       };
       rec.start(); c.__rec = rec; b.textContent = '⏹ وقّف التسجيل'; b.classList.add('bad'); st.textContent = '🔴 بيسجل…';
+    });
+    /* 🎙️ a voice reply on ONE recording: saved as <token>/fb-<submission>-n<k>-<time>, sent with ✅ / 🔁 */
+    app.querySelectorAll('[data-nrec]').forEach((b, k) => b.onclick = async () => {
+      const item = b.closest('.item'), c = b.closest('[data-id]'), st = item.querySelector('[data-nst]'), box = item.querySelector('[data-nbox]');
+      if(item.__rec){ item.__rec.stop(); return; }
+      let stream; try{ stream = await navigator.mediaDevices.getUserMedia({audio: true}); }catch(e){ return alert('افتح إذن المايك للموقع الأول.'); }
+      const mt = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/webm'].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
+      const rec = new MediaRecorder(stream, mt ? {mimeType: mt} : undefined), parts = [];
+      rec.ondataavailable = e => { if(e.data.size) parts.push(e.data); };
+      rec.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop()); item.__rec = null; b.textContent = '🎙️ سجّل تاني'; b.classList.remove('bad');
+        const type = rec.mimeType || 'audio/webm', ext = type.indexOf('mp4') >= 0 ? 'm4a' : 'webm', blob = new Blob(parts, {type});
+        const x = list.find(y => String(y.id) === c.dataset.id), tok = x && x.assignment_targets && x.assignment_targets.token;
+        if(!tok) return; st.textContent = 'بيرفع…';
+        const path = tok + '/fb-' + c.dataset.id + '-n' + k + '-' + Date.now() + '.' + ext;
+        const up = await db.storage.from('recordings').upload(path, blob, {contentType: type});
+        if(up.error){ st.textContent = ''; return alert(up.error.message); }
+        st.textContent = '✓ اتسجل — اضغط تمام أو يعيد عشان يوصل';
+        box.innerHTML = '<audio controls src="' + URL.createObjectURL(blob) + '" data-naud="' + path + '"></audio>';
+      };
+      rec.start(); item.__rec = rec; b.textContent = '⏹ وقّف'; b.classList.add('bad'); st.textContent = '🔴 بيسجل…';
     });
     /* 🗣️ speak and it is typed into the reply box (browser speech-to-text, Egyptian Arabic) */
     app.querySelectorAll('[data-dict]').forEach(b => b.onclick = () => {
@@ -945,9 +968,13 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     app.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
       const c = b.closest('[data-id]'), gen = c.querySelector('[data-fb]').value.trim(), notes = {}, lines = [];
       /* ✏️ a note on a recording goes to the student inside the reply, under the question it answers */
-      c.querySelectorAll('[data-note]').forEach(n => { const v = n.value.trim(); if(v){ notes[n.dataset.note] = v; lines.push('🎙️ ' + n.dataset.q + '\n✏️ ' + v); } });
+      const audio = {}, its = [];
+      c.querySelectorAll('[data-note]').forEach(n => { const v = n.value.trim(), it = n.closest('.item'), au = it && it.querySelector('[data-naud]');
+        if(v){ notes[n.dataset.note] = v; lines.push('🎙️ ' + n.dataset.q + '\n✏️ ' + v); }
+        if(au) audio[n.dataset.note] = au.dataset.naud;
+        if(v || au) its.push({q: n.dataset.q, note: v || null, audio: au ? au.dataset.naud : null}); });
       const fb = [gen].concat(lines).filter(Boolean).join('\n\n');
-      const upd = {status: b.dataset.act, feedback: fb || null, item_notes: {general: gen, notes}, reviewed_at: new Date().toISOString()};
+      const upd = {status: b.dataset.act, feedback: fb || null, item_notes: {general: gen, notes, audio, items: its}, reviewed_at: new Date().toISOString()};
       if(c.dataset.audio) upd.feedback_audio = c.dataset.audio;
       const r = await db.from('submissions').update(upd).eq('id', c.dataset.id);
       if(r.error) return alert(r.error.message); flash('اتحفظ ✓'); inbox();
