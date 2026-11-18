@@ -831,6 +831,19 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
     const paths = list.flatMap(x => x.audio_paths || []);
     const urls = {};
     if(paths.length){ const u = await db.storage.from('recordings').createSignedUrls(paths, 3600); (u.data || []).forEach(x => { if(x.signedUrl) urls[x.path] = x.signedUrl; }); }
+    /* the question behind each recording: read the homework pages (docs hwpages) the items point to, and match the recording's label */
+    const RQ = {}, norm = v => String(v || '').replace(/<[^>]+>/g, '').replace(/[\u{1F000}-\u{1FFFF}\u2600-\u27BF\uFE0F]/gu, '').replace(/\s+/g, ' ').trim();
+    try{
+      const hids = [...new Set(list.flatMap(x => (((((x.assignment_targets || {}).assignments || {}).content || {}).items) || []).map(it => ((it.url || '').match(/[?&]h=([^&#]+)/) || [])[1]).filter(Boolean)))];
+      if(hids.length){ const hp = await db.from('docs').select('id,data').eq('collection', 'hwpages').in('id', hids);
+        (hp.data || []).forEach(row => { const m = RQ[row.id] = {}, d = row.data || {}, put = (labels, q) => [].concat(labels).forEach(l => { const k = norm(typeof l === 'object' ? (l || {}).ar : l), k2 = norm(typeof l === 'object' ? (l || {}).en : ''); if(k) m[k] = q; if(k2) m[k2] = q; });
+          (d.tasks || []).filter(t => t.t === 'record').forEach(t => put([t.label], {say: t.say, text: t.text}));
+          (d.stations || []).filter(t => t.t === 'record').forEach(st => (st.items || []).forEach((it, j) => put([it.label || it.hint || it.say || ('#' + (j + 1))], {say: it.say || it.label, text: it.hint})));
+        }); }
+    }catch(_){}
+    const qOf = (x, label) => { const items = ((((x.assignment_targets || {}).assignments || {}).content || {}).items) || [];
+      for(const it of items){ const h = ((it.url || '').match(/[?&]h=([^&#]+)/) || [])[1]; const q = h && RQ[h] && RQ[h][norm(label)]; if(q) return q; } return null; };
+    const tx = v => typeof v === 'object' && v ? (v.ar || v.en || '') : (v || '');
     app.innerHTML = '<h2>📥 التسليمات' + (waiting ? ' <span class="muted small">(' + waiting + ' مستنيين ردّك)</span>' : '') + '</h2>' + list.map(x => {
       const t = x.assignment_targets || {}, a = t.assignments || {}, s = t.students || {}, items = (a.content && a.content.items) || [];
       const wrong = ((x.answers && x.answers.mcq) || []).filter(m => !m.right);
@@ -842,8 +855,13 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
         pgs.map(g => { const it = items[g.i] || {}; return '<div class="item"><div class="small"><b>🧩 ' + esc(it.title || 'نشاط') + '</b> — ' + (g.max ? '<b dir="ltr">' + g.score + ' / ' + g.max + '</b> ' : '') + (g.done ? '<b style="color:var(--ok)">خلّص ✓</b>' : '<b style="color:var(--bad)">ما خلّصش</b>') + '</div>' +
           ((g.details || []).length ? '<details><summary class="small">إجاباته (' + g.details.length + ')</summary><div class="small">' + g.details.map(d => (d.ok === true ? '✅ ' : d.ok === false ? '❌ ' : '• ') + esc(d.q) + (d.a ? ' ← <b>' + esc(d.a) + '</b>' : '')).join('<br>') + '</div></details>' : '') + '</div>'; }).join('') +
         (wrong.length ? '<div class="small muted">غلط في: ' + wrong.map(m => { const it = items[m.i] || {}; const o = (it.options || [])[m.chose]; return 'س' + (m.i + 1) + (o != null ? ' (اختار «' + esc(typeof o === 'object' ? o.ar : o) + '»)' : ' (ما جاوبش)'); }).join('، ') + '</div>' : '') +
-        rec.map(p => { const it = items[p.i] || {}; return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (p.label ? ' · ' + esc(p.label) : it.say ? ' · ' + esc(it.say) : it.title ? ' · ' + esc(it.title) : '') + '</div>' + (it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') + (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') + '</div>'; }).join('') +
-        '<label>ردّك للطالب</label><textarea data-fb>' + esc(x.feedback || '') + '</textarea>' +
+        rec.map(p => { const it = items[p.i] || {}, q = p.label ? qOf(x, p.label) : null, note = (((x.item_notes || {}).notes) || {})[p.path] || '';
+          return '<div class="item"><div class="small muted">🎙️ ' + (p.i + 1) + (p.label ? ' · ' + esc(p.label) : it.say ? ' · ' + esc(it.say) : it.title ? ' · ' + esc(it.title) : '') + '</div>' +
+            (q && tx(q.say) ? '<div style="font-weight:700;margin:4px 0" dir="auto">❓ ' + esc(norm(tx(q.say))) + '</div>' : '') +
+            (q && tx(q.text) ? '<div class="ayah">' + esc(norm(tx(q.text))) + '</div>' : it.text ? '<div class="ayah">' + esc(it.text) + '</div>' : '') +
+            (urls[p.path] ? '<audio controls preload="none" src="' + esc(urls[p.path]) + '"></audio>' : '<div class="small">الملف مش متاح</div>') +
+            '<textarea data-note="' + esc(p.path) + '" data-q="' + esc(q && tx(q.say) ? norm(tx(q.say)) : norm(p.label || it.say || ('تسجيل ' + (p.i + 1)))) + '" rows="2" placeholder="✏️ تعليق / تصحيح على التسجيل ده (اختياري)" style="margin-top:6px;min-height:52px">' + esc(note) + '</textarea></div>'; }).join('') +
+        '<label>ردّك للطالب</label><textarea data-fb>' + esc(((x.item_notes || {}).general != null ? x.item_notes.general : x.feedback) || '') + '</textarea>' +
         '<div class="row" style="margin-top:6px;gap:6px;flex-wrap:wrap"><span class="small muted">💬 كلمات تشجيع جاهزة:</span>' + TPL.map((p, k) => '<button type="button" class="chip" data-tpl="' + k + '">' + p[0] + '</button>').join('') + '</div>' +
         '<div class="row" style="margin-top:6px;align-items:center"><button type="button" class="btn ghost sm" data-vrec>🎙️ سجّل ردّ صوتي</button><button type="button" class="btn ghost sm" data-dict>🗣️ اتكلم ويتكتب</button><button type="button" class="btn ghost sm" data-polish>✨ حوّلها رسالة للطالب</button><span class="small muted" data-vst></span></div>' +
         '<div data-vbox>' + (x.feedback_audio ? '<audio controls preload="none" data-vpath="' + esc(x.feedback_audio) + '"></audio>' : '') + '</div>' +
@@ -925,8 +943,11 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
       b.disabled = false; b.textContent = old;
     });
     app.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
-      const c = b.closest('[data-id]'), fb = c.querySelector('[data-fb]').value.trim();
-      const upd = {status: b.dataset.act, feedback: fb || null, reviewed_at: new Date().toISOString()};
+      const c = b.closest('[data-id]'), gen = c.querySelector('[data-fb]').value.trim(), notes = {}, lines = [];
+      /* ✏️ a note on a recording goes to the student inside the reply, under the question it answers */
+      c.querySelectorAll('[data-note]').forEach(n => { const v = n.value.trim(); if(v){ notes[n.dataset.note] = v; lines.push('🎙️ ' + n.dataset.q + '\n✏️ ' + v); } });
+      const fb = [gen].concat(lines).filter(Boolean).join('\n\n');
+      const upd = {status: b.dataset.act, feedback: fb || null, item_notes: {general: gen, notes}, reviewed_at: new Date().toISOString()};
       if(c.dataset.audio) upd.feedback_audio = c.dataset.audio;
       const r = await db.from('submissions').update(upd).eq('id', c.dataset.id);
       if(r.error) return alert(r.error.message); flash('اتحفظ ✓'); inbox();
