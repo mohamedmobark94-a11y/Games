@@ -288,6 +288,17 @@ body[data-theme="adult"] .kick,body[data-theme="teen"] .kick{background:transpar
 #penbar .sw{width:30px;height:30px;border-radius:50%;display:block;margin:auto;border:2px solid rgba(255,255,255,.6)}
 #board{position:absolute;inset:72px 0 84px;z-index:14;background:#FBFAF6;display:none}
 #board.on{display:block}
+/* 🔍 zoom: the word being read fills the screen (beginners) */
+#zoom{position:absolute;inset:72px 0 84px;z-index:13;display:none;align-items:center;justify-content:center;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(3px)}
+#zoom.on{display:flex}
+#zoom .zin{position:relative;min-width:60%;max-width:92%;padding:34px 60px 30px;border-radius:calc(var(--r)*2);background:var(--card);box-shadow:var(--sh);text-align:center;border:5px solid var(--acc);animation:zpop .28s ease-out}
+@keyframes zpop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+#zoom .zs{font-size:110px;line-height:1.5;letter-spacing:.06em;color:var(--muted);direction:rtl}
+#zoom .zs b{display:inline-block;margin:0 .16em;color:var(--ink);transition:color .2s,transform .2s}
+#zoom .zs b.lit{color:var(--pri);transform:translateY(-8px) scale(1.12)}
+#zoom .zw{font-size:190px;line-height:1.35;color:var(--pri);direction:rtl}
+#zoom .zb{display:flex;gap:18px;justify-content:center;margin-top:16px}
+#zoom .zx{position:absolute;top:10px;inset-inline-end:16px;font-size:34px;background:none;border:0;color:var(--muted);cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -317,6 +328,7 @@ body[data-theme="adult"] .kick,body[data-theme="teen"] .kick{background:transpar
   <button class="ic" data-p="clear" id="bPenClr" title="Clear">🧽</button>
  </div>
  <div id="board"></div>
+ <div id="zoom"><div class="zin"><button class="zx" data-zx>✕</button><div class="zs" data-zs></div><div class="zw" data-zw></div><div class="zb" data-zb></div></div></div>
  <nav id="nav"><button class="nb ghost" id="bPrev"></button><div id="dots"></div><span id="cnt"></span><button class="nb" id="bNext"></button></nav>
  <canvas id="pen" width="1600" height="900"></canvas>
  <canvas id="fxc" width="1600" height="900"></canvas>
@@ -488,11 +500,23 @@ W.trueFalse=o=>add(o,()=>`<div class="cq" data-q></div><div class="row" data-btn
   const round=()=>{p.innerHTML=Q.map((_,k)=>`<i class="${k<r?'d':''}"></i>`).join('');if(r>=Q.length){q.innerHTML=T('score',{r:right,n:Q.length});$('[data-btns]',el).hidden=true;fb.innerHTML='';if(right>=Math.ceil(Q.length*.7))win(el);return}lock=false;q.innerHTML=L(Q[r].t);fb.innerHTML=''};
   $$('[data-v]',el).forEach(b=>b.onclick=()=>{if(lock)return;lock=true;const ok=Q[r].v===(b.dataset.v==='1');if(ok){right++;fx.ok(b)}else fx.bad(b);fb.className='fb '+(ok?'ok':'no');fb.innerHTML=(ok?'✅ ':'❌ ')+L(Q[r].why||'');setTimeout(()=>{r++;round()},o.delay||2000)});round()},{center:true});
 
+/* 🔍 zoom(text, word, buttons): big centred word; letters light one by one, then the whole word */
+const ZM=()=>$('#zoom'),SYL=w=>String(w).replace(/<[^>]+>/g,'').match(/[^\s\u064B-\u0652\u0670\u0640][\u064B-\u0652\u0670]*/g)||[];
+function zoom(a,w,btns){const z=ZM();if(!z)return;const zs=$('[data-zs]',z),zw=$('[data-zw]',z),zb=$('[data-zb]',z);clearInterval(z._t);
+ const parts=SYL(a&&a.indexOf(' ')<0?a:String(a||'').replace(/\s+/g,''));zs.innerHTML=parts.map(x=>'<b>'+x+'</b>').join('');zw.innerHTML='';zb.innerHTML='';
+ (btns||[]).forEach(b=>{const e=document.createElement('button');e.className='btn '+(b.c||'');e.style.fontSize='34px';e.style.minHeight='72px';e.style.padding='0 40px';e.textContent=b.t;e.onclick=ev=>{ev.stopPropagation();b.f()};zb.appendChild(e)});
+ z.classList.add('on');let k=0;const bs=$$('b',zs);z._t=setInterval(()=>{if(k<bs.length){bs.forEach(x=>x.classList.remove('lit'));bs[k++].classList.add('lit');snd('tick')}else{clearInterval(z._t);bs.forEach(x=>x.classList.remove('lit'));if(w)zw.innerHTML=w}},700)}
+function unzoom(){const z=ZM();if(z){clearInterval(z._t);z.classList.remove('on')}}
+document.addEventListener('click',e=>{const z=ZM();if(!z||!z.classList.contains('on'))return;if(e.target===z||e.target.closest('[data-zx]'))unzoom()});
+document.addEventListener('tqkit:slide',unzoom);
+
 W.pairRead=o=>add(o,()=>`<div class="prg" style="grid-template-columns:repeat(${o.cols||4},1fr)">${o.pairs.map((p,i)=>`<button class="pr q" data-i="${i}"><span>${p[0]}</span><span class="pa rv">←</span><span>${p[1]}</span></button>`).join('')}</div>
  <div class="row"><span class="chip" data-m>${L(o.sub||{ar:'اقرأ الزوج ثم اضغطه',en:'Read the pair, then tap it'})}</span><button class="btn sm alt" data-ch>${L(UI.challenge)}</button><button class="btn sm okb" data-ok hidden>✓</button><button class="btn sm nob" data-no hidden>✗</button></div>`,
  el=>{const cells=$$('.pr',el),m=$('[data-m]',el),ch=$('[data-ch]',el),ok=$('[data-ok]',el),no=$('[data-no]',el),seen=new Set();let mode=0,ci=0,sc=0;
-  cells.forEach(c=>c.onclick=()=>{if(mode)return;c.classList.add('on');seen.add(c.dataset.i);fx.tap();if(seen.size===cells.length)win(el)});
-  const step=()=>{cells.forEach((c,k)=>c.classList.toggle('cur',k===ci));if(ci>=cells.length){mode=0;ok.hidden=no.hidden=true;ch.hidden=false;m.innerHTML=T('score',{r:sc,n:cells.length});if(sc>=cells.length-2)win(el)}};
+  const zm=o.zoom!==false;
+  cells.forEach(c=>c.onclick=()=>{if(mode)return;c.classList.add('on');seen.add(c.dataset.i);fx.tap();const p=o.pairs[+c.dataset.i];if(zm)zoom(p[0],p[1]);if(seen.size===cells.length)win(el)});
+  const step=()=>{cells.forEach((c,k)=>c.classList.toggle('cur',k===ci));if(ci>=cells.length){unzoom();mode=0;ok.hidden=no.hidden=true;ch.hidden=false;m.innerHTML=T('score',{r:sc,n:cells.length});if(sc>=cells.length-2)win(el)}
+   else if(zm){const p=o.pairs[ci];zoom(p[0],p[1],[{t:'✓',c:'okb',f:()=>ok.click()},{t:'✗',c:'nob',f:()=>no.click()}])}};
   ch.onclick=()=>{mode=1;ci=0;sc=0;cells.forEach(c=>c.classList.remove('good','bad2'));ok.hidden=no.hidden=false;ch.hidden=true;m.innerHTML=L(UI.readPair);step()};
   ok.onclick=()=>{cells[ci].classList.add('good');sc++;snd('ok');ci++;step()};no.onclick=()=>{cells[ci].classList.add('bad2');snd('bad');ci++;step()}});
 
@@ -514,7 +538,7 @@ W.matchPairs=o=>add(o,()=>`<div class="chip" style="align-self:center">${L(o.sub
    else{const a=sel;a.classList.add('wrong');b.classList.add('wrong');fx.bad(b);sel=null;setTimeout(()=>{a.classList.remove('wrong','sel');b.classList.remove('wrong')},600)}})});
 
 W.countBeats=o=>add(o,()=>{const MX=Math.max(...o.items.map(x=>x.n));return `${o.text?`<p class="lead">${L(o.text)}</p>`:''}<div class="cbg" style="grid-template-columns:repeat(${Math.min(o.items.length,4)},1fr)">${o.items.map((x,i)=>`<button class="cbc" data-i="${i}"><div class="cbw q">${x.t}</div><div class="beads">${'<i></i>'.repeat(MX)}</div><div class="cbl">${L(x.l||'')}</div></button>`).join('')}</div>${o.rule?`<div class="rule">${L(o.rule)}</div>`:''}`},
- el=>{const seen=new Set();$$('.cbc',el).forEach(b=>b.onclick=()=>{const i=+b.dataset.i,x=o.items[i],bs=$$('.beads i',b);bs.forEach(e=>e.classList.remove('lit'));if(x.ay)hear(x.ay);let k=0;clearInterval(b._t);
+ el=>{const seen=new Set();$$('.cbc',el).forEach(b=>b.onclick=()=>{const i=+b.dataset.i,x=o.items[i],bs=$$('.beads i',b);if(o.zoom!==false)zoom(x.t,x.t);bs.forEach(e=>e.classList.remove('lit'));if(x.ay)hear(x.ay);let k=0;clearInterval(b._t);
   b._t=setInterval(()=>{if(k<x.n){bs[k++].classList.add('lit');snd('tick')}else{clearInterval(b._t);seen.add(i);if(seen.size===o.items.length)win(el)}},o.ms||600)})},{center:true});
 
 W.discuss=o=>add(o,()=>`<div class="dq">${L(o.q)}</div><div class="hints">${(o.hints||[]).map(h=>`<div class="hint" hidden>💡 ${L(h)}</div>`).join('')}</div>
