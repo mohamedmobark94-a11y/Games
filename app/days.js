@@ -291,7 +291,45 @@
     setTimeout(fill, 500);
   }
 
+  /* «دروس اليوم» lives on the first page, above the report form, in its own gold card (Mohamed wants everything
+     in one place). The tab «📅 دروس اليوم» now jumps to that card. The card folds; the choice is remembered. */
+  function home(){
+    const td = document.querySelector('#page-today .td'), rep = document.getElementById('page-report');
+    if(!td || !rep || document.getElementById('tqToday')) return;
+    const st = document.createElement('style');
+    st.textContent = '#tqToday{max-width:1340px;margin:16px auto 4px;padding:0 20px}' +
+      '#tqToday .tq-card{border:2px solid #c9a227;border-radius:18px;background:linear-gradient(180deg,#fffaf0,#fff 140px);box-shadow:0 6px 22px rgba(138,109,11,.13);overflow:hidden}' +
+      '#tqToday .tq-bar{display:flex;align-items:center;gap:12px;width:100%;padding:14px 18px;border:0;background:linear-gradient(90deg,#0e4d3c,#177a5b);color:#fff;font:inherit;cursor:pointer;text-align:start;direction:rtl}' +
+      '#tqToday .tq-bar b{font-size:18px}#tqToday .tq-sum{flex:1;font-size:13px;opacity:.92}' +
+      '#tqToday .tq-pill{background:#f5d76e;color:#3d2f00;border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:800;white-space:nowrap}' +
+      '#tqToday .tq-arr{font-size:16px;transition:transform .2s}#tqToday.shut .tq-arr{transform:rotate(-90deg)}' +
+      '#tqToday .tq-in{padding:6px 14px 14px}#tqToday.shut .tq-in{display:none}' +
+      '#tqToday .td-head h2{display:none}#tqToday .td{max-width:none;margin:0}';
+    document.head.appendChild(st);
+    const box = document.createElement('section'); box.id = 'tqToday';
+    let shut = false; try{ shut = localStorage.getItem('tqTodayShut') === '1'; }catch(_){}
+    if(shut) box.classList.add('shut');
+    box.innerHTML = '<div class="tq-card"><button type="button" class="tq-bar" aria-expanded="' + !shut + '"><span class="tq-arr">▾</span><b>📅 دروس اليوم</b><span class="tq-sum"></span><span class="tq-pill" hidden></span></button><div class="tq-in"></div></div>';
+    box.querySelector('.tq-in').appendChild(td);
+    rep.insertBefore(box, rep.firstChild);
+    const bar = box.querySelector('.tq-bar'), sum = box.querySelector('.tq-sum'), pill = box.querySelector('.tq-pill');
+    bar.onclick = () => { const s = box.classList.toggle('shut'); bar.setAttribute('aria-expanded', !s); try{ localStorage.setItem('tqTodayShut', s ? '1' : '0'); }catch(_){} };
+    const paint = () => {
+      const t = document.getElementById('tdTitle'), rows = td.querySelectorAll('.td-chip').length, picked = td.querySelectorAll('.td-chip.on').length;
+      sum.textContent = (t ? t.textContent.replace(/^دروس اليوم\s*·?\s*/, '') : '') + (rows ? ' · ' + rows + ' حصة' : '');
+      pill.hidden = !picked; pill.textContent = picked + ' مختار';
+    };
+    new MutationObserver(paint).observe(td, {childList: true, subtree: true, characterData: true}); paint();
+    const show = () => { box.classList.remove('shut'); bar.setAttribute('aria-expanded', 'true'); setTimeout(() => box.scrollIntoView({behavior: 'smooth', block: 'start'}), 60); };
+    if(window.Desk && Desk.go && !Desk.__tqHome){ const go = Desk.go; Desk.go = p => p === 'today' ? (go('report'), show()) : go(p); Desk.__tqHome = true; }
+    /* the separate tab is no longer needed: its badge moves into the card's bar, the tab itself is hidden */
+    const tab = document.querySelector('.tabb[data-page="today"]');
+    if(tab){ const bd = document.getElementById('todayBadge'); if(bd) bar.insertBefore(bd, pill); tab.style.display = 'none'; }
+    const pt = document.getElementById('page-today'); if(pt && pt.classList.contains('on') && window.Desk) Desk.go('today');
+  }
+
   function ui(sb){
+    try{ home(); }catch(e){ console.warn('days.home', e); }
     if(window.__tqDayUi) return; window.__tqDayUi = true;
     const L = document.getElementById('tdList'); if(!sb || !L) return;
     const K = kit(sb), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
