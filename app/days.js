@@ -328,12 +328,117 @@
     const pt = document.getElementById('page-today'); if(pt && pt.classList.contains('on') && window.Desk) Desk.go('today');
   }
 
+  /* 🔄 «شوف تحديثات جدولي»: read the teacher's Google Calendar (edge function cal-sessions, through the secret
+     iCal address saved once in kv 'calIcs') for one teaching day, compare it with the list, show what changed
+     (➕ new class · ⏰ new time · 🚫 not in the calendar) and apply the ticked changes. */
+  function calSync(sb, K, L, esc){
+    if(document.getElementById('tqCal')) return;
+    const host = document.querySelector('#tqToday .td') || L.parentNode, chips = document.getElementById('tdChips');
+    const box = document.createElement('div'); box.id = 'tqCal';
+    box.style.cssText = 'margin:4px 0 12px;border:1.5px solid #9cc8b5;border-radius:12px;padding:10px 12px;background:#f3fbf7;direction:rtl';
+    const btn = 'padding:9px 14px;border:0;border-radius:10px;font:inherit;font-weight:800;cursor:pointer';
+    box.innerHTML = '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+      '<button type="button" id="tqCalGo" style="' + btn + ';background:#177a5b;color:#fff">🔄 شوف تحديثات جدولي</button>' +
+      '<select id="tqCalDay" style="padding:8px;border:1px solid #9cc8b5;border-radius:10px;font:inherit;background:#fff"><option value="0">النهارده</option><option value="1">بكرة</option><option value="2">بعد بكرة</option></select>' +
+      '<span id="tqCalMsg" style="font-size:13px;color:#4d6459">بيقارن «دروس اليوم» بـ Google Calendar</span></div><div id="tqCalOut"></div>';
+    host.insertBefore(box, chips && chips.parentNode === host ? chips : host.firstChild);
+    const $ = id => document.getElementById(id), msg = (t, c) => { const m = $('tqCalMsg'); m.textContent = t; m.style.color = c || '#4d6459'; };
+    const nk = v => fold(v).replace(/[^\p{L}\p{N}]+/gu, '');
+    const lev = (a, b) => { const m = a.length, n = b.length, d = Array.from({length: m + 1}, (_, i) => [i]); for(let j = 1; j <= n; j++) d[0][j] = j;
+      for(let i = 1; i <= m; i++) for(let j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[m][n]; };
+    function slugsOf(summary, C){
+      const R = C.R.students || [], rules = C.rules, f = nk(summary);
+      if((rules.hide || []).some(h => nk(h) === f)) return [];
+      const ro = R.find(s => nk(s.name) === f);
+      if(ro){ const sp = (rules.split || {})[ro.name]; if(sp) return sp; const k = (rules.keys || {})[ro.name]; if(k) return [k]; }
+      const k2 = Object.keys(rules.keys || {}).find(n => nk(n) === f); if(k2) return [rules.keys[k2]];
+      const one = t => { const g = nk(t); if(!g) return null;
+        const names = s => [s.slug, s.name_ar, s.name_en].concat(s.keys || []).filter(Boolean).map(nk);
+        let st = C.S.find(s => names(s).indexOf(g) >= 0);
+        if(!st && g.length >= 4) st = C.S.find(s => names(s).some(n => n.length >= 4 && lev(n, g) <= 1));
+        return st ? st.slug : null; };
+      const whole = one(summary); if(whole) return [whole];
+      const parts = String(summary).split(/\s*[,،&+]\s*|\s+و(?=\S)|\s+and\s+/i).map(x => x.trim()).filter(Boolean);
+      if(parts.length < 2) return [];
+      const got = parts.map(one); return got.every(Boolean) ? got : got.filter(Boolean);
+    }
+    const startOf = t => ordOf(t);
+    let plan = [];
+    $('tqCalGo').onclick = async () => {
+      const off = +$('tqCalDay').value, D = addDays(today(), off), out = $('tqCalOut');
+      out.innerHTML = ''; msg('⏳ بيقرا الجدول…');
+      try{
+        const r = await sb.functions.invoke('cal-sessions', {body: {from: D + 'T06:00', to: addDays(D, 1) + 'T06:00'}});
+        if(r.error) throw r.error;
+        const res = r.data || {};
+        if(res.need === 'ics') return askIcs(out);
+        if(res.error) throw new Error(res.error);
+        const C = await K.load(true), day = await K.ensure(D);
+        const items = (day.items || []), evs = res.events || [], seen = new Set(), unknown = [];
+        plan = [];
+        evs.forEach(ev => {
+          const slugs = slugsOf(ev.summary, C); if(!slugs.length){ unknown.push(ev); return; }
+          const s0 = (ev.date === D ? 0 : 1440) + hm(ev.time), len = (+ev.mins || 30) / slugs.length;
+          slugs.forEach((slug, i) => {
+            seen.add(slug);
+            const it = items.find(x => x.slug === slug || x.key === slug);
+            const a = s0 + i * len, t = fmt(a), nm = (it && it.name) || ((C.S.find(s => s.slug === slug) || {}).name_ar) || slug;
+            if(!it) plan.push({op: 'add', slug, date: ev.date, time: t, mins: Math.round(len), text: '➕ ' + nm + ' · حصة ' + t + ' (مش في القايمة)'});
+            else{ const o = startOf(it.time); if(o < s0 || o >= s0 + (+ev.mins || 30)){
+              if(it.extra) plan.push({op: 'add', slug, date: ev.date, time: t, mins: Math.round(len), text: '⏰ ' + nm + ' · في الجدول ' + t + ' (في القايمة ' + it.time + ')'});
+              else plan.push({op: 'move', slug, date: ev.date, time: t, mins: Math.round(len), text: '⏰ ' + nm + ' · من ' + String(it.time).replace(/^غد\S*\s+\S+\s+/, '') + ' ← ' + t}); } }
+          });
+        });
+        items.forEach(it => { const sl = it.slug || it.key; if(!sl || seen.has(sl) || it.extra) return;
+          plan.push({op: 'cancel', slug: sl, text: '🚫 ' + it.name + ' · ' + String(it.time || '').replace(/^غد\S*\s+\S+\s+/, '') + ' (مش في الجدول)'}); });
+        const lbl = K.labelOf(D);
+        if(!plan.length){ msg('✓ ' + lbl + ': القايمة مطابقة للجدول (' + evs.length + ' موعد في الجدول)', '#177a5b');
+          if(unknown.length) out.innerHTML = '<div style="font-size:12.5px;color:#6b7c74;margin-top:6px">مواعيد تانية في الجدول اتسابت: ' + esc(unknown.map(e => e.summary + ' ' + e.time).join(' · ')) + '</div>';
+          return; }
+        msg(lbl + ': فيه ' + plan.length + ' تغيير — علّم اللي عايزه ودوس «طبّق»', '#8a6d0b');
+        out.innerHTML = '<div style="margin-top:8px">' + plan.map((p, i) => '<label style="display:flex;gap:8px;align-items:flex-start;padding:6px 4px;border-bottom:1px dashed #cfe3d9;cursor:pointer"><input type="checkbox" data-cp="' + i + '" checked style="width:18px;height:18px;margin-top:2px"><span>' + esc(p.text) + '</span></label>').join('') +
+          (unknown.length ? '<div style="font-size:12.5px;color:#6b7c74;margin-top:6px">اتسابت (مش طلاب): ' + esc(unknown.map(e => e.summary + ' ' + e.time).join(' · ')) + '</div>' : '') +
+          '<button type="button" id="tqCalApply" style="' + btn + ';background:#8a6d0b;color:#fff;margin-top:10px;width:100%">✓ طبّق التغييرات المعلّمة</button></div>';
+        $('tqCalApply').onclick = async () => {
+          const pick = plan.filter((p, i) => { const c = out.querySelector('[data-cp="' + i + '"]'); return c && c.checked; });
+          if(!pick.length) return msg('مفيش حاجة متعلّمة.');
+          $('tqCalApply').disabled = true; msg('⏳ بيطبّق…'); let ok = 0; const bad = [];
+          for(const p of pick){
+            try{
+              if(p.op === 'add') await K.extra(p.slug, p.date, p.time, p.mins);
+              else if(p.op === 'move') await K.move(D, p.slug, p.date, p.time, p.mins);
+              else if(p.op === 'cancel') await K.cancel(D, p.slug);
+              ok++;
+            }catch(e){ bad.push(p.text + ': ' + (e.message || e)); }
+          }
+          out.innerHTML = bad.length ? '<div style="color:#b42318;font-size:13px;margin-top:6px">' + bad.map(esc).join('<br>') + '</div>' : '';
+          msg('✓ اتطبّق ' + ok + ' تغيير' + (bad.length ? ' · ⚠️ ' + bad.length + ' ما اتطبّقش' : ''), bad.length ? '#b42318' : '#177a5b');
+          try{ if(window.__tdRender) setTimeout(window.__tdRender, 800); }catch(_){}
+        };
+      }catch(e){ msg('⚠️ ' + (e.message || e), '#b42318'); }
+    };
+    function askIcs(out){
+      msg('محتاج لينك جدولك مرة واحدة بس', '#8a6d0b');
+      out.innerHTML = '<div style="margin-top:8px;font-size:13px;line-height:1.8">افتح <b>Google Calendar</b> على الكمبيوتر ← ⚙️ <b>الإعدادات</b> ← من الشمال اختار تقويمك (اسمك) ← انزل لـ <b>«دمج التقويم»</b> ← انسخ <b>«العنوان السري بتنسيق iCal»</b> والصقه هنا. اللينك ده سري وبيتحفظ عندك بس.</div>' +
+        '<div style="display:flex;gap:8px;margin-top:8px"><input id="tqCalIcs" dir="ltr" placeholder="https://calendar.google.com/calendar/ical/…/basic.ics" style="flex:1;min-width:0;padding:9px;border:1px solid #9cc8b5;border-radius:10px;font:inherit">' +
+        '<button type="button" id="tqCalSave" style="' + btn + ';background:#177a5b;color:#fff">حفظ</button></div>';
+      $('tqCalSave').onclick = async () => {
+        const v = $('tqCalIcs').value.trim();
+        if(!/^https:\/\/calendar\.google\.com\/calendar\/ical\/.+\.ics/.test(v)) return msg('ده مش لينك iCal من Google Calendar — لازم يبدأ بـ https://calendar.google.com/calendar/ical/', '#b42318');
+        const r = await sb.from('kv').upsert({key: 'calIcs', value: v});
+        if(r.error) return msg('⚠️ ' + r.error.message, '#b42318');
+        out.innerHTML = ''; msg('✓ اتحفظ — بيقرا الجدول…', '#177a5b'); $('tqCalGo').click();
+      };
+    }
+  }
+
   function ui(sb){
     try{ home(); }catch(e){ console.warn('days.home', e); }
     if(window.__tqDayUi) return; window.__tqDayUi = true;
     const L = document.getElementById('tdList'); if(!sb || !L) return;
     const K = kit(sb), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
     gaps(sb, L, esc);
+    try{ calSync(sb, K, L, esc); }catch(e){ console.warn('days.cal', e); }
     /* the generator still says the list comes from a 1 AM task: it now comes from the weekly schedule */
     const sub = document.getElementById('tdSub'); if(sub && /١ بعد/.test(sub.textContent)) sub.textContent = 'القايمة بتتبني لوحدها من الجدول الأسبوعي (٦ ص ← ٦ ص) ومعاها آخر تقرير لكل طالب.';
     const em = L.querySelector('.td-empty'); if(em && /١ بالليل/.test(em.textContent)) em.textContent = 'بتتحمّل القايمة من الجدول الأسبوعي…';
