@@ -233,10 +233,68 @@
   }
 
   /* ---------- inside the report generator: the box under «دروس اليوم» ---------- */
+  /* the cards of «دروس اليوم» say «مفيش درس محفوظ / مفيش تقرير محفوظ على الجهاز ده» when the generator cannot match
+     the name (e.g. «رضا» vs a report saved as «Reda») or the student only has Qur'an homework, no lesson page.
+     Fill those lines from the site: the newest lesson (docs lessons) or else the newest homework (assignments),
+     and the newest saved report (docs reports). */
+  function gaps(sb, L, esc){
+    let D = null, busy = false, t = null;
+    const shortD = s => { const d = new Date(s); return isNaN(d) ? '' : d.getDate() + '/' + (d.getMonth() + 1); };
+    async function data(){
+      if(D && Date.now() - D.at < 60000) return D;
+      const [st, ls, rp, as] = await Promise.all([
+        sb.from('students').select('id,slug,keys,name_ar,name_en'),
+        sb.from('docs').select('id,data').eq('collection', 'lessons').order('id', {ascending: false}).limit(400),
+        sb.from('docs').select('id,data').eq('collection', 'reports'),
+        sb.from('assignment_targets').select('student_id,token,sent_at,released,assignments(title,created_at)').order('sent_at', {ascending: false}).limit(400)]);
+      D = {at: Date.now(), st: st.data || [], ls: ls.data || [], rp: rp.data || [], as: as.data || []};
+      return D;
+    }
+    const namesOf = s => [s.slug, s.name_ar, s.name_en].concat(s.keys || []).filter(Boolean).map(fold);
+    function who(name, d){
+      const f = fold(name); if(!f) return null;
+      return d.st.find(s => namesOf(s).indexOf(f) >= 0) || d.st.find(s => namesOf(s).some(n => n && (n === f.split('-')[0] || f.split('-').indexOf(n) >= 0))) || null;
+    }
+    async function fill(){
+      if(busy) return;
+      const rows = [...L.querySelectorAll('.td-row')].filter(r => !r.dataset.tqGap && [...r.querySelectorAll('.td-dim')].some(x => /مفيش (درس|تقرير) محفوظ/.test(x.textContent)));
+      if(!rows.length) return;
+      busy = true;
+      try{
+        const d = await data(), site = (window.TQ && TQ.site) || 'https://mohamedmobark94-a11y.github.io/Games/';
+        rows.forEach(r => {
+          r.dataset.tqGap = '1';
+          const nm = r.querySelector('.td-nm'); const s = nm && who((nm.firstChild || {}).textContent || nm.textContent, d); if(!s) return;
+          const names = namesOf(s), today = new Date().toISOString().slice(0, 10);
+          r.querySelectorAll('.td-dim').forEach(x => {
+            if(/مفيش درس محفوظ/.test(x.textContent)){
+              const l = d.ls.find(l => l.id <= today + '~' && (l.id.slice(11) === s.slug || names.indexOf(fold((l.data || {}).student)) >= 0));
+              if(l){ const v = l.data || {};
+                x.outerHTML = '<span>' + esc(shortD(l.id.slice(0, 10)) + ' · ' + (v.title || '')) + (v.url ? ' · <a href="' + esc(v.url) + '" target="_blank" rel="noopener">فتحه</a>' : '') + (v.hw ? ' · <a href="' + esc(v.hw) + '" target="_blank" rel="noopener">الواجب</a> <button type="button" class="td-mini" data-hwc="' + esc(v.hw) + '">نسخ اللينك</button>' : '') + '</span>'; return; }
+              const a = d.as.find(a => a.student_id === s.id && a.assignments);
+              if(a){ const u = site + 'app/hw.html?t=' + a.token;
+                x.outerHTML = '<span>' + esc(shortD(a.sent_at || a.assignments.created_at) + ' · ' + a.assignments.title) + ' · <a href="' + esc(u) + '" target="_blank" rel="noopener">الواجب</a> <button type="button" class="td-mini" data-hwc="' + esc(u) + '">نسخ اللينك</button>' + (a.released ? '' : ' <small style="color:#b45309">(مخفي لسه)</small>') + '</span>'; }
+            } else if(/مفيش تقرير محفوظ/.test(x.textContent)){
+              const p = d.rp.filter(p => p.id === s.slug || names.indexOf(fold(p.id)) >= 0 || names.indexOf(fold((p.data || {}).studentId)) >= 0 || names.indexOf(fold((p.data || {}).student)) >= 0)
+                .sort((a, b) => (+(b.data || {}).savedAt || 0) - (+(a.data || {}).savedAt || 0))[0];
+              if(!p) return; const v = p.data || {};
+              let key = ''; try{ key = Object.keys(lastReports || {}).find(k => names.indexOf(fold(k)) >= 0) || ''; }catch(_){}
+              x.outerHTML = '<span>حصة ' + esc(v.session || '?') + ' · <bdi dir="ltr">' + esc(v.date || '') + '</bdi>' + (key ? ' <button type="button" class="td-mini" data-lr="' + esc(key) + '">افتحه في الفورم (حصة +1)</button>' : '') + '</span>';
+            }
+          });
+        });
+      }catch(e){ console.warn('days.gaps', e); }
+      busy = false;
+    }
+    new MutationObserver(() => { clearTimeout(t); t = setTimeout(fill, 250); }).observe(L, {childList: true, subtree: true});
+    setTimeout(fill, 500);
+  }
+
   function ui(sb){
     if(window.__tqDayUi) return; window.__tqDayUi = true;
     const L = document.getElementById('tdList'); if(!sb || !L) return;
     const K = kit(sb), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+    gaps(sb, L, esc);
     /* the generator still says the list comes from a 1 AM task: it now comes from the weekly schedule */
     const sub = document.getElementById('tdSub'); if(sub && /١ بعد/.test(sub.textContent)) sub.textContent = 'القايمة بتتبني لوحدها من الجدول الأسبوعي (٦ ص ← ٦ ص) ومعاها آخر تقرير لكل طالب.';
     const em = L.querySelector('.td-empty'); if(em && /١ بالليل/.test(em.textContent)) em.textContent = 'بتتحمّل القايمة من الجدول الأسبوعي…';
