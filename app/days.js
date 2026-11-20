@@ -250,10 +250,11 @@
       D = {at: Date.now(), st: st.data || [], ls: ls.data || [], rp: rp.data || [], as: as.data || []};
       return D;
     }
-    const namesOf = s => [s.slug, s.name_ar, s.name_en].concat(s.keys || []).filter(Boolean).map(fold);
+    const nk = v => fold(v).replace(/[^\p{L}\p{N}]+/gu, '');   // names compared without spaces, dashes or brackets
+    const namesOf = s => [s.slug, s.name_ar, s.name_en].concat(s.keys || []).filter(Boolean).map(nk);
     function who(name, d){
-      const f = fold(name); if(!f) return null;
-      return d.st.find(s => namesOf(s).indexOf(f) >= 0) || d.st.find(s => namesOf(s).some(n => n && (n === f.split('-')[0] || f.split('-').indexOf(n) >= 0))) || null;
+      const f = nk(name), parts = fold(name).split('-').map(nk); if(!f) return null;
+      return d.st.find(s => namesOf(s).indexOf(f) >= 0) || d.st.find(s => namesOf(s).some(n => n && parts.indexOf(n) >= 0)) || null;
     }
     async function fill(){
       if(busy) return;
@@ -268,17 +269,17 @@
           const names = namesOf(s), today = new Date().toISOString().slice(0, 10);
           r.querySelectorAll('.td-dim').forEach(x => {
             if(/مفيش درس محفوظ/.test(x.textContent)){
-              const l = d.ls.find(l => l.id <= today + '~' && (l.id.slice(11) === s.slug || names.indexOf(fold((l.data || {}).student)) >= 0));
+              const l = d.ls.find(l => l.id <= today + '~' && (l.id.slice(11) === s.slug || names.indexOf(nk((l.data || {}).student)) >= 0));
               if(l){ const v = l.data || {};
                 x.outerHTML = '<span>' + esc(shortD(l.id.slice(0, 10)) + ' · ' + (v.title || '')) + (v.url ? ' · <a href="' + esc(v.url) + '" target="_blank" rel="noopener">فتحه</a>' : '') + (v.hw ? ' · <a href="' + esc(v.hw) + '" target="_blank" rel="noopener">الواجب</a> <button type="button" class="td-mini" data-hwc="' + esc(v.hw) + '">نسخ اللينك</button>' : '') + '</span>'; return; }
               const a = d.as.find(a => a.student_id === s.id && a.assignments);
               if(a){ const u = site + 'app/hw.html?t=' + a.token;
                 x.outerHTML = '<span>' + esc(shortD(a.sent_at || a.assignments.created_at) + ' · ' + a.assignments.title) + ' · <a href="' + esc(u) + '" target="_blank" rel="noopener">الواجب</a> <button type="button" class="td-mini" data-hwc="' + esc(u) + '">نسخ اللينك</button>' + (a.released ? '' : ' <small style="color:#b45309">(مخفي لسه)</small>') + '</span>'; }
             } else if(/مفيش تقرير محفوظ/.test(x.textContent)){
-              const p = d.rp.filter(p => p.id === s.slug || names.indexOf(fold(p.id)) >= 0 || names.indexOf(fold((p.data || {}).studentId)) >= 0 || names.indexOf(fold((p.data || {}).student)) >= 0)
+              const p = d.rp.filter(p => p.id === s.slug || names.indexOf(nk(p.id)) >= 0 || names.indexOf(nk((p.data || {}).studentId)) >= 0 || names.indexOf(nk((p.data || {}).student)) >= 0)
                 .sort((a, b) => (+(b.data || {}).savedAt || 0) - (+(a.data || {}).savedAt || 0))[0];
               if(!p) return; const v = p.data || {};
-              let key = ''; try{ key = Object.keys(lastReports || {}).find(k => names.indexOf(fold(k)) >= 0) || ''; }catch(_){}
+              let key = ''; try{ key = Object.keys(lastReports || {}).find(k => names.indexOf(nk(k)) >= 0) || ''; }catch(_){}
               x.outerHTML = '<span>حصة ' + esc(v.session || '?') + ' · <bdi dir="ltr">' + esc(v.date || '') + '</bdi>' + (key ? ' <button type="button" class="td-mini" data-lr="' + esc(key) + '">افتحه في الفورم (حصة +1)</button>' : '') + '</span>';
             }
           });
