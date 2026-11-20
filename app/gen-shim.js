@@ -230,11 +230,26 @@
       call('render'); call('saveDraft');
       return [done, kept];
     }
+    /* the lesson's three links (lesson, homework, student page) shown in the bar, each with open + copy */
+    function linksOf(L, st){
+      const abs = u => { try{ return u ? new URL(u, TQ.site).href : ''; }catch(e){ return ''; } };
+      const items = [['🎓 الدرس', abs(L && L.url)], ['🎨 الواجب', abs(L && L.hw)], ['👤 صفحة الطالب', pageOf(st)]].filter(x => x[1]);
+      if(!items.length) return '';
+      return '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">' + items.map(([t, u]) =>
+        '<span style="display:inline-flex;align-items:center;border:1px solid #d9c38f;border-radius:7px;background:#fff;overflow:hidden">' +
+        '<a href="' + esc(u) + '" target="_blank" rel="noopener" style="padding:3px 9px;color:#1f6b4f;font-weight:700;text-decoration:none">' + t + '</a>' +
+        '<button type="button" data-tqcopy="' + esc(u) + '" title="نسخ اللينك" style="border:0;border-inline-start:1px solid #d9c38f;background:#fffaf0;padding:3px 8px;cursor:pointer;font:inherit">📋</button></span>').join('') + '</div>';
+    }
+    bar.addEventListener('click', e => {
+      const b = e.target.closest('[data-tqcopy]'); if(!b) return;
+      const u = b.dataset.tqcopy, ok = () => { b.textContent = '✅'; setTimeout(() => b.textContent = '📋', 1200); };
+      (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(ok, () => { window.prompt('انسخ اللينك:', u); });
+    });
     function report(res){
       const L = current.lesson, [done, kept] = res || [[], []];
       say('📚 درس ' + esc(current.day) + ': <b>' + esc(L.title || current.id) + '</b>' +
         (done.length ? ' — اتملى: ' + esc(done.join(' · ')) : '') +
-        (kept.length ? '<br><span style="color:#8a978f">سبت اللي كتبته بإيدك في: ' + esc(kept.join(' · ')) + ' (اضغط «املأ من الدرس» تاني لو عايز الدرس مكانه)</span>' : ''), true);
+        (kept.length ? '<br><span style="color:#8a978f">سبت اللي كتبته بإيدك في: ' + esc(kept.join(' · ')) + ' (اضغط «املأ من الدرس» تاني لو عايز الدرس مكانه)</span>' : '') + linksOf(L, current.st), true);
     }
 
     let lastKey = '', seen = '', busy = false;
@@ -254,7 +269,7 @@
         if(!row){ say('<span style="color:#8a978f">مفيش درس متسجّل لـ' + esc(name) + ' يوم ' + esc(day) + ' — التقرير ماتغيّرش.</span>', false); return; }
         current = {id: row.id, day, lesson: row.data, st};
         /* no auto fill: the last report stays on screen (where the student stopped, Quran review…) until the teacher asks */
-        say('📚 فيه درس جاهز ' + esc(day) + ': <b>' + esc(row.data.title || row.id) + '</b><br><span style="color:#8a978f">التقرير اللي قدامك هو القديم — اضغط «⬇ املأ من الدرس» لما تحب تحط ملخص الدرس الجديد والواجب ولينك صفحة الطالب.</span>', true);
+        say('📚 فيه درس جاهز ' + esc(day) + ': <b>' + esc(row.data.title || row.id) + '</b><br><span style="color:#8a978f">التقرير اللي قدامك هو القديم — اضغط «⬇ املأ من الدرس» لما تحب تحط ملخص الدرس الجديد والواجب ولينك صفحة الطالب.</span>' + linksOf(row.data, st), true);
       }catch(e){ console.warn('lessonFill', e); }
       finally{ busy = false; }
     }
