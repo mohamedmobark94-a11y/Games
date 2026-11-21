@@ -744,7 +744,7 @@ W.TQKIT={add,L,IMG,pic,fx,win,go,toast,hear,ayah,
   const $ = s => document.querySelector(s), btn = $('#bDict'); if(!btn) return;
   const st = document.createElement('style');
   st.textContent = 'body.dict #stage,body.dict #notes{cursor:help}' +
-    '#dict{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;width:min(560px,94vw);background:#fff;color:#1d2530;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.28);padding:16px 18px;font:16px/1.5 system-ui,sans-serif;direction:ltr}' +
+    '#dict{position:fixed;top:84px;right:14px;left:auto;z-index:9999;width:min(340px,86vw);max-height:calc(100vh - 170px);overflow:auto;'+'}#dict.lft{right:auto;left:14px}#dict{background:#fff;color:#1d2530;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.28);padding:16px 18px;font:16px/1.5 system-ui,sans-serif;direction:ltr}' +
     '#dict[hidden]{display:none}#dict .dw{font-size:30px;font-weight:800}#dict .dp{color:#5a6472;font-size:17px;margin-inline-start:8px}' +
     '#dict .dr{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}#dict button{border:0;border-radius:12px;padding:10px 16px;font:700 16px system-ui;cursor:pointer;background:#2F80ED;color:#fff}' +
     '#dict button.uk{background:#1F9D55}#dict .dm{margin:6px 0}#dict .da{direction:rtl;text-align:right;font:700 20px "Cairo","Readex Pro",sans-serif;color:#0e4d3c;margin-top:6px}' +
@@ -819,7 +819,7 @@ W.TQKIT={add,L,IMG,pic,fx,win,go,toast,hear,ayah,
     if(!on || e.target.closest('#dict,#bar,#nav')) return; block(e);
     const sel = (getSelection && String(getSelection())).trim();
     const w = sel && /[A-Za-z]/.test(sel) && sel.length < 60 ? sel : wordAt(e.clientX, e.clientY);
-    if(w) look(w);
+    if(w){ box.classList.toggle('lft', e.clientX > innerWidth * 0.55); look(w); }   /* the card sits on the side away from the word, so it never hides it */
   }, true);
 })();
 </script>
