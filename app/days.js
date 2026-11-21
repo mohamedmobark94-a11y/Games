@@ -303,22 +303,34 @@
       '#tqToday .tq-bar b{font-size:18px}#tqToday .tq-sum{flex:1;font-size:13px;opacity:.92}' +
       '#tqToday .tq-pill{background:#f5d76e;color:#3d2f00;border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:800;white-space:nowrap}' +
       '#tqToday .tq-arr{font-size:16px;transition:transform .2s}#tqToday.shut .tq-arr{transform:rotate(-90deg)}' +
+      '#tqToday .tq-names{display:flex;flex-wrap:wrap;gap:6px;padding:9px 14px;background:#f3faf6;border-bottom:1px solid #d7ebe1;direction:rtl}#tqToday .tq-names:empty{display:none}' +
+      '#tqToday .tq-nm{border:1.5px solid #cfe3d8;background:#fff;border-radius:999px;padding:4px 11px;font:inherit;font-size:13.5px;font-weight:700;color:#0e4d3c;cursor:pointer}' +
+      '#tqToday .tq-nm small{opacity:.65;font-weight:600;margin-inline-start:5px}#tqToday .tq-nm.on{background:#177a5b;color:#fff;border-color:#c9a227}' +
       '#tqToday .tq-in{padding:6px 14px 14px}#tqToday.shut .tq-in{display:none}' +
       '#tqToday .td-head h2{display:none}#tqToday .td{max-width:none;margin:0}#tqToday #page-today{display:block!important;padding:0;margin:0;max-width:none}';
     document.head.appendChild(st);
     const box = document.createElement('section'); box.id = 'tqToday';
     let shut = false; try{ shut = localStorage.getItem('tqTodayShut') === '1'; }catch(_){}
     if(shut) box.classList.add('shut');
-    box.innerHTML = '<div class="tq-card"><button type="button" class="tq-bar" aria-expanded="' + !shut + '"><span class="tq-arr">▾</span><b>📅 دروس اليوم</b><span class="tq-sum"></span><span class="tq-pill" hidden></span></button><div class="tq-in"></div></div>';
+    box.innerHTML = '<div class="tq-card"><button type="button" class="tq-bar" aria-expanded="' + !shut + '"><span class="tq-arr">▾</span><b>📅 دروس اليوم</b><span class="tq-sum"></span><span class="tq-pill" hidden></span></button><div class="tq-names"></div><div class="tq-in"></div></div>';
     /* move the whole page (not only .td): the generator listens for clicks/typing on #page-today itself */
     box.querySelector('.tq-in').appendChild(document.getElementById('page-today'));
     rep.insertBefore(box, rep.firstChild);
+    const names = box.querySelector('.tq-names');
+    /* today's students show under the bar even when the card is folded; a tap works like the chip inside */
+    names.addEventListener('click', e => { const b = e.target.closest('[data-nm]'); if(!b) return;
+      const c = td.querySelector('#tdChips .td-chip[data-ch="' + b.dataset.nm + '"]'); if(c) c.click(); });
     const bar = box.querySelector('.tq-bar'), sum = box.querySelector('.tq-sum'), pill = box.querySelector('.tq-pill');
     bar.onclick = () => { const s = box.classList.toggle('shut'); bar.setAttribute('aria-expanded', !s); try{ localStorage.setItem('tqTodayShut', s ? '1' : '0'); }catch(_){} };
     const paint = () => {
       const t = document.getElementById('tdTitle'), rows = td.querySelectorAll('.td-chip').length, picked = td.querySelectorAll('.td-chip.on').length;
       sum.textContent = (t ? t.textContent.replace(/^دروس اليوم\s*·?\s*/, '') : '') + (rows ? ' · ' + rows + ' حصة' : '');
       pill.hidden = !picked; pill.textContent = picked + ' مختار';
+      const html = [...td.querySelectorAll('#tdChips .td-chip')].map(c => {
+        const tm = c.querySelector('small'), nm = [...c.childNodes].filter(n => n !== tm).map(n => n.textContent).join('').replace(/^[+✓\s]+/, '').trim();
+        return '<button type="button" class="tq-nm' + (c.classList.contains('on') ? ' on' : '') + '" data-nm="' + c.dataset.ch + '">' + (c.classList.contains('on') ? '✓ ' : '') + nm.replace(/[&<>"]/g, '') + (tm ? '<small>' + tm.textContent + '</small>' : '') + '</button>';
+      }).join('');
+      if(names.innerHTML !== html) names.innerHTML = html;
     };
     new MutationObserver(paint).observe(td, {childList: true, subtree: true, characterData: true}); paint();
     /* «افتحه في الفورم»: the generator fills the form below the card — take the eye there and show it worked */
