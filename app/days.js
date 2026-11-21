@@ -304,13 +304,14 @@
       '#tqToday .tq-pill{background:#f5d76e;color:#3d2f00;border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:800;white-space:nowrap}' +
       '#tqToday .tq-arr{font-size:16px;transition:transform .2s}#tqToday.shut .tq-arr{transform:rotate(-90deg)}' +
       '#tqToday .tq-in{padding:6px 14px 14px}#tqToday.shut .tq-in{display:none}' +
-      '#tqToday .td-head h2{display:none}#tqToday .td{max-width:none;margin:0}';
+      '#tqToday .td-head h2{display:none}#tqToday .td{max-width:none;margin:0}#tqToday #page-today{display:block!important;padding:0;margin:0;max-width:none}';
     document.head.appendChild(st);
     const box = document.createElement('section'); box.id = 'tqToday';
     let shut = false; try{ shut = localStorage.getItem('tqTodayShut') === '1'; }catch(_){}
     if(shut) box.classList.add('shut');
     box.innerHTML = '<div class="tq-card"><button type="button" class="tq-bar" aria-expanded="' + !shut + '"><span class="tq-arr">▾</span><b>📅 دروس اليوم</b><span class="tq-sum"></span><span class="tq-pill" hidden></span></button><div class="tq-in"></div></div>';
-    box.querySelector('.tq-in').appendChild(td);
+    /* move the whole page (not only .td): the generator listens for clicks/typing on #page-today itself */
+    box.querySelector('.tq-in').appendChild(document.getElementById('page-today'));
     rep.insertBefore(box, rep.firstChild);
     const bar = box.querySelector('.tq-bar'), sum = box.querySelector('.tq-sum'), pill = box.querySelector('.tq-pill');
     bar.onclick = () => { const s = box.classList.toggle('shut'); bar.setAttribute('aria-expanded', !s); try{ localStorage.setItem('tqTodayShut', s ? '1' : '0'); }catch(_){} };
