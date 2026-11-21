@@ -370,7 +370,7 @@
     const open = (i, name, n) => {
       const b = document.querySelector('#tdr' + i + ' [data-lr]');
       if(b) return b.click();
-      if(n < 12) return setTimeout(() => open(i, name, n + 1), 150);      // the card is still being drawn
+      if(n < 50) return setTimeout(() => open(i, name, n + 1), 150);      // the card, or its report button (filled from the database), is still coming
       toast('مفيش تقرير محفوظ لـ ' + name + ' لسه — اختاره في الفورم تحت واكتب أول تقرير');
     };
     /* on the window, in the capture phase: before the generator's own click handler turns the chip on/off */
