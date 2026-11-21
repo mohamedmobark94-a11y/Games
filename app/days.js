@@ -327,6 +327,8 @@
       setTimeout(() => {
         const w = rep.querySelector('.wrap') || document.getElementById('lastPick'); if(!w) return;
         w.scrollIntoView({behavior: 'smooth', block: 'start'});
+        try{ const fr = window.frameElement; if(fr && window.parent !== window){   // the site shows the generator in a tall frame: scroll the outer page too
+          const P = window.parent; P.scrollTo({top: fr.getBoundingClientRect().top + P.scrollY + w.getBoundingClientRect().top - 12, behavior: 'smooth'}); } }catch(_){}
         w.style.transition = 'box-shadow .3s'; w.style.boxShadow = '0 0 0 4px #c9a227'; setTimeout(() => { w.style.boxShadow = ''; }, 1800);
         let t = document.getElementById('tqToast');
         if(!t){ t = document.createElement('div'); t.id = 'tqToast'; t.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#0e4d3c;color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;z-index:99999;box-shadow:0 6px 20px rgba(0,0,0,.2);direction:rtl'; document.body.appendChild(t); }
