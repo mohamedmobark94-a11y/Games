@@ -373,7 +373,8 @@
       if(n < 12) return setTimeout(() => open(i, name, n + 1), 150);      // the card is still being drawn
       toast('مفيش تقرير محفوظ لـ ' + name + ' لسه — اختاره في الفورم تحت واكتب أول تقرير');
     };
-    document.addEventListener('click', e => {
+    /* on the window, in the capture phase: before the generator's own click handler turns the chip on/off */
+    window.addEventListener('click', e => {
       const c = e.target.closest && e.target.closest('#tdChips .td-chip'); if(!c) return;
       const i = c.dataset.ch, name = (c.firstChild && c.firstChild.textContent || c.textContent).replace(/^[+✓\s]+/, '').replace(/\d\d:\d\d.*$/, '').trim();
       if(c.classList.contains('on')) return;      // a second tap un-picks him (the generator does that)
