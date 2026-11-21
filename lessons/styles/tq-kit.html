@@ -778,7 +778,8 @@ W.TQKIT={add,L,IMG,pic,fx,win,go,toast,hear,ayah,
       const one = !/\s/.test(word);
       const [en, ar] = await Promise.all([
         one ? fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(key)).then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null),
-        fetch('https://api.mymemory.translated.net/get?langpair=en|ar&q=' + encodeURIComponent(key)).then(r => r.json()).catch(() => null)]);
+        fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q=' + encodeURIComponent(key)).then(r => r.json()).then(j => ({responseData: {translatedText: j[0].map(x => x[0]).join('')}}))
+          .catch(() => fetch('https://api.mymemory.translated.net/get?langpair=en|ar&q=' + encodeURIComponent(key)).then(r => r.json()).catch(() => null))]);
       d = {phon: '', us: '', uk: '', any: '', def: '', pos: '', ar: ''};
       (Array.isArray(en) ? en : []).forEach(e => {
         d.phon = d.phon || e.phonetic || ((e.phonetics || []).find(p => p.text) || {}).text || '';
