@@ -63,8 +63,11 @@
       else if(s >= 0){ if(++gap > 2 || y === SH){ bands.push([s, y - gap]); s = -1; gap = 0; } }
     }
     const lineH = SH * .022;
+    const tall = bands.filter(([a, b]) => b - a + 1 >= lineH).map(([a, b]) => b - a + 1).sort((p, q) => p - q);
+    const med = tall.length ? tall[tall.length >> 1] : lineH * 2;
     const lines = bands.filter(([a, b]) => {
-      const h = b - a + 1; if(h < lineH) return false;
+      const h = b - a + 1; if(h < Math.max(lineH, med * .55) || h > med * 1.45) return false;   // too small, or a surah-title box
+      if(b < SH * .07 || a > SH * .93) return false;                                              // page header / footer
       let sum = 0, full = 0; for(let y = a; y <= b; y++){ sum += row[y]; if(row[y] > tw * .8) full++; }
       const dens = sum / (h * tw);
       return dens < .42 && full < h * .2;          // skip surah-title boxes and ruled borders
