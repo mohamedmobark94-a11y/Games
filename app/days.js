@@ -376,7 +376,7 @@
     document.addEventListener('click', e => {
       const c = e.target.closest && e.target.closest('#tdChips .td-chip'); if(!c) return;
       const i = c.dataset.ch, name = (c.firstChild && c.firstChild.textContent || c.textContent).replace(/^[+✓\s]+/, '').replace(/\d\d:\d\d.*$/, '').trim();
-      if(c.classList.contains('on')){ e.preventDefault(); e.stopPropagation(); open(i, name, 0); return; }   // already picked: open again, don't un-pick (✕ in his tools does that)
+      if(c.classList.contains('on')) return;      // a second tap un-picks him (the generator does that)
       setTimeout(() => open(i, name, 0), 120);
     }, true);
   }
