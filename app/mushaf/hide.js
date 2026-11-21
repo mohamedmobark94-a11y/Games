@@ -62,12 +62,15 @@
       if(y < SH && on[y]){ if(s < 0) s = y; gap = 0; }
       else if(s >= 0){ if(++gap > 2 || y === SH){ bands.push([s, y - gap]); s = -1; gap = 0; } }
     }
+    // full-width ruled lines of the frame: the text is between the first and the last one
+    const rules = []; for(let y = 0; y < SH; y++) if(row[y] > tw * .8) rules.push(y);
+    const top = rules.length && rules[0] < SH * .2 ? rules[0] : 0, bot = rules.length && rules[rules.length - 1] > SH * .8 ? rules[rules.length - 1] : SH;
     const lineH = SH * .022;
     const tall = bands.filter(([a, b]) => b - a + 1 >= lineH).map(([a, b]) => b - a + 1).sort((p, q) => p - q);
     const med = tall.length ? tall[tall.length >> 1] : lineH * 2;
     const lines = bands.filter(([a, b]) => {
       const h = b - a + 1; if(h < Math.max(lineH, med * .55) || h > med * 1.45) return false;   // too small, or a surah-title box
-      if(b < SH * .07 || a > SH * .93) return false;                                              // page header / footer
+      if(a <= top || b >= bot || b < SH * .05 || a > SH * .95) return false;                       // page header / footer, outside the frame
       let sum = 0, full = 0; for(let y = a; y <= b; y++){ sum += row[y]; if(row[y] > tw * .8) full++; }
       const dens = sum / (h * tw);
       return dens < .42 && full < h * .2;          // skip surah-title boxes and ruled borders
@@ -76,10 +79,10 @@
     const out = [];
     lines.forEach(([a, b]) => {
       const col = []; for(let xx = L; xx < R; xx++){ let n = 0; for(let y = a; y <= b; y++) n += ink[y * SW + xx]; col.push(n); }
-      const minGap = Math.max(3, Math.round(SW * .007));
+      const minGap = Math.max(3, Math.round(SW * .005));
       const segs = []; let cs = -1, g = 0;
       for(let k = 0; k <= col.length; k++){
-        if(k < col.length && col[k] > 0){ if(cs < 0) cs = k; g = 0; }
+        if(k < col.length && col[k] > 1){ if(cs < 0) cs = k; g = 0; }   // >1: a lone dot does not join two words
         else if(cs >= 0){ if(++g >= minGap || k === col.length){ segs.push([cs, k - g]); cs = -1; g = 0; } }
       }
       const ws = segs.filter(([p, q]) => q - p >= 3);
