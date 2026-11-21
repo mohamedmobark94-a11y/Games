@@ -343,6 +343,44 @@
     const pt = document.getElementById('page-today'); if(pt && pt.classList.contains('on') && window.Desk) Desk.go('today');
   }
 
+  /* Picking a student (step ١) = open his last report in the form, as the next session (+1).
+     The old step ٢ (a card per student) goes away from the top: the same card (👁 the homework, last lesson,
+     new lesson / continue, notes…) shows lower down, with the other tools, as «🧰 أدوات الطالب». */
+  function pickOpens(L, after){
+    const st = document.createElement('style');
+    st.textContent = '#tdList>.td-chips-h{display:none}#tdList{margin-top:12px}' +
+      '#tqTools{margin-top:12px;font-weight:800;color:#0e4d3c;font-size:15px}#tqTools[hidden]{display:none}' +
+      '.td-chip.on{box-shadow:0 0 0 2px #c9a227}';
+    document.head.appendChild(st);
+    const hd = document.createElement('div'); hd.id = 'tqTools'; hd.textContent = '🧰 أدوات الطالب المختار';
+    after.after(hd); hd.after(L);
+    const fix = () => {
+      hd.hidden = !L.querySelector('.td-row');
+      const h = document.querySelector('#tdChips .td-chips-h');
+      if(h && !/تقريره/.test(h.textContent)) h.textContent = '١. اختار الطالب ← يفتح تقريره في الفورم (الحصة الجاية +1)';
+      const sub = document.getElementById('tdSub');
+      if(sub && !/تقريره/.test(sub.textContent)) sub.textContent = 'دوس على الطالب يفتح تقريره (حصة +1). أدواته (الواجب، آخر درس، الملاحظات) تحت في «🧰 أدوات الطالب».';
+    };
+    new MutationObserver(fix).observe(document.querySelector('#page-today .td') || L, {childList: true, subtree: true}); fix();
+    const toast = t => {
+      let x = document.getElementById('tqToast');
+      if(!x){ x = document.createElement('div'); x.id = 'tqToast'; x.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#0e4d3c;color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;z-index:99999;box-shadow:0 6px 20px rgba(0,0,0,.2);direction:rtl'; document.body.appendChild(x); }
+      x.textContent = t; x.hidden = false; clearTimeout(x._h); x._h = setTimeout(() => { x.hidden = true; }, 4000);
+    };
+    const open = (i, name, n) => {
+      const b = document.querySelector('#tdr' + i + ' [data-lr]');
+      if(b) return b.click();
+      if(n < 12) return setTimeout(() => open(i, name, n + 1), 150);      // the card is still being drawn
+      toast('مفيش تقرير محفوظ لـ ' + name + ' لسه — اختاره في الفورم تحت واكتب أول تقرير');
+    };
+    document.addEventListener('click', e => {
+      const c = e.target.closest && e.target.closest('#tdChips .td-chip'); if(!c) return;
+      const i = c.dataset.ch, name = (c.firstChild && c.firstChild.textContent || c.textContent).replace(/^[+✓\s]+/, '').replace(/\d\d:\d\d.*$/, '').trim();
+      if(c.classList.contains('on')){ e.preventDefault(); e.stopPropagation(); open(i, name, 0); return; }   // already picked: open again, don't un-pick (✕ in his tools does that)
+      setTimeout(() => open(i, name, 0), 120);
+    }, true);
+  }
+
   /* 🔄 «شوف تحديثات جدولي»: read the teacher's Google Calendar (edge function cal-sessions, through the secret
      iCal address saved once in kv 'calIcs') for one teaching day, compare it with the list, show what changed
      (➕ new class · ⏰ new time · 🚫 not in the calendar) and apply the ticked changes. */
@@ -526,6 +564,7 @@
       }catch(e){ msg('⚠️ ' + (e.message || e), '#b42318'); }
       b.disabled = false;
     };
+    try{ pickOpens(L, box); }catch(e){ console.warn('days.pick', e); }
     /* the list itself: make sure today's sessions are all there (the teacher page does this too, every 30 minutes) */
     K.ensure().catch(e => console.warn('days.ensure', e));
     paintUp();
