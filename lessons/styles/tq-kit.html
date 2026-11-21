@@ -429,7 +429,25 @@ function stopAud(){if(curAud){try{curAud.pause()}catch(_){}curAud=null}$$('.aya.
 function ayah(s,a,cb){if(MUTED){cb&&setTimeout(cb,300);return}stopAud();const p3=n=>String(n).padStart(3,'0'),R=['Husary_Muallim_128kbps','Husary_128kbps'];
  const au=new Audio(`https://everyayah.com/data/${R[0]}/${p3(s)}${p3(a)}.mp3`);curAud=au;let end=false;const fin=()=>{if(end)return;end=true;if(curAud===au)curAud=null;cb&&cb()};
  au.onerror=()=>{if(au._f){fin();return}au._f=1;au.src=`https://everyayah.com/data/${R[1]}/${p3(s)}${p3(a)}.mp3`;au.play().catch(fin)};au.onended=fin;au.play().catch(()=>{})}
-function audio(src,cb){if(MUTED){cb&&cb();return}stopAud();const au=new Audio(IMG(src));curAud=au;au.onended=()=>cb&&cb();au.onerror=()=>cb&&cb();au.play().catch(()=>{})}
+/* ---------- 🎵 a signature sound for every haraka (deck calls harakaSounds()) — fatha goes UP, kasra goes DOWN,
+   ḍamma is a round «boop-boop» (like the hand: up · down · forward). Played on a tap on a short voweled syllable,
+   and before every letter clip (s_xxx_a|i|u.mp3); 'tone:a|i|u' as an audio src plays the sound alone. */
+let HKON=false,HKT=0,HKD=0;const HKV={'\u064E':'a','\u0650':'i','\u064F':'u'};
+const HKI={a:'☝️ a',i:'👇 i',u:'👉 u'};
+function hkTone(v,t){t=t||0;if(v==='a'){nt(440,t,.34,'triangle',.16,1046);nt(1318,t+.24,.18,'sine',.07)}
+ else if(v==='i'){nt(988,t,.36,'sine',.16,330);nt(330,t+.3,.08,'triangle',.06)}
+ else if(v==='u'){nt(300,t,.14,'sine',.2,240);nt(300,t+.16,.18,'sine',.2,200);nt(150,t,.32,'triangle',.05)}}
+function hkBadge(seq){let b=$('#hkB');if(!b){b=document.createElement('div');b.id='hkB';b.style.cssText='position:absolute;top:96px;left:50%;transform:translateX(-50%);z-index:41;display:flex;gap:14px;pointer-events:none';stage.appendChild(b)}
+ b.innerHTML=seq.map(v=>`<span style="background:var(--card);color:var(--ink);border-radius:999px;padding:8px 22px;font:var(--hw) 38px var(--fh);box-shadow:var(--sh);border:4px solid ${v==='a'?'#F59E0B':v==='i'?'#3B82F6':'#10B981'}">${HKI[v]}</span>`).join('');
+ b.style.opacity='1';clearTimeout(b._t);b._t=setTimeout(()=>b.style.opacity='0',1400)}
+function hkPlay(seq){if(!seq.length||MUTED)return 0;seq.forEach((v,k)=>hkTone(v,k*.42));hkBadge(seq);HKT=Date.now();HKD=seq.length*420+60;return HKD}
+const hkOf=t=>{t=String(t||'').replace(/<[^>]+>/g,'');const ar=(t.match(/[\u0621-\u064A]/g)||[]).length;if(!ar||ar>4)return[];return(t.match(/[\u064E\u064F\u0650]/g)||[]).map(c=>HKV[c])};
+W.harakaSounds=(on)=>{HKON=on!==false};
+function audio(src,cb){if(MUTED){cb&&cb();return}
+ if(HKON&&/^tone:/.test(src)){stopAud();const d=hkPlay(src.slice(5).split(''));cb&&setTimeout(cb,d);return}
+ if(HKON&&Date.now()-HKT>90){const m=String(src).match(/_([aiu])\.mp3$/);if(m){hkPlay([m[1]])}}
+ if(HKON&&Date.now()-HKT<90&&HKD){const d=HKD;HKD=0;stopAud();setTimeout(()=>audio(src,cb),d);return}HKD=0;
+ stopAud();const au=new Audio(IMG(src));curAud=au;au.onended=()=>cb&&cb();au.onerror=()=>cb&&cb();au.play().catch(()=>{})}
 const hear=(x,cb)=>{if(!x)return;if(Array.isArray(x))ayah(x[0],x[1],cb);else audio(x,cb)};
 /* recorded English classroom lines (Kokoro George via tq-fx.js); never for Arabic-only lessons */
 const voice=k=>{if(W.TQFX)try{TQFX.cue?TQFX.cue(k):LANG!=='ar'&&TQFX.say(k)}catch(_){}};
@@ -438,8 +456,24 @@ const voice=k=>{if(W.TQFX)try{TQFX.cue?TQFX.cue(k):LANG!=='ar'&&TQFX.say(k)}catc
 let toastT=0;
 function toast(html,cls){const t=$('#toast');t.innerHTML=html;t.className='on '+(cls||'');clearTimeout(toastT);toastT=setTimeout(()=>t.className='',1300)}
 const anim=(el,c)=>{if(!el)return;el.classList.remove(c);void el.offsetWidth;el.classList.add(c);setTimeout(()=>el.classList.remove(c),600)};
-const fx={ok(el){snd('ok');anim(el,'bounce');toast(L(U('ok')),'ok');burst(el,10)},bad(el,msg){snd('bad');anim(el,'shake');toast(msg||L(U('bad')),'no')},
+const fx={ok(el){if(TURNS.length&&tmode()==='ok')setTimeout(turnNext,900);snd('ok');anim(el,'bounce');toast(L(U('ok')),'ok');burst(el,10)},bad(el,msg){snd('bad');anim(el,'shake');toast(msg||L(U('bad')),'no')},
  win(){snd('win');confetti()},tap(){snd('tap')}};
+/* ---------- 🎤 turns (deck calls turns(['Lina','Balgah','Kosar'])): every activity starts with the first name;
+   a right answer passes the turn on (slide option turn:'tap' = every tap passes it, turn:'manual' = only the chip / key T) */
+let TURNS=[],TI=0;const TC=['#EC4899','#8B5CF6','#14B8A6','#F59E0B'];
+function turnShow(pop){let c=$('#turnC');if(!TURNS.length){c&&c.remove();return}
+ if(!c){c=document.createElement('button');c.id='turnC';c.title='دور مين؟ (T)';c.style.cssText='position:absolute;top:9px;left:50%;margin-left:-110px;min-width:220px;z-index:39;border:3px solid #fff;border-radius:999px;padding:6px 22px;font:var(--hw) 28px var(--fh);color:#fff;cursor:pointer;box-shadow:var(--sh);transition:transform .25s';
+  c.onclick=e=>{e.stopPropagation();turnNext()};stage.appendChild(c)}
+ c.style.background=TC[TI%TC.length];c.innerHTML='🎤 '+(LANG==='en'?'Turn: ':'دور: ')+L1(TURNS[TI]);
+ if(pop){c.style.transform='scale(1.2)';setTimeout(()=>c.style.transform='',260)}}
+function turnNext(){if(!TURNS.length)return;TI=(TI+1)%TURNS.length;bell(1568,0,.05);turnShow(true)}
+W.turns=n=>{TURNS=(n||[]).slice();TI=0;setTimeout(()=>turnShow(),0)};
+const tmode=()=>((S[cur]||{}).o||{}).turn||'ok';
+document.addEventListener('tqkit:slide',()=>{if(TURNS.length){TI=0;turnShow(true)}});
+addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;if((e.key==='t'||e.key==='T')&&TURNS.length){turnNext()}});
+stage.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.pr,.ccard,.opt,[data-ok],[data-no]');if(!b)return;
+ if(HKON&&!b.closest('[data-no],[data-ok]')){const sp=b.matches('.pr')?$('span',b):b,q=hkOf(sp.textContent);if(q.length)hkPlay(q)}
+ if(TURNS.length&&tmode()==='tap')setTimeout(turnNext,700)},true);
 function win(el){if(!el||el.__won)return;el.__won=1;STARS++;$('#stars').textContent='★ '+AN(STARS);fx.win();const d=$$('#dots i')[cur];d&&d.classList.add('d')}
 /* confetti + bursts on one canvas */
 const cv=$('#fxc'),cx=cv.getContext('2d');let parts=[],raf=0;
