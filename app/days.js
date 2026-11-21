@@ -321,6 +321,18 @@
       pill.hidden = !picked; pill.textContent = picked + ' مختار';
     };
     new MutationObserver(paint).observe(td, {childList: true, subtree: true, characterData: true}); paint();
+    /* «افتحه في الفورم»: the generator fills the form below the card — take the eye there and show it worked */
+    box.addEventListener('click', e => {
+      const b = e.target.closest && e.target.closest('[data-lr]'); if(!b) return;
+      setTimeout(() => {
+        const w = rep.querySelector('.wrap') || document.getElementById('lastPick'); if(!w) return;
+        w.scrollIntoView({behavior: 'smooth', block: 'start'});
+        w.style.transition = 'box-shadow .3s'; w.style.boxShadow = '0 0 0 4px #c9a227'; setTimeout(() => { w.style.boxShadow = ''; }, 1800);
+        let t = document.getElementById('tqToast');
+        if(!t){ t = document.createElement('div'); t.id = 'tqToast'; t.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#0e4d3c;color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;z-index:99999;box-shadow:0 6px 20px rgba(0,0,0,.2);direction:rtl'; document.body.appendChild(t); }
+        t.textContent = '✓ اتفتح آخر تقرير لـ ' + b.dataset.lr + ' في الفورم تحت (الحصة الجاية +1)'; t.hidden = false; clearTimeout(t._h); t._h = setTimeout(() => { t.hidden = true; }, 3500);
+      }, 200);
+    });
     const show = () => { box.classList.remove('shut'); bar.setAttribute('aria-expanded', 'true'); setTimeout(() => box.scrollIntoView({behavior: 'smooth', block: 'start'}), 60); };
     if(window.Desk && Desk.go && !Desk.__tqHome){ const go = Desk.go; Desk.go = p => p === 'today' ? (go('report'), show()) : go(p); Desk.__tqHome = true; }
     /* the separate tab is no longer needed: its badge moves into the card's bar, the tab itself is hidden */
