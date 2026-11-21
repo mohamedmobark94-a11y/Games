@@ -313,6 +313,7 @@ body[data-theme="adult"] .kick,body[data-theme="teen"] .kick{background:transpar
   <div class="seg" id="lseg"><button data-l="ar">ع</button><button data-l="both">ع+EN</button><button data-l="en">EN</button></div>
   <button class="ic" id="bPen" title="Pen">✏️</button>
   <button class="ic" id="bSnd" title="Sound">🔊</button>
+  <button class="ic" id="bDict" title="Dictionary: tap an English word to hear it and see its meaning (M)">📖</button>
   <button class="ic" id="bNotes" title="Teacher notes (N)">📝</button>
   <button class="ic" id="bFs" title="Full screen">⛶</button>
  </header>
@@ -734,6 +735,78 @@ W.TQKIT={add,L,IMG,pic,fx,win,go,toast,hear,ayah,
 <script>
 /* ===================== LESSON BODY ===================== */
 <!--LESSON-->
+</script>
+<script>
+/* 📖 Dictionary mode (button 📖 or key M): tap any English word on the slide (or in the teacher notes) to hear a real
+   recorded pronunciation (US / UK, from the Free Dictionary API) and see a short English meaning + the Arabic meaning.
+   No browser voice. While the mode is on, taps only look words up (they do not answer questions); tap 📖 again to stop. */
+(function(){
+  const $ = s => document.querySelector(s), btn = $('#bDict'); if(!btn) return;
+  const st = document.createElement('style');
+  st.textContent = 'body.dict #stage,body.dict #notes{cursor:help}' +
+    '#dict{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;width:min(560px,94vw);background:#fff;color:#1d2530;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.28);padding:16px 18px;font:16px/1.5 system-ui,sans-serif;direction:ltr}' +
+    '#dict[hidden]{display:none}#dict .dw{font-size:30px;font-weight:800}#dict .dp{color:#5a6472;font-size:17px;margin-inline-start:8px}' +
+    '#dict .dr{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}#dict button{border:0;border-radius:12px;padding:10px 16px;font:700 16px system-ui;cursor:pointer;background:#2F80ED;color:#fff}' +
+    '#dict button.uk{background:#1F9D55}#dict .dm{margin:6px 0}#dict .da{direction:rtl;text-align:right;font:700 20px "Cairo","Readex Pro",sans-serif;color:#0e4d3c;margin-top:6px}' +
+    '#dict .dx{position:absolute;top:8px;right:12px;background:none;color:#888;font-size:20px;padding:4px 8px}#dict a{color:#2F80ED;font-size:14px}' +
+    '#dict .dh{font-size:13px;color:#8a6d0b;margin-bottom:4px}#bDict.on{background:#F2C46D}';
+  document.head.appendChild(st);
+  const box = document.createElement('div'); box.id = 'dict'; box.hidden = true; document.body.appendChild(box);
+  let on = false; const cache = new Map(); let aud = null;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  function set(v){ on = v; btn.classList.toggle('on', on); document.body.classList.toggle('dict', on);
+    if(on){ box.hidden = false; box.innerHTML = '<button class="dx" data-x>✕</button><div class="dh">📖 Dictionary is ON</div>Tap any English word to hear it and see its meaning.<div class="da">اضغط على أي كلمة إنجليزي: تسمع نطقها وتعرف معناها. دوس 📖 تاني عشان تقفل.</div>'; }
+    else{ box.hidden = true; } }
+  btn.onclick = () => set(!on);
+  addEventListener('keydown', e => { if(/INPUT|TEXTAREA/.test(e.target.tagName)) return; if(e.key === 'm' || e.key === 'M') set(!on); if(e.key === 'Escape' && on) set(false); });
+  box.addEventListener('click', e => { if(e.target.closest('[data-x]')) set(false); const p = e.target.closest('[data-au]'); if(p){ play(p.dataset.au); } });
+  function play(u){ try{ if(aud) aud.pause(); aud = new Audio(u); aud.play().catch(() => {}); }catch(_){} }
+  function wordAt(x, y){
+    let node, off;
+    if(document.caretRangeFromPoint){ const r = document.caretRangeFromPoint(x, y); if(r){ node = r.startContainer; off = r.startOffset; } }
+    else if(document.caretPositionFromPoint){ const p = document.caretPositionFromPoint(x, y); if(p){ node = p.offsetNode; off = p.offset; } }
+    if(!node || node.nodeType !== 3) return '';
+    const t = node.textContent, ok = c => /[A-Za-z'’\-]/.test(c || ''); let a = off, b = off;
+    while(a > 0 && ok(t[a - 1])) a--; while(b < t.length && ok(t[b])) b++;
+    return t.slice(a, b).replace(/^['’\-]+|['’\-]+$/g, '');
+  }
+  async function look(w){
+    const word = w.trim(), key = word.toLowerCase(); if(!/[a-z]/i.test(word)) return;
+    box.hidden = false; box.innerHTML = '<button class="dx" data-x>✕</button><div class="dw">' + esc(word) + '</div><div class="dm">⏳ …</div>';
+    let d = cache.get(key);
+    if(!d){
+      const one = !/\s/.test(word);
+      const [en, ar] = await Promise.all([
+        one ? fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(key)).then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null),
+        fetch('https://api.mymemory.translated.net/get?langpair=en|ar&q=' + encodeURIComponent(key)).then(r => r.json()).catch(() => null)]);
+      d = {phon: '', us: '', uk: '', any: '', def: '', pos: '', ar: ''};
+      (Array.isArray(en) ? en : []).forEach(e => {
+        d.phon = d.phon || e.phonetic || ((e.phonetics || []).find(p => p.text) || {}).text || '';
+        (e.phonetics || []).forEach(p => { if(!p.audio) return; if(/-us\.mp3/.test(p.audio)) d.us = d.us || p.audio; else if(/-uk\.mp3/.test(p.audio)) d.uk = d.uk || p.audio; else d.any = d.any || p.audio; });
+        if(!d.def){ const m = (e.meanings || [])[0]; if(m && m.definitions && m.definitions[0]){ d.def = m.definitions[0].definition; d.pos = m.partOfSpeech || ''; } }
+      });
+      d.ar = (ar && ar.responseData && ar.responseData.translatedText) || '';
+      if(/[A-Za-z]/.test(d.ar) && !/[؀-ۿ]/.test(d.ar)) d.ar = '';
+      cache.set(key, d);
+    }
+    const au = [d.us && ['🔊 US', d.us, ''], d.uk && ['🔊 UK', d.uk, 'uk'], !d.us && !d.uk && d.any && ['🔊 Listen', d.any, '']].filter(Boolean);
+    box.innerHTML = '<button class="dx" data-x>✕</button><div><span class="dw">' + esc(word) + '</span><span class="dp">' + esc(d.phon) + '</span></div>' +
+      (au.length ? '<div class="dr">' + au.map(a => '<button class="' + a[2] + '" data-au="' + esc(a[1]) + '">' + a[0] + '</button>').join('') + '</div>' : '<div class="dm" style="color:#8a6d0b">No recording for this word — open Cambridge below.</div>') +
+      (d.def ? '<div class="dm"><i>' + esc(d.pos) + '</i> ' + esc(d.def) + '</div>' : '') +
+      (d.ar ? '<div class="da">' + esc(d.ar) + '</div>' : '') +
+      '<div style="margin-top:8px"><a href="https://dictionary.cambridge.org/dictionary/english-arabic/' + encodeURIComponent(key.replace(/\s+/g, '-')) + '" target="_blank" rel="noopener">Cambridge ↗</a></div>';
+    if(au.length) play(au[0][1]);
+  }
+  /* while the mode is on, a tap looks the word up instead of pressing the slide's buttons */
+  const block = e => { if(!on) return; if(e.target.closest('#dict,#bar,#nav')) return; e.preventDefault(); e.stopPropagation(); };
+  ['pointerdown', 'mousedown', 'touchstart'].forEach(t => addEventListener(t, e => { if(!on) return; if(e.target.closest('#dict,#bar,#nav')) return; e.stopPropagation(); }, true));
+  addEventListener('click', e => {
+    if(!on || e.target.closest('#dict,#bar,#nav')) return; block(e);
+    const sel = (getSelection && String(getSelection())).trim();
+    const w = sel && /[A-Za-z]/.test(sel) && sel.length < 60 ? sel : wordAt(e.clientX, e.clientY);
+    if(w) look(w);
+  }, true);
+})();
 </script>
 <script>TQKIT.boot()</script>
 </body>
