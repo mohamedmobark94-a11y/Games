@@ -432,7 +432,7 @@ function ayah(s,a,cb){if(MUTED){cb&&setTimeout(cb,300);return}stopAud();const p3
 /* ---------- 🎵 a signature sound for every haraka (deck calls harakaSounds()) — fatha goes UP, kasra goes DOWN,
    ḍamma is a round «boop-boop» (like the hand: up · down · forward). Played on a tap on a short voweled syllable,
    and before every letter clip (s_xxx_a|i|u.mp3); 'tone:a|i|u' as an audio src plays the sound alone. */
-let HKON=false,HKT=0,HKD=0;const HKV={'\u064E':'a','\u0650':'i','\u064F':'u'};
+let HKON=false,HKONLY=false,HKT=0,HKD=0;const HKV={'\u064E':'a','\u0650':'i','\u064F':'u'};
 const HKI={a:'☝️ a',i:'👇 i',u:'👉 u'};
 function hkTone(v,t){t=t||0;if(v==='a'){nt(440,t,.34,'triangle',.16,1046);nt(1318,t+.24,.18,'sine',.07)}
  else if(v==='i'){nt(988,t,.36,'sine',.16,330);nt(330,t+.3,.08,'triangle',.06)}
@@ -442,12 +442,14 @@ function hkBadge(seq){let b=$('#hkB');if(!b){b=document.createElement('div');b.i
  b.style.opacity='1';clearTimeout(b._t);b._t=setTimeout(()=>b.style.opacity='0',1400)}
 function hkPlay(seq){if(!seq.length||MUTED)return 0;seq.forEach((v,k)=>hkTone(v,k*.42));hkBadge(seq);HKT=Date.now();HKD=seq.length*420+60;return HKD}
 const hkOf=t=>{t=String(t||'').replace(/<[^>]+>/g,'');const ar=(t.match(/[\u0621-\u064A]/g)||[]).length;if(!ar||ar>4)return[];return(t.match(/[\u064E\u064F\u0650]/g)||[]).map(c=>HKV[c])};
-W.harakaSounds=(on)=>{HKON=on!==false};
+W.harakaSounds=(on)=>{HKON=on!==false;HKONLY=on==='only'};
 function audio(src,cb,_hk){if(MUTED){cb&&cb();return}
  if(HKON&&!_hk){
   if(/^tone:/.test(src)){stopAud();const d=hkPlay(src.slice(5).split(''));cb&&setTimeout(cb,d);return}
   /* a tap already played the haraka sound(s) → wait for them; else a letter clip gets its own sound first */
-  let d=0;if(Date.now()-HKT<120&&HKD)d=HKD;else{const m=String(src).match(/_([aiu])\.mp3$/);if(m)d=hkPlay([m[1]])}
+  const mm=String(src).match(/_([aiu])\.mp3$/);
+  if(HKONLY&&mm){HKD=0;stopAud();const d2=(Date.now()-HKT<120)?450:hkPlay([mm[1]]);cb&&setTimeout(cb,d2||450);return}   /* 'only': the haraka sound, never the spoken letter */
+  let d=0;if(Date.now()-HKT<120&&HKD)d=HKD;else if(mm)d=hkPlay([mm[1]]);
   HKD=0;if(d){stopAud();clearTimeout(audio._t);audio._t=setTimeout(()=>audio(src,cb,1),d);return}
  }
  stopAud();const au=new Audio(IMG(src));curAud=au;au.onended=()=>cb&&cb();au.onerror=()=>cb&&cb();au.play().catch(()=>{})}
