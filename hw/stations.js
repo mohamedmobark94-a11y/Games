@@ -58,6 +58,7 @@
 .recItem img{width:100%;border-radius:10px}
 .hint{font-weight:700;font-size:1.3rem;line-height:1.5;direction:rtl;opacity:.9}
 .hint.hide{filter:blur(6px);cursor:pointer}
+.hint.en{direction:ltr;font-family:var(--f-en);font-size:1.05rem}
 .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;margin-top:8px}
 .fb{text-align:center;font-weight:800;margin-top:8px;min-height:1.6em}
 .sky{position:relative;height:300px;border-radius:16px;overflow:hidden;background:linear-gradient(var(--sky1),var(--sky2));touch-action:manipulation}
@@ -201,8 +202,8 @@ body{--acc:#2EC4B6;--sky1:#0B2A55;--sky2:#123C55}`;
         const own = x.own;
         g.innerHTML = '<div class="card">' + head(x) +
           (x.items || []).map((it, j) => '<div class="recItem' + (it.img || it.clock != null ? '' : ' noimg') + '">' + (it.img || it.clock != null ? '<div>' + (it.img ? '<img src="' + U(it.img) + '" alt="">' : '') + '<div style="text-align:center;margin-top:4px">' + clock(it.clock, 70) + '</div></div>' : '') + '<div>' +
-            (it.say ? '<div style="font-weight:800">' + txt(it.say) + '</div>' : '') +
-            (it.hint ? '<div class="hint hide" data-h title="' + L('اضغط لو محتاج مساعدة', 'Tap if you need help') + '">' + T(it.hint) + '</div>' : '') +
+            (it.say || it.label ? '<div style="font-weight:800;font-size:1.15rem;margin-bottom:6px">' + txt(it.say || it.label) + '</div>' : '') +
+            (it.hint ? '<div class="hint hide' + (isAr(T(it.hint)) ? '' : ' en') + '" data-h title="' + L('اضغط لو محتاج مساعدة', 'Tap if you need help') + '">' + T(it.hint) + '</div>' : '') +
             '<div class="row" style="justify-content:flex-start">' + (it.audio ? '<button class="play" data-ex="' + j + '">🔊 ' + L('مثال', 'Example') + '</button>' : '') + '<span data-r="' + j + '"></span></div></div></div>').join('') +
           (own ? '<h3 style="margin-top:14px">' + T(own.title || {ar: '👨‍👩‍👦 سؤالك أنت', en: '👨‍👩‍👦 Your own question'}) + '</h3>' + help(own.help) +
             '<div class="sopts">' + (own.qs || []).map((m, j) => '<button class="opt arx" data-m="' + j + '">' + (m.ar || m) + (E() && m.en ? '<small dir="ltr" style="display:block;font:600 .8rem var(--f-en);opacity:.8">' + m.en + '</small>' : '') + '</button>').join('') + '</div><div data-own style="margin-top:10px"></div>' : '') +
