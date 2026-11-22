@@ -99,10 +99,10 @@ ul{margin:6px 0;padding-inline-start:22px}
     document.documentElement.lang = lang; document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl'; lb.textContent = lang === 'en' ? 'عربي' : 'English';
     const s = P.student, name = lang === 'en' ? (s.name_en || s.name_ar) : s.name_ar;
     const hw = P.homework || [], L = P.lessons || [], r = P.report;
-    const todo = hw.filter(h => !h.last || h.last.status === 'redo');
+    const todo = hw.filter(h => !h.group && (!h.last || h.last.status === 'redo'));
     const scored = hw.filter(h => h.last && h.last.max_score), avg = scored.length ? Math.round(100 * scored.reduce((a, h) => a + h.last.score / h.last.max_score, 0) / scored.length) : null;
     const hwUrl = t => new URL('app/hw.html?t=' + t, TQ.site).href;
-    const stLabel = h => !h.last ? ['todo', T('لسه', 'To do')] : h.last.status === 'redo' ? ['redo', T('أعِد المحاولة', 'Try again')] : h.last.status === 'reviewed' ? ['reviewed', T('المعلم راجعه ✓', 'Checked ✓')] : ['submitted', T('اتبعت', 'Sent')];
+    const stLabel = h => h.group ? ['todo', '👥 ' + ((h.names || []).length ? T('سلّموا: ', 'Sent by: ') + (h.names || []).join('، ') : T('واجب جماعي', 'Group homework'))] : !h.last ? ['todo', T('لسه', 'To do')] : h.last.status === 'redo' ? ['redo', T('أعِد المحاولة', 'Try again')] : h.last.status === 'reviewed' ? ['reviewed', T('المعلم راجعه ✓', 'Checked ✓')] : ['submitted', T('اتبعت', 'Sent')];
     let h = '<div class="hd"><div class="muted">' + T('صفحة', 'The page of') + '</div><h1>' + esc(name) + ' 🌱</h1><div class="stats">' +
       '<div class="stat"><b>' + L.length + '</b>' + T('درس', 'lessons') + '</div><div class="stat"><b>' + todo.length + '</b>' + T('واجب مستني', 'homework to do') + '</div><div class="stat"><b>' + (avg != null ? avg + '%' : '—') + '</b>' + T('متوسط الدرجات', 'average score') + '</div></div>' + rewards(hw) + '</div>';
     if(todo.length) h += '<a class="btn" style="width:100%;justify-content:center;font-size:1.15rem;min-height:56px;margin-top:14px" href="' + hwUrl(todo[0].token) + '">▶ ' + T('ابدأ واجبك الحالي: ', 'Start your current homework: ') + esc(hwTitle(todo[0])) + '</a>';

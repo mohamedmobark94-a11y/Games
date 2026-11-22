@@ -81,6 +81,8 @@ audio{width:100%;margin-top:8px}
     missing: ['فاضل أسئلة ما جاوبتهاش. تسلّم كده؟', 'Some questions have no answer. Send anyway?'],
     gname: ['✍️ اكتب اسمك هنا', '✍️ Write your name here'], needName: ['دي حلقة جماعية: اكتب اسمك قبل التسليم علشان المعلم يعرف مين اللي سلّم.', 'This is a group class: write your name before sending so the teacher knows who sent it.'],
     done: ['✅ اتسلّم! جزاك الله خيرًا', '✅ Sent! Jazāk Allāhu khayran'],
+    grp: ['واجب جماعي: كل واحد يحلّه بنفسه ويكتب اسمه — حتى لو غيرك سلّم قبلك.', 'Group homework: each student does it himself and writes his name — even if others already sent it.'],
+    grpSent: ['سلّموا:', 'Sent by:'], another: ['👥 طالب تاني يحلّه على نفس الجهاز', '👥 Another student on this device'],
     score: ['درجتك', 'Your score'], heard: ['المعلم هيسمع تسجيلك ويرد عليك.', 'Your teacher will listen to your recording and reply.'],
     teacher: ['ملاحظة المعلم على آخر مرة', "Teacher's note on your last try"], redo: ['المعلم طلب تعيد الواجب', 'Your teacher asked you to do it again'],
     open: ['📖 افتح الدرس / اللعبة', '📖 Open the lesson / game'], due: ['آخر ميعاد', 'Due'],
@@ -114,6 +116,15 @@ audio{width:100%;margin-top:8px}
       h += '<div class="note"><b>' + L(A.last.status === 'redo' ? 'redo' : 'teacher') + '</b>' + (A.last.feedback ? '<br>' + esc(A.last.feedback) : '') +
         (A.last.feedback_audio ? '<div style="margin-top:8px">🎧 <audio controls preload="none" id="fbVoice" style="width:100%;margin-top:4px"></audio></div>' : '') +
         (A.last.notes || []).filter(n => n && n.audio).map(n => '<div style="margin-top:8px">🎧 <b>' + esc(n.q || '') + '</b><audio controls preload="none" data-nv="' + esc(n.audio) + '" style="width:100%;margin-top:4px"></audio></div>').join('') + '</div>';
+    if(A.group){
+      const me = (() => { try{ return (localStorage.getItem('tq-gname') || '').trim(); }catch(_){ return ''; } })(), subs = A.subs || [];
+      const names = [...new Set(subs.map(x => (x.name || '').trim()).filter(Boolean))];
+      h += '<div class="note">👥 ' + L('grp') + (names.length ? '<br><b>' + L('grpSent') + '</b> ' + names.map(esc).join(' · ') : '') + '</div>';
+      const mine = me ? subs.filter(x => (x.name || '').trim() === me && (x.feedback || x.feedback_audio || x.status === 'redo')).pop() : null;
+      if(mine) A.last = mine;
+      if(mine) h += '<div class="note"><b>' + L(mine.status === 'redo' ? 'redo' : 'teacher') + ' (' + esc(me) + ')</b>' + (mine.feedback ? '<br>' + esc(mine.feedback) : '') +
+        (mine.feedback_audio ? '<div style="margin-top:8px">🎧 <audio controls preload="none" id="fbVoice" style="width:100%;margin-top:4px"></audio></div>' : '') + '</div>';
+    }
     if(A.page_url) h += '<div class="row" style="margin-top:12px"><a class="btn ghost" href="' + esc(A.page_url) + '" target="_blank" rel="noopener">' + L('open') + '</a></div>';
     h += '</div>';
     $('app').innerHTML = h;
@@ -144,7 +155,7 @@ audio{width:100%;margin-top:8px}
     $('after').innerHTML = sent ? sentBox : '';
     $('bar').hidden = sent || !items.length; $('send').textContent = L('send');
     /* group class (content.group): every student writes his own name with the homework */
-    { const g = $('gname'), grp = !!(A.content && A.content.group); g.hidden = !grp || sent; g.placeholder = L('gname');
+    { const g = $('gname'), grp = !!(A.group || (A.content && A.content.group)); g.hidden = !grp || sent; g.placeholder = L('gname');
       $('bar').style.display = grp && !sent ? 'flex' : ''; $('bar').style.alignItems = 'center'; $('bar').style.justifyContent = 'center';
       if(grp && !g.value){ try{ g.value = localStorage.getItem('tq-gname') || ''; }catch(_){} } }
     lit = '';
@@ -336,7 +347,7 @@ audio{width:100%;margin-top:8px}
   }
 
   $('send').onclick = async () => {
-    const grp = !!(A.content && A.content.group), gname = ($('gname').value || '').trim();
+    const grp = !!(A.group || (A.content && A.content.group)), gname = ($('gname').value || '').trim();
     if(grp && !gname){ alert(L('needName')); $('gname').focus(); return; }
     if(grp) try{ localStorage.setItem('tq-gname', gname); }catch(_){}
     const items = (A.content && A.content.items) || [];
@@ -374,7 +385,8 @@ audio{width:100%;margin-top:8px}
       if(r.error) throw r.error;
       sent = true;
       sentBox = '<div class="done"><div>' + L('done') + '</div>' + (totMax ? '<div style="margin-top:6px">' + L('score') + ': <b dir="ltr">' + tot + ' / ' + totMax + '</b></div>' : '') +
-        (paths.length ? '<div class="small" style="margin-top:6px">' + L('heard') + '</div>' : '') + '</div>';
+        (paths.length ? '<div class="small" style="margin-top:6px">' + L('heard') + '</div>' : '') +
+        (grp ? '<div style="margin-top:10px"><button class="btn ghost" type="button" onclick="try{localStorage.removeItem(\'tq-gname\')}catch(_){};location.reload()">' + L('another') + '</button></div>' : '') + '</div>';
       draw(); scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
     }catch(err){
       console.error(err); alert(L('fail') + '\n' + (err.message || err)); btn.disabled = false; btn.textContent = L('send');
