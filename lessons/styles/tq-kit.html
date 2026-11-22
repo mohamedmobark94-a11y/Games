@@ -443,10 +443,13 @@ function hkBadge(seq){let b=$('#hkB');if(!b){b=document.createElement('div');b.i
 function hkPlay(seq){if(!seq.length||MUTED)return 0;seq.forEach((v,k)=>hkTone(v,k*.42));hkBadge(seq);HKT=Date.now();HKD=seq.length*420+60;return HKD}
 const hkOf=t=>{t=String(t||'').replace(/<[^>]+>/g,'');const ar=(t.match(/[\u0621-\u064A]/g)||[]).length;if(!ar||ar>4)return[];return(t.match(/[\u064E\u064F\u0650]/g)||[]).map(c=>HKV[c])};
 W.harakaSounds=(on)=>{HKON=on!==false};
-function audio(src,cb){if(MUTED){cb&&cb();return}
- if(HKON&&/^tone:/.test(src)){stopAud();const d=hkPlay(src.slice(5).split(''));cb&&setTimeout(cb,d);return}
- if(HKON&&Date.now()-HKT>90){const m=String(src).match(/_([aiu])\.mp3$/);if(m){hkPlay([m[1]])}}
- if(HKON&&Date.now()-HKT<90&&HKD){const d=HKD;HKD=0;stopAud();setTimeout(()=>audio(src,cb),d);return}HKD=0;
+function audio(src,cb,_hk){if(MUTED){cb&&cb();return}
+ if(HKON&&!_hk){
+  if(/^tone:/.test(src)){stopAud();const d=hkPlay(src.slice(5).split(''));cb&&setTimeout(cb,d);return}
+  /* a tap already played the haraka sound(s) → wait for them; else a letter clip gets its own sound first */
+  let d=0;if(Date.now()-HKT<120&&HKD)d=HKD;else{const m=String(src).match(/_([aiu])\.mp3$/);if(m)d=hkPlay([m[1]])}
+  HKD=0;if(d){stopAud();clearTimeout(audio._t);audio._t=setTimeout(()=>audio(src,cb,1),d);return}
+ }
  stopAud();const au=new Audio(IMG(src));curAud=au;au.onended=()=>cb&&cb();au.onerror=()=>cb&&cb();au.play().catch(()=>{})}
 const hear=(x,cb)=>{if(!x)return;if(Array.isArray(x))ayah(x[0],x[1],cb);else audio(x,cb)};
 /* recorded English classroom lines (Kokoro George via tq-fx.js); never for Arabic-only lessons */
