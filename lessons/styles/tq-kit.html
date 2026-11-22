@@ -550,7 +550,7 @@ function unzoom(){const z=ZM();if(z){clearInterval(z._t);z.classList.remove('on'
 document.addEventListener('click',e=>{const z=ZM();if(!z||!z.classList.contains('on'))return;if(e.target===z||e.target.closest('[data-zx]'))unzoom()});
 document.addEventListener('tqkit:slide',unzoom);
 
-W.pairRead=o=>add(o,()=>`<div class="prg" style="grid-template-columns:repeat(${o.cols||4},1fr)">${o.pairs.map((p,i)=>`<button class="pr q" data-i="${i}"><span>${p[0]}</span><span class="pa rv">←</span><span>${p[1]}</span></button>`).join('')}</div>
+W.pairRead=o=>add(o,()=>`<div class="prg" style="grid-template-columns:repeat(${o.cols||4},1fr)">${o.pairs.map((p,i)=>`<button class="pr q" data-i="${i}"><span>${p[0]}</span>${p[1]?`<span class="pa rv">←</span><span>${p[1]}</span>`:''}</button>`).join('')}</div>
  <div class="row"><span class="chip" data-m>${L(o.sub||{ar:'اقرأ الزوج ثم اضغطه',en:'Read the pair, then tap it'})}</span><button class="btn sm alt" data-ch>${L(UI.challenge)}</button><button class="btn sm okb" data-ok hidden>✓</button><button class="btn sm nob" data-no hidden>✗</button></div>`,
  el=>{const cells=$$('.pr',el),m=$('[data-m]',el),ch=$('[data-ch]',el),ok=$('[data-ok]',el),no=$('[data-no]',el),seen=new Set();let mode=0,ci=0,sc=0;
   const zm=o.zoom!==false;
