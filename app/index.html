@@ -65,7 +65,7 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   .ptab td[data-h]:not(:first-child)::before{content:attr(data-h);display:block;color:var(--gold);font-size:.8rem;font-weight:800}}
 .flash{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#10263A;font-weight:800;border-radius:99px;padding:8px 18px;z-index:99}
 </style>
-<link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg"><link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0B1E2D"><link rel="icon" type="image/svg+xml" href="../assets/brand/emblem.svg"><link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
 </head>
 <body>
 <div class="top"><div class="in">
@@ -1460,5 +1460,6 @@ table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--li
   start();
 })();
 </script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});</script>
 </body>
 </html>
