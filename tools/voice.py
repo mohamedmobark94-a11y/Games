@@ -5,6 +5,9 @@
   python3 tools/voice.py bank                                  # the shared lines: praise, oops, class phrases
   python3 tools/voice.py bank excellent beautiful_recitation   # only these lines of the bank
   python3 tools/voice.py lesson madd-asli-fari lines.json      # one lesson: {"s1": "text", ...} -> assets/voice/<voice>/lessons/<name>/s1.mp3
+  python3 tools/voice.py ar <set> words.json                   # ARABIC words/phrases (Google voice, gTTS — the natural one used
+                                                               # in the old Hudhayfa homework): {"k": "كَتَبَ"} -> assets/voice/ar/<set>/k.mp3
+                                                               # pip install gTTS · never for Qur'an (Husary) — words, letters, du'a, ḥadīth only
   python3 tools/voice.py names names.json <out_dir>            # name clips {"slug": "Name"} -> <out_dir>/<slug>.mp3 (TQFX.cheer)
                                                                # never inside the repo: the add-on folder + Storage private/voice/names/
 
@@ -52,6 +55,19 @@ def make(lines, out_dir):
             os.remove(wav)
         print(key, '·', text)
 
+def make_ar(lines, out_dir, slow=False):
+    from gtts import gTTS
+    os.makedirs(out_dir, exist_ok=True)
+    for key, text in lines.items():
+        fd, raw = tempfile.mkstemp(suffix='.mp3'); os.close(fd)
+        try:
+            gTTS(text, lang='ar', slow=slow).save(raw)
+            subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', raw, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse',
+                            '-ac', '1', '-b:a', '48k', os.path.join(out_dir, key + '.mp3')], check=True)
+        finally:
+            os.remove(raw)
+        print(key, '·', text)
+
 if __name__ == '__main__':
     base = os.path.join(ROOT, 'assets', 'voice', VOICE_DIR)
     if len(sys.argv) >= 2 and sys.argv[1] == 'bank':
@@ -59,6 +75,8 @@ if __name__ == '__main__':
         make({k: v for k, v in BANK.items() if not keys or k in keys}, base)
     elif len(sys.argv) == 4 and sys.argv[1] == 'lesson':
         make(json.load(open(sys.argv[3], encoding='utf-8')), os.path.join(base, 'lessons', sys.argv[2]))
+    elif len(sys.argv) == 4 and sys.argv[1] == 'ar':
+        make_ar(json.load(open(sys.argv[3], encoding='utf-8')), os.path.join(ROOT, 'assets', 'voice', 'ar', sys.argv[2]))
     elif len(sys.argv) == 4 and sys.argv[1] == 'names':
         out = os.path.abspath(sys.argv[3])
         if out.startswith(ROOT + os.sep): sys.exit('name clips never go inside the repo')

@@ -554,7 +554,8 @@ W.pairRead=o=>add(o,()=>`<div class="prg" style="grid-template-columns:repeat(${
  <div class="row"><span class="chip" data-m>${L(o.sub||{ar:'اقرأ الزوج ثم اضغطه',en:'Read the pair, then tap it'})}</span><button class="btn sm alt" data-ch>${L(UI.challenge)}</button><button class="btn sm okb" data-ok hidden>✓</button><button class="btn sm nob" data-no hidden>✗</button></div>`,
  el=>{const cells=$$('.pr',el),m=$('[data-m]',el),ch=$('[data-ch]',el),ok=$('[data-ok]',el),no=$('[data-no]',el),seen=new Set();let mode=0,ci=0,sc=0;
   const zm=o.zoom!==false;
-  cells.forEach(c=>c.onclick=()=>{if(mode)return;c.classList.add('on');seen.add(c.dataset.i);fx.tap();const p=o.pairs[+c.dataset.i];if(zm)zoom(p[0],p[1]);if(seen.size===cells.length)win(el)});
+  cells.forEach(c=>c.onclick=()=>{if(mode)return;c.classList.add('on');seen.add(c.dataset.i);fx.tap();const p=o.pairs[+c.dataset.i];if(zm)zoom(p[0],p[1]);if(p[2])setTimeout(()=>audio(p[2]),zm?150:0);   /* p[2]: an Arabic voice clip (tools/voice.py ar) */
+  if(seen.size===cells.length)win(el)});
   const step=()=>{cells.forEach((c,k)=>c.classList.toggle('cur',k===ci));if(ci>=cells.length){unzoom();mode=0;ok.hidden=no.hidden=true;ch.hidden=false;m.innerHTML=T('score',{r:sc,n:cells.length});if(sc>=cells.length-2)win(el)}
    else if(zm){const p=o.pairs[ci];zoom(p[0],p[1],[{t:'✓',c:'okb',f:()=>ok.click()},{t:'✗',c:'nob',f:()=>no.click()}])}};
   ch.onclick=()=>{mode=1;ci=0;sc=0;cells.forEach(c=>c.classList.remove('good','bad2'));ok.hidden=no.hidden=false;ch.hidden=true;m.innerHTML=L(UI.readPair);step()};
