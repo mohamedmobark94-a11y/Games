@@ -242,12 +242,13 @@
     const shortD = s => { const d = new Date(s); return isNaN(d) ? '' : d.getDate() + '/' + (d.getMonth() + 1); };
     async function data(){
       if(D && Date.now() - D.at < 60000) return D;
-      const [st, ls, rp, as] = await Promise.all([
-        sb.from('students').select('id,slug,keys,name_ar,name_en'),
+      const [st, ls, rp, as, sbm] = await Promise.all([
+        sb.from('students').select('id,slug,keys,name_ar,name_en,portal_token'),
         sb.from('docs').select('id,data').eq('collection', 'lessons').order('id', {ascending: false}).limit(400),
         sb.from('docs').select('id,data').eq('collection', 'reports'),
-        sb.from('assignment_targets').select('student_id,token,sent_at,released,assignments(title,created_at)').order('sent_at', {ascending: false}).limit(400)]);
-      D = {at: Date.now(), st: st.data || [], ls: ls.data || [], rp: rp.data || [], as: as.data || []};
+        sb.from('assignment_targets').select('id,student_id,token,sent_at,released,assignments(title,created_at,content)').order('sent_at', {ascending: false}).limit(600),
+        sb.from('submissions').select('target_id,submitted_at,status,score,max_score,feedback,feedback_audio').order('submitted_at', {ascending: false}).limit(1500)]);
+      D = {at: Date.now(), st: st.data || [], ls: ls.data || [], rp: rp.data || [], as: as.data || [], sb: sbm.data || []};
       return D;
     }
     const nk = v => fold(v).replace(/[^\p{L}\p{N}]+/gu, '');   // names compared without spaces, dashes or brackets
@@ -256,8 +257,35 @@
       const f = nk(name), parts = fold(name).split('-').map(nk); if(!f) return null;
       return d.st.find(s => namesOf(s).indexOf(f) >= 0) || d.st.find(s => namesOf(s).some(n => n && parts.indexOf(n) >= 0)) || null;
     }
+    /* 📋 overview on every student's card: what the student sees on his page (homework to do / done / waiting
+       for the teacher's reply) + his page link — so there is no need to open the other tabs */
+    function overview(d, site){
+      [...L.querySelectorAll('.td-row')].filter(r => !r.querySelector('.tq-ov')).forEach(r => {
+        const nm = r.querySelector('.td-nm'); const s = nm && who((nm.firstChild || {}).textContent || nm.textContent, d); if(!s) return;
+        const mine = d.as.filter(a => a.student_id === s.id && a.assignments);
+        const subsOf = a => d.sb.filter(x => x.target_id === a.id);
+        const vis = mine.filter(a => a.released), hid = mine.filter(a => !a.released);
+        const grp = a => !!((a.assignments.content || {}).group) || /^حلقة/.test(s.name_ar || '');
+        const todo = vis.filter(a => { if(grp(a)) return false; const l = subsOf(a)[0]; return !l || l.status === 'redo'; });
+        const sent = vis.filter(a => subsOf(a).length), review = sent.filter(a => { const l = subsOf(a)[0]; return l && !l.feedback && !l.feedback_audio && l.status !== 'redo' && l.status !== 'reviewed'; });
+        const last = d.sb.filter(x => mine.some(a => a.id === x.target_id))[0];
+        const link = (t, u) => '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a>';
+        const parts = [];
+        parts.push(todo.length ? '<b style="color:#b45309">⏳ ' + todo.length + ' فاضل عليه</b> <small>(' + todo.slice(0, 3).map(a => link(a.assignments.title, site + 'app/hw.html?t=' + a.token)).join(' · ') + (todo.length > 3 ? ' …' : '') + ')</small>' : '<b style="color:#15803d">✅ مفيش واجب فاضل</b>');
+        parts.push('📥 ' + sent.length + ' اتسلّم' + (review.length ? ' · <b style="color:#7c3aed">👀 ' + review.length + ' مستني ردّك</b>' : ''));
+        if(last) parts.push('<small>آخر تسليم ' + esc(shortD(last.submitted_at)) + (last.max_score ? ' · ' + Math.round(last.score || 0) + '/' + Math.round(last.max_score) : '') + '</small>');
+        if(hid.length) parts.push('<small style="color:#b45309">🙈 ' + hid.length + ' مخفي</small>');
+        if(s.portal_token) parts.push(link('صفحة الطالب ↗', site + 'app/student.html?k=' + s.portal_token));
+        const div = document.createElement('div'); div.className = 'td-inf tq-ov';
+        div.style.cssText = 'background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:6px 10px;margin:6px 0;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center';
+        div.innerHTML = '<b>📋 الواجبات:</b> ' + parts.join('<span style="color:#cbd5e1">|</span>');
+        const anchor = r.querySelector('.td-inf'); if(anchor) anchor.parentNode.insertBefore(div, anchor); else (r.querySelector('.td-hd') || r).after(div);
+      });
+    }
     async function fill(){
       if(busy) return;
+      try{ if([...L.querySelectorAll('.td-row')].some(r => !r.querySelector('.tq-ov'))){ busy = true; overview(await data(), (window.TQ && TQ.site) || 'https://mohamedmobark94-a11y.github.io/Games/'); } }catch(e){ console.warn('days.ov', e); }
+      busy = false;
       const rows = [...L.querySelectorAll('.td-row')].filter(r => !r.dataset.tqGap && [...r.querySelectorAll('.td-dim')].some(x => /مفيش (درس|تقرير) محفوظ/.test(x.textContent)));
       if(!rows.length) return;
       busy = true;
