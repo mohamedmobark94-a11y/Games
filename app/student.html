@@ -75,6 +75,7 @@ ul{margin:6px 0;padding-inline-start:22px}
   const MAR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'], MEN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function hwTitle(x){
     const t = String((x && x.title) || '');
+    if(lang === 'en' && x && x.title_en) return x.title_en;
     if(lang !== 'en' || !/^واجب القرآن/.test(t)) return t;
     return t.split('·').map(p => p.trim()).map((p, i) => {
       if(i === 0) return 'Qur\'an homework';
@@ -128,10 +129,10 @@ ul{margin:6px 0;padding-inline-start:22px}
         (r.rating ? '<div class="small">⭐ ' + esc(r.rating) + '</div>' : '') + sec('📖', 'الدرس', 'Lesson', r.lesson) + sec('🎵', 'التجويد', 'Tajweed', r.tajwid) + sec('🔤', 'العربي', 'Arabic', r.arabic) + sec('🕌', 'الإسلاميات', 'Islamic studies', r.islamic) +
         sec('📝', 'الواجب', 'Homework', [].concat(r.hw || [], r.arabichw || [], r.islamichw || [])) + quranHw(r, hw, hwUrl) + (r.encourage ? '<div class="fb">🌟 ' + esc(r.encourage) + '</div>' : '') + '</div>';
     }
-    h += '<h2>📚 ' + T('دروسي', 'My lessons') + '</h2>' + (L.length ? L.map(l => '<div class="card"><div class="row"><b>' + esc(l.title || '') + '</b><span class="date">' + fmt(l.date) + '</span></div>' +
-        (Array.isArray(l.summary) && l.summary.length ? '<ul class="small">' + l.summary.map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul>' : '') +
-        (l.homework ? '<div class="small muted" dir="auto">📝 ' + esc(l.homework) + '</div>' : '') +
-        '<div class="row" style="margin-top:8px">' + (l.url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.url) + '">🎓 ' + T('الدرس', 'Lesson') + '</a>' : '') + (l.hw ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.hw) + '">🎨 ' + T('صفحة الواجب', 'Homework page') + '</a>' : '') + '</div></div>').join('')
+    h += '<h2>📚 ' + T('دروسي', 'My lessons') + '</h2>' + (L.length ? L.map(l => { const en = lang === 'en', sm = en && Array.isArray(l.summary_en) && l.summary_en.length ? l.summary_en : l.summary; return '<div class="card"><div class="row"><b dir="auto">' + esc((en && l.title_en) || l.title || '') + '</b><span class="date">' + fmt(l.date) + '</span></div>' +
+        (Array.isArray(sm) && sm.length ? '<ul class="small">' + sm.map(x => '<li dir="auto">' + esc(x) + '</li>').join('') + '</ul>' : '') +
+        ((en && l.homework_en) || l.homework ? '<div class="small muted" dir="auto">📝 ' + esc((en && l.homework_en) || l.homework) + '</div>' : '') +
+        '<div class="row" style="margin-top:8px">' + (l.url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.url) + '">🎓 ' + T('الدرس', 'Lesson') + '</a>' : '') + (l.hw ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + esc(l.hw) + '">🎨 ' + T('صفحة الواجب', 'Homework page') + '</a>' : '') + '</div></div>'; }).join('')
       : '<div class="card muted">' + T('لسه مفيش دروس متسجلة هنا.', 'No lessons here yet.') + '</div>');
     h += '<h2>🎮 ' + T('العب وراجع', 'Play and review') + '</h2><div class="card"><div>' + T('ألعاب القرآن والتجويد والعربي — كلها مجانية.', 'Qur’an, tajweed and Arabic games — all free.') + '</div><div class="row" style="margin-top:8px"><a class="btn" href="' + TQ.site + '" target="_blank" rel="noopener">' + T('افتح الألعاب ↗', 'Open the games ↗') + '</a></div></div>';
     h += '<div class="foot">Mohamed Mubarak · ' + T('المعلم محمد مبارك', 'Teacher Mohamed Mubarak') + '</div>';

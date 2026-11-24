@@ -108,7 +108,7 @@ audio{width:100%;margin-top:8px}
 
   function draw(){
     const c = A.content || {}, items = c.items || [], st = A.student || {};
-    let h = '<div class="hd"><h1>' + esc(A.title) + '</h1><div class="who">👤 ' + esc(pick(st.name_ar, st.name_en)) + '</div>' +
+    let h = '<div class="hd"><h1>' + esc(pick(A.title, c.title_en || (items[0] && items[0].title_en))) + '</h1><div class="who">👤 ' + esc(pick(st.name_ar, st.name_en)) + '</div>' +
       '<span class="tag">' + L(A.kind === 'test' ? 'test' : 'hw') + (A.subject ? ' · ' + esc(A.subject) : '') + '</span>' +
       (A.due_date ? ' <span class="tag">' + L('due') + ': ' + esc(A.due_date) + '</span>' : '') +
       (c.intro ? '<div class="note">' + esc(pick(c.intro.ar, c.intro.en)) + '</div>' : '');
