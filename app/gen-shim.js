@@ -174,7 +174,9 @@
       const f = fold(name); if(!f) return null;
       const id = call('studentIdOf', name) || '';
       return (students || []).find(s => id && (s.slug === id || (s.keys || []).indexOf(id) >= 0))
-        || (students || []).find(s => [s.name_en, s.name_ar, s.slug].concat(s.keys || []).some(n => n && fold(n) === f)) || null;
+        || (students || []).find(s => [s.name_en, s.name_ar, s.slug].concat(s.keys || []).some(n => n && fold(n) === f))
+        /* «Sheikh Youssef», «الأخ يوسف»…: one word of the name is the student's name */
+        || (students || []).find(s => { const w = f.split(' '); return [s.name_en, s.name_ar, s.slug].concat(s.keys || []).some(n => n && fold(n).length > 2 && w.indexOf(fold(n)) >= 0); }) || null;
     }
     async function findLesson(name, st, day){
       const r = await sb.from('docs').select('id,data').eq('collection', 'lessons').like('id', day + '-%');
@@ -198,6 +200,7 @@
     const bar = document.createElement('div'); bar.id = 'tqFromLesson';
     bar.style.cssText = 'display:none;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;padding:8px 10px;border:1.5px solid #c99a3f;border-radius:9px;background:#fffdf6;font-size:12.5px;line-height:1.55;direction:rtl;text-align:right';
     bar.innerHTML = '<span id="tqFlMsg" style="flex:1;min-width:160px;color:#5c4409"></span>' +
+      '<button type="button" id="tqFlRe" title="دوّر تاني على درس اليوم" style="border:1.5px solid #c99a3f;background:#fff;color:#8a6620;border-radius:8px;padding:4px 11px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap">↻ تحديث</button>' +
       '<button type="button" id="tqFlGo" style="border:1.5px solid #c99a3f;background:#fff;color:#8a6620;border-radius:8px;padding:4px 11px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap">⬇ املأ من الدرس</button>';
     sec.prepend(bar);
     const say = (html, can) => { bar.style.display = html ? 'flex' : 'none'; $g('tqFlMsg').innerHTML = html; $g('tqFlGo').disabled = !can; $g('tqFlGo').style.opacity = can ? 1 : .45; };
@@ -274,7 +277,12 @@
       finally{ busy = false; }
     }
     $g('tqFlGo').onclick = () => { if(current) report(put(true)); };
+    /* ↻: look again now (a lesson added after the report was opened, a new student…) */
+    const again = () => { students = null; lastKey = ''; seen = String($g('student').value || '').trim() + '|' + reportDay(); check(); };
+    $g('tqFlRe').onclick = () => { $g('tqFlMsg').innerHTML = '<span style="color:#8a978f">⏳ بدوّر على الدرس…</span>'; again(); };
     setInterval(check, 600);
+    /* no lesson yet: look again by itself every minute */
+    setInterval(() => { if(!current && lastKey && !busy && !document.hidden) again(); }, 60000);
   }
   window.addEventListener('load', () => setTimeout(lessonFill, 900));
 })();
